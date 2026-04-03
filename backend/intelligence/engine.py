@@ -7,8 +7,23 @@ from .models import DiagnosticReport, Issue, SystemSnapshot
 
 
 class IntelligenceEngine:
+	_previous_snapshot = None
+	_snapshot_history: List[SystemSnapshot] = []
+
 	def analyze(self, snapshot: SystemSnapshot) -> DiagnosticReport:
 		issues: List[Issue] = []
+
+		IntelligenceEngine._snapshot_history.append(snapshot)
+		if len(IntelligenceEngine._snapshot_history) > 5:
+			IntelligenceEngine._snapshot_history = IntelligenceEngine._snapshot_history[-5:]
+
+		avg_cpu = sum(item.cpu_percent for item in IntelligenceEngine._snapshot_history) / len(
+			IntelligenceEngine._snapshot_history
+		)
+		avg_memory = sum(item.memory_percent for item in IntelligenceEngine._snapshot_history) / len(
+			IntelligenceEngine._snapshot_history
+		)
+		history_ready = len(IntelligenceEngine._snapshot_history) >= 3
 
 		def _unique_process_names(process_names: List[str]) -> List[str]:
 			unique_names: List[str] = []
@@ -31,15 +46,25 @@ class IntelligenceEngine:
 				return f"Consider closing {_join_with_or(affected_processes)}"
 			return generic_suggestion
 
+		top_cpu_processes = sorted(
+			snapshot.top_processes,
+			key=lambda process: process.cpu_percent,
+			reverse=True,
+		)[:2]
+		affected_cpu_processes = _unique_process_names(
+			[process.name for process in top_cpu_processes]
+		)
+
+		top_memory_processes = sorted(
+			snapshot.top_processes,
+			key=lambda process: process.memory_mb,
+			reverse=True,
+		)[:2]
+		affected_memory_processes = _unique_process_names(
+			[process.name for process in top_memory_processes]
+		)
+
 		if snapshot.cpu_percent > 80:
-			top_cpu_processes = sorted(
-				snapshot.top_processes,
-				key=lambda process: process.cpu_percent,
-				reverse=True,
-			)[:2]
-			affected_cpu_processes = _unique_process_names(
-				[process.name for process in top_cpu_processes]
-			)
 			cpu_suggestion = _build_suggestion(
 				affected_cpu_processes,
 				"Close heavy applications or background processes",
@@ -75,14 +100,6 @@ class IntelligenceEngine:
 			issues.append(cpu_issue)
 
 		if snapshot.memory_percent > 80:
-			top_memory_processes = sorted(
-				snapshot.top_processes,
-				key=lambda process: process.memory_mb,
-				reverse=True,
-			)[:2]
-			affected_memory_processes = _unique_process_names(
-				[process.name for process in top_memory_processes]
-			)
 			memory_suggestion = _build_suggestion(
 				affected_memory_processes,
 				"Close memory-intensive applications or restart unused services",
@@ -125,11 +142,65 @@ class IntelligenceEngine:
 			"process_count": snapshot.process_count,
 		}
 
+		changes_detected: List[dict] = []
+		previous_snapshot = IntelligenceEngine._previous_snapshot
+		change_time = time.time()
+
+		if previous_snapshot is not None:
+			current_process_names = _unique_process_names(
+				[process.name for process in snapshot.top_processes]
+			)
+			previous_process_names = _unique_process_names(
+				[process.name for process in previous_snapshot.top_processes]
+			)
+
+			previous_process_set = set(previous_process_names)
+			current_process_set = set(current_process_names)
+
+			for process_name in current_process_names:
+				if process_name not in previous_process_set:
+					changes_detected.append(
+						{"type": "process_started", "name": process_name, "time": change_time}
+					)
+
+			for process_name in previous_process_names:
+				if process_name not in current_process_set:
+					changes_detected.append(
+						{"type": "process_stopped", "name": process_name, "time": change_time}
+					)
+
+			if history_ready:
+				cpu_spike_value = snapshot.cpu_percent - avg_cpu
+				if cpu_spike_value > 15:
+					changes_detected.append(
+						{
+							"type": "cpu_spike",
+							"value": cpu_spike_value,
+							"likely_caused_by": affected_cpu_processes,
+							"severity": "high" if cpu_spike_value > 30 else "medium",
+							"time": change_time,
+						}
+					)
+
+				memory_spike_value = snapshot.memory_percent - avg_memory
+				if memory_spike_value > 10:
+					changes_detected.append(
+						{
+							"type": "memory_spike",
+							"value": memory_spike_value,
+							"likely_caused_by": affected_memory_processes,
+							"severity": "high" if memory_spike_value > 30 else "medium",
+							"time": change_time,
+						}
+					)
+
+		IntelligenceEngine._previous_snapshot = snapshot
+
 		return DiagnosticReport(
 			timestamp=time.time(),
 			snapshot_summary=snapshot_summary,
 			issues=issues,
 			system_health_score=health_score,
-			changes_detected=[],
+			changes_detected=changes_detected,
 			anomalies_detected=[],
 		)
