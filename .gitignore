@@ -6,3 +6,8 @@ dist
 .env.local
 .vite
 .cache
+backend/venv/
+backend/__pycache__/
+*.pyc
+backend/.env
+backend/*.log
