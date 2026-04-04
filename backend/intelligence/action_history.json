@@ -49,5 +49,59 @@
     "parameters": {
       "reverted_action_id": "13c1dcc2-99fa-4143-a1d5-a6f3b94fde3f"
     }
+  },
+  {
+    "action_id": "9e5834c8-641c-44f9-a999-805947cff28c",
+    "action_type": "kill_process",
+    "target": "notepad.exe",
+    "timestamp": 1775308594.1356063,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "kill_process",
+      "target": "notepad.exe",
+      "killed_pids": [],
+      "failed": []
+    },
+    "parameters": {}
+  },
+  {
+    "action_id": "6cbb2c83-bd34-44d5-b7f3-bcf088f99d83",
+    "action_type": "system_tweak",
+    "target": "reduce_visual_effects",
+    "timestamp": 1775308635.156251,
+    "status": "success",
+    "reversible": true,
+    "result": {
+      "status": "success",
+      "tweak": "reduce_visual_effects",
+      "type": "system_tweak",
+      "result": {
+        "status": "success",
+        "message": "Visual effects reduced (simulated)",
+        "impact": "Improved UI responsiveness"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "action_id": "b1dfd796-db9a-4b6d-a91f-2a329577d46b",
+    "action_type": "system_tweak",
+    "target": "reduce_visual_effects",
+    "timestamp": 1775308700.179997,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "revert",
+      "tweak": "reduce_visual_effects",
+      "type": "system_tweak",
+      "result": {
+        "status": "success",
+        "message": "Visual effects restored (simulated)"
+      }
+    },
+    "parameters": {
+      "reverted_action_id": "6cbb2c83-bd34-44d5-b7f3-bcf088f99d83"
+    }
   }
 ]
