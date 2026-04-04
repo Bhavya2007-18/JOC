@@ -10,5 +10,44 @@
       "message": "test"
     },
     "parameters": {}
+  },
+  {
+    "action_id": "13c1dcc2-99fa-4143-a1d5-a6f3b94fde3f",
+    "action_type": "system_tweak",
+    "target": "reduce_visual_effects",
+    "timestamp": 1775307868.1342988,
+    "status": "success",
+    "reversible": true,
+    "result": {
+      "status": "success",
+      "tweak": "reduce_visual_effects",
+      "type": "system_tweak",
+      "result": {
+        "status": "success",
+        "message": "Visual effects reduced (simulated)",
+        "impact": "Improved UI responsiveness"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "action_id": "0c24044b-1628-4c8c-b5d3-cfd0f93f8e04",
+    "action_type": "system_tweak",
+    "target": "reduce_visual_effects",
+    "timestamp": 1775307868.135533,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "revert",
+      "tweak": "reduce_visual_effects",
+      "type": "system_tweak",
+      "result": {
+        "status": "success",
+        "message": "Visual effects restored (simulated)"
+      }
+    },
+    "parameters": {
+      "reverted_action_id": "13c1dcc2-99fa-4143-a1d5-a6f3b94fde3f"
+    }
   }
 ]
