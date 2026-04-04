@@ -6,6 +6,31 @@ from .junk_cleaner import get_junk_files
 from .store_utils import bytes_to_human
 
 
+def get_system_health(junk_size: int, duplicate_size: int, cold_size: int) -> dict:
+	"""Calculate health score and status from storage inefficiencies."""
+	score = 100
+	one_gb = 1024 * 1024 * 1024
+	two_gb = 2 * one_gb
+
+	if junk_size > one_gb:
+		score -= 10
+	if duplicate_size > one_gb:
+		score -= 15
+	if cold_size > two_gb:
+		score -= 10
+
+	score = max(0, min(score, 100))
+
+	if score >= 80:
+		status = "Healthy"
+	elif score >= 50:
+		status = "Needs Optimization"
+	else:
+		status = "Critical"
+
+	return {"system_health": score, "status": status}
+
+
 def generate_suggestions(files: list, junk_data: dict) -> dict:
 	"""Generate simple, actionable storage suggestions."""
 	junk_raw = int(junk_data.get("total_junk_size", 0) or 0)
@@ -24,12 +49,14 @@ def generate_suggestions(files: list, junk_data: dict) -> dict:
 	actions = [
 		{
 			"type": "junk_cleanup",
-			"description": "Clear junk files",
+			"title": "Clear junk files",
+			"description": "Remove temporary and cache files",
 			"recoverable_space": bytes_to_human(junk_raw),
 		},
 		{
 			"type": "large_files",
-			"description": "Review large files",
+			"title": "Review large files",
+			"description": "Review very large files to decide what to remove",
 			"recoverable_space": bytes_to_human(large_files_raw),
 		},
 	]
@@ -53,13 +80,28 @@ def generate_full_suggestions(files: list) -> dict:
 	cold_size = int(cold.get("total_cold_size", 0) or 0)
 
 	raw_total = junk_size + duplicate_size + cold_size
+	total_recoverable_space = bytes_to_human(raw_total)
+	mb_500 = 500 * 1024 * 1024
+	gb_2 = 2 * 1024 * 1024 * 1024
+
+	if raw_total < mb_500:
+		priority = "low"
+		recommendation = "Cleanup is optional right now; focus on junk files first."
+	elif raw_total <= gb_2:
+		priority = "medium"
+		recommendation = "Run a cleanup pass for junk and duplicate files soon."
+	else:
+		priority = "high"
+		recommendation = "Start cleanup now and prioritize duplicate and cold files."
+
 	actions = []
 
 	if junk_size > 0:
 		actions.append(
 			{
 				"type": "junk",
-				"description": "Clear junk files",
+				"title": "Clear junk files",
+				"description": "Remove temporary and cache files",
 				"recoverable_space": bytes_to_human(junk_size),
 			}
 		)
@@ -68,7 +110,8 @@ def generate_full_suggestions(files: list) -> dict:
 		actions.append(
 			{
 				"type": "duplicates",
-				"description": "Remove duplicate files",
+				"title": "Remove duplicate files",
+				"description": "Delete redundant copies of the same files",
 				"recoverable_space": bytes_to_human(duplicate_size),
 			}
 		)
@@ -77,13 +120,38 @@ def generate_full_suggestions(files: list) -> dict:
 		actions.append(
 			{
 				"type": "cold_files",
-				"description": "Clean unused files",
+				"title": "Clean unused files",
+				"description": "Remove files not used in a long time",
 				"recoverable_space": bytes_to_human(cold_size),
 			}
 		)
 
+	issue_sizes = {
+		"junk": junk_size,
+		"duplicates": duplicate_size,
+		"cold_files": cold_size,
+	}
+	top_issue_type = max(issue_sizes, key=issue_sizes.get)
+
+	if issue_sizes[top_issue_type] <= 0:
+		top_issue = "No major storage issue detected"
+	elif top_issue_type == "junk":
+		top_issue = "Junk files are taking the most space"
+	elif top_issue_type == "duplicates":
+		top_issue = "Duplicate files are taking the most space"
+	else:
+		top_issue = "Unused files are occupying most storage"
+
+	health_data = get_system_health(junk_size, duplicate_size, cold_size)
+
 	return {
-		"total_recoverable_space": bytes_to_human(raw_total),
+		"insight": f"You can free up {total_recoverable_space} of storage space",
+		"top_issue": top_issue,
+		"priority": priority,
+		"recommendation": recommendation,
+		"system_health": health_data["system_health"],
+		"status": health_data["status"],
+		"total_recoverable_space": total_recoverable_space,
 		"raw_total": raw_total,
 		"actions": actions,
 	}
