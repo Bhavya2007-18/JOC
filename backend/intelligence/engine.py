@@ -3,7 +3,14 @@ from __future__ import annotations
 import time
 from typing import List
 
-from .models import DiagnosticReport, Issue, SystemSnapshot
+from .models import (
+	ActionSuggestion,
+	ActionType,
+	DiagnosticReport,
+	Issue,
+	RiskLevel,
+	SystemSnapshot,
+)
 
 
 class IntelligenceEngine:
@@ -69,6 +76,30 @@ class IntelligenceEngine:
 				affected_cpu_processes,
 				"Close heavy applications or background processes",
 			)
+			cpu_suggested_actions: List[ActionSuggestion] = []
+			if affected_cpu_processes:
+				cpu_suggested_actions.append(
+					ActionSuggestion(
+						action_type=ActionType.KILL_PROCESS,
+						target=affected_cpu_processes[0],
+						description=f"Close {affected_cpu_processes[0]} to reduce CPU usage",
+						risk_level=RiskLevel.MODERATE,
+						reversible=False,
+						parameters={},
+						estimated_impact="Immediate CPU usage reduction",
+					)
+				)
+			cpu_suggested_actions.append(
+				ActionSuggestion(
+					action_type=ActionType.SYSTEM_TWEAK,
+					target="high_performance_mode",
+					description="Enable high performance mode to improve CPU performance",
+					risk_level=RiskLevel.MODERATE,
+					reversible=True,
+					parameters={},
+					estimated_impact="Improves CPU performance under load",
+				)
+			)
 			cpu_evidence = {"cpu_percent": snapshot.cpu_percent}
 			if affected_cpu_processes:
 				cpu_evidence["fix_action"] = {
@@ -101,6 +132,7 @@ class IntelligenceEngine:
 				affected_processes=affected_cpu_processes,
 				suggestion=cpu_suggestion,
 				evidence=cpu_evidence,
+				suggested_actions=cpu_suggested_actions,
 			)
 			cpu_issue.clamp_confidence()
 			issues.append(cpu_issue)
@@ -109,6 +141,30 @@ class IntelligenceEngine:
 			memory_suggestion = _build_suggestion(
 				affected_memory_processes,
 				"Close memory-intensive applications or restart unused services",
+			)
+			memory_suggested_actions: List[ActionSuggestion] = []
+			if affected_memory_processes:
+				memory_suggested_actions.append(
+					ActionSuggestion(
+						action_type=ActionType.KILL_PROCESS,
+						target=affected_memory_processes[0],
+						description=f"Close {affected_memory_processes[0]} to free memory",
+						risk_level=RiskLevel.MODERATE,
+						reversible=False,
+						parameters={},
+						estimated_impact="Immediate memory usage reduction",
+					)
+				)
+			memory_suggested_actions.append(
+				ActionSuggestion(
+					action_type=ActionType.SYSTEM_TWEAK,
+					target="reduce_visual_effects",
+					description="Reduce UI animations to lower memory usage",
+					risk_level=RiskLevel.SAFE,
+					reversible=True,
+					parameters={},
+					estimated_impact="Reduces RAM usage and improves responsiveness",
+				)
 			)
 			memory_evidence = {"memory_percent": snapshot.memory_percent}
 			if affected_memory_processes:
@@ -142,6 +198,7 @@ class IntelligenceEngine:
 				affected_processes=affected_memory_processes,
 				suggestion=memory_suggestion,
 				evidence=memory_evidence,
+				suggested_actions=memory_suggested_actions,
 			)
 			memory_issue.clamp_confidence()
 			issues.append(memory_issue)
