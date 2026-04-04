@@ -19,7 +19,7 @@ def analyze_system():
 		"changes": report.changes_detected,
 	}
 from pydantic import BaseModel
-from fixer import FixEngine
+from backend.intelligence.fixer import FixEngine
 
 fix_engine = FixEngine()
 
