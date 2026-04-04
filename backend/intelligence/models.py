@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Dict, List, Optional
 
 
@@ -41,6 +42,40 @@ class SystemSnapshot:
 	boot_time: float
 
 
+class ActionType(Enum):
+	KILL_PROCESS = "kill_process"
+	SYSTEM_TWEAK = "system_tweak"
+
+
+class RiskLevel(Enum):
+	SAFE = "safe"
+	MODERATE = "moderate"
+	RISKY = "risky"
+
+
+@dataclass
+class ActionSuggestion:
+	action_type: ActionType
+	target: str
+	description: str
+	risk_level: RiskLevel
+	reversible: bool
+	parameters: Dict[str, object]
+	estimated_impact: str
+
+
+@dataclass
+class ActionRecord:
+	action_id: str
+	action_type: ActionType
+	target: str
+	timestamp: float
+	status: str
+	reversible: bool
+	result: Dict[str, object]
+	parameters: Dict[str, object]
+
+
 @dataclass
 class Issue:
 	"""Structured diagnosis output for one detected problem."""
@@ -55,6 +90,7 @@ class Issue:
 	affected_processes: List[str]
 	suggestion: str
 	evidence: Dict[str, object]
+	suggested_actions: List[ActionSuggestion] = field(default_factory=list)
 
 	def clamp_confidence(self) -> None:
 		"""Clamp confidence to the inclusive [0.0, 1.0] range."""
@@ -67,8 +103,8 @@ class DiagnosticReport:
 
 	timestamp: float
 	snapshot_summary: Dict[str, object]
-	issues: List[Issue] = field(default_factory=list)
 	system_health_score: float
+	issues: List[Issue] = field(default_factory=list)
 	changes_detected: List[Dict[str, object]] = field(default_factory=list)
 	anomalies_detected: List[Dict[str, object]] = field(default_factory=list)
 
