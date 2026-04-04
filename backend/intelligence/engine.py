@@ -69,6 +69,12 @@ class IntelligenceEngine:
 				affected_cpu_processes,
 				"Close heavy applications or background processes",
 			)
+			cpu_evidence = {"cpu_percent": snapshot.cpu_percent}
+			if affected_cpu_processes:
+				cpu_evidence["fix_action"] = {
+					"action": "kill_process",
+					"target": affected_cpu_processes[0],
+				}
 			if top_cpu_processes:
 				cpu_process_details = " and ".join(
 					f"{process.name} ({process.cpu_percent:.0f}%)" for process in top_cpu_processes
@@ -94,7 +100,7 @@ class IntelligenceEngine:
 				confidence=min(1.0, snapshot.cpu_percent / 100),
 				affected_processes=affected_cpu_processes,
 				suggestion=cpu_suggestion,
-				evidence={"cpu_percent": snapshot.cpu_percent},
+				evidence=cpu_evidence,
 			)
 			cpu_issue.clamp_confidence()
 			issues.append(cpu_issue)
@@ -104,6 +110,12 @@ class IntelligenceEngine:
 				affected_memory_processes,
 				"Close memory-intensive applications or restart unused services",
 			)
+			memory_evidence = {"memory_percent": snapshot.memory_percent}
+			if affected_memory_processes:
+				memory_evidence["fix_action"] = {
+					"action": "kill_process",
+					"target": affected_memory_processes[0],
+				}
 			if top_memory_processes:
 				memory_process_details = " and ".join(
 					f"{process.name} ({process.memory_mb:.0f} MB)" for process in top_memory_processes
@@ -129,7 +141,7 @@ class IntelligenceEngine:
 				confidence=min(1.0, snapshot.memory_percent / 100),
 				affected_processes=affected_memory_processes,
 				suggestion=memory_suggestion,
-				evidence={"memory_percent": snapshot.memory_percent},
+				evidence=memory_evidence,
 			)
 			memory_issue.clamp_confidence()
 			issues.append(memory_issue)
