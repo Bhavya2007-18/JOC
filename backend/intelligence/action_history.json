@@ -1,0 +1,14 @@
+[
+  {
+    "action_id": "183c89dd-4b73-48df-aa3b-1258634af32a",
+    "action_type": "kill_process",
+    "target": "test.exe",
+    "timestamp": 1775306259.364736,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "message": "test"
+    },
+    "parameters": {}
+  }
+]
