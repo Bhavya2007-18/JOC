@@ -44,6 +44,7 @@ def scan(path: str, max_files: int = 5000) -> dict:
 			extension = os.path.splitext(filename)[1].lower()
 			record = {
 				"path": full_path,
+				"path_lower": full_path.lower(),
 				"name": filename,
 				"size": bytes_to_human(int(stat_result.st_size)),
 				"raw_size": int(stat_result.st_size),

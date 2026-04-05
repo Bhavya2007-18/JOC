@@ -15,8 +15,8 @@ def get_junk_files(files: list) -> dict:
 
 	for file_record in files:
 		extension = str(file_record.get("extension", "")).lower()
-		file_path = str(file_record.get("path", ""))
-		normalized_path = os.path.normpath(file_path).replace("\\", "/").lower()
+		file_path_lower = str(file_record.get("path_lower", str(file_record.get("path", "")).lower()))
+		normalized_path = os.path.normpath(file_path_lower).replace("\\", "/")
 		path_segments = [segment for segment in normalized_path.split("/") if segment]
 
 		is_junk_by_extension = extension in junk_extensions
