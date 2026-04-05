@@ -31,44 +31,6 @@ def get_system_health(junk_size: int, duplicate_size: int, cold_size: int) -> di
 	return {"system_health": score, "status": status}
 
 
-def generate_suggestions(files: list, junk_data: dict) -> dict:
-	"""Generate simple, actionable storage suggestions."""
-	junk_raw = int(junk_data.get("total_junk_size", 0) or 0)
-
-	sorted_files = sorted(
-		files,
-		key=lambda file_record: int(file_record.get("raw_size", 0) or 0),
-		reverse=True,
-	)
-
-	top_10_largest = sorted_files[:10]
-	large_files_raw = sum(int(file_record.get("raw_size", 0) or 0) for file_record in top_10_largest)
-
-	raw_total = junk_raw + large_files_raw
-
-	actions = [
-		{
-			"type": "junk_cleanup",
-			"title": "Clear junk files",
-			"description": "Remove temporary and cache files",
-			"recoverable_space": bytes_to_human(junk_raw),
-		},
-		{
-			"type": "large_files",
-			"title": "Review large files",
-			"description": "Review very large files to decide what to remove",
-			"recoverable_space": bytes_to_human(large_files_raw),
-		},
-	]
-
-	return {
-		"total_recoverable_space": bytes_to_human(raw_total),
-		"raw_total": raw_total,
-		"actions": actions,
-		"top_large_files": top_10_largest[:3],
-	}
-
-
 def generate_full_suggestions(
 	files: list,
 	junk: dict = None,

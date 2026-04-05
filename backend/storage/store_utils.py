@@ -3,6 +3,13 @@
 import os
 
 
+VIDEO_EXTENSIONS = {"mp4", "mkv", "avi", "mov", "wmv", "flv", "webm", "m4v"}
+IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "tiff"}
+DOCUMENT_EXTENSIONS = {"pdf", "doc", "docx", "txt", "ppt", "pptx", "xls", "xlsx", "csv", "md"}
+AUDIO_EXTENSIONS = {"mp3", "wav", "aac", "flac", "ogg", "m4a", "wma"}
+ARCHIVE_EXTENSIONS = {"zip", "rar", "7z", "tar", "gz", "bz2", "xz"}
+
+
 def bytes_to_human(size: int) -> str:
 	"""Convert bytes to a readable KB/MB/GB string."""
 	if size < 0:
@@ -27,21 +34,15 @@ def get_file_category(extension: str) -> str:
 	if ext.startswith("."):
 		ext = ext[1:]
 
-	video = {"mp4", "mkv", "avi", "mov", "wmv", "flv", "webm", "m4v"}
-	image = {"jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "tiff"}
-	document = {"pdf", "doc", "docx", "txt", "ppt", "pptx", "xls", "xlsx", "csv", "md"}
-	audio = {"mp3", "wav", "aac", "flac", "ogg", "m4a", "wma"}
-	archive = {"zip", "rar", "7z", "tar", "gz", "bz2", "xz"}
-
-	if ext in video:
+	if ext in VIDEO_EXTENSIONS:
 		return "video"
-	if ext in image:
+	if ext in IMAGE_EXTENSIONS:
 		return "image"
-	if ext in document:
+	if ext in DOCUMENT_EXTENSIONS:
 		return "document"
-	if ext in audio:
+	if ext in AUDIO_EXTENSIONS:
 		return "audio"
-	if ext in archive:
+	if ext in ARCHIVE_EXTENSIONS:
 		return "archive"
 	return "other"
 
