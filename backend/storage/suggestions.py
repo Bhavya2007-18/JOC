@@ -69,11 +69,19 @@ def generate_suggestions(files: list, junk_data: dict) -> dict:
 	}
 
 
-def generate_full_suggestions(files: list) -> dict:
+def generate_full_suggestions(
+	files: list,
+	junk: dict = None,
+	duplicates: dict = None,
+	cold: dict = None,
+) -> dict:
 	"""Combine junk, duplicate, and cold-file insights into one output."""
-	junk = get_junk_files(files)
-	duplicates = find_duplicates(files)
-	cold = find_cold_files(files, days=60)
+	if junk is None:
+		junk = get_junk_files(files)
+	if duplicates is None:
+		duplicates = find_duplicates(files)
+	if cold is None:
+		cold = find_cold_files(files, days=60)
 
 	junk_size = int(junk.get("total_junk_size", 0) or 0)
 	duplicate_size = int(duplicates.get("total_duplicate_size", 0) or 0)
