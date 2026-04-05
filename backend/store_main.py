@@ -18,7 +18,13 @@ def scan_files(path: str = "C:/Users", max_files: int = 5000, cold_days: int = 6
     junk = get_junk_files(files)
     duplicates = find_duplicates(files)
     cold = find_cold_files(files, days=cold_days)
-    suggestions = generate_full_suggestions(files)
+    suggestions = generate_full_suggestions(
+        files,
+        junk=junk,
+        duplicates=duplicates,
+        cold=cold,
+        cold_days=cold_days,
+    )
 
     return {
         "summary": {

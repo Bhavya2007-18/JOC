@@ -74,14 +74,16 @@ def generate_full_suggestions(
 	junk: dict = None,
 	duplicates: dict = None,
 	cold: dict = None,
+	cold_days: int = 60,
 ) -> dict:
 	"""Combine junk, duplicate, and cold-file insights into one output."""
+	threshold_days = int(cold_days)
 	if junk is None:
 		junk = get_junk_files(files)
 	if duplicates is None:
 		duplicates = find_duplicates(files)
 	if cold is None:
-		cold = find_cold_files(files, days=60)
+		cold = find_cold_files(files, days=threshold_days)
 
 	junk_size = int(junk.get("total_junk_size", 0) or 0)
 	duplicate_size = int(duplicates.get("total_duplicate_size", 0) or 0)
@@ -159,6 +161,7 @@ def generate_full_suggestions(
 		"recommendation": recommendation,
 		"system_health": health_data["system_health"],
 		"status": health_data["status"],
+		"threshold_days": threshold_days,
 		"total_recoverable_space": total_recoverable_space,
 		"raw_total": raw_total,
 		"actions": actions,
