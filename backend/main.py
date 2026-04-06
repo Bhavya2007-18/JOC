@@ -1,54 +1,24 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
-from intelligence.engine import IntelligenceEngine
-from intelligence.fixer import FixEngine
-from intelligence.snapshot_provider import collect_snapshot
+from api.analyze import router as analyze_router
+from api.fix import router as fix_router
+from api.tweak import router as tweak_router
+from api.action import router as action_router
+from api.storage_routes import router as storage_router
 
 app = FastAPI()
 
-intelligence_engine = IntelligenceEngine()
-engine = FixEngine()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-
-@app.get("/analyze")
-def analyze_system():
-	snapshot = collect_snapshot()
-	report = intelligence_engine.analyze(snapshot)
-
-	return {
-		"summary": report.snapshot_summary,
-		"issues": [issue.__dict__ for issue in report.issues],
-		"changes": report.changes_detected,
-	}
-
-
-class FixRequest(BaseModel):
-	action: str
-	target: str
-
-
-class TweakExecuteRequest(BaseModel):
-	tweak_name: str
-
-
-class ActionRevertRequest(BaseModel):
-	action_id: str
-
-
-@app.post("/fix")
-def apply_fix(request: FixRequest):
-    if request.action == "kill_process":
-        return engine.kill_process_by_name(request.target)
-
-    return {"error": "Unsupported action"}
-
-
-@app.post("/tweak/execute")
-def execute_tweak(request: TweakExecuteRequest):
-    return engine.execute_tweak(request.tweak_name)
-
-
-@app.post("/action/revert")
-def revert_action(request: ActionRevertRequest):
-    return engine.revert_action(request.action_id)
+app.include_router(analyze_router)
+app.include_router(fix_router)
+app.include_router(tweak_router)
+app.include_router(action_router)
+app.include_router(storage_router)

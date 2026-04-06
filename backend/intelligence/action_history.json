@@ -103,5 +103,97 @@
     "parameters": {
       "reverted_action_id": "6cbb2c83-bd34-44d5-b7f3-bcf088f99d83"
     }
+  },
+  {
+    "action_id": "fecba813-7a44-483c-b032-5e2cc7c6b698",
+    "action_type": "kill_process",
+    "target": "notepad.exe",
+    "timestamp": 1775517282.8996105,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "kill_process",
+      "target": "notepad.exe",
+      "killed_pids": [],
+      "failed": []
+    },
+    "parameters": {}
+  },
+  {
+    "action_id": "e7ba8bde-ad96-47b3-95e6-9a8e6217b160",
+    "action_type": "kill_process",
+    "target": "notepad.exe",
+    "timestamp": 1775517306.163414,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "kill_process",
+      "target": "notepad.exe",
+      "killed_pids": [],
+      "failed": []
+    },
+    "parameters": {}
+  },
+  {
+    "action_id": "d329de18-7ebf-4b39-9942-b5862e442443",
+    "action_type": "kill_process",
+    "target": "notepad.exe",
+    "timestamp": 1775517307.9041407,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "kill_process",
+      "target": "notepad.exe",
+      "killed_pids": [],
+      "failed": []
+    },
+    "parameters": {}
+  },
+  {
+    "action_id": "83821128-bceb-4fdb-8a06-9c994300acf4",
+    "action_type": "kill_process",
+    "target": "notepad.exe",
+    "timestamp": 1775517316.204135,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "kill_process",
+      "target": "notepad.exe",
+      "killed_pids": [],
+      "failed": []
+    },
+    "parameters": {}
+  },
+  {
+    "action_id": "66f55188-d431-41a3-b7f6-bba31c299f68",
+    "action_type": "kill_process",
+    "target": "notepad",
+    "timestamp": 1775517577.4425793,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "kill_process",
+      "target": "notepad",
+      "killed_pids": [],
+      "failed": []
+    },
+    "parameters": {}
+  },
+  {
+    "action_id": "77e764ab-d386-4e95-a411-f6607f9da8f6",
+    "action_type": "kill_process",
+    "target": "notepad",
+    "timestamp": 1775517953.2004457,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "kill_process",
+      "target": "notepad",
+      "killed_pids": [
+        9488
+      ],
+      "failed": []
+    },
+    "parameters": {}
   }
 ]

@@ -1,15 +1,17 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Literal
-from .storage.breakdown import get_category_breakdown
-from .storage.cleanup import EMPTY_CLEANUP_RESULT, delete_paths, extract_cleanup_paths
-from .storage.cold_files import find_cold_files
-from .storage.duplicate_finder import find_duplicates
-from .storage.junk_cleaner import get_junk_files
-from .storage.scanner import scan
-from .storage.suggestions import generate_full_suggestions
 
-app = FastAPI()
+from storage.breakdown import get_category_breakdown
+from storage.cleanup import EMPTY_CLEANUP_RESULT, delete_paths, extract_cleanup_paths
+from storage.cold_files import find_cold_files
+from storage.duplicate_finder import find_duplicates
+from storage.junk_cleaner import get_junk_files
+from storage.scanner import scan
+from storage.suggestions import generate_full_suggestions
+
+router = APIRouter()
+
 LAST_ANALYSIS = {
     "junk": {"junk_files": [], "total_junk_size": 0, "readable_size": "0 B"},
     "duplicates": {"duplicates": [], "total_duplicate_size": 0, "readable_size": "0 B"},
@@ -23,11 +25,10 @@ class CleanupRequest(BaseModel):
 
 
 def _strip_internal_fields(file_record: dict) -> dict:
-    """Remove internal-only fields before API response."""
     return {key: value for key, value in file_record.items() if key != "path_lower"}
 
 
-@app.get("/scan")
+@router.get("/scan")
 def scan_files(path: str = "C:/Users", max_files: int = 5000, cold_days: int = 60):
     result = scan(path, max_files=max_files)
     files = result["files"]
@@ -75,7 +76,7 @@ def scan_files(path: str = "C:/Users", max_files: int = 5000, cold_days: int = 6
     }
 
 
-@app.post("/cleanup")
+@router.post("/cleanup")
 def cleanup_files(payload: CleanupRequest):
     if not payload.confirm:
         return {"error": "Confirmation required"}

@@ -70,9 +70,14 @@ class FixEngine:
 
         for proc in psutil.process_iter(["pid", "name"]):
             try:
-                if proc.info["name"] == process_name:
+                name = proc.info.get("name")
+
+                if not name:
+                    continue
+                if process_name.lower() in name.lower():
                     proc.kill()
                     killed.append(proc.info["pid"])
+
             except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
                 failed.append({
                     "pid": proc.info.get("pid"),
