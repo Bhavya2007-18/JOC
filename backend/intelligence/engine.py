@@ -10,6 +10,7 @@ from .models import (
 	Issue,
 	RiskLevel,
 	SystemSnapshot,
+	Severity,
 )
 
 
@@ -124,7 +125,7 @@ class IntelligenceEngine:
 			cpu_issue = Issue(
 				id="HIGH_CPU",
 				category="cpu",
-				severity="warning",
+				severity=Severity.MEDIUM,
 				title="High CPU Usage",
 				cause=cpu_cause,
 				explanation=cpu_explanation,
@@ -190,7 +191,7 @@ class IntelligenceEngine:
 			memory_issue = Issue(
 				id="HIGH_MEMORY",
 				category="memory",
-				severity="warning",
+				severity=Severity.HIGH,
 				title="High Memory Usage",
 				cause=memory_cause,
 				explanation=memory_explanation,

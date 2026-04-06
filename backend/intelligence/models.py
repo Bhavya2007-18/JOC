@@ -53,6 +53,14 @@ class RiskLevel(Enum):
 	RISKY = "risky"
 
 
+# 🔥 NEW — Proper severity typing
+class Severity(str, Enum):
+	LOW = "low"
+	MEDIUM = "medium"
+	HIGH = "high"
+	CRITICAL = "critical"
+
+
 @dataclass
 class ActionSuggestion:
 	action_type: ActionType
@@ -82,7 +90,7 @@ class Issue:
 
 	id: str
 	category: str
-	severity: str
+	severity: Severity  # ✅ UPDATED
 	title: str
 	cause: str
 	explanation: str
@@ -107,4 +115,3 @@ class DiagnosticReport:
 	issues: List[Issue] = field(default_factory=list)
 	changes_detected: List[Dict[str, object]] = field(default_factory=list)
 	anomalies_detected: List[Dict[str, object]] = field(default_factory=list)
-
