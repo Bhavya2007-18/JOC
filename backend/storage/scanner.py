@@ -38,7 +38,7 @@ def scan(path: str, max_files: int = 5000) -> dict:
 
 			try:
 				stat_result = os.stat(full_path)
-			except (PermissionError, FileNotFoundError, OSError):
+			except Exception:
 				continue
 
 			extension = os.path.splitext(filename)[1].lower()
