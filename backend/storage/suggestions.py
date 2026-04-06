@@ -53,18 +53,18 @@ def generate_full_suggestions(
 
 	raw_total = junk_size + duplicate_size + cold_size
 	total_recoverable_space = bytes_to_human(raw_total)
+	mb_50 = 50 * 1024 * 1024
 	mb_500 = 500 * 1024 * 1024
-	gb_2 = 2 * 1024 * 1024 * 1024
 
-	if raw_total < mb_500:
-		priority = "low"
-		recommendation = "Cleanup is optional right now; focus on junk files first."
-	elif raw_total <= gb_2:
-		priority = "medium"
-		recommendation = "Run a cleanup pass for junk and duplicate files soon."
-	else:
+	if raw_total > mb_500:
 		priority = "high"
-		recommendation = "Start cleanup now and prioritize duplicate and cold files."
+		recommendation = "Immediate cleanup recommended"
+	elif raw_total > mb_50:
+		priority = "medium"
+		recommendation = "Cleanup recommended soon"
+	else:
+		priority = "low"
+		recommendation = "Cleanup is optional right now"
 
 	actions = []
 
@@ -121,8 +121,6 @@ def generate_full_suggestions(
 		"top_issue": top_issue,
 		"priority": priority,
 		"recommendation": recommendation,
-		"system_health": health_data["system_health"],
-		"status": health_data["status"],
 		"threshold_days": threshold_days,
 		"total_recoverable_space": total_recoverable_space,
 		"raw_total": raw_total,
