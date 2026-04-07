@@ -1,7 +1,7 @@
 import psutil
 import time
 import os
-
+from storage.db import save_snapshot
 # Optional: Set a global flag if initialization is required
 _is_initialized = False
 
@@ -117,7 +117,7 @@ if __name__ == "__main__":
             os.system('cls' if os.name == 'nt' else 'clear')
             
             snapshot = get_system_snapshot()
-            
+            save_snapshot(snapshot)
             # Print formatted output for easy reading
             print(f"=== System Snapshot at {time.strftime('%H:%M:%S', time.localtime(snapshot['timestamp']))} ===")
             print(f"CPU: {snapshot['cpu']['cpu_percent']}% ({snapshot['cpu']['cpu_count']} cores)")

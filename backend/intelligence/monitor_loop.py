@@ -3,7 +3,10 @@ import threading
 
 from intelligence.snapshot_provider import collect_snapshot
 from intelligence.engine import IntelligenceEngine
+from storage.db import save_snapshot
+from utils.logger import get_logger
 
+logger = get_logger("monitor")
 
 class MonitorLoop:
     def __init__(self, interval: int = 5):
@@ -25,8 +28,15 @@ class MonitorLoop:
     def run(self):
         while self.running:
             try:
+                logger.info("Loop running")
+
                 snapshot = collect_snapshot()
-                self.engine.analyze(snapshot)
+                save_snapshot(snapshot)
+                threading.Thread(
+                    target=self.engine.analyze,
+                    args=(snapshot,),
+                    daemon=True
+                ).start()
             except Exception as e:
                 print(f"[MonitorLoop Error] {e}")
 

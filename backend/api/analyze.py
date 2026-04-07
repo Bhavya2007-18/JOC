@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from intelligence.engine import IntelligenceEngine
 from intelligence.snapshot_provider import collect_snapshot
+from storage.db import save_snapshot
 
 router = APIRouter()
 
@@ -9,6 +10,7 @@ intelligence_engine = IntelligenceEngine()
 @router.get("/analyze")
 def analyze_system():
     snapshot = collect_snapshot()
+    save_snapshot(snapshot)
     report = intelligence_engine.analyze(snapshot)
 
     return {

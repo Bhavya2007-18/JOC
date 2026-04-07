@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from storage.db import init_db
 from api.analyze import router as analyze_router
 from api.fix import router as fix_router
 from api.tweak import router as tweak_router
@@ -10,6 +10,10 @@ from intelligence.monitor_loop import MonitorLoop
 
 monitor = MonitorLoop(interval=5)
 app = FastAPI()
+@app.on_event("startup")
+def startup_event():
+    init_db()
+    
 @app.on_event("startup")
 def start_monitor():
     monitor.start()
