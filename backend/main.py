@@ -6,9 +6,13 @@ from api.fix import router as fix_router
 from api.tweak import router as tweak_router
 from api.action import router as action_router
 from api.storage_routes import router as storage_router
+from intelligence.monitor_loop import MonitorLoop
 
+monitor = MonitorLoop(interval=5)
 app = FastAPI()
-
+@app.on_event("startup")
+def start_monitor():
+    monitor.start()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
