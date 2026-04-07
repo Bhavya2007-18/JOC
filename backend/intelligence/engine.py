@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 from typing import List
-
+from intelligence.state_manager import StateManager
 from .models import (
 	ActionSuggestion,
 	ActionType,
@@ -15,23 +15,26 @@ from .models import (
 
 
 class IntelligenceEngine:
-	_previous_snapshot = None
-	_snapshot_history: List[SystemSnapshot] = []
+	state_manager = StateManager()
 
 	def analyze(self, snapshot: SystemSnapshot) -> DiagnosticReport:
 		issues: List[Issue] = []
 
-		IntelligenceEngine._snapshot_history.append(snapshot)
-		if len(IntelligenceEngine._snapshot_history) > 5:
-			IntelligenceEngine._snapshot_history = IntelligenceEngine._snapshot_history[-5:]
+		IntelligenceEngine.state_manager.add_snapshot(snapshot)
+		history = IntelligenceEngine.state_manager.get_recent()
 
-		avg_cpu = sum(item.cpu_percent for item in IntelligenceEngine._snapshot_history) / len(
-			IntelligenceEngine._snapshot_history
-		)
-		avg_memory = sum(item.memory_percent for item in IntelligenceEngine._snapshot_history) / len(
-			IntelligenceEngine._snapshot_history
-		)
-		history_ready = len(IntelligenceEngine._snapshot_history) >= 3
+		avg_cpu = sum(item.cpu_percent for item in history) / len(history)
+		avg_memory = sum(item.memory_percent for item in history) / len(history)
+		
+		cpu_values = [item.cpu_percent for item in history]
+		memory_values = [item.memory_percent for item in history]
+
+		cpu_increasing = all(x < y for x, y in zip(cpu_values, cpu_values[1:]))
+		memory_increasing = all(x < y for x, y in zip(memory_values, memory_values[1:]))
+		history_ready = IntelligenceEngine.state_manager.has_enough_data()
+		cpu_consistently_high = all(x > 75 for x in cpu_values) if history_ready else False
+		memory_consistently_high = all(x > 75 for x in memory_values) if history_ready else False
+
 
 		def _unique_process_names(process_names: List[str]) -> List[str]:
 			unique_names: List[str] = []
@@ -138,6 +141,22 @@ class IntelligenceEngine:
 			cpu_issue.clamp_confidence()
 			issues.append(cpu_issue)
 
+		if cpu_consistently_high:
+			cpu_sustained_issue = Issue(
+				id="CPU_SUSTAINED_HIGH",
+				category="cpu",
+				severity=Severity.HIGH,
+				title="Sustained High CPU Usage",
+				cause="CPU usage has remained consistently high over multiple checks",
+				explanation="This indicates prolonged system stress, not just a temporary spike.",
+				confidence=0.9,
+				affected_processes=affected_cpu_processes,
+				suggestion="Consider closing heavy applications or restarting system",
+				evidence={"cpu_history": cpu_values},
+				suggested_actions=[],
+			)
+			issues.append(cpu_sustained_issue)
+
 		if snapshot.memory_percent > 80:
 			memory_suggestion = _build_suggestion(
 				affected_memory_processes,
@@ -204,6 +223,22 @@ class IntelligenceEngine:
 			memory_issue.clamp_confidence()
 			issues.append(memory_issue)
 
+		if memory_increasing and history_ready:
+			memory_leak_issue = Issue(
+				id="MEMORY_LEAK_PATTERN",
+				category="memory",
+				severity=Severity.MEDIUM,
+				title="Memory Usage Increasing Over Time",
+				cause="Memory usage shows a steady upward trend",
+				explanation="This may indicate a memory leak or accumulating background processes.",
+				confidence=0.85,
+				affected_processes=affected_memory_processes,
+				suggestion="Monitor or restart high memory applications",
+				evidence={"memory_history": memory_values},
+				suggested_actions=[],
+			)
+			issues.append(memory_leak_issue)
+
 		health_score = max(0.0, min(100.0, 100.0 - (20.0 * len(issues))))
 
 		snapshot_summary = {
@@ -213,7 +248,8 @@ class IntelligenceEngine:
 		}
 
 		changes_detected: List[dict] = []
-		previous_snapshot = IntelligenceEngine._previous_snapshot
+		history = IntelligenceEngine.state_manager.get_recent()
+		previous_snapshot = history[-2] if len(history) >= 2 else None
 		change_time = time.time()
 
 		if previous_snapshot is not None:
@@ -263,8 +299,6 @@ class IntelligenceEngine:
 							"time": change_time,
 						}
 					)
-
-		IntelligenceEngine._previous_snapshot = snapshot
 
 		return DiagnosticReport(
 			timestamp=time.time(),
