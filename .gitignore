@@ -12,3 +12,6 @@ backend/__pycache__/
 backend/.env
 backend/*.log
 backend/storage/*.db
+backend/logs/simulation_logs.json
+backend/storage/behavior_logs.json
+frontend/package-lock.json
