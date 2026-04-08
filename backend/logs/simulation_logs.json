@@ -160,5 +160,95 @@
       "state": "IDLE",
       "note": "Engine returned to IDLE"
     }
+  },
+  {
+    "timestamp": 1775665374.5414004,
+    "correlation_id": "27cb44a8-6bd7-459d-89d9-38981b23a2b5",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775665374.2665775,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1775665374.9566145,
+    "correlation_id": "27cb44a8-6bd7-459d-89d9-38981b23a2b5",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775665374.6419044,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running network_burst"
+    }
+  },
+  {
+    "timestamp": 1775665375.3918948,
+    "correlation_id": "27cb44a8-6bd7-459d-89d9-38981b23a2b5",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775665375.1984336,
+      "state": "FAILED",
+      "note": "Simulation failed: Memory safety ceiling exceeded: 91.9% >= 90.0%"
+    }
+  },
+  {
+    "timestamp": 1775665375.7787771,
+    "correlation_id": "27cb44a8-6bd7-459d-89d9-38981b23a2b5",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "7a05dca1-a0fe-49ec-8d65-027a5fbbbac1",
+      "simulation_type": "network_burst",
+      "parameters": {},
+      "timeline": {
+        "start": 1775665374.266512,
+        "anomaly_detected_at": null,
+        "decision_made_at": null,
+        "completed_at": 1775665375.4805183,
+        "transitions": [
+          {
+            "timestamp": 1775665374.2665775,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1775665374.6419044,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running network_burst"
+          },
+          {
+            "timestamp": 1775665375.1984336,
+            "state": "FAILED",
+            "note": "Simulation failed: Memory safety ceiling exceeded: 91.9% >= 90.0%"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 1.2140064239501953,
+        "detection_delay": 0.0
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 0,
+        "total_score": 0,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [],
+      "logs_ref": "D:\\WORK AND STUDY\\projects\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "FAILED",
+      "correlation_id": "27cb44a8-6bd7-459d-89d9-38981b23a2b5"
+    }
+  },
+  {
+    "timestamp": 1775665375.781086,
+    "correlation_id": "27cb44a8-6bd7-459d-89d9-38981b23a2b5",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775665375.780332,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
   }
 ]
