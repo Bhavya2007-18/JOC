@@ -8,6 +8,9 @@ from api.tweak import router as tweak_router
 from api.action import router as action_router
 from api.storage_routes import router as storage_router
 from api.system_routes import router as system_router
+from api.optimizer_routes import router as optimizer_router
+from api.intelligence_routes import router as intelligence_router
+from api.simulation_routes import router as simulation_router
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
 
@@ -50,3 +53,6 @@ app.include_router(tweak_router)
 app.include_router(action_router)
 app.include_router(storage_router)
 app.include_router(system_router)
+app.include_router(optimizer_router)
+app.include_router(intelligence_router)
+app.include_router(simulation_router)

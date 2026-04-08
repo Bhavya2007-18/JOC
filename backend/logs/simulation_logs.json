@@ -1,0 +1,164 @@
+[
+  {
+    "timestamp": 1775663755.8415668,
+    "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775663755.8410237,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1775663755.8422089,
+    "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775663755.841866,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running cpu_spike"
+    }
+  },
+  {
+    "timestamp": 1775663755.8939786,
+    "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775663755.8935065,
+      "state": "OBSERVING",
+      "note": "Observation window started"
+    }
+  },
+  {
+    "timestamp": 1775663757.941801,
+    "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775663757.9414341,
+      "state": "ANALYZING",
+      "note": "Analyzing responses"
+    }
+  },
+  {
+    "timestamp": 1775663757.9442925,
+    "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775663757.9439647,
+      "state": "COMPLETED",
+      "note": "Simulation completed"
+    }
+  },
+  {
+    "timestamp": 1775663757.9454074,
+    "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "fbdc04f6-05f9-4066-a1b2-30826de40bbe",
+      "simulation_type": "cpu_spike",
+      "parameters": {
+        "intensity": 1,
+        "duration": 1
+      },
+      "timeline": {
+        "start": 1775663755.841006,
+        "anomaly_detected_at": null,
+        "decision_made_at": 1775663757.9413931,
+        "completed_at": 1775663757.9420226,
+        "transitions": [
+          {
+            "timestamp": 1775663755.8410237,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1775663755.841866,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running cpu_spike"
+          },
+          {
+            "timestamp": 1775663755.8935065,
+            "state": "OBSERVING",
+            "note": "Observation window started"
+          },
+          {
+            "timestamp": 1775663757.9414341,
+            "state": "ANALYZING",
+            "note": "Analyzing responses"
+          },
+          {
+            "timestamp": 1775663757.9439647,
+            "state": "COMPLETED",
+            "note": "Simulation completed"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 2.1010165214538574,
+        "detection_delay": 2.1010165214538574
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 20,
+        "total_score": 20,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [
+        {
+          "metadata": {
+            "type": "cpu_spike",
+            "simulation_id": "fbdc04f6-05f9-4066-a1b2-30826de40bbe",
+            "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e",
+            "parameters": {
+              "intensity": 1,
+              "duration": 1
+            }
+          },
+          "result": {
+            "simulation": "cpu_spike",
+            "dry_run": true,
+            "threads": 1,
+            "duration": 1.0,
+            "throttle_seconds": 0.001
+          },
+          "timestamp": 1775663755.893226
+        },
+        {
+          "decision": "Suggest cleanup to free memory",
+          "reason": "Average memory usage is 82.8%, above the safe threshold",
+          "confidence": "low",
+          "data_used": {
+            "average_memory_percent": 82.8
+          },
+          "related_anomalies": [],
+          "suggested_actions": [
+            {
+              "action_type": "run_cleanup",
+              "target": "system",
+              "parameters": {
+                "endpoint": "/optimize/cleanup",
+                "dry_run": true
+              }
+            }
+          ]
+        }
+      ],
+      "logs_ref": "D:\\WORK AND STUDY\\projects\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "COMPLETED",
+      "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e"
+    }
+  },
+  {
+    "timestamp": 1775663757.946074,
+    "correlation_id": "074e86b2-ddab-4cc9-947b-c62f701da37e",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775663757.9457939,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
+  }
+]
