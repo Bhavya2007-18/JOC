@@ -1,0 +1,40 @@
+[
+  {
+    "timestamp": 1775663756.937117,
+    "hour_of_day": 21,
+    "cpu_percent": 9.0,
+    "memory_percent": 82.8,
+    "top_processes": [
+      {
+        "pid": 18468,
+        "name": "Trae.exe",
+        "cpu_percent": 0.0,
+        "memory_percent": 5.852911911351316
+      },
+      {
+        "pid": 3108,
+        "name": "dwm.exe",
+        "cpu_percent": 0.0,
+        "memory_percent": 4.486139251549735
+      },
+      {
+        "pid": 3540,
+        "name": "MemCompression",
+        "cpu_percent": 0.0,
+        "memory_percent": 4.481295169214176
+      },
+      {
+        "pid": 19960,
+        "name": "Trae.exe",
+        "cpu_percent": 0.0,
+        "memory_percent": 3.4704884169588355
+      },
+      {
+        "pid": 31144,
+        "name": "brave.exe",
+        "cpu_percent": 0.0,
+        "memory_percent": 3.340192488014603
+      }
+    ]
+  }
+]
