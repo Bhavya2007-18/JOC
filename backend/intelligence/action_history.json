@@ -195,5 +195,23 @@
       "failed": []
     },
     "parameters": {}
+  },
+  {
+    "action_id": "4277ea53-bec3-4be2-b2ba-3a97be72c594",
+    "action_type": "kill_process",
+    "target": "notepad.exe",
+    "timestamp": 1775588981.783571,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "action": "kill_process",
+      "target": "notepad.exe",
+      "killed_pids": [
+        28568,
+        28568
+      ],
+      "failed": []
+    },
+    "parameters": {}
   }
 ]

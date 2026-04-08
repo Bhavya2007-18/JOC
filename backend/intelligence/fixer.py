@@ -8,6 +8,8 @@ import psutil
 from intelligence.action_store import ActionStore
 from intelligence.models import ActionRecord, ActionType
 
+from config import DRY_RUN
+
 
 CRITICAL_PROCESSES = [
     "explorer.exe",
@@ -21,6 +23,48 @@ CRITICAL_PROCESSES = [
 
 
 class FixEngine:
+    def kill_process_by_pid(self, pid: int) -> dict:
+        try:
+            proc = psutil.Process(pid)
+            name = proc.name()
+
+            if name.lower() in CRITICAL_PROCESSES:
+                return {"error": f"Refusing to kill critical process: {name}"}
+
+            if DRY_RUN:
+                result = {
+                    "action": "kill_process_pid",
+                    "pid": pid,
+                    "name": name,
+                    "simulated": True
+                }
+            else:
+                proc.kill()
+                result = {
+                    "action": "kill_process_pid",
+                    "pid": pid,
+                    "name": name,
+                    "simulated": False
+                }
+
+            record = self._build_action_record(
+                action_type=ActionType.KILL_PROCESS,
+                target=name,
+                reversible=False,
+                result=result,
+                parameters={"pid": pid},
+            )
+
+            self.store.add_action(record)
+
+            response = dict(result)
+            response["action_id"] = record.action_id
+            return response
+
+        except psutil.NoSuchProcess:
+            return {"error": f"No process found with PID {pid}"}
+        except psutil.AccessDenied:
+            return {"error": f"Access denied to process {pid}"}
     def __init__(self) -> None:
         self.store = ActionStore()
 
@@ -74,9 +118,16 @@ class FixEngine:
 
                 if not name:
                     continue
-                if process_name.lower() in name.lower():
-                    proc.kill()
-                    killed.append(proc.info["pid"])
+
+                target = process_name.lower().replace(".exe", "")
+                proc_name = name.lower().replace(".exe", "")
+
+                if target in proc_name:
+                    if DRY_RUN:
+                        killed.append(proc.info["pid"])
+                    else:
+                        proc.kill()
+                        killed.append(proc.info["pid"])
 
             except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
                 failed.append({

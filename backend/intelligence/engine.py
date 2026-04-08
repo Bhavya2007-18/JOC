@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import time
 from typing import List
 from intelligence.state_manager import StateManager
@@ -13,6 +12,16 @@ from .models import (
 	Severity,
 )
 
+CRITICAL_PROCESSES = [
+    "explorer.exe",
+    "winlogon.exe",
+    "csrss.exe",
+    "services.exe",
+    "lsass.exe",
+    "system",
+    "svchost.exe",
+    "memcompression",
+]
 
 class IntelligenceEngine:
 	state_manager = StateManager()
@@ -71,9 +80,10 @@ class IntelligenceEngine:
 			key=lambda process: process.memory_mb,
 			reverse=True,
 		)[:2]
-		affected_memory_processes = _unique_process_names(
-			[process.name for process in top_memory_processes]
-		)
+		affected_memory_processes = [
+			{"name": process.name, "pid": process.pid}
+			for process in top_memory_processes
+		]
 
 		if snapshot.cpu_percent > 80:
 			cpu_suggestion = _build_suggestion(
@@ -82,17 +92,21 @@ class IntelligenceEngine:
 			)
 			cpu_suggested_actions: List[ActionSuggestion] = []
 			if affected_cpu_processes:
-				cpu_suggested_actions.append(
-					ActionSuggestion(
-						action_type=ActionType.KILL_PROCESS,
-						target=affected_cpu_processes[0],
-						description=f"Close {affected_cpu_processes[0]} to reduce CPU usage",
-						risk_level=RiskLevel.MODERATE,
-						reversible=False,
-						parameters={},
-						estimated_impact="Immediate CPU usage reduction",
+				process_name = affected_cpu_processes[0]
+				process_pid = None	
+
+				if process_name.lower().replace(".exe", "") not in CRITICAL_PROCESSES:
+					cpu_suggested_actions.append(
+						ActionSuggestion(
+							action_type=ActionType.KILL_PROCESS,
+							target=process_name,
+							description=f"Close {process_name} to reduce CPU usage",
+							risk_level=RiskLevel.MODERATE,
+							reversible=False,
+							parameters={},
+							estimated_impact="Immediate CPU usage reduction",
+						)
 					)
-				)
 			cpu_suggested_actions.append(
 				ActionSuggestion(
 					action_type=ActionType.SYSTEM_TWEAK,
@@ -106,10 +120,13 @@ class IntelligenceEngine:
 			)
 			cpu_evidence = {"cpu_percent": snapshot.cpu_percent}
 			if affected_cpu_processes:
-				cpu_evidence["fix_action"] = {
-					"action": "kill_process",
-					"target": affected_cpu_processes[0],
-				}
+				process_name = affected_cpu_processes[0]
+				process_pid = None
+				if process_name.lower().replace(".exe", "") not in CRITICAL_PROCESSES:
+					cpu_evidence["fix_action"] = {
+						"action": "kill_process",
+						"target": process_name,
+					}
 			if top_cpu_processes:
 				cpu_process_details = " and ".join(
 					f"{process.name} ({process.cpu_percent:.0f}%)" for process in top_cpu_processes
@@ -159,22 +176,32 @@ class IntelligenceEngine:
 
 		if snapshot.memory_percent > 80:
 			memory_suggestion = _build_suggestion(
-				affected_memory_processes,
+				[p["name"] for p in affected_memory_processes],
 				"Close memory-intensive applications or restart unused services",
 			)
 			memory_suggested_actions: List[ActionSuggestion] = []
 			if affected_memory_processes:
-				memory_suggested_actions.append(
-					ActionSuggestion(
-						action_type=ActionType.KILL_PROCESS,
-						target=affected_memory_processes[0],
-						description=f"Close {affected_memory_processes[0]} to free memory",
-						risk_level=RiskLevel.MODERATE,
-						reversible=False,
-						parameters={},
-						estimated_impact="Immediate memory usage reduction",
+				safe_process = None
+				for p in affected_memory_processes:
+					process_name = p["name"].lower().replace(".exe", "")
+					if process_name not in CRITICAL_PROCESSES:
+						safe_process = p
+						break
+
+				if safe_process:
+					process_name = safe_process["name"]
+					process_pid = safe_process["pid"]
+					memory_suggested_actions.append(
+						ActionSuggestion(
+							action_type=ActionType.KILL_PROCESS,
+							target=process_name,
+							description=f"Close {process_name} to free memory",
+							risk_level=RiskLevel.MODERATE,
+							reversible=False,
+							parameters={"pid": process_pid},
+							estimated_impact="Immediate memory usage reduction",
+						)
 					)
-				)
 			memory_suggested_actions.append(
 				ActionSuggestion(
 					action_type=ActionType.SYSTEM_TWEAK,
@@ -188,10 +215,21 @@ class IntelligenceEngine:
 			)
 			memory_evidence = {"memory_percent": snapshot.memory_percent}
 			if affected_memory_processes:
-				memory_evidence["fix_action"] = {
-					"action": "kill_process",
-					"target": affected_memory_processes[0],
-				}
+				safe_process = None
+				for p in affected_memory_processes:
+					process_name = p["name"].lower().replace(".exe", "")
+					if process_name not in CRITICAL_PROCESSES:
+						safe_process = p
+						break
+
+				if safe_process:
+					process_name = safe_process["name"]
+					process_pid = safe_process["pid"]
+					memory_evidence["fix_action"] = {
+						"action": "kill_process",
+						"target": process_name,
+						"pid": process_pid
+					}
 			if top_memory_processes:
 				memory_process_details = " and ".join(
 					f"{process.name} ({process.memory_mb:.0f} MB)" for process in top_memory_processes
