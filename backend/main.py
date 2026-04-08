@@ -1,22 +1,41 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from storage.db import init_db
 from api.analyze import router as analyze_router
 from api.fix import router as fix_router
 from api.tweak import router as tweak_router
 from api.action import router as action_router
 from api.storage_routes import router as storage_router
+from api.system_routes import router as system_router
 from intelligence.monitor_loop import MonitorLoop
+from utils.logger import get_logger
 
 monitor = MonitorLoop(interval=5)
+logger = get_logger("api")
 app = FastAPI()
+
+
+@app.middleware("http")
+async def add_error_handling(request: Request, call_next):
+    try:
+        response = await call_next(request)
+        return response
+    except Exception as exc:
+        logger.exception("Unhandled error")
+        return JSONResponse(status_code=500, content={"detail": "Internal server error"})
+
+
 @app.on_event("startup")
 def startup_event():
     init_db()
-    
+
+
 @app.on_event("startup")
 def start_monitor():
     monitor.start()
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,3 +49,4 @@ app.include_router(fix_router)
 app.include_router(tweak_router)
 app.include_router(action_router)
 app.include_router(storage_router)
+app.include_router(system_router)
