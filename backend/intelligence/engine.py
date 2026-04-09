@@ -2,6 +2,7 @@ from __future__ import annotations
 import time
 from typing import List
 from intelligence.state_manager import StateManager
+from intelligence.utils.anomaly import compute_z_score, is_anomaly
 from .models import (
 	ActionSuggestion,
 	ActionType,
@@ -28,6 +29,7 @@ class IntelligenceEngine:
 
 	def analyze(self, snapshot: SystemSnapshot) -> DiagnosticReport:
 		issues: List[Issue] = []
+		anomalies: List[Issue] = []
 
 		IntelligenceEngine.state_manager.add_snapshot(snapshot)
 		history = IntelligenceEngine.state_manager.get_recent()
@@ -35,8 +37,13 @@ class IntelligenceEngine:
 		avg_cpu = sum(item.cpu_percent for item in history) / len(history)
 		avg_memory = sum(item.memory_percent for item in history) / len(history)
 		
-		cpu_values = [item.cpu_percent for item in history]
-		memory_values = [item.memory_percent for item in history]
+		cpu_history = [item.cpu_percent for item in history]
+		memory_history = [item.memory_percent for item in history]
+
+		cpu_values = cpu_history
+		memory_values = memory_history
+		cpu_z = compute_z_score(snapshot.cpu_percent, cpu_history)
+		memory_z = compute_z_score(snapshot.memory_percent, memory_history)
 
 		cpu_increasing = all(x < y for x, y in zip(cpu_values, cpu_values[1:]))
 		memory_increasing = all(x < y for x, y in zip(memory_values, memory_values[1:]))
@@ -71,6 +78,10 @@ class IntelligenceEngine:
 			key=lambda process: process.cpu_percent,
 			reverse=True,
 		)[:2]
+		affected_cpu_processes_with_pid = [
+			{"name": process.name, "pid": process.pid}
+			for process in top_cpu_processes
+		]
 		affected_cpu_processes = _unique_process_names(
 			[process.name for process in top_cpu_processes]
 		)
@@ -85,6 +96,48 @@ class IntelligenceEngine:
 			for process in top_memory_processes
 		]
 
+		if is_anomaly(cpu_z):
+			cpu_anomaly_issue = Issue(
+				id="CPU_ANOMALY",
+				category="cpu",
+				severity=Severity.MEDIUM,
+				title="Abnormal CPU Usage Detected",
+				cause="CPU usage deviates significantly from recent baseline",
+				explanation="CPU usage is significantly higher than usual behavior",
+				confidence=min(1.0, abs(cpu_z) / 3.0),
+				affected_processes=affected_cpu_processes_with_pid,
+				suggestion="Inspect recent workload spikes and high-CPU processes",
+				evidence={
+					"current": snapshot.cpu_percent,
+					"z_score": cpu_z,
+				},
+				suggested_actions=[],
+			)
+			cpu_anomaly_issue.clamp_confidence()
+			issues.append(cpu_anomaly_issue)
+			anomalies.append(cpu_anomaly_issue)
+
+		if is_anomaly(memory_z):
+			memory_anomaly_issue = Issue(
+				id="MEMORY_ANOMALY",
+				category="memory",
+				severity=Severity.MEDIUM,
+				title="Abnormal Memory Usage Detected",
+				cause="Memory usage deviates significantly from recent baseline",
+				explanation="Memory usage is significantly higher than usual behavior",
+				confidence=min(1.0, abs(memory_z) / 3.0),
+				affected_processes=affected_memory_processes,
+				suggestion="Inspect recent memory growth and high-memory processes",
+				evidence={
+					"current": snapshot.memory_percent,
+					"z_score": memory_z,
+				},
+				suggested_actions=[],
+			)
+			memory_anomaly_issue.clamp_confidence()
+			issues.append(memory_anomaly_issue)
+			anomalies.append(memory_anomaly_issue)
+
 		if snapshot.cpu_percent > 80:
 			cpu_suggestion = _build_suggestion(
 				affected_cpu_processes,
@@ -92,8 +145,9 @@ class IntelligenceEngine:
 			)
 			cpu_suggested_actions: List[ActionSuggestion] = []
 			if affected_cpu_processes:
-				process_name = affected_cpu_processes[0]
-				process_pid = None	
+				process = top_cpu_processes[0]
+				process_name = process.name
+				process_pid = process.pid	
 
 				if process_name.lower().replace(".exe", "") not in CRITICAL_PROCESSES:
 					cpu_suggested_actions.append(
@@ -103,7 +157,7 @@ class IntelligenceEngine:
 							description=f"Close {process_name} to reduce CPU usage",
 							risk_level=RiskLevel.MODERATE,
 							reversible=False,
-							parameters={},
+							parameters={"pid": process.pid},
 							estimated_impact="Immediate CPU usage reduction",
 						)
 					)
@@ -119,13 +173,13 @@ class IntelligenceEngine:
 				)
 			)
 			cpu_evidence = {"cpu_percent": snapshot.cpu_percent}
-			if affected_cpu_processes:
-				process_name = affected_cpu_processes[0]
-				process_pid = None
-				if process_name.lower().replace(".exe", "") not in CRITICAL_PROCESSES:
+			if top_cpu_processes:
+				process = top_cpu_processes[0]
+				if process.name.lower().replace(".exe", "") not in CRITICAL_PROCESSES:
 					cpu_evidence["fix_action"] = {
 						"action": "kill_process",
-						"target": process_name,
+						"target": process.name,
+						"pid": process.pid,
 					}
 			if top_cpu_processes:
 				cpu_process_details = " and ".join(
@@ -277,7 +331,15 @@ class IntelligenceEngine:
 			)
 			issues.append(memory_leak_issue)
 
-		health_score = max(0.0, min(100.0, 100.0 - (20.0 * len(issues))))
+		health_score = 100.0
+		for issue in issues:
+			if issue.severity == Severity.HIGH:
+				health_score -= 30.0
+			elif issue.severity == Severity.MEDIUM:
+				health_score -= 15.0
+			elif issue.severity == Severity.LOW:
+				health_score -= 5.0
+		health_score = max(0.0, min(100.0, health_score))
 
 		snapshot_summary = {
 			"cpu_percent": snapshot.cpu_percent,
@@ -338,11 +400,95 @@ class IntelligenceEngine:
 						}
 					)
 
+		high_memory_issue = next((issue for issue in issues if issue.id == "HIGH_MEMORY"), None)
+		if high_memory_issue and changes_detected:
+			latest_process_started = next(
+				(change for change in reversed(changes_detected) if change.get("type") == "process_started"),
+				None,
+			)
+			latest_memory_spike = next(
+				(change for change in reversed(changes_detected) if change.get("type") == "memory_spike"),
+				None,
+			)
+
+			if top_memory_processes:
+				likely_due_to = " and ".join(
+					f"{process.name} ({process.memory_mb:.0f} MB)" for process in top_memory_processes
+				)
+			else:
+				likely_due_to = "recent memory-intensive activity"
+
+			if latest_process_started and latest_memory_spike:
+				high_memory_issue.cause = (
+					f"Memory usage increased after {latest_process_started['name']} started, "
+					f"causing a {latest_memory_spike['value']:.1f}% spike likely due to {likely_due_to}"
+				)
+				high_memory_issue.explanation = (
+					"Recent change analysis shows a process start followed by a memory spike "
+					f"of {latest_memory_spike['value']:.1f}% above baseline."
+				)
+			elif latest_process_started:
+				high_memory_issue.cause = (
+					f"Memory usage increased after {latest_process_started['name']} started, "
+					f"likely due to {likely_due_to}"
+				)
+			elif latest_memory_spike:
+				high_memory_issue.cause = (
+					f"Memory usage increased with a {latest_memory_spike['value']:.1f}% spike, "
+					f"likely due to {likely_due_to}"
+				)
+				high_memory_issue.explanation = (
+					"Recent change analysis detected a memory spike "
+					f"of {latest_memory_spike['value']:.1f}% above baseline."
+				)
+
+		for issue in issues:
+			if not issue.suggested_actions:
+				continue
+
+			def _action_score(action: ActionSuggestion) -> float:
+				if action.action_type == ActionType.KILL_PROCESS:
+					base_score = 3
+				elif action.action_type == ActionType.SYSTEM_TWEAK:
+					base_score = 2
+				else:
+					base_score = 0
+
+				if action.risk_level == RiskLevel.SAFE:
+					safety_bonus = 2
+				elif action.risk_level == RiskLevel.MODERATE:
+					safety_bonus = 1
+				else:
+					safety_bonus = 0
+
+				return (base_score + safety_bonus) * issue.confidence
+
+			best_suggestion = max(issue.suggested_actions, key=_action_score)
+
+			if best_suggestion.action_type == ActionType.KILL_PROCESS:
+				reason = "Highest impact action to immediately reduce resource usage"
+			elif best_suggestion.action_type == ActionType.SYSTEM_TWEAK:
+				reason = "Safe optimization with moderate performance improvement"
+			else:
+				reason = "Recommended action based on current issue confidence"
+
+			best_action = {
+				"action_type": best_suggestion.action_type.value,
+				"target": best_suggestion.target,
+				"parameters": best_suggestion.parameters,
+				"reason": reason,
+				"confidence": issue.confidence,
+			}
+			pid = best_suggestion.parameters.get("pid")
+			if pid is not None:
+				best_action["pid"] = pid
+			issue.best_action = best_action
+
 		return DiagnosticReport(
 			timestamp=time.time(),
 			snapshot_summary=snapshot_summary,
 			issues=issues,
 			system_health_score=health_score,
 			changes_detected=changes_detected,
-			anomalies_detected=[],
+			anomalies_detected=anomalies,
 		)

@@ -99,6 +99,7 @@ class Issue:
 	suggestion: str
 	evidence: Dict[str, object]
 	suggested_actions: List[ActionSuggestion] = field(default_factory=list)
+	best_action: Optional[Dict[str, object]] = None
 
 	def clamp_confidence(self) -> None:
 		"""Clamp confidence to the inclusive [0.0, 1.0] range."""
