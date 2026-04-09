@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from intelligence.engine import IntelligenceEngine
 from intelligence.snapshot_provider import collect_snapshot
 from storage.db import save_snapshot
+from utils.system import is_admin
 
 router = APIRouter()
 
@@ -17,4 +18,5 @@ def analyze_system():
         "summary": report.snapshot_summary,
         "issues": [issue.__dict__ for issue in report.issues],
         "changes": report.changes_detected,
+        "is_admin": is_admin()
     }

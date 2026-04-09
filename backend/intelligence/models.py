@@ -33,13 +33,18 @@ class SystemSnapshot:
 	memory_used_mb: float
 	memory_percent: float
 	swap_percent: float
+	disk_total: int
+	disk_used: int
+	disk_percent: float
 	disk_read_bytes_per_sec: float
 	disk_write_bytes_per_sec: float
 	net_bytes_sent_per_sec: float
 	net_bytes_recv_per_sec: float
 	process_count: int
 	top_processes: List[ProcessInfo]
+	disk_heavy_processes: List[ProcessInfo]
 	boot_time: float
+	services: List[Dict[str, str]] = field(default_factory=list)
 
 
 class ActionType(Enum):
@@ -99,6 +104,7 @@ class Issue:
 	suggestion: str
 	evidence: Dict[str, object]
 	suggested_actions: List[ActionSuggestion] = field(default_factory=list)
+	best_action: Optional[Dict[str, object]] = None
 
 	def clamp_confidence(self) -> None:
 		"""Clamp confidence to the inclusive [0.0, 1.0] range."""

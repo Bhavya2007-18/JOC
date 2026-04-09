@@ -34,9 +34,6 @@ export const systemApi = {
   getProcesses: (limit = 10) => api.get(`/system/processes?limit=${limit}`),
   analyze: () => api.get('/analyze'),
   fix: (action, target) => api.post('/fix', { action, target }),
-  safeAnalyze: () => wrapRequest(() => api.get('/analyze')),
-  safeStats: () => wrapRequest(() => api.get('/system/stats')),
-  safeProcesses: (limit = 10) => wrapRequest(() => api.get(`/system/processes?limit=${limit}`)),
 };
 
 export const intelligenceApi = {
