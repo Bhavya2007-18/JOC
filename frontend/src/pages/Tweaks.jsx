@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { systemApi } from '../api/client';
+import { optimizerApi } from '../api/client';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { 
   Zap, 
-  Settings2, 
   Gamepad2, 
   Battery, 
   Cpu,
@@ -12,65 +11,114 @@ import {
   CheckCircle2,
   AlertTriangle,
   Info,
-  ChevronRight
+  ChevronRight,
+  Eye,
+  Shield,
+  X
 } from 'lucide-react';
 
 export function Tweaks() {
   const [executing, setExecuting] = useState({});
+  const [previewing, setPreviewing] = useState({});
+  const [preview, setPreview] = useState(null);
   const [status, setStatus] = useState(null);
 
   const tweaks = [
     { 
       id: 'gaming_boost', 
       name: 'Gaming Boost', 
-      description: 'Prioritize game processes and disable background services for maximum FPS.', 
+      description: 'Kill background apps (OneDrive, Search, Edge, Teams, Discord, Spotify) and activate High Performance power plan for maximum FPS.', 
       icon: Gamepad2, 
       color: 'text-purple-600', 
       bg: 'bg-purple-50',
       impact: 'High',
-      type: 'Performance'
+      type: 'Performance',
+      actions: [
+        'Kill: OneDrive, SearchIndexer, Teams, Discord, Spotify, Edge updates',
+        'Power Plan: Switch to High Performance',
+        'Priority: Boost foreground game processes',
+      ]
     },
     { 
       id: 'battery_saver', 
       name: 'Battery Saver', 
-      description: 'Reduce CPU performance and screen brightness to extend battery life.', 
+      description: 'Suspend heavy background apps and activate Power Saver plan to extend battery life.', 
       icon: Battery, 
       color: 'text-green-600', 
       bg: 'bg-green-50',
       impact: 'Medium',
-      type: 'Power'
+      type: 'Power',
+      actions: [
+        'Suspend: OneDrive, Teams, Discord, Spotify, Steam',
+        'Power Plan: Switch to Power Saver',
+        'CPU: Reduce background thread activity',
+      ]
     },
     { 
       id: 'performance_boost', 
       name: 'Performance Boost', 
-      description: 'Clear system caches and optimize memory allocation for smoother operation.', 
+      description: 'Lower priority of CPU-heavy background processes so your active apps run smoother.', 
       icon: Zap, 
       color: 'text-amber-600', 
       bg: 'bg-amber-50',
       impact: 'Medium',
-      type: 'Performance'
+      type: 'Performance',
+      actions: [
+        'Reprioritize: Lower priority of processes using >20% CPU',
+        'Skip: All protected/critical system processes',
+        'Result: More CPU headroom for active apps',
+      ]
     },
     { 
       id: 'clean_ram', 
       name: 'Clean RAM', 
-      description: 'Forcefully clear inactive memory pages to free up resources.', 
+      description: 'Clear inactive memory pages from all non-critical processes using Windows EmptyWorkingSet API.', 
       icon: Cpu, 
       color: 'text-blue-600', 
       bg: 'bg-blue-50',
       impact: 'Low',
-      type: 'Memory'
+      type: 'Memory',
+      actions: [
+        'Clear: Inactive memory pages via EmptyWorkingSet',
+        'Skip: All critical system processes',
+        'Result: Immediate RAM freed for active use',
+      ]
     },
   ];
+
+  const handlePreview = async (tweak) => {
+    setPreviewing(prev => ({ ...prev, [tweak.id]: true }));
+    setStatus(null);
+    try {
+      const response = await optimizerApi.executeTweak(tweak.id);
+      const data = response.data;
+      setPreview({
+        tweakId: tweak.id,
+        tweakName: tweak.name,
+        result: data.result || data,
+        details: data.result?.details || tweak.actions,
+        dryRun: data.result?.dry_run ?? true,
+        processesAffected: data.result?.processes_killed || data.result?.processes_suspended || data.result?.processes_lowered || [],
+      });
+    } catch (err) {
+      setStatus({ 
+        type: 'error', 
+        message: `Failed to preview ${tweak.name}. Backend might be offline.` 
+      });
+    } finally {
+      setPreviewing(prev => ({ ...prev, [tweak.id]: false }));
+    }
+  };
 
   const handleExecute = async (tweak) => {
     setExecuting(prev => ({ ...prev, [tweak.id]: true }));
     setStatus(null);
+    setPreview(null);
     try {
-      const response = await systemApi.executeTweak(tweak.id);
-      setStatus({ 
-        type: 'success', 
-        message: response.data.message || `Successfully executed ${tweak.name}` 
-      });
+      const response = await optimizerApi.executeTweak(tweak.id);
+      const data = response.data;
+      const msg = data.result?.message || data.message || `Successfully executed ${tweak.name}`;
+      setStatus({ type: 'success', message: msg });
     } catch (err) {
       setStatus({ 
         type: 'error', 
@@ -100,11 +148,61 @@ export function Tweaks() {
         </div>
       )}
 
+      {/* Preview Modal */}
+      {preview && (
+        <div className="rounded-2xl bg-white shadow-xl ring-1 ring-gray-200 overflow-hidden">
+          <div className="flex items-center justify-between bg-gray-50 px-6 py-4 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="rounded-lg bg-amber-100 p-2">
+                <Eye className="h-5 w-5 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">
+                  Preview: {preview.tweakName}
+                </h3>
+                <p className="text-xs font-bold text-amber-600 uppercase tracking-widest">
+                  {preview.dryRun ? '🛡️ DRY RUN — No changes made yet' : '⚡ Live execution result'}
+                </p>
+              </div>
+            </div>
+            <button onClick={() => setPreview(null)} className="rounded-lg p-2 hover:bg-gray-200 transition-colors">
+              <X className="h-5 w-5 text-gray-500" />
+            </button>
+          </div>
+          <div className="p-6 space-y-4">
+            <div>
+              <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-3">What will happen:</h4>
+              <ul className="space-y-2">
+                {(preview.details || []).map((detail, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-sm">
+                    <Shield className="h-4 w-4 mt-0.5 text-blue-500 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium">{detail}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {preview.processesAffected.length > 0 && (
+              <div>
+                <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-3">Processes affected:</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {preview.processesAffected.map((p, idx) => (
+                    <div key={idx} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 text-xs">
+                      <span className="font-bold text-gray-900">{p.name}</span>
+                      <span className="text-gray-400">PID {p.pid}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {tweaks.map((tweak) => (
           <Card key={tweak.id} className="relative group overflow-hidden border-none shadow-sm ring-1 ring-gray-200 hover:ring-blue-500/30 transition-all duration-300">
             <div className="flex flex-col h-full p-2">
-              <div className="flex items-start justify-between mb-6">
+              <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center">
                   <div className={`mr-4 rounded-2xl ${tweak.bg} p-4 transition-transform duration-300 group-hover:scale-110 shadow-sm`}>
                     <tweak.icon className={`h-8 w-8 ${tweak.color}`} />
@@ -124,18 +222,35 @@ export function Tweaks() {
                   </div>
                 </div>
               </div>
-              <p className="text-gray-600 leading-relaxed font-medium mb-8 grow">
+              <p className="text-gray-600 leading-relaxed font-medium mb-4 grow">
                 {tweak.description}
               </p>
-              <div className="pt-6 border-t border-gray-100/50 flex items-center justify-between">
-                <div className="flex items-center text-xs font-bold text-gray-400 uppercase tracking-widest">
-                  <Info className="h-3.5 w-3.5 mr-1.5" />
-                  One-click optimize
-                </div>
+
+              {/* Action details */}
+              <div className="mb-4 space-y-1.5">
+                {tweak.actions.map((action, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-xs text-gray-500">
+                    <span className="text-blue-400 mt-0.5">›</span>
+                    <span className="font-medium">{action}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-4 border-t border-gray-100/50 flex items-center justify-between gap-2">
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handlePreview(tweak)} 
+                  isLoading={previewing[tweak.id]}
+                  className="px-4 font-bold uppercase tracking-widest text-xs"
+                >
+                  <Eye className="mr-1.5 h-3.5 w-3.5" />
+                  Preview
+                </Button>
                 <Button 
                   onClick={() => handleExecute(tweak)} 
                   isLoading={executing[tweak.id]}
-                  className="px-8 font-black uppercase tracking-widest shadow-lg shadow-blue-500/20"
+                  className="px-6 font-black uppercase tracking-widest shadow-lg shadow-blue-500/20"
                 >
                   Execute <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>

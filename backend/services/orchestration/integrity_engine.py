@@ -32,6 +32,10 @@ from services.red_team import (
     ProcessSimulation,
 )
 from services.system_monitor import get_cpu_stats, get_memory_stats, get_top_processes
+from services.red_team.attack_strategist import AttackStrategist
+from services.red_team.multi_vector import AttackPlan
+from services.orchestration.feedback_loop import FeedbackLoop
+from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
 
 
@@ -57,6 +61,11 @@ class IntegrityEngine:
 
         self._run_lock = threading.Lock()
         self._history: List[SimulationReport] = []
+
+        # ML-driven components
+        self.strategist = AttackStrategist()
+        self.feedback_loop = FeedbackLoop()
+        self._current_attack_plan: Optional[AttackPlan] = None
 
     def run(self, request: SimulationRunRequest) -> SimulationRunResponse:
         if self._run_lock.locked():
@@ -144,8 +153,30 @@ class IntegrityEngine:
         correlation_id = fixed_ids[1] if fixed_ids else str(uuid.uuid4())
         start = time.time()
 
-        requested_types = [request.simulation_type]
-        requested_types.extend(request.chain)
+        # ── ML Attack Selection ───────────────────────────────
+        attack_plan: Optional[AttackPlan] = None
+        difficulty = getattr(request, "difficulty", "auto")
+
+        if request.simulation_type == SimulationType.auto:
+            # Let the strategist choose the attack
+            attack_plan = self.strategist.select_attack(difficulty=difficulty)
+            self._current_attack_plan = attack_plan
+            requested_types = [
+                SimulationType(v.simulation_type) for v in attack_plan.vectors
+            ]
+            # Use intensity-controlled parameters from the plan
+            if attack_plan.vectors:
+                request.parameters = attack_plan.vectors[0].parameters
+            logger.info(
+                "ML-selected attack: %s (plan=%s, difficulty=%s, history=%s)",
+                attack_plan.strategy_name,
+                attack_plan.plan_id,
+                attack_plan.difficulty,
+                attack_plan.history_based,
+            )
+        else:
+            requested_types = [request.simulation_type]
+            requested_types.extend(request.chain)
 
         if request.replay_simulation_id:
             previous = self.get_report(request.replay_simulation_id)
@@ -159,6 +190,11 @@ class IntegrityEngine:
         try:
             self._transition(SimulationState.initializing, correlation_id, "Initializing simulation run", timeline)
             self._assert_not_timeout(start)
+
+            # Nudge the monitor to collect fresh data immediately
+            monitor = MonitorLoop.get_instance()
+            if monitor:
+                monitor.nudge()
 
             for simulation_type in requested_types:
                 simulation = self._build_simulation(
@@ -180,8 +216,11 @@ class IntegrityEngine:
 
             self._transition(SimulationState.analyzing, correlation_id, "Analyzing responses", timeline)
 
+            # Use primary type for analysis (first vector if multi-vector)
+            primary_type = attack_plan.primary_type() if attack_plan else request.simulation_type.value
+
             analysis = self.analyzer.analyze(
-                simulation_type=request.simulation_type.value,
+                simulation_type=primary_type,
                 anomalies=intelligence.get("anomalies", []),
                 decisions=intelligence.get("decisions", []),
             )
@@ -212,10 +251,38 @@ class IntegrityEngine:
                 verdict=Verdict(evaluation_raw["verdict"]),
             )
 
+            # ── Feedback Loop ─────────────────────────────────
+            feedback_data = None
+            try:
+                feedback_result = self.feedback_loop.process_simulation_result(
+                    report=SimulationReport(
+                        simulation_id=simulation_id,
+                        simulation_type=primary_type,
+                        parameters=request.parameters,
+                        timeline=timeline,
+                        metrics=metrics,
+                        evaluation=evaluation,
+                        observations=observations + intelligence.get("anomalies", []) + intelligence.get("decisions", []),
+                        logs_ref=self._resolve_log_ref(),
+                        state=SimulationState.completed,
+                        correlation_id=correlation_id,
+                    ),
+                    attack_plan=attack_plan,
+                )
+                feedback_data = {
+                    "red_reward": feedback_result.red_reward,
+                    "blue_detected": feedback_result.blue_detected,
+                    "detection_latency": feedback_result.detection_latency,
+                    "red_evolution": feedback_result.red_evolution,
+                    "blue_evolution": feedback_result.blue_evolution,
+                }
+            except Exception as fb_err:
+                logger.error("Feedback loop error: %s", fb_err)
+
             self._transition(SimulationState.completed, correlation_id, "Simulation completed", timeline)
             report = SimulationReport(
                 simulation_id=simulation_id,
-                simulation_type=request.simulation_type.value,
+                simulation_type=primary_type,
                 parameters=request.parameters,
                 timeline=timeline,
                 metrics=metrics,
@@ -224,6 +291,8 @@ class IntegrityEngine:
                 logs_ref=self._resolve_log_ref(),
                 state=SimulationState.completed,
                 correlation_id=correlation_id,
+                feedback=feedback_data,
+                attack_plan=attack_plan.to_dict() if attack_plan else None,
             )
             self._persist_report(report)
             return report
@@ -305,6 +374,11 @@ class IntegrityEngine:
             simulation.cleanup()
 
     def _observe(self, observation_window: int, start_time: float) -> None:
+        # Nudge again at the start of observation to capture post-attack state
+        monitor = MonitorLoop.get_instance()
+        if monitor:
+            monitor.nudge()
+
         observe_start = time.time()
         while time.time() - observe_start < observation_window:
             self._assert_not_timeout(start_time)

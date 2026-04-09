@@ -24,13 +24,26 @@ export function History() {
   const { history: simHistory, fetchHistory: fetchSimHistory } = useSimulation();
   const [activeTab, setActiveTab] = useState('actions');
 
-  const [history] = useState([
-    { id: 'act_1', action: 'Kill Process', target: 'chrome.exe', timestamp: '2026-04-07 14:30', status: 'Completed', revertible: true },
-    { id: 'act_2', action: 'Clean Junk', target: 'Temp Files', timestamp: '2026-04-07 12:15', status: 'Completed', revertible: false },
-    { id: 'act_3', action: 'Tweak Execute', target: 'Gaming Boost', timestamp: '2026-04-07 10:00', status: 'Completed', revertible: true },
-  ]);
+  const [history, setHistory] = useState([]);
 
   const [behavior, setBehavior] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    systemApi.getActionHistory().then((res) => {
+      if (!mounted) return;
+      const actions = (res.data?.actions || []).map((a) => ({
+        id: a.id,
+        action: a.action,
+        target: a.target,
+        timestamp: new Date(a.timestamp * 1000).toLocaleString(),
+        status: a.status,
+        revertible: a.reversible,
+      }));
+      setHistory(actions);
+    }).catch(() => {});
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     fetchSimHistory();

@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'http://localhost:8000',
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -34,6 +35,9 @@ export const systemApi = {
   getProcesses: (limit = 10) => api.get(`/system/processes?limit=${limit}`),
   analyze: () => api.get('/analyze'),
   fix: (action, target) => api.post('/fix', { action, target }),
+  safeAnalyze: () => wrapRequest(() => api.get('/analyze')),
+  getActionHistory: () => api.get('/action/history'),
+  revertAction: (actionId) => api.post('/action/revert', { action_id: actionId }),
 };
 
 export const intelligenceApi = {
