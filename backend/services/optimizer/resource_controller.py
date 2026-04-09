@@ -138,6 +138,12 @@ def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: 
         len(boosted),
     )
 
+    risk = "low"
+    confidence = 0.8
+    if not dry_run and score_after < score_before:
+        risk = "medium"
+        confidence = 0.85
+
     return {
         "success": True,
         "message": "Boost executed" if not dry_run else "Dry-run: boost simulated",
@@ -145,6 +151,8 @@ def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: 
         "optimization_score_before": score_before,
         "optimization_score_after": score_after,
         "processes": boosted,
+        "risk": risk,
+        "confidence": confidence,
     }
 
 
@@ -198,4 +206,3 @@ def get_optimization_suggestions(cpu_threshold: float, max_processes: int) -> Di
         "high_cpu_processes": high_cpu_suggestions,
         "recommended_actions": actions,
     }
-

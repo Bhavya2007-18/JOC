@@ -57,6 +57,8 @@ def optimize_boost(payload: BoostRequest) -> BoostResponse:
             }
             for p in result.get("processes", [])
         ],
+        risk=str(result.get("risk", "medium")),
+        confidence=float(result.get("confidence", 0.75)),
     )
 
 
@@ -76,6 +78,8 @@ def optimize_cleanup(payload: CleanupRequest) -> CleanupResponse:
             }
             for item in result.get("items", [])
         ],
+        risk=str(result.get("risk", "medium")),
+        confidence=float(result.get("confidence", 0.75)),
     )
 
 
@@ -113,4 +117,3 @@ def optimize_suggestions(cpu_threshold: float = 30.0, max_processes: int = 10) -
         high_cpu_processes=result.get("high_cpu_processes", []),
         recommended_actions=result.get("recommended_actions", []),
     )
-

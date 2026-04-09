@@ -22,6 +22,7 @@ LAST_ANALYSIS = {
 class CleanupRequest(BaseModel):
     type: Literal["junk", "duplicates", "cold"]
     confirm: bool
+    dry_run: bool = False
 
 
 def _strip_internal_fields(file_record: dict) -> dict:
@@ -78,7 +79,7 @@ def scan_files(path: str = "C:/Users", max_files: int = 5000, cold_days: int = 6
 
 @router.post("/cleanup")
 def cleanup_files(payload: CleanupRequest):
-    if not payload.confirm:
+    if not payload.confirm and not payload.dry_run:
         return {"error": "Confirmation required"}
 
     cleanup_type = str(payload.type).lower().strip()
@@ -93,4 +94,45 @@ def cleanup_files(payload: CleanupRequest):
     if not file_paths:
         return EMPTY_CLEANUP_RESULT.copy()
 
-    return delete_paths(file_paths)
+    if payload.dry_run:
+        risk = "low"
+        confidence = 0.8
+        if len(file_paths) > 1000:
+            risk = "medium"
+            confidence = 0.85
+        return {
+            "deleted": [],
+            "failed": [],
+            "total_deleted": 0,
+            "total_failed": 0,
+            "preview": {
+                "type": cleanup_type,
+                "total_files": len(file_paths),
+                "paths": file_paths,
+            },
+            "risk": risk,
+            "confidence": confidence,
+        }
+
+    result = delete_paths(file_paths)
+    risk = "low"
+    confidence = 0.8
+    if result["total_deleted"] > 1000:
+        risk = "medium"
+        confidence = 0.85
+    result["risk"] = risk
+    result["confidence"] = confidence
+    return result
+
+
+@router.get("/storage/analysis")
+def storage_analysis(path: str = "C:/Users", max_files: int = 5000, cold_days: int = 60):
+    scan_result = scan_files(path=path, max_files=max_files, cold_days=cold_days)
+    junk = scan_result.get("junk", {})
+    suggestions = scan_result.get("suggestions", [])
+
+    return {
+        "junk_files": junk.get("readable_size", "0 B"),
+        "large_files": [],
+        "suggestions": suggestions,
+    }

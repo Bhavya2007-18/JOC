@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Info, Zap, Settings, Activity } from 'lucide-react';
 
 const icons = {
@@ -37,7 +37,7 @@ export function EventStream({ events = [] }) {
               const colorClass = colors[event.type] || colors.info;
               
               return (
-                <motion.div
+                <Motion.div
                   key={event.id}
                   initial={{ opacity: 0, x: -20, height: 0 }}
                   animate={{ opacity: 1, x: 0, height: 'auto' }}
@@ -51,7 +51,7 @@ export function EventStream({ events = [] }) {
                     <p className="text-sm font-medium leading-tight">{event.message}</p>
                     <span className="mt-1 text-[10px] opacity-70 font-mono">{event.timestamp}</span>
                   </div>
-                </motion.div>
+                </Motion.div>
               );
             })
           )}

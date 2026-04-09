@@ -7,11 +7,36 @@ const api = axios.create({
   },
 });
 
+async function wrapRequest(fn) {
+  try {
+    const res = await fn();
+    return {
+      status: 'success',
+      data: res.data,
+      message: '',
+    };
+  } catch (err) {
+    const message =
+      err.response?.data?.message ||
+      err.response?.data?.detail ||
+      err.message ||
+      'Request failed';
+    return {
+      status: 'error',
+      data: null,
+      message,
+    };
+  }
+}
+
 export const systemApi = {
   getStats: () => api.get('/system/stats'),
   getProcesses: (limit = 10) => api.get(`/system/processes?limit=${limit}`),
   analyze: () => api.get('/analyze'),
   fix: (action, target) => api.post('/fix', { action, target }),
+  safeAnalyze: () => wrapRequest(() => api.get('/analyze')),
+  safeStats: () => wrapRequest(() => api.get('/system/stats')),
+  safeProcesses: (limit = 10) => wrapRequest(() => api.get(`/system/processes?limit=${limit}`)),
 };
 
 export const intelligenceApi = {
@@ -19,6 +44,9 @@ export const intelligenceApi = {
   getPatterns: (windowMinutes = 60) => api.get(`/intelligence/patterns?window_minutes=${windowMinutes}`),
   getAnomalies: (windowMinutes = 60) => api.get(`/intelligence/anomalies?window_minutes=${windowMinutes}`),
   getDecisions: (windowMinutes = 60) => api.get(`/intelligence/decisions?window_minutes=${windowMinutes}`),
+  safePatterns: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/patterns?window_minutes=${windowMinutes}`)),
+  safeAnomalies: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/anomalies?window_minutes=${windowMinutes}`)),
+  safeDecisions: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/decisions?window_minutes=${windowMinutes}`)),
 };
 
 export const optimizerApi = {
@@ -34,6 +62,8 @@ export const optimizerApi = {
   },
   executeTweak: (tweakName) => api.post('/tweak/execute', { tweak_name: tweakName }),
   revertAction: (actionId) => api.post('/action/revert', { action_id: actionId }),
+  safeBoost: (payload) => wrapRequest(() => api.post('/optimize/boost', payload)),
+  safeCleanup: (payload) => wrapRequest(() => api.post('/optimize/cleanup', payload)),
 };
 
 export const simulationApi = {
@@ -45,7 +75,9 @@ export const simulationApi = {
 
 export const storageApi = {
   scan: (params) => api.get('/scan', { params }),
-  cleanup: (type, confirm = true) => api.post('/cleanup', { type, confirm }),
+  cleanup: (type, { confirm = true, dryRun = false } = {}) =>
+    api.post('/cleanup', { type, confirm, dry_run: dryRun }),
+  analysis: (params) => api.get('/storage/analysis', { params }),
 };
 
 export default api;

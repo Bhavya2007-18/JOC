@@ -70,6 +70,18 @@ def _log_action(
     return action_id
 
 
+def _compute_risk(action: str, protected: bool, cpu_percent: Optional[float] = None) -> Dict[str, Any]:
+    if protected:
+        return {"risk": "high", "confidence": 0.95}
+    if cpu_percent is None:
+        return {"risk": "medium", "confidence": 0.7}
+    if cpu_percent < 20:
+        return {"risk": "low", "confidence": 0.8}
+    if cpu_percent < 60:
+        return {"risk": "medium", "confidence": 0.85}
+    return {"risk": "high", "confidence": 0.9}
+
+
 def _prepare_process(pid: int) -> Tuple[Optional[psutil.Process], bool, str]:
     _ensure_protected_set()
     try:
@@ -97,12 +109,18 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": dry_run,
             "protected": False,
             "action_id": None,
+            "risk": "medium",
+            "confidence": 0.7,
         }
 
     try:
         name = proc.name() or ""
+        cpu_percent = proc.cpu_percent(interval=None)
     except psutil.Error:
         name = ""
+        cpu_percent = None
+
+    risk_info = _compute_risk("kill", protected, cpu_percent)
 
     if protected:
         logger.warning("Kill rejected for protected process pid=%s name=%s", pid, name)
@@ -115,6 +133,7 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": dry_run,
             "protected": True,
             "action_id": None,
+            **risk_info,
         }
 
     if dry_run:
@@ -128,6 +147,7 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": True,
             "protected": False,
             "action_id": None,
+            **risk_info,
         }
 
     try:
@@ -150,6 +170,7 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": False,
             "protected": False,
             "action_id": action_id,
+            **risk_info,
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess) as exc:
         logger.error("Failed to terminate pid=%s: %s", pid, exc)
@@ -162,6 +183,7 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": False,
             "protected": False,
             "action_id": None,
+            **risk_info,
         }
 
 
@@ -192,14 +214,20 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "dry_run": dry_run,
             "protected": False,
             "action_id": None,
+            "risk": "medium",
+            "confidence": 0.7,
         }
 
     try:
         name = proc.name() or ""
         old_nice = proc.nice()
+        cpu_percent = proc.cpu_percent(interval=None)
     except psutil.Error:
         name = ""
         old_nice = None
+        cpu_percent = None
+
+    risk_info = _compute_risk("priority", protected, cpu_percent)
 
     if protected:
         logger.warning("Priority change rejected for protected process pid=%s name=%s", pid, name)
@@ -212,6 +240,7 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "dry_run": dry_run,
             "protected": True,
             "action_id": None,
+            **risk_info,
         }
 
     new_nice_value = _map_priority_for_platform(priority)
@@ -233,6 +262,7 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "dry_run": True,
             "protected": False,
             "action_id": None,
+            **risk_info,
         }
 
     try:
@@ -261,6 +291,7 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "dry_run": False,
             "protected": False,
             "action_id": action_id,
+            **risk_info,
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, ValueError) as exc:
         logger.error("Failed to change priority for pid=%s: %s", pid, exc)
@@ -273,6 +304,7 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "dry_run": False,
             "protected": False,
             "action_id": None,
+            **risk_info,
         }
 
 
@@ -289,12 +321,18 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": dry_run,
             "protected": False,
             "action_id": None,
+            "risk": "medium",
+            "confidence": 0.7,
         }
 
     try:
         name = proc.name() or ""
+        cpu_percent = proc.cpu_percent(interval=None)
     except psutil.Error:
         name = ""
+        cpu_percent = None
+
+    risk_info = _compute_risk("suspend", protected, cpu_percent)
 
     if protected:
         logger.warning("Suspend rejected for protected process pid=%s name=%s", pid, name)
@@ -307,6 +345,7 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": dry_run,
             "protected": True,
             "action_id": None,
+            **risk_info,
         }
 
     if dry_run:
@@ -320,6 +359,7 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": True,
             "protected": False,
             "action_id": None,
+            **risk_info,
         }
 
     try:
@@ -342,6 +382,7 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": False,
             "protected": False,
             "action_id": action_id,
+            **risk_info,
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, AttributeError) as exc:
         logger.error("Failed to suspend pid=%s: %s", pid, exc)
@@ -354,6 +395,7 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": False,
             "protected": False,
             "action_id": None,
+            **risk_info,
         }
 
 
@@ -370,12 +412,18 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": dry_run,
             "protected": False,
             "action_id": None,
+            "risk": "medium",
+            "confidence": 0.7,
         }
 
     try:
         name = proc.name() or ""
+        cpu_percent = proc.cpu_percent(interval=None)
     except psutil.Error:
         name = ""
+        cpu_percent = None
+
+    risk_info = _compute_risk("resume", protected, cpu_percent)
 
     if protected:
         logger.warning("Resume allowed for protected process pid=%s name=%s", pid, name)
@@ -391,6 +439,7 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": True,
             "protected": protected,
             "action_id": None,
+            **risk_info,
         }
 
     try:
@@ -413,6 +462,7 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": False,
             "protected": protected,
             "action_id": action_id,
+            **risk_info,
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, AttributeError) as exc:
         logger.error("Failed to resume pid=%s: %s", pid, exc)
@@ -425,5 +475,5 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": False,
             "protected": protected,
             "action_id": None,
+            **risk_info,
         }
-

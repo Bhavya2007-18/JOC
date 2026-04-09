@@ -5,7 +5,8 @@ import { Button } from '../components/Button';
 import { SystemHealthScore } from '../components/SystemHealthScore';
 import { EventStream } from '../components/EventStream';
 import { useSystemData } from '../hooks/useSystemData';
-import { motion, AnimatePresence } from 'framer-motion';
+import { intelligenceApi } from '../api/client';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { 
   Activity, 
   HardDrive, 
@@ -24,23 +25,41 @@ import {
 import { Link } from 'react-router-dom';
 
 export function Dashboard() {
-  const { stats, processes, anomalies, decisions, loading, error, events, addEvent } = useSystemData(3000);
+  const { stats, anomalies, decisions, events, addEvent } = useSystemData(3000);
   const [chartData, setChartData] = useState([]);
+  const [baseline, setBaseline] = useState({ cpu: null, memory: null });
 
-  // Update chart data when stats change
   useEffect(() => {
-    if (stats) {
+    if (!stats) return;
+    const id = setTimeout(() => {
       const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       setChartData(prev => {
-        const newData = [...prev, {
-          time: timestamp,
-          cpu: stats.cpu.usage_percent,
-          memory: stats.memory.percent,
-        }].slice(-20); // Keep last 20 data points
-        return newData;
+        const next = [
+          ...prev,
+          {
+            time: timestamp,
+            cpu: stats.cpu.usage_percent,
+            memory: stats.memory.percent,
+          },
+        ].slice(-20);
+        return next;
       });
-    }
+    }, 0);
+    return () => clearTimeout(id);
   }, [stats]);
+
+  useEffect(() => {
+    let mounted = true;
+    intelligenceApi.safePatterns(1440).then((res) => {
+      if (!mounted || res.status !== 'success') return;
+      const avgCpu = res.data.average_cpu_percent ?? null;
+      const avgMem = res.data.average_memory_percent ?? null;
+      setBaseline({ cpu: avgCpu, memory: avgMem });
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const systemHealth = useMemo(() => {
     if (!stats) return 100;
@@ -51,11 +70,42 @@ export function Dashboard() {
     return Math.max(0, score);
   }, [stats, anomalies]);
 
+  const classifyUsage = (value) => {
+    if (value < 50) return { label: 'NORMAL', tone: 'text-green-600', badge: 'bg-green-50 text-green-700' };
+    if (value < 80) return { label: 'HIGH', tone: 'text-amber-600', badge: 'bg-amber-50 text-amber-700' };
+    return { label: 'CRITICAL', tone: 'text-red-600', badge: 'bg-red-50 text-red-700' };
+  };
+
+  const cpuUsage = stats?.cpu?.usage_percent || 0;
+  const memUsage = stats?.memory?.percent || 0;
+
+  const lastPoint = chartData[chartData.length - 1];
+  const prevPoint = chartData[chartData.length - 2];
+  const cpuTrendArrow =
+    lastPoint && prevPoint
+      ? lastPoint.cpu > prevPoint.cpu
+        ? '↑'
+        : lastPoint.cpu < prevPoint.cpu
+        ? '↓'
+        : '→'
+      : '';
+  const memTrendArrow =
+    lastPoint && prevPoint
+      ? lastPoint.memory > prevPoint.memory
+        ? '↑'
+        : lastPoint.memory < prevPoint.memory
+        ? '↓'
+        : '→'
+      : '';
+
+  const cpuState = classifyUsage(cpuUsage);
+  const memState = classifyUsage(memUsage);
+
   const quickStats = [
-    { name: 'CPU Usage', value: `${stats?.cpu?.usage_percent || 0}%`, icon: Cpu, color: 'text-blue-500', bg: 'bg-blue-50' },
-    { name: 'Memory', value: `${stats?.memory?.percent || 0}%`, icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50' },
-    { name: 'Disk Free', value: `${stats?.disk?.percent_free || 0}%`, icon: HardDrive, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-    { name: 'Network', value: 'Active', icon: Monitor, color: 'text-amber-500', bg: 'bg-amber-50' },
+    { name: 'CPU Usage', value: `${cpuUsage}%`, state: cpuState, icon: Cpu, color: 'text-blue-500', bg: 'bg-blue-50', trend: cpuTrendArrow },
+    { name: 'Memory', value: `${memUsage}%`, state: memState, icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50', trend: memTrendArrow },
+    { name: 'Disk Free', value: `${stats?.disk?.percent_free || 0}%`, state: null, icon: HardDrive, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+    { name: 'Network', value: 'Active', state: null, icon: Monitor, color: 'text-amber-500', bg: 'bg-amber-50' },
   ];
 
   const [systemMode, setSystemMode] = useState('smart');
@@ -73,7 +123,7 @@ export function Dashboard() {
 
   return (
     <div className="space-y-8 pb-12">
-      <motion.header
+      <Motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -89,12 +139,12 @@ export function Dashboard() {
              <SystemHealthScore score={systemHealth} />
           </div>
         </div>
-      </motion.header>
+      </Motion.header>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {quickStats.map((stat, idx) => (
-          <motion.div
+          <Motion.div
             key={stat.name}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -106,9 +156,37 @@ export function Dashboard() {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">{stat.name}</p>
-              <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stat.value}
+                {stat.trend && <span className="ml-1 text-xs align-middle">{stat.trend}</span>}
+              </p>
+              {stat.state && (
+                <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${stat.state.badge}`}>
+                  {stat.state.label}
+                </span>
+              )}
+              {stat.name === 'CPU Usage' && baseline.cpu != null && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Normal for you: {baseline.cpu.toFixed(1)}%. {cpuUsage > baseline.cpu ? 'Higher than usual.' : 'Within usual range.'}
+                </p>
+              )}
+              {stat.name === 'Memory' && baseline.memory != null && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Normal for you: {baseline.memory.toFixed(1)}%. {memUsage > baseline.memory ? 'Higher than usual.' : 'Within usual range.'}
+                </p>
+              )}
+              {stat.name === 'CPU Usage' && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Sustained high CPU can cause slowdowns and input lag in active applications.
+                </p>
+              )}
+              {stat.name === 'Memory' && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  High memory usage can lead to app freezes and disk swapping.
+                </p>
+              )}
             </div>
-          </motion.div>
+          </Motion.div>
         ))}
       </div>
 
@@ -174,7 +252,7 @@ export function Dashboard() {
               <AnimatePresence mode="popLayout">
                 {decisions.length > 0 ? (
                   decisions.map((decision, idx) => (
-                    <motion.div
+                    <Motion.div
                       key={idx}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -191,6 +269,23 @@ export function Dashboard() {
                         </span>
                       </div>
                       <p className="mt-1 text-sm text-gray-600 leading-relaxed">{decision.reason}</p>
+                      <div className="mt-2 text-[11px] text-gray-500">
+                        <span className="font-semibold">Why:</span> Based on recent CPU and memory behavior and top processes.
+                      </div>
+                      {(decision.data_used || (decision.related_anomalies && decision.related_anomalies.length > 0)) && (
+                        <div className="mt-2 text-[11px] text-gray-500">
+                          {decision.data_used && (
+                            <span className="block">
+                              Data used: {Object.keys(decision.data_used).join(', ') || 'aggregate metrics'}.
+                            </span>
+                          )}
+                          {decision.related_anomalies && decision.related_anomalies.length > 0 && (
+                            <span className="block">
+                              Related anomalies: {decision.related_anomalies.length}.
+                            </span>
+                          )}
+                        </div>
+                      )}
                       <div className="mt-3 flex items-center gap-3">
                          {decision.suggested_actions.map((action, aidx) => (
                            <Button key={aidx} size="sm" variant="outline" className="text-xs h-8">
@@ -198,7 +293,7 @@ export function Dashboard() {
                            </Button>
                          ))}
                       </div>
-                    </motion.div>
+                    </Motion.div>
                   ))
                 ) : (
                   <div className="py-8 text-center text-gray-500 italic text-sm">

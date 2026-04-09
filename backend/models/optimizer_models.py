@@ -47,6 +47,8 @@ class ProcessActionResult(BaseModel):
     dry_run: bool
     protected: bool
     action_id: Optional[str] = None
+    risk: str = "medium"
+    confidence: float = 0.75
 
 
 class BoostedProcessInfo(BaseModel):
@@ -68,6 +70,8 @@ class BoostResponse(BaseModel):
     optimization_score_before: Optional[OptimizationScore]
     optimization_score_after: Optional[OptimizationScore]
     processes: List[BoostedProcessInfo]
+    risk: str = "medium"
+    confidence: float = 0.75
 
 
 class CleanupItemResult(BaseModel):
@@ -82,6 +86,8 @@ class CleanupResponse(BaseModel):
     dry_run: bool
     total_bytes_freed: int
     items: List[CleanupItemResult]
+    risk: str = "medium"
+    confidence: float = 0.75
 
 
 class HighCpuProcessSuggestion(BaseModel):
@@ -105,4 +111,3 @@ class SuggestionsResponse(BaseModel):
     optimization_score: Optional[OptimizationScore]
     high_cpu_processes: List[HighCpuProcessSuggestion]
     recommended_actions: List[SuggestedAction]
-

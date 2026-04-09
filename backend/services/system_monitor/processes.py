@@ -3,6 +3,7 @@ import time
 
 import psutil
 
+from services.optimizer.process_manager import _is_protected_process
 
 _CACHE_TTL_SECONDS = 1.0
 _last_process_list: Optional[List[Dict[str, Any]]] = None
@@ -34,6 +35,7 @@ def get_top_processes(limit: int = 10) -> List[Dict[str, Any]]:
                     "name": info.get("name") or "unknown",
                     "cpu_percent": float(cpu_percent),
                     "memory_percent": float(memory_percent),
+                    "protected": bool(_is_protected_process(proc)),
                 }
             )
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
@@ -45,4 +47,3 @@ def get_top_processes(limit: int = 10) -> List[Dict[str, Any]]:
     _last_process_list = top_processes
     _last_process_timestamp = now
     return top_processes
-
