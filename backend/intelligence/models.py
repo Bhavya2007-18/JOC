@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -100,7 +100,7 @@ class Issue:
 	cause: str
 	explanation: str
 	confidence: float
-	affected_processes: List[str]
+	affected_processes: List[Dict[str, Any]]
 	suggestion: str
 	evidence: Dict[str, object]
 	suggested_actions: List[ActionSuggestion] = field(default_factory=list)

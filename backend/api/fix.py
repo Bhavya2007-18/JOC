@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
+from intelligence.config import DRY_RUN
 from intelligence.fixer import FixEngine
+from services.optimizer.process_manager import kill_process_safe
 
 router = APIRouter()
 engine = FixEngine()
@@ -14,10 +16,11 @@ class FixRequest(BaseModel):
 def apply_fix(request: FixRequest):
     if request.action == "kill_process":
         if request.pid:
-            return engine.kill_process_by_pid(request.pid)
-        elif request.target:
-            return engine.kill_process_by_name(request.target)
-        else:
-            return {"error": "No target or pid provided"}
+            return kill_process_safe(request.pid, dry_run=DRY_RUN)
+        return {
+            "error": "PID required for safe process termination"
+        }
+    elif request.action == "system_tweak":
+        return engine.execute_tweak(request.target)
 
     return {"error": "Unsupported action"}

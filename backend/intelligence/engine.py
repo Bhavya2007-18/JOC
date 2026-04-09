@@ -1,6 +1,7 @@
 from __future__ import annotations
 import time
 from typing import List
+from intelligence.constants import CRITICAL_PROCESSES
 from intelligence.state_manager import StateManager
 from intelligence.utils.anomaly import compute_z_score, is_anomaly
 from .models import (
@@ -12,17 +13,6 @@ from .models import (
 	SystemSnapshot,
 	Severity,
 )
-
-CRITICAL_PROCESSES = [
-    "explorer.exe",
-    "winlogon.exe",
-    "csrss.exe",
-    "services.exe",
-    "lsass.exe",
-    "system",
-    "svchost.exe",
-    "memcompression",
-]
 
 class IntelligenceEngine:
 	state_manager = StateManager()
@@ -71,9 +61,14 @@ class IntelligenceEngine:
 				return f"{names[0]} or {names[1]}"
 			return f"{', '.join(names[:-1])}, or {names[-1]}"
 
-		def _build_suggestion(affected_processes: List[str], generic_suggestion: str) -> str:
+		def _build_suggestion(affected_processes: List[dict], generic_suggestion: str) -> str:
 			if affected_processes:
-				return f"Consider closing {_join_with_or(affected_processes)}"
+				names = [p["name"] for p in affected_processes]
+				if len(names) == 1:
+					return f"Consider closing {names[0]}"
+				if len(names) == 2:
+					return f"Consider closing {names[0]} or {names[1]}"
+				return f"Consider closing {', '.join(names[:-1])}, or {names[-1]}"
 			return generic_suggestion
 
 		top_cpu_processes = sorted(
@@ -81,11 +76,11 @@ class IntelligenceEngine:
 			key=lambda process: process.cpu_percent,
 			reverse=True,
 		)[:2]
-		affected_cpu_processes_with_pid = [
+		affected_cpu_processes = [
 			{"name": process.name, "pid": process.pid}
 			for process in top_cpu_processes
 		]
-		affected_cpu_processes = _unique_process_names(
+		affected_cpu_process_names = _unique_process_names(
 			[process.name for process in top_cpu_processes]
 		)
 
@@ -108,7 +103,7 @@ class IntelligenceEngine:
 				cause="CPU usage deviates significantly from recent baseline",
 				explanation="CPU usage is significantly higher than usual behavior",
 				confidence=min(1.0, abs(cpu_z) / 3.0),
-				affected_processes=affected_cpu_processes_with_pid,
+				affected_processes=affected_cpu_processes,
 				suggestion="Inspect recent workload spikes and high-CPU processes",
 				evidence={
 					"current": snapshot.cpu_percent,
@@ -151,8 +146,9 @@ class IntelligenceEngine:
 				process = top_cpu_processes[0]
 				process_name = process.name
 				process_pid = process.pid	
+				normalized_process_name = process_name.lower().replace(".exe", "")
 
-				if process_name.lower().replace(".exe", "") not in CRITICAL_PROCESSES:
+				if normalized_process_name not in CRITICAL_PROCESSES:
 					cpu_suggested_actions.append(
 						ActionSuggestion(
 							action_type=ActionType.KILL_PROCESS,
@@ -178,7 +174,8 @@ class IntelligenceEngine:
 			cpu_evidence = {"cpu_percent": snapshot.cpu_percent}
 			if top_cpu_processes:
 				process = top_cpu_processes[0]
-				if process.name.lower().replace(".exe", "") not in CRITICAL_PROCESSES:
+				normalized_process_name = process.name.lower().replace(".exe", "")
+				if normalized_process_name not in CRITICAL_PROCESSES:
 					cpu_evidence["fix_action"] = {
 						"action": "kill_process",
 						"target": process.name,
@@ -233,7 +230,7 @@ class IntelligenceEngine:
 
 		if snapshot.memory_percent > 80:
 			memory_suggestion = _build_suggestion(
-				[p["name"] for p in affected_memory_processes],
+				affected_memory_processes,
 				"Close memory-intensive applications or restart unused services",
 			)
 			memory_suggested_actions: List[ActionSuggestion] = []
@@ -577,7 +574,7 @@ class IntelligenceEngine:
 				explanation="Too many services can consume resources and slow down performance",
 				confidence=0.75,
 				affected_processes=[
-					{"name": service.get("name", "unknown")}
+					{"name": service.get("name", "unknown"), "pid": None}
 					for service in running_services[:3]
 				],
 				suggestion="Review and optimize running services",
@@ -652,7 +649,7 @@ class IntelligenceEngine:
 				cause="Several services appear to be continuously active across snapshots",
 				explanation="Services that are always running and frequently present may contribute to persistent background load",
 				confidence=min(1.0, 0.6 + (0.1 * len(heavy_service_names))),
-				affected_processes=[{"name": name} for name in heavy_service_names],
+				affected_processes=[{"name": name, "pid": None} for name in heavy_service_names],
 				suggestion="Review and disable unnecessary services",
 				evidence={
 					"top_services": heavy_service_names,
@@ -697,6 +694,7 @@ class IntelligenceEngine:
 		snapshot_summary = {
 			"cpu_percent": snapshot.cpu_percent,
 			"memory_percent": snapshot.memory_percent,
+			"disk_percent": snapshot.disk_percent,
 			"process_count": snapshot.process_count,
 		}
 
@@ -719,13 +717,23 @@ class IntelligenceEngine:
 			for process_name in current_process_names:
 				if process_name not in previous_process_set:
 					changes_detected.append(
-						{"type": "process_started", "name": process_name, "time": change_time}
+						{
+							"type": "process_started",
+							"name": process_name,
+							"pid": next((p.pid for p in snapshot.top_processes if p.name == process_name), None),
+							"time": change_time,
+						}
 					)
 
 			for process_name in previous_process_names:
 				if process_name not in current_process_set:
 					changes_detected.append(
-						{"type": "process_stopped", "name": process_name, "time": change_time}
+						{
+							"type": "process_stopped",
+							"name": process_name,
+							"pid": None,
+							"time": change_time,
+						}
 					)
 
 			if history_ready:
@@ -735,7 +743,7 @@ class IntelligenceEngine:
 						{
 							"type": "cpu_spike",
 							"value": cpu_spike_value,
-							"likely_caused_by": affected_cpu_processes,
+							"likely_caused_by": affected_cpu_process_names,
 							"severity": "high" if cpu_spike_value > 30 else "medium",
 							"time": change_time,
 						}
@@ -747,7 +755,7 @@ class IntelligenceEngine:
 						{
 							"type": "memory_spike",
 							"value": memory_spike_value,
-							"likely_caused_by": affected_memory_processes,
+							"likely_caused_by": [p["name"] for p in affected_memory_processes],
 							"severity": "high" if memory_spike_value > 30 else "medium",
 							"time": change_time,
 						}

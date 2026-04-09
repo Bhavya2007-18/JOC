@@ -1,11 +1,17 @@
 import time
+import uuid
 from typing import Any, Dict, Optional, Tuple
 
 import psutil
 
 from intelligence.action_store import ActionStore
+from intelligence.config import DRY_RUN
+from intelligence.constants import CRITICAL_PROCESSES
 from intelligence.models import ActionRecord, ActionType
+from intelligence.safety import allow_execution, enforce_safe_execution
 from utils.logger import get_logger
+
+assert isinstance(DRY_RUN, bool), "DRY_RUN must be a boolean"
 
 
 logger = get_logger("optimizer.process_manager")
@@ -14,23 +20,16 @@ _action_store = ActionStore()
 
 _PROTECTED_PIDS = {0, 1}
 _PROTECTED_NAMES = {
-    "system",
-    "system idle process",
-    "idle",
-    "init",
-    "systemd",
-    "csrss.exe",
-    "wininit.exe",
-    "services.exe",
-    "lsass.exe",
-}
+    name.lower().replace(".exe", "")
+    for name in CRITICAL_PROCESSES
+} | {"init", "systemd"}
 
 
 def _is_protected_process(proc: psutil.Process) -> bool:
     try:
         if proc.pid in _PROTECTED_PIDS:
             return True
-        name = (proc.name() or "").lower()
+        name = (proc.name() or "").lower().replace(".exe", "")
         if name in _PROTECTED_NAMES:
             return True
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
@@ -55,7 +54,7 @@ def _log_action(
     result: Dict[str, Any],
     parameters: Dict[str, Any],
 ) -> str:
-    action_id = f"opt-{int(time.time() * 1000)}-{target}"
+    action_id = f"opt-{uuid.uuid4()}"
     record = ActionRecord(
         action_id=action_id,
         action_type=action_type,
@@ -85,6 +84,9 @@ def _prepare_process(pid: int) -> Tuple[Optional[psutil.Process], bool, str]:
 
 
 def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
+    execution_allowed = allow_execution()
+    effective_dry_run = not execution_allowed
+    start_time = time.time()
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
         logger.warning("Kill rejected for pid=%s: %s", pid, reason)
@@ -94,9 +96,10 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "kill",
             "success": False,
             "message": reason,
-            "dry_run": dry_run,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
+            "execution_time_ms": int((time.time() - start_time) * 1000),
         }
 
     try:
@@ -112,12 +115,13 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "kill",
             "success": False,
             "message": "Protected process; kill not allowed",
-            "dry_run": dry_run,
+            "dry_run": effective_dry_run,
             "protected": True,
             "action_id": None,
+            "execution_time_ms": int((time.time() - start_time) * 1000),
         }
 
-    if dry_run:
+    if effective_dry_run:
         logger.info("Dry-run kill for pid=%s name=%s", pid, name)
         return {
             "pid": pid,
@@ -128,10 +132,22 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "dry_run": True,
             "protected": False,
             "action_id": None,
+            "execution_time_ms": int((time.time() - start_time) * 1000),
         }
 
     try:
-        proc.terminate()
+        if not execution_allowed:
+            enforce_safe_execution()
+
+        if allow_execution():
+            proc.terminate()
+            try:
+                proc.wait(timeout=3)
+            except psutil.TimeoutExpired:
+                if allow_execution():
+                    proc.kill()
+                else:
+                    enforce_safe_execution()
         logger.info("Requested terminate for pid=%s name=%s", pid, name)
         action_id = _log_action(
             action_type=ActionType.KILL_PROCESS,
@@ -147,9 +163,10 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "kill",
             "success": True,
             "message": "Terminate signal sent",
-            "dry_run": False,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": action_id,
+            "execution_time_ms": int((time.time() - start_time) * 1000),
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess) as exc:
         logger.error("Failed to terminate pid=%s: %s", pid, exc)
@@ -159,9 +176,10 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "kill",
             "success": False,
             "message": "Failed to terminate process",
-            "dry_run": False,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
+            "execution_time_ms": int((time.time() - start_time) * 1000),
         }
 
 
@@ -180,6 +198,8 @@ def _map_priority_for_platform(priority: int) -> Any:
 
 
 def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False) -> Dict[str, Any]:
+    execution_allowed = allow_execution()
+    effective_dry_run = not execution_allowed
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
         logger.warning("Priority change rejected for pid=%s: %s", pid, reason)
@@ -189,7 +209,7 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "action": "priority",
             "success": False,
             "message": reason,
-            "dry_run": dry_run,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
         }
@@ -209,14 +229,14 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "action": "priority",
             "success": False,
             "message": "Protected process; priority change not allowed",
-            "dry_run": dry_run,
+            "dry_run": effective_dry_run,
             "protected": True,
             "action_id": None,
         }
 
     new_nice_value = _map_priority_for_platform(priority)
 
-    if dry_run:
+    if effective_dry_run:
         logger.info(
             "Dry-run priority change for pid=%s name=%s from=%s to=%s",
             pid,
@@ -236,6 +256,8 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
         }
 
     try:
+        if not execution_allowed:
+            enforce_safe_execution()
         proc.nice(new_nice_value)
         logger.info(
             "Changed priority for pid=%s name=%s from=%s to=%s",
@@ -258,7 +280,7 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "action": "priority",
             "success": True,
             "message": "Priority updated",
-            "dry_run": False,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": action_id,
         }
@@ -270,13 +292,15 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
             "action": "priority",
             "success": False,
             "message": "Failed to change priority",
-            "dry_run": False,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
         }
 
 
 def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
+    execution_allowed = allow_execution()
+    effective_dry_run = not execution_allowed
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
         logger.warning("Suspend rejected for pid=%s: %s", pid, reason)
@@ -286,7 +310,7 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "suspend",
             "success": False,
             "message": reason,
-            "dry_run": dry_run,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
         }
@@ -304,12 +328,12 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "suspend",
             "success": False,
             "message": "Protected process; suspend not allowed",
-            "dry_run": dry_run,
+            "dry_run": effective_dry_run,
             "protected": True,
             "action_id": None,
         }
 
-    if dry_run:
+    if effective_dry_run:
         logger.info("Dry-run suspend for pid=%s name=%s", pid, name)
         return {
             "pid": pid,
@@ -323,7 +347,10 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         }
 
     try:
-        proc.suspend()
+        if not execution_allowed:
+            enforce_safe_execution()
+        if allow_execution():
+            proc.suspend()
         logger.info("Suspended pid=%s name=%s", pid, name)
         action_id = _log_action(
             action_type=ActionType.SYSTEM_TWEAK,
@@ -339,7 +366,7 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "suspend",
             "success": True,
             "message": "Process suspended",
-            "dry_run": False,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": action_id,
         }
@@ -351,13 +378,15 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "suspend",
             "success": False,
             "message": "Failed to suspend process",
-            "dry_run": False,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
         }
 
 
 def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
+    execution_allowed = allow_execution()
+    effective_dry_run = not execution_allowed
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
         logger.warning("Resume rejected for pid=%s: %s", pid, reason)
@@ -367,7 +396,7 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "resume",
             "success": False,
             "message": reason,
-            "dry_run": dry_run,
+            "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
         }
@@ -380,7 +409,7 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
     if protected:
         logger.warning("Resume allowed for protected process pid=%s name=%s", pid, name)
 
-    if dry_run:
+    if effective_dry_run:
         logger.info("Dry-run resume for pid=%s name=%s", pid, name)
         return {
             "pid": pid,
@@ -394,7 +423,10 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         }
 
     try:
-        proc.resume()
+        if not execution_allowed:
+            enforce_safe_execution()
+        if allow_execution():
+            proc.resume()
         logger.info("Resumed pid=%s name=%s", pid, name)
         action_id = _log_action(
             action_type=ActionType.SYSTEM_TWEAK,
@@ -410,7 +442,7 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "resume",
             "success": True,
             "message": "Process resumed",
-            "dry_run": False,
+            "dry_run": effective_dry_run,
             "protected": protected,
             "action_id": action_id,
         }
@@ -422,7 +454,7 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             "action": "resume",
             "success": False,
             "message": "Failed to resume process",
-            "dry_run": False,
+            "dry_run": effective_dry_run,
             "protected": protected,
             "action_id": None,
         }

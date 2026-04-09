@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from intelligence.config import DRY_RUN
 
 from models.optimizer_models import (
     BoostRequest,
@@ -31,7 +32,7 @@ def optimize_boost(payload: BoostRequest) -> BoostResponse:
     result = boost_system_performance(
         cpu_threshold=float(payload.cpu_threshold),
         max_processes=int(payload.max_processes),
-        dry_run=payload.dry_run,
+        dry_run=DRY_RUN,
     )
     return BoostResponse(
         success=bool(result["success"]),
@@ -62,7 +63,7 @@ def optimize_boost(payload: BoostRequest) -> BoostResponse:
 
 @router.post("/optimize/cleanup", response_model=CleanupResponse)
 def optimize_cleanup(payload: CleanupRequest) -> CleanupResponse:
-    result = run_cleanup(dry_run=payload.dry_run)
+    result = run_cleanup(dry_run=DRY_RUN)
     return CleanupResponse(
         success=bool(result["success"]),
         message=str(result["message"]),
@@ -81,25 +82,25 @@ def optimize_cleanup(payload: CleanupRequest) -> CleanupResponse:
 
 @router.post("/process/kill", response_model=ProcessActionResult)
 def process_kill(payload: ProcessKillRequest) -> ProcessActionResult:
-    result = kill_process_safe(pid=payload.pid, dry_run=payload.dry_run)
+    result = kill_process_safe(pid=payload.pid, dry_run=DRY_RUN)
     return ProcessActionResult(**result)
 
 
 @router.post("/process/priority", response_model=ProcessActionResult)
 def process_priority(payload: ProcessPriorityRequest) -> ProcessActionResult:
-    result = change_process_priority_safe(pid=payload.pid, priority=payload.priority, dry_run=payload.dry_run)
+    result = change_process_priority_safe(pid=payload.pid, priority=payload.priority, dry_run=DRY_RUN)
     return ProcessActionResult(**result)
 
 
 @router.post("/process/suspend", response_model=ProcessActionResult)
 def process_suspend(payload: ProcessSuspendRequest) -> ProcessActionResult:
-    result = suspend_process_safe(pid=payload.pid, dry_run=payload.dry_run)
+    result = suspend_process_safe(pid=payload.pid, dry_run=DRY_RUN)
     return ProcessActionResult(**result)
 
 
 @router.post("/process/resume", response_model=ProcessActionResult)
 def process_resume(payload: ProcessResumeRequest) -> ProcessActionResult:
-    result = resume_process_safe(pid=payload.pid, dry_run=payload.dry_run)
+    result = resume_process_safe(pid=payload.pid, dry_run=DRY_RUN)
     return ProcessActionResult(**result)
 
 

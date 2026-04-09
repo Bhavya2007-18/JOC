@@ -71,9 +71,19 @@ export function System() {
     const issueId = issue.id || issue.target;
     setFixing(prev => ({ ...prev, [issueId]: true }));
     try {
-      const action = issue.action || 'kill_process';
-      const target = issue.target;
-      await systemApi.fix(action, target);
+      const action = issue.best_action?.action_type || issue.action || 'kill_process';
+      const target = issue.best_action?.target || issue.target;
+      const pid =
+        issue.best_action?.pid ??
+        issue.pid ??
+        issue.target_pid ??
+        issue.evidence?.fix_action?.pid;
+
+      if (action === 'kill_process' && !pid) {
+        throw new Error('PID required for safe process termination');
+      }
+
+      await systemApi.fix(action, target, pid);
       handleAnalyze();
     } catch (err) {
       console.error('Failed to fix issue:', err);

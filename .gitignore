@@ -15,3 +15,4 @@ backend/storage/*.db
 backend/logs/simulation_logs.json
 backend/storage/behavior_logs.json
 frontend/package-lock.json
+backend/intelligence/action_history.json
