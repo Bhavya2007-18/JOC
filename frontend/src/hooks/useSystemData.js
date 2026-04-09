@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { systemApi, intelligenceApi, optimizerApi } from '../api/client';
+import { systemApi } from '../api/client';
 
 export function useSystemData(pollingInterval = 2000) {
   const [stats, setStats] = useState(null);
   const [processes, setProcesses] = useState([]);
   const [anomalies, setAnomalies] = useState([]);
   const [decisions, setDecisions] = useState([]);
+  const [health, setHealth] = useState(100);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [events, setEvents] = useState([]);
@@ -22,24 +23,39 @@ export function useSystemData(pollingInterval = 2000) {
 
   const fetchData = useCallback(async () => {
     try {
-      const [statsRes, procRes, anomalyRes, decisionRes] = await Promise.all([
-        systemApi.getStats(),
-        systemApi.getProcesses(10),
-        intelligenceApi.getAnomalies(5),
-        intelligenceApi.getDecisions(5)
-      ]);
+      const res = await systemApi.analyze();
+      const data = res.data;
 
-      setStats(statsRes.data);
-      setProcesses(procRes.data.top_processes);
-      
-      // Check for new anomalies to add to event stream
-      if (anomalyRes.data.anomalies.length > anomalies.length) {
-        const newAnomalies = anomalyRes.data.anomalies.slice(0, anomalyRes.data.anomalies.length - anomalies.length);
-        newAnomalies.forEach(a => addEvent(`Anomaly Detected: ${a.description}`, 'warning'));
+      setStats({
+        cpu: { usage_percent: data.summary.cpu_percent },
+        memory: { percent: data.summary.memory_percent },
+        disk: { percent: data.summary.disk_percent || 0 }
+      });
+
+      setProcesses(
+        data.issues.flatMap(issue =>
+          (issue.affected_processes || []).map(p => ({
+            name: p.name,
+            pid: p.pid
+          }))
+        )
+      );
+
+      setAnomalies(data.issues);
+      setDecisions(data.issues);
+      setHealth(data.system_health_score);
+
+      const seen = new Set();
+      if (data.changes) {
+        data.changes.forEach(change => {
+          const key = `${change.type}-${change.name}`;
+          if (!seen.has(key)) {
+            addEvent(`${change.type}: ${change.name || ''}`, 'info');
+            seen.add(key);
+          }
+        });
       }
-      
-      setAnomalies(anomalyRes.data.anomalies);
-      setDecisions(decisionRes.data.decisions);
+
       setLoading(false);
       setError(null);
     } catch (err) {
@@ -47,7 +63,7 @@ export function useSystemData(pollingInterval = 2000) {
       setError(err.message);
       // Don't set loading to false here to show stale data while retrying
     }
-  }, [anomalies.length, addEvent]);
+  }, [addEvent]);
 
   useEffect(() => {
     fetchData();
@@ -60,6 +76,7 @@ export function useSystemData(pollingInterval = 2000) {
     processes,
     anomalies,
     decisions,
+    health,
     loading,
     error,
     events,

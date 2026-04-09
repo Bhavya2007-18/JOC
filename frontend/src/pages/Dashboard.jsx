@@ -1,10 +1,11 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { SystemHealthScore } from '../components/SystemHealthScore';
 import { EventStream } from '../components/EventStream';
 import { useSystemData } from '../hooks/useSystemData';
+import { systemApi } from '../api/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Activity, 
@@ -24,7 +25,7 @@ import {
 import { Link } from 'react-router-dom';
 
 export function Dashboard() {
-  const { stats, processes, anomalies, decisions, loading, error, events, addEvent } = useSystemData(3000);
+  const { stats, processes, anomalies, decisions, health, loading, error, events, addEvent } = useSystemData(3000);
   const [chartData, setChartData] = useState([]);
 
   // Update chart data when stats change
@@ -42,19 +43,10 @@ export function Dashboard() {
     }
   }, [stats]);
 
-  const systemHealth = useMemo(() => {
-    if (!stats) return 100;
-    let score = 100;
-    if (stats.cpu.usage_percent > 80) score -= 20;
-    if (stats.memory.percent > 80) score -= 20;
-    if (anomalies.length > 0) score -= anomalies.length * 5;
-    return Math.max(0, score);
-  }, [stats, anomalies]);
-
   const quickStats = [
     { name: 'CPU Usage', value: `${stats?.cpu?.usage_percent || 0}%`, icon: Cpu, color: 'text-blue-500', bg: 'bg-blue-50' },
     { name: 'Memory', value: `${stats?.memory?.percent || 0}%`, icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50' },
-    { name: 'Disk Free', value: `${stats?.disk?.percent_free || 0}%`, icon: HardDrive, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+    { name: 'Disk Usage', value: `${stats?.disk?.percent || 0}%`, icon: HardDrive, color: 'text-emerald-500', bg: 'bg-emerald-50' },
     { name: 'Network', value: 'Active', icon: Monitor, color: 'text-amber-500', bg: 'bg-amber-50' },
   ];
 
@@ -69,6 +61,22 @@ export function Dashboard() {
   const handleModeChange = (modeId) => {
     setSystemMode(modeId);
     addEvent(`System mode changed to ${modeId.toUpperCase()}`, 'config');
+  };
+
+  const handleFix = async (issue) => {
+    if (!issue.best_action) return;
+
+    try {
+      await systemApi.fix(
+        issue.best_action.action_type,
+        issue.best_action.target,
+        issue.best_action.pid
+      );
+      addEvent(`Applied fix: ${issue.best_action.target}`, 'success');
+    } catch (fixError) {
+      addEvent(`Failed to apply fix: ${issue.best_action.target}`, 'error');
+      console.error('Failed to apply fix:', fixError);
+    }
   };
 
   return (
@@ -86,7 +94,7 @@ export function Dashboard() {
             <p className="mt-2 text-lg text-gray-600">Real-time system monitoring and autonomous optimization.</p>
           </div>
           <div className="flex items-center gap-4 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
-             <SystemHealthScore score={systemHealth} />
+             <SystemHealthScore score={health || 100} />
           </div>
         </div>
       </motion.header>
@@ -173,7 +181,7 @@ export function Dashboard() {
             <div className="space-y-4 mt-4">
               <AnimatePresence mode="popLayout">
                 {decisions.length > 0 ? (
-                  decisions.map((decision, idx) => (
+                  decisions.map((issue, idx) => (
                     <motion.div
                       key={idx}
                       initial={{ opacity: 0, x: -20 }}
@@ -182,21 +190,27 @@ export function Dashboard() {
                       className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors"
                     >
                       <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-gray-900">{decision.decision}</h4>
+                        <h4 className="font-semibold text-gray-900">{issue.title}</h4>
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                          decision.confidence === 'high' ? 'bg-green-100 text-green-700' :
-                          decision.confidence === 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+                          (issue.confidence || 0) >= 0.8 ? 'bg-green-100 text-green-700' :
+                          (issue.confidence || 0) >= 0.5 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
                         }`}>
-                          {decision.confidence} CONFIDENCE
+                          {`${Math.round((issue.confidence || 0) * 100)}%`} CONFIDENCE
                         </span>
                       </div>
-                      <p className="mt-1 text-sm text-gray-600 leading-relaxed">{decision.reason}</p>
+                      <p className="mt-1 text-sm text-gray-600 leading-relaxed">{issue.cause}</p>
                       <div className="mt-3 flex items-center gap-3">
-                         {decision.suggested_actions.map((action, aidx) => (
-                           <Button key={aidx} size="sm" variant="outline" className="text-xs h-8">
-                             Apply {action.action_type}
-                           </Button>
-                         ))}
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-xs h-8"
+                          onClick={() => handleFix(issue)}
+                          disabled={!issue.best_action}
+                        >
+                          {issue.best_action
+                            ? `Fix: ${issue.best_action.target}`
+                            : "No Action"}
+                        </Button>
                       </div>
                     </motion.div>
                   ))

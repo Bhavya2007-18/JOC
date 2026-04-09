@@ -11,7 +11,7 @@ export const systemApi = {
   getStats: () => api.get('/system/stats'),
   getProcesses: (limit = 10) => api.get(`/system/processes?limit=${limit}`),
   analyze: () => api.get('/analyze'),
-  fix: (action, target) => api.post('/fix', { action, target }),
+  fix: (action, target, pid) => api.post('/fix', { action, target, pid }),
 };
 
 export const intelligenceApi = {
