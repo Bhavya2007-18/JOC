@@ -10,6 +10,7 @@ export function useSystemData(pollingInterval = 2000) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [events, setEvents] = useState([]);
+  const previousCpuByPid = useRef({});
 
   const addEvent = useCallback((message, type = 'info') => {
     const newEvent = {
@@ -66,9 +67,14 @@ export function useSystemData(pollingInterval = 2000) {
   }, [addEvent]);
 
   useEffect(() => {
-    fetchData();
+    const immediate = setTimeout(() => {
+      fetchData();
+    }, 0);
     const interval = setInterval(fetchData, pollingInterval);
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(immediate);
+      clearInterval(interval);
+    };
   }, [fetchData, pollingInterval]);
 
   return {

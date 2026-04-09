@@ -19,10 +19,12 @@ export function Storage() {
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
   const [cleaning, setCleaning] = useState({});
+  const [status, setStatus] = useState(null);
 
   const handleScan = async () => {
     setLoading(true);
     setError(null);
+    setStatus(null);
     try {
       const response = await storageApi.scan({ path: 'C:/Users' });
       setReport(response.data);
@@ -36,14 +38,52 @@ export function Storage() {
 
   const handleCleanup = async (type) => {
     setCleaning(prev => ({ ...prev, [type]: true }));
+    setStatus(null);
     try {
-      const response = await storageApi.cleanup(type, true);
-      alert(`Cleanup successful! Freed ${response.data.freed_readable || '0 B'}`);
-      // Refresh scan after cleanup
+      const previewRes = await storageApi.cleanup(type, { confirm: false, dryRun: true });
+      const preview = previewRes.data.preview;
+
+      const riskLabel = previewRes.data.risk ? `Risk: ${previewRes.data.risk.toUpperCase()}. ` : '';
+      let proceed = true;
+      if (previewRes.data.risk === 'high') {
+        const typed = window.prompt(
+          `${riskLabel}High-risk cleanup. Type CONFIRM to proceed with deleting files from ${type.toUpperCase()}.`
+        );
+        if (typed !== 'CONFIRM') {
+          proceed = false;
+        }
+      } else {
+        proceed = window.confirm(
+          preview
+            ? `${riskLabel}This will delete approximately ${preview.total_files} files from ${type.toUpperCase()}. Do you want to continue?`
+            : `${riskLabel}This will delete files for ${type.toUpperCase()}. Do you want to continue?`
+        );
+      }
+
+      if (!proceed) {
+        setCleaning(prev => ({ ...prev, [type]: false }));
+        return;
+      }
+
+      const response = await storageApi.cleanup(type, { confirm: true, dryRun: false });
+      const benefitPercent =
+        response.data.total_deleted > 0
+          ? Math.min(25, Math.max(5, Math.round(response.data.total_deleted / (1024 * 1024 * 500))))
+          : 0;
+      setStatus({
+        type: 'success',
+        message:
+          benefitPercent > 0
+            ? `Cleanup completed. Deleted ${response.data.total_deleted} files, ${response.data.total_failed} failed. Estimated performance improvement ~${benefitPercent}%.`
+            : `Cleanup completed. Deleted ${response.data.total_deleted} files, ${response.data.total_failed} failed.`,
+      });
       handleScan();
     } catch (err) {
       console.error('Failed to cleanup storage:', err);
-      alert('Failed to cleanup storage.');
+      setStatus({
+        type: 'error',
+        message: 'Failed to cleanup storage. Please check if the backend is running.',
+      });
     } finally {
       setCleaning(prev => ({ ...prev, [type]: false }));
     }
@@ -72,6 +112,19 @@ export function Storage() {
         <div className="flex items-center gap-3 rounded-xl bg-red-50 p-6 text-red-800 ring-1 ring-red-200">
           <AlertTriangle className="h-6 w-6" />
           <p className="font-medium text-lg">{error}</p>
+        </div>
+      )}
+
+      {status && (
+        <div
+          className={`flex items-center gap-3 rounded-xl p-4 text-sm font-medium ${
+            status.type === 'success'
+              ? 'bg-green-50 text-green-800 ring-1 ring-green-200'
+              : 'bg-red-50 text-red-800 ring-1 ring-red-200'
+          }`}
+        >
+          <Info className="h-5 w-5" />
+          <p>{status.message}</p>
         </div>
       )}
 

@@ -27,20 +27,25 @@ import { Link } from 'react-router-dom';
 export function Dashboard() {
   const { stats, processes, anomalies, decisions, health, loading, error, events, addEvent } = useSystemData(3000);
   const [chartData, setChartData] = useState([]);
+  const [baseline, setBaseline] = useState({ cpu: null, memory: null });
 
-  // Update chart data when stats change
   useEffect(() => {
-    if (stats) {
+    if (!stats) return;
+    const id = setTimeout(() => {
       const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       setChartData(prev => {
-        const newData = [...prev, {
-          time: timestamp,
-          cpu: stats.cpu.usage_percent,
-          memory: stats.memory.percent,
-        }].slice(-20); // Keep last 20 data points
-        return newData;
+        const next = [
+          ...prev,
+          {
+            time: timestamp,
+            cpu: stats.cpu.usage_percent,
+            memory: stats.memory.percent,
+          },
+        ].slice(-20);
+        return next;
       });
-    }
+    }, 0);
+    return () => clearTimeout(id);
   }, [stats]);
 
   const quickStats = [
@@ -81,7 +86,7 @@ export function Dashboard() {
 
   return (
     <div className="space-y-8 pb-12">
-      <motion.header
+      <Motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -97,12 +102,12 @@ export function Dashboard() {
              <SystemHealthScore score={health || 100} />
           </div>
         </div>
-      </motion.header>
+      </Motion.header>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {quickStats.map((stat, idx) => (
-          <motion.div
+          <Motion.div
             key={stat.name}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -114,9 +119,37 @@ export function Dashboard() {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">{stat.name}</p>
-              <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stat.value}
+                {stat.trend && <span className="ml-1 text-xs align-middle">{stat.trend}</span>}
+              </p>
+              {stat.state && (
+                <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${stat.state.badge}`}>
+                  {stat.state.label}
+                </span>
+              )}
+              {stat.name === 'CPU Usage' && baseline.cpu != null && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Normal for you: {baseline.cpu.toFixed(1)}%. {cpuUsage > baseline.cpu ? 'Higher than usual.' : 'Within usual range.'}
+                </p>
+              )}
+              {stat.name === 'Memory' && baseline.memory != null && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Normal for you: {baseline.memory.toFixed(1)}%. {memUsage > baseline.memory ? 'Higher than usual.' : 'Within usual range.'}
+                </p>
+              )}
+              {stat.name === 'CPU Usage' && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Sustained high CPU can cause slowdowns and input lag in active applications.
+                </p>
+              )}
+              {stat.name === 'Memory' && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  High memory usage can lead to app freezes and disk swapping.
+                </p>
+              )}
             </div>
-          </motion.div>
+          </Motion.div>
         ))}
       </div>
 
@@ -212,7 +245,7 @@ export function Dashboard() {
                             : "No Action"}
                         </Button>
                       </div>
-                    </motion.div>
+                    </Motion.div>
                   ))
                 ) : (
                   <div className="py-8 text-center text-gray-500 italic text-sm">

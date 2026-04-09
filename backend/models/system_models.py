@@ -51,6 +51,7 @@ class ProcessInfoModel(BaseModel):
     name: str
     cpu_percent: float
     memory_percent: float
+    protected: bool = False
 
 
 class SystemStatsResponse(BaseModel):
@@ -66,4 +67,3 @@ class ProcessesResponse(BaseModel):
     """Response model for top processes endpoint."""
 
     top_processes: List[ProcessInfoModel]
-

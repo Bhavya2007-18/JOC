@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 
 export function SystemHealthScore({ score = 100 }) {
   const getColor = (s) => {
@@ -22,7 +22,7 @@ export function SystemHealthScore({ score = 100 }) {
           cx="64"
           cy="64"
         />
-        <motion.circle
+        <Motion.circle
           className={getColor(score)}
           strokeWidth="8"
           strokeDasharray={circumference}

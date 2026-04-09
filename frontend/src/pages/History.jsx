@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { systemApi, simulationApi } from '../api/client';
+import { systemApi, intelligenceApi } from '../api/client';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { useSimulation } from '../hooks/useSimulation';
@@ -16,7 +16,7 @@ import {
   Activity,
   FileText
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 
 export function History() {
   const [reverting, setReverting] = useState({});
@@ -24,16 +24,46 @@ export function History() {
   const { history: simHistory, fetchHistory: fetchSimHistory } = useSimulation();
   const [activeTab, setActiveTab] = useState('actions');
 
-  // Mock history for actions as backend might not have a persistent GET /history for all actions yet
-  const [history, setHistory] = useState([
-    { id: 'act_1', action: 'Kill Process', target: 'chrome.exe', timestamp: '2026-04-07 14:30', status: 'Completed', revertible: true },
-    { id: 'act_2', action: 'Clean Junk', target: 'Temp Files', timestamp: '2026-04-07 12:15', status: 'Completed', revertible: false },
-    { id: 'act_3', action: 'Tweak Execute', target: 'Gaming Boost', timestamp: '2026-04-07 10:00', status: 'Completed', revertible: true },
-  ]);
+  const [history, setHistory] = useState([]);
+
+  const [behavior, setBehavior] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    systemApi.getActionHistory().then((res) => {
+      if (!mounted) return;
+      const actions = (res.data?.actions || []).map((a) => ({
+        id: a.id,
+        action: a.action,
+        target: a.target,
+        timestamp: new Date(a.timestamp * 1000).toLocaleString(),
+        status: a.status,
+        revertible: a.reversible,
+      }));
+      setHistory(actions);
+    }).catch(() => {});
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     fetchSimHistory();
   }, [fetchSimHistory]);
+
+  useEffect(() => {
+    let mounted = true;
+    intelligenceApi.safePatterns(1440).then((res) => {
+      if (!mounted || res.status !== 'success') return;
+      const data = res.data;
+      setBehavior({
+        avgCpu: data.average_cpu_percent,
+        avgMem: data.average_memory_percent,
+        peakHours: data.peak_hours || [],
+      });
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const handleRevert = async (actionId) => {
     setReverting(prev => ({ ...prev, [actionId]: true }));
@@ -64,6 +94,28 @@ export function History() {
         </div>
       </header>
 
+      {behavior && (
+        <Card className="border-none shadow-sm ring-1 ring-blue-100 bg-blue-50/40">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h2 className="text-sm font-bold text-blue-900 uppercase tracking-widest">Behavior Insights</h2>
+              <p className="mt-1 text-sm text-blue-900">
+                You typically use around {behavior.avgCpu?.toFixed(1) ?? 0}% CPU and {behavior.avgMem?.toFixed(1) ?? 0}% memory across the day.
+              </p>
+            </div>
+            {behavior.peakHours.length > 0 && (
+              <div className="text-xs text-blue-900">
+                Peak hours:{' '}
+                {behavior.peakHours
+                  .slice(0, 2)
+                  .map((h) => `${h.hour}:00`)
+                  .join(' – ')}
+              </div>
+            )}
+          </div>
+        </Card>
+      )}
+
       {/* Tab Navigation */}
       <div className="flex p-1 bg-gray-100 rounded-xl w-fit">
         <button
@@ -87,7 +139,7 @@ export function History() {
       </div>
 
       {status && (
-        <motion.div 
+        <Motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className={`flex items-center gap-4 rounded-xl p-6 shadow-sm ring-1 ring-inset ${
@@ -96,7 +148,7 @@ export function History() {
         >
           {status.type === 'success' ? <CheckCircle2 className="h-6 w-6" /> : <AlertTriangle className="h-6 w-6" />}
           <p className="font-bold text-lg">{status.message}</p>
-        </motion.div>
+        </Motion.div>
       )}
 
       <AnimatePresence mode="wait">

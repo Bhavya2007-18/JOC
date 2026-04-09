@@ -3,10 +3,12 @@ import time
 
 import psutil
 
+from services.optimizer.process_manager import _is_protected_process
 
 _CACHE_TTL_SECONDS = 1.0
 _last_process_list: Optional[List[Dict[str, Any]]] = None
 _last_process_timestamp: float = 0.0
+_cpu_count: int = psutil.cpu_count(logical=True) or 1
 
 
 def get_top_processes(limit: int = 10) -> List[Dict[str, Any]]:
@@ -26,6 +28,10 @@ def get_top_processes(limit: int = 10) -> List[Dict[str, Any]]:
             if cpu_percent is None:
                 cpu_percent = proc.cpu_percent(interval=None)
 
+            # Normalize: psutil returns per-core values (e.g. 400% on 4 cores)
+            # Divide by cpu_count to get a 0-100% value
+            cpu_percent = round(float(cpu_percent) / _cpu_count, 1)
+
             memory_percent = info.get("memory_percent") or 0.0
 
             processes.append(
@@ -33,7 +39,8 @@ def get_top_processes(limit: int = 10) -> List[Dict[str, Any]]:
                     "pid": int(info["pid"]),
                     "name": info.get("name") or "unknown",
                     "cpu_percent": float(cpu_percent),
-                    "memory_percent": float(memory_percent),
+                    "memory_percent": round(float(memory_percent), 1),
+                    "protected": bool(_is_protected_process(proc)),
                 }
             )
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):

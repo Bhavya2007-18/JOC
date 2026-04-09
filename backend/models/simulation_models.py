@@ -9,6 +9,7 @@ class SimulationType(str, Enum):
     memory_stress = "memory_stress"
     process_simulator = "process_simulator"
     network_burst = "network_burst"
+    auto = "auto"  # ML-chosen by AttackStrategist
 
 
 class SimulationState(str, Enum):
@@ -35,6 +36,7 @@ class SimulationRunRequest(BaseModel):
     chain: List[SimulationType] = Field(default_factory=list)
     queue_if_busy: bool = True
     replay_simulation_id: Optional[str] = None
+    difficulty: str = Field(default="auto", description="easy/medium/hard/auto")
 
 
 class SimulationStopRequest(BaseModel):
@@ -75,6 +77,8 @@ class SimulationReport(BaseModel):
     logs_ref: str
     state: SimulationState
     correlation_id: str
+    feedback: Optional[Dict[str, Any]] = None  # ML feedback from feedback loop
+    attack_plan: Optional[Dict[str, Any]] = None  # Red Team attack plan used
 
 
 class SimulationHistoryResponse(BaseModel):

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSimulation } from '../hooks/useSimulation';
 import { Button } from './Button';
 import { Card } from './Card';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { 
   Play, 
   Square, 
@@ -121,7 +121,7 @@ export function SimulationPanel() {
 
       <AnimatePresence>
         {isRunning && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -137,11 +137,11 @@ export function SimulationPanel() {
                 <p className="text-sm text-blue-700/80">The JOC engine is currently monitoring system response to the {selectedType} event.</p>
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
         )}
 
         {report && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
@@ -204,8 +204,27 @@ export function SimulationPanel() {
                   </div>
                 </div>
               </div>
+              {Array.isArray(report.timeline?.transitions) && report.timeline.transitions.length > 0 && (
+                <div className="mt-6 border-t border-gray-100 pt-4">
+                  <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Timeline
+                  </h4>
+                  <div className="mt-3 space-y-2 text-xs text-gray-700">
+                    {report.timeline.transitions.map((t, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <span className="mt-0.5 h-1.5 w-1.5 rounded-full bg-blue-500" />
+                        <div>
+                          <span className="font-semibold">{t.state || t.phase || 'Event'}</span>{' '}
+                          {t.message && <span>- {t.message}</span>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          </motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </div>

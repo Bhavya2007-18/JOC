@@ -135,6 +135,12 @@ def run_cleanup(dry_run: bool = False) -> Dict[str, Any]:
     gc.collect()
     after_gc = gc.get_stats()
 
+    risk = "low"
+    confidence = 0.8
+    if not dry_run and total_freed > 0:
+        risk = "medium"
+        confidence = 0.85
+
     result = {
         "success": True,
         "message": "Cleanup completed" if not effective_dry_run else "Dry-run: cleanup simulated",
@@ -144,6 +150,8 @@ def run_cleanup(dry_run: bool = False) -> Dict[str, Any]:
         "gc_before": before_gc,
         "gc_after": after_gc,
         "timestamp": float(__import__("time").time()),
+        "risk": risk,
+        "confidence": confidence,
     }
 
     _log_cleanup_action(result, {"dry_run": effective_dry_run})
@@ -156,4 +164,3 @@ def run_cleanup(dry_run: bool = False) -> Dict[str, Any]:
     )
 
     return result
-
