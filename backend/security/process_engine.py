@@ -1,47 +1,69 @@
-"""Process collection and behavior analysis stage."""
+"""Process collection engine for Phase 3."""
 
-import importlib
+from __future__ import annotations
 
-from .sec_config import KNOWN_SAFE_PROCESSES, THRESHOLDS
-from .sec_utils import current_timestamp, safe_process_attr
+import psutil
+
+from .sec_models import ProcessInfo
+from .sec_utils import safe_proc_attr
+
+MAX_PROCESSES = 40
 
 
-def collect_processes() -> list[dict]:
-    """Collect running process snapshots from psutil."""
-    try:
-        psutil = importlib.import_module("psutil")
-    except Exception:
-        return []
+def _rss_to_mb(rss_bytes: int) -> float:
+    """Convert RSS bytes to MB."""
+    return float(max(rss_bytes, 0)) / (1024 * 1024)
 
-    items: list[dict] = []
-    for proc in psutil.process_iter(attrs=["pid", "name", "cpu_percent", "memory_percent"]):
-        name = (safe_process_attr(proc, "name", "unknown") or "unknown").lower()
-        items.append(
-            {
-                "pid": safe_process_attr(proc, "pid"),
-                "name": name,
-                "cpu_percent": float(safe_process_attr(proc, "cpu_percent", 0.0) or 0.0),
-                "ram_percent": float(safe_process_attr(proc, "memory_percent", 0.0) or 0.0),
-                "is_known": name in KNOWN_SAFE_PROCESSES,
-            }
-        )
-    return items
+
+def get_processes() -> list[ProcessInfo]:
+    """Collect running processes and return top entries by CPU or memory."""
+    processes: list[ProcessInfo] = []
+
+    for proc in psutil.process_iter(attrs=["pid", "name", "exe"]):
+        try:
+            pid = int(safe_proc_attr(proc, "pid", 0) or 0)
+            if pid <= 0:
+                continue
+
+            name = str(safe_proc_attr(proc, "name", "unknown") or "unknown")
+            exe_path = str(safe_proc_attr(proc, "exe", "") or "")
+            cpu_percent = float(proc.cpu_percent(interval=0.1) or 0.0)
+
+            mem_info = proc.memory_info()
+            rss_bytes = int(getattr(mem_info, "rss", 0) or 0)
+            ram_mb = _rss_to_mb(rss_bytes)
+
+            processes.append(
+                ProcessInfo(
+                    pid=pid,
+                    name=name,
+                    cpu_percent=cpu_percent,
+                    ram_mb=ram_mb,
+                    exe_path=exe_path,
+                )
+            )
+        except (psutil.AccessDenied, psutil.NoSuchProcess, psutil.ZombieProcess):
+            continue
+
+    processes.sort(key=lambda p: (p.cpu_percent, p.ram_mb), reverse=True)
+    return processes[:MAX_PROCESSES]
 
 
 def analyze_processes() -> dict:
-    """Build basic behavior signals from process data."""
-    processes = collect_processes()
-    high_usage = [
-        process
-        for process in processes
-        if process["cpu_percent"] >= THRESHOLDS["cpu_percent"]
-        or process["ram_percent"] >= THRESHOLDS["ram_percent"]
-    ]
-    unknown_processes = [process for process in processes if not process["is_known"]]
-
+    """Compatibility wrapper for older pipeline calls."""
+    items = get_processes()
     return {
-        "timestamp": current_timestamp(),
-        "processes": processes,
-        "high_usage": high_usage,
-        "unknown_processes": unknown_processes,
+        "processes": [
+            {
+                "pid": p.pid,
+                "name": p.name,
+                "cpu_percent": p.cpu_percent,
+                "ram_mb": p.ram_mb,
+                "exe_path": p.exe_path,
+                "classification": p.classification,
+                "is_background": p.is_background,
+                "is_idle": p.is_idle,
+            }
+            for p in items
+        ]
     }
