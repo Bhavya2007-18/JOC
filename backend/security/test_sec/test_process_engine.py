@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import psutil
 
-from backend.security.process_engine import MAX_PROCESSES, get_processes
+from backend.security.process_engine import MAX_PROCESSES, classify_process, get_processes
 from backend.security.sec_models import ProcessInfo
 
 
@@ -66,6 +66,34 @@ class TestProcessEngine(unittest.TestCase):
         self.assertEqual(len(results), MAX_PROCESSES)
         self.assertGreaterEqual(results[0].cpu_percent, results[-1].cpu_percent)
         self.assertEqual(results[0].pid, 79)
+
+    def test_classify_known_safe(self) -> None:
+        proc = ProcessInfo(
+            pid=101,
+            name="python.exe",
+            cpu_percent=2.0,
+            ram_mb=150.0,
+            exe_path="C:/Python/python.exe",
+        )
+
+        classified = classify_process(proc)
+        self.assertEqual(classified.classification, "known_safe")
+        self.assertTrue(classified.is_background)
+        self.assertFalse(classified.is_idle)
+
+    def test_classify_suspicious_and_idle(self) -> None:
+        proc = ProcessInfo(
+            pid=202,
+            name="random_tool.exe",
+            cpu_percent=0.2,
+            ram_mb=1500.0,
+            exe_path="C:/Temp/random_tool.exe",
+        )
+
+        classified = classify_process(proc)
+        self.assertEqual(classified.classification, "suspicious")
+        self.assertTrue(classified.is_background)
+        self.assertTrue(classified.is_idle)
 
 
 if __name__ == "__main__":
