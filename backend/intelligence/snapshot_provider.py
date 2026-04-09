@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import psutil
 
@@ -35,6 +35,29 @@ def _safe_io_counters(proc: psutil.Process) -> tuple[Optional[int], Optional[int
 		return None, None
 
 
+def _collect_services() -> List[Dict[str, str]]:
+	services: List[Dict[str, str]] = []
+	if not hasattr(psutil, "win_service_iter"):
+		return services
+
+	try:
+		for service in psutil.win_service_iter():
+			try:
+				services.append(
+					{
+						"name": service.name(),
+						"status": service.status(),
+						"display_name": service.display_name(),
+					}
+				)
+			except (psutil.AccessDenied, psutil.NoSuchProcess, OSError):
+				continue
+	except (psutil.AccessDenied, NotImplementedError, OSError, AttributeError):
+		return []
+
+	return services
+
+
 def collect_snapshot() -> SystemSnapshot:
 	global _previous_disk, _previous_net, _previous_time
 
@@ -62,6 +85,8 @@ def collect_snapshot() -> SystemSnapshot:
 	cpu_per_core = psutil.cpu_percent(interval=None, percpu=True)
 
 	vm = psutil.virtual_memory()
+	disk_usage = psutil.disk_usage("/")
+	services = _collect_services()
 
 	processes: List[ProcessInfo] = []
 	for proc in process_handles:
@@ -90,6 +115,11 @@ def collect_snapshot() -> SystemSnapshot:
 			continue
 
 	top_processes = sorted(processes, key=lambda process: process.memory_mb, reverse=True)[:5]
+	disk_heavy_processes = sorted(
+		processes,
+		key=lambda process: (process.io_read_bytes or 0) + (process.io_write_bytes or 0),
+		reverse=True,
+	)[:5]
 
 	current_time = time.time()
 	disk_counters = psutil.disk_io_counters()
@@ -142,11 +172,16 @@ def collect_snapshot() -> SystemSnapshot:
 		memory_used_mb=_bytes_to_mb(vm.used),
 		memory_percent=vm.percent,
 		swap_percent=psutil.swap_memory().percent,
+		disk_total=int(disk_usage.total),
+		disk_used=int(disk_usage.used),
+		disk_percent=float(disk_usage.percent),
 		disk_read_bytes_per_sec=disk_read_rate,
 		disk_write_bytes_per_sec=disk_write_rate,
 		net_bytes_sent_per_sec=net_sent_rate,
 		net_bytes_recv_per_sec=net_recv_rate,
 		process_count=len(process_handles),
 		top_processes=top_processes,
+		disk_heavy_processes=disk_heavy_processes,
 		boot_time=psutil.boot_time(),
+		services=services,
 	)
