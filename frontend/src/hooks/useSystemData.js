@@ -44,7 +44,7 @@ export function useSystemData(pollingInterval = 2000) {
 
       setAnomalies(data.issues);
       setDecisions(data.issues);
-      setHealth(data.system_health_score);
+      setHealth(Number(data.system_health_score || 0));
 
       const seen = new Set();
       if (data.changes) {

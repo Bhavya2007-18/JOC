@@ -99,7 +99,7 @@ export function Dashboard() {
             <p className="mt-2 text-lg text-gray-600">Real-time system monitoring and autonomous optimization.</p>
           </div>
           <div className="flex items-center gap-4 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
-             <SystemHealthScore score={health || 100} />
+             <SystemHealthScore score={health} />
           </div>
         </div>
       </motion.header>

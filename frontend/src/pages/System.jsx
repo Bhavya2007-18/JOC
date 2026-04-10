@@ -239,20 +239,6 @@ export function System() {
     { id: 'simulation', label: 'Simulation Engine', icon: Terminal },
   ];
 
-  const score = Math.max(0, Math.min(100, report?.system_health_score || 0));
-  const color =
-    score > 70 ? 'text-green-600' :
-    score > 40 ? 'text-amber-600' :
-    'text-red-600';
-  const ringColor =
-    score > 70 ? 'border-green-600' :
-    score > 40 ? 'border-amber-600' :
-    'border-red-600';
-  const status =
-    score > 70 ? 'Healthy' :
-    score > 40 ? 'Warning' :
-    'Critical';
-
   return (
     <div className="space-y-8 pb-20">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -333,34 +319,6 @@ export function System() {
                               {classifyUsage((report.summary?.memory_percent ?? 0)).label}
                             </span>
                           )}
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                        <div>
-                          <span className="text-gray-600">System Health</span>
-                          <div className={`text-xs font-semibold ${color}`}>
-                            {status}
-                          </div>
-                          <div className={`text-sm font-bold ${color}`}>
-                            {score.toFixed(1)}%
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <div className="relative w-20 h-20">
-                            <div className="absolute inset-0 rounded-full border-8 border-gray-200"></div>
-                            <div
-                              className={`absolute inset-0 rounded-full border-8 ${ringColor} transition-all duration-500 ease-in-out`}
-                              style={{
-                                clipPath: `inset(${100 - score}% 0 0 0)`
-                              }}
-                            ></div>
-                            <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-800">
-                              {score.toFixed(0)}%
-                            </div>
-                          </div>
-                          <div className="text-xs text-gray-500 text-center mt-1">
-                            System Health
-                          </div>
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
