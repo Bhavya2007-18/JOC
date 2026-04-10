@@ -129,12 +129,13 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
         logger.warning("Kill rejected for pid=%s: %s", pid, reason)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else reason
         return {
             "pid": pid,
             "name": "",
             "action": "kill",
-            "success": False,
-            "message": reason,
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
@@ -154,12 +155,13 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
 
     if protected:
         logger.warning("Kill rejected for protected process pid=%s name=%s", pid, name)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else "Protected process; kill not allowed"
         return {
             "pid": pid,
             "name": name,
             "action": "kill",
-            "success": False,
-            "message": "Protected process; kill not allowed",
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": True,
             "action_id": None,
@@ -213,12 +215,13 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess) as exc:
         logger.error("Failed to terminate pid=%s: %s", pid, exc)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else "Failed to terminate process"
         return {
             "pid": pid,
             "name": name,
             "action": "kill",
-            "success": False,
-            "message": "Failed to terminate process",
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
@@ -249,12 +252,13 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
     if proc is None:
         risk_info = _compute_risk("priority", False, None)
         logger.warning("Priority change rejected for pid=%s: %s", pid, reason)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else reason
         return {
             "pid": pid,
             "name": "",
             "action": "priority",
-            "success": False,
-            "message": reason,
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
@@ -275,12 +279,13 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
 
     if protected:
         logger.warning("Priority change rejected for protected process pid=%s name=%s", pid, name)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else "Protected process; priority change not allowed"
         return {
             "pid": pid,
             "name": name,
             "action": "priority",
-            "success": False,
-            "message": "Protected process; priority change not allowed",
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": True,
             "action_id": None,
@@ -344,12 +349,13 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, ValueError) as exc:
         logger.error("Failed to change priority for pid=%s: %s", pid, exc)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else "Failed to change priority"
         return {
             "pid": pid,
             "name": name,
             "action": "priority",
-            "success": False,
-            "message": "Failed to change priority",
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
@@ -366,12 +372,13 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
     if proc is None:
         risk_info = _compute_risk("suspend", False, None)
         logger.warning("Suspend rejected for pid=%s: %s", pid, reason)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else reason
         return {
             "pid": pid,
             "name": "",
             "action": "suspend",
-            "success": False,
-            "message": reason,
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
@@ -390,12 +397,13 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
 
     if protected:
         logger.warning("Suspend rejected for protected process pid=%s name=%s", pid, name)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else "Protected process; suspend not allowed"
         return {
             "pid": pid,
             "name": name,
             "action": "suspend",
-            "success": False,
-            "message": "Protected process; suspend not allowed",
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": True,
             "action_id": None,
@@ -445,12 +453,13 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, AttributeError) as exc:
         logger.error("Failed to suspend pid=%s: %s", pid, exc)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else "Failed to suspend process"
         return {
             "pid": pid,
             "name": name,
             "action": "suspend",
-            "success": False,
-            "message": "Failed to suspend process",
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
@@ -467,12 +476,13 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
     if proc is None:
         risk_info = _compute_risk("resume", False, None)
         logger.warning("Resume rejected for pid=%s: %s", pid, reason)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else reason
         return {
             "pid": pid,
             "name": "",
             "action": "resume",
-            "success": False,
-            "message": reason,
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": False,
             "action_id": None,
@@ -534,12 +544,13 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         }
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, AttributeError) as exc:
         logger.error("Failed to resume pid=%s: %s", pid, exc)
+        message = "Simulated action (DRY RUN)" if effective_dry_run else "Failed to resume process"
         return {
             "pid": pid,
             "name": name,
             "action": "resume",
-            "success": False,
-            "message": "Failed to resume process",
+            "success": True if effective_dry_run else False,
+            "message": message,
             "dry_run": effective_dry_run,
             "protected": protected,
             "action_id": None,

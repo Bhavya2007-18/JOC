@@ -86,7 +86,7 @@ export function Dashboard() {
 
   return (
     <div className="space-y-8 pb-12">
-      <Motion.header
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -102,12 +102,12 @@ export function Dashboard() {
              <SystemHealthScore score={health || 100} />
           </div>
         </div>
-      </Motion.header>
+      </motion.header>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {quickStats.map((stat, idx) => (
-          <Motion.div
+          <motion.div
             key={stat.name}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -149,7 +149,7 @@ export function Dashboard() {
                 </p>
               )}
             </div>
-          </Motion.div>
+          </motion.div>
         ))}
       </div>
 
@@ -245,7 +245,7 @@ export function Dashboard() {
                             : "No Action"}
                         </Button>
                       </div>
-                    </Motion.div>
+                    </motion.div>
                   ))
                 ) : (
                   <div className="py-8 text-center text-gray-500 italic text-sm">

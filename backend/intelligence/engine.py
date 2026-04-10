@@ -681,14 +681,25 @@ class IntelligenceEngine:
 			heavy_services_issue.clamp_confidence()
 			issues.append(heavy_services_issue)
 
-		health_score = 100.0
-		for issue in issues:
-			if issue.severity == Severity.HIGH:
-				health_score -= 30.0
-			elif issue.severity == Severity.MEDIUM:
-				health_score -= 15.0
-			elif issue.severity == Severity.LOW:
-				health_score -= 5.0
+		def _safe_percent(primary_attr: str, nested_attr: str) -> float:
+			"""Safely fetch percent metrics from flat or nested snapshot shapes."""
+			try:
+				value = getattr(snapshot, primary_attr, None)
+				if value is None:
+					nested = getattr(snapshot, nested_attr, None)
+					if nested is not None:
+						value = getattr(nested, primary_attr, None)
+						if value is None and isinstance(nested, dict):
+							value = nested.get(primary_attr, None)
+				if value is None:
+					return 0.0
+				return float(value)
+			except (TypeError, ValueError):
+				return 0.0
+
+		cpu_percent_for_health = _safe_percent("cpu_percent", "cpu")
+		memory_percent_for_health = _safe_percent("memory_percent", "memory")
+		health_score = 100.0 - (cpu_percent_for_health * 0.5 + memory_percent_for_health * 0.5)
 		health_score = max(0.0, min(100.0, health_score))
 
 		snapshot_summary = {

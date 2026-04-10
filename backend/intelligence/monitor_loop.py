@@ -18,6 +18,8 @@ class MonitorLoop:
         self._running = False
         self._lock = threading.Lock()
         self._stop_event = threading.Event()
+        self.latest_snapshot = None
+        self.latest_analysis = None
         MonitorLoop._instance = self
 
     @classmethod
@@ -62,8 +64,12 @@ class MonitorLoop:
                 logger.info("Loop running")
 
                 snapshot = collect_snapshot()
+                self.latest_snapshot = snapshot
+
+                analysis = self.engine.analyze(snapshot)
+                self.latest_analysis = analysis
+
                 save_snapshot(snapshot)
-                self.engine.analyze(snapshot)
             except Exception as e:
                 logger.error(f"[MonitorLoop Error] {e}")
 

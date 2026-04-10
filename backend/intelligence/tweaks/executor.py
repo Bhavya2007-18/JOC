@@ -10,8 +10,10 @@ def execute_tweak(tweak_name: str, dry_run: bool = DRY_RUN) -> Dict[str, object]
 	effective_dry_run = bool(DRY_RUN)
 	if effective_dry_run:
 		return {
+			"success": True,
 			"status": "dry_run",
-			"message": f"Dry-run: tweak '{tweak_name}' would be executed",
+			"message": "Simulated action (DRY RUN)",
+			"dry_run": True,
 		}
 
 	tweak = get_tweak(tweak_name)

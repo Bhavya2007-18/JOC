@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { systemApi } from '../api/client';
 
 export function useSystemData(pollingInterval = 2000) {
@@ -67,13 +67,19 @@ export function useSystemData(pollingInterval = 2000) {
   }, [addEvent]);
 
   useEffect(() => {
-    const immediate = setTimeout(() => {
-      fetchData();
-    }, 0);
-    const interval = setInterval(fetchData, pollingInterval);
+    let isMounted = true;
+
+    const poll = async () => {
+      while (isMounted) {
+        await fetchData(); // wait for request to finish
+        await new Promise(res => setTimeout(res, pollingInterval));
+      }
+    };
+
+    poll();
+
     return () => {
-      clearTimeout(immediate);
-      clearInterval(interval);
+      isMounted = false;
     };
   }, [fetchData, pollingInterval]);
 

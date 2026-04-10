@@ -156,10 +156,12 @@ export function System() {
       }
 
       const result = res?.data;
-      if (result?.success) {
+      if (result?.success || result?.dry_run) {
         setActionStatus({
           type: 'success',
-          message: `Action ${action} applied to ${proc.name} (PID ${proc.pid}).`,
+          message: result?.dry_run
+            ? `Simulated action (DRY RUN): ${action} on ${proc.name} (PID ${proc.pid}).`
+            : `Action ${action} applied to ${proc.name} (PID ${proc.pid}).`,
         });
         refresh();
       } else {
@@ -203,9 +205,28 @@ export function System() {
         throw new Error('PID required for safe process termination');
       }
 
-      await systemApi.fix(action, target, pid);
+      const res = await systemApi.fix(action, target, pid);
+
+      if (res?.data?.success || res?.data?.dry_run) {
+        setActionStatus({
+          type: 'success',
+          message: res?.data?.dry_run
+            ? `Simulated fix applied (DRY RUN): ${action}`
+            : `Fix applied successfully: ${action}`,
+        });
+      } else {
+        setActionStatus({
+          type: 'error',
+          message: res?.data?.message || 'Failed to apply fix',
+        });
+      }
+
       handleAnalyze();
     } catch (err) {
+      setActionStatus({
+        type: 'error',
+        message: 'Failed to apply fix',
+      });
       console.error('Failed to fix issue:', err);
     } finally {
       setFixing(prev => ({ ...prev, [issueId]: false }));
@@ -217,6 +238,20 @@ export function System() {
     { id: 'processes', label: 'Process Control', icon: ListFilter },
     { id: 'simulation', label: 'Simulation Engine', icon: Terminal },
   ];
+
+  const score = Math.max(0, Math.min(100, report?.system_health_score || 0));
+  const color =
+    score > 70 ? 'text-green-600' :
+    score > 40 ? 'text-amber-600' :
+    'text-red-600';
+  const ringColor =
+    score > 70 ? 'border-green-600' :
+    score > 40 ? 'border-amber-600' :
+    'border-red-600';
+  const status =
+    score > 70 ? 'Healthy' :
+    score > 40 ? 'Warning' :
+    'Critical';
 
   return (
     <div className="space-y-8 pb-20">
@@ -281,10 +316,10 @@ export function System() {
                       <div className="flex items-center justify-between border-b border-gray-100 pb-4">
                         <span className="text-gray-600 flex items-center gap-2"><Cpu className="h-4 w-4" /> CPU</span>
                         <div className="text-right">
-                          <span className="font-bold text-gray-900 block">{report.summary?.cpu_usage}%</span>
-                          {typeof report.summary?.cpu_usage === 'number' && (
-                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage(report.summary.cpu_usage).badge}`}>
-                              {classifyUsage(report.summary.cpu_usage).label}
+                          <span className="font-bold text-gray-900 block">{(report.summary?.cpu_percent ?? 0)}%</span>
+                          {typeof (report.summary?.cpu_percent ?? 0) === 'number' && (
+                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage((report.summary?.cpu_percent ?? 0)).badge}`}>
+                              {classifyUsage((report.summary?.cpu_percent ?? 0)).label}
                             </span>
                           )}
                         </div>
@@ -292,12 +327,40 @@ export function System() {
                       <div className="flex items-center justify-between border-b border-gray-100 pb-4">
                         <span className="text-gray-600 flex items-center gap-2"><Database className="h-4 w-4" /> RAM</span>
                         <div className="text-right">
-                          <span className="font-bold text-gray-900 block">{report.summary?.ram_usage}%</span>
-                          {typeof report.summary?.ram_usage === 'number' && (
-                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage(report.summary.ram_usage).badge}`}>
-                              {classifyUsage(report.summary.ram_usage).label}
+                          <span className="font-bold text-gray-900 block">{(report.summary?.memory_percent ?? 0)}%</span>
+                          {typeof (report.summary?.memory_percent ?? 0) === 'number' && (
+                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage((report.summary?.memory_percent ?? 0)).badge}`}>
+                              {classifyUsage((report.summary?.memory_percent ?? 0)).label}
                             </span>
                           )}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+                        <div>
+                          <span className="text-gray-600">System Health</span>
+                          <div className={`text-xs font-semibold ${color}`}>
+                            {status}
+                          </div>
+                          <div className={`text-sm font-bold ${color}`}>
+                            {score.toFixed(1)}%
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <div className="relative w-20 h-20">
+                            <div className="absolute inset-0 rounded-full border-8 border-gray-200"></div>
+                            <div
+                              className={`absolute inset-0 rounded-full border-8 ${ringColor} transition-all duration-500 ease-in-out`}
+                              style={{
+                                clipPath: `inset(${100 - score}% 0 0 0)`
+                              }}
+                            ></div>
+                            <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-800">
+                              {score.toFixed(0)}%
+                            </div>
+                          </div>
+                          <div className="text-xs text-gray-500 text-center mt-1">
+                            System Health
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
@@ -321,7 +384,12 @@ export function System() {
                                 </div>
                                 <div>
                                   <h4 className="text-lg font-bold text-gray-900">{issue.title || issue.issue_type}</h4>
-                                  <p className="mt-1 text-gray-600 leading-relaxed">{issue.description}</p>
+                                  <p className="mt-1 text-gray-600 leading-relaxed">{issue.explanation || issue.description}</p>
+                                  {issue.best_action && (
+                                    <div className="mt-3 text-sm font-semibold text-blue-600">
+                                      🔥 Recommended: {issue.best_action.action_type} → {issue.best_action.target}
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                               <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
