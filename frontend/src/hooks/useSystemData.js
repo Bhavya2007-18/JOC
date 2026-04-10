@@ -35,22 +35,18 @@ export function useSystemData(pollingInterval = 2000) {
         });
       }
 
-      if (data.issues) {
-        setProcesses(
-          data.issues.flatMap(issue =>
-            (issue.affected_processes || []).map(p => ({
-              name: p.name,
-              pid: p.pid
-            }))
-          )
-        );
-        setAnomalies(data.issues);
-        setDecisions(data.issues);
-      }
+      setProcesses(
+        data.issues.flatMap(issue =>
+          (issue.affected_processes || []).map(p => ({
+            name: p.name,
+            pid: p.pid
+          }))
+        )
+      );
 
-      if (data.system_health_score !== undefined) {
-        setHealth(data.system_health_score);
-      }
+      setAnomalies(data.issues);
+      setDecisions(data.issues);
+      setHealth(Number(data.system_health_score || 0));
 
       const seen = new Set();
       if (Array.isArray(data.changes)) {
@@ -73,13 +69,19 @@ export function useSystemData(pollingInterval = 2000) {
   }, [addEvent]);
 
   useEffect(() => {
-    const immediate = setTimeout(() => {
-      fetchData();
-    }, 0);
-    const interval = setInterval(fetchData, pollingInterval);
+    let isMounted = true;
+
+    const poll = async () => {
+      while (isMounted) {
+        await fetchData(); // wait for request to finish
+        await new Promise(res => setTimeout(res, pollingInterval));
+      }
+    };
+
+    poll();
+
     return () => {
-      clearTimeout(immediate);
-      clearInterval(interval);
+      isMounted = false;
     };
   }, [fetchData, pollingInterval]);
 

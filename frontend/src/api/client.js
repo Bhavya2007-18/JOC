@@ -34,10 +34,25 @@ export const systemApi = {
   getStats: () => api.get('/system/stats'),
   getProcesses: (limit = 10) => api.get(`/system/processes?limit=${limit}`),
   analyze: () => api.get('/analyze'),
-  fix: (action, target) => api.post('/fix', { action, target }),
-  safeAnalyze: () => wrapRequest(() => api.get('/analyze')),
-  getActionHistory: () => api.get('/action/history'),
-  revertAction: (actionId) => api.post('/action/revert', { action_id: actionId }),
+fix: (action, target, pid) => {
+  const payload = { action };
+
+  if (action === 'kill_process') {
+    payload.pid = pid;
+  } else {
+    payload.target = target;
+    if (pid !== undefined) {
+      payload.pid = pid;
+    }
+  }
+
+  return api.post('/fix', payload);
+},
+
+safeAnalyze: () => wrapRequest(() => api.get('/analyze')),
+getActionHistory: () => api.get('/action/history'),
+revertAction: (actionId) =>
+  api.post('/action/revert', { action_id: actionId }),
 };
 
 export const intelligenceApi = {
@@ -56,10 +71,10 @@ export const optimizerApi = {
   getSuggestions: (cpuThreshold = 30, maxProcesses = 10) => 
     api.get(`/optimize/suggestions?cpu_threshold=${cpuThreshold}&max_processes=${maxProcesses}`),
   processAction: {
-    kill: (pid, dryRun = false) => api.post('/process/kill', { pid, dry_run: dryRun }),
-    priority: (pid, priority, dryRun = false) => api.post('/process/priority', { pid, priority, dry_run: dryRun }),
-    suspend: (pid, dryRun = false) => api.post('/process/suspend', { pid, dry_run: dryRun }),
-    resume: (pid, dryRun = false) => api.post('/process/resume', { pid, dry_run: dryRun }),
+    kill: (pid) => api.post('/process/kill', { pid }),
+    priority: (pid, priority) => api.post('/process/priority', { pid, priority }),
+    suspend: (pid) => api.post('/process/suspend', { pid }),
+    resume: (pid) => api.post('/process/resume', { pid }),
   },
   executeTweak: (tweakName) => api.post('/tweak/execute', { tweak_name: tweakName }),
   revertAction: (actionId) => api.post('/action/revert', { action_id: actionId }),

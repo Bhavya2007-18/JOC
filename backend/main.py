@@ -11,6 +11,7 @@ from api.system_routes import router as system_router
 from api.optimizer_routes import router as optimizer_router
 from api.intelligence_routes import router as intelligence_router
 from api.simulation_routes import router as simulation_router
+from intelligence.config import DRY_RUN
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
 
@@ -31,6 +32,13 @@ async def add_error_handling(request: Request, call_next):
 
 @app.on_event("startup")
 def startup_event():
+    print(f"🔥 SYSTEM RUNNING IN DRY MODE: {DRY_RUN}")
+    if DRY_RUN:
+        print("⚠️ WARNING: ALL SYSTEM ACTIONS ARE IN DRY RUN MODE")
+        print("=" * 50)
+        print("⚠️ SYSTEM RUNNING IN SAFE SIMULATION MODE")
+        print("⚠️ NO REAL SYSTEM CHANGES WILL OCCUR")
+        print("=" * 50)
     init_db()
 
 

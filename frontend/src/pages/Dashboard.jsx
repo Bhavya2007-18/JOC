@@ -7,12 +7,12 @@ import { EventStream } from '../components/EventStream';
 import { useSystemData } from '../hooks/useSystemData';
 import { systemApi } from '../api/client';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
-import { 
-  Activity, 
-  HardDrive, 
-  Zap, 
-  Clock, 
-  AlertTriangle, 
+import {
+  Activity,
+  HardDrive,
+  Zap,
+  Clock,
+  AlertTriangle,
   ArrowRight,
   Cpu,
   Monitor,
@@ -83,14 +83,12 @@ export function Dashboard() {
   };
 
   return (
-    <div className="space-y-10 pb-12">
-      <AnimatePresence mode="wait">
-        <Motion.header
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col md:flex-row items-center justify-between gap-6"
-        >
+    <div className="space-y-8 pb-12">
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-black tracking-tighter text-white flex items-center gap-3 uppercase italic">
               <div className="nm-flat p-3 rounded-2xl bg-slate-900">
@@ -102,16 +100,16 @@ export function Dashboard() {
               Autonomous Optimization Unit // OS_VER 4.2.1
             </p>
           </div>
-          <div className="nm-flat p-4 rounded-3xl bg-slate-900 border border-slate-800">
-             <SystemHealthScore score={health || 100} />
+          <div className="flex items-center gap-4 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+            <SystemHealthScore score={health} />
           </div>
-        </Motion.header>
-      </AnimatePresence>
+        </div>
+      </motion.header>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {quickStats.map((stat, idx) => (
-          <Motion.div
+          <motion.div
             key={stat.name}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -121,17 +119,47 @@ export function Dashboard() {
             <div className="nm-inset p-4 rounded-2xl bg-slate-900 mb-4 group-hover:scale-105 transition-transform">
               <stat.icon className={`h-8 w-8 ${stat.color}`} />
             </div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{stat.name}</p>
-            <p className="text-3xl font-black text-white mt-1 font-mono">{stat.value}</p>
-          </Motion.div>
+            <div>
+              <p className="text-sm font-medium text-gray-500">{stat.name}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stat.value}
+                {stat.trend && <span className="ml-1 text-xs align-middle">{stat.trend}</span>}
+              </p>
+              {stat.state && (
+                <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${stat.state.badge}`}>
+                  {stat.state.label}
+                </span>
+              )}
+              {stat.name === 'CPU Usage' && baseline.cpu != null && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Normal for you: {baseline.cpu.toFixed(1)}%. {cpuUsage > baseline.cpu ? 'Higher than usual.' : 'Within usual range.'}
+                </p>
+              )}
+              {stat.name === 'Memory' && baseline.memory != null && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Normal for you: {baseline.memory.toFixed(1)}%. {memUsage > baseline.memory ? 'Higher than usual.' : 'Within usual range.'}
+                </p>
+              )}
+              {stat.name === 'CPU Usage' && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  Sustained high CPU can cause slowdowns and input lag in active applications.
+                </p>
+              )}
+              {stat.name === 'Memory' && (
+                <p className="mt-1 text-[11px] text-gray-500">
+                  High memory usage can lead to app freezes and disk swapping.
+                </p>
+              )}
+            </div>
+          </motion.div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         {/* Real-time Graph */}
         <div className="lg:col-span-2 space-y-10">
-          <Card 
-            title="Telemetric Analysis" 
+          <Card
+            title="Telemetric Analysis"
             description="Live system resource overhead"
             icon={Activity}
           >
@@ -140,43 +168,43 @@ export function Dashboard() {
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="colorCpu" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="colorMem" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#a855f7" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.3} />
                   <XAxis dataKey="time" hide />
                   <YAxis domain={[0, 100]} stroke="#64748b" fontSize={10} fontStyle="italic" />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#0f172a', 
-                      borderRadius: '16px', 
-                      border: '1px solid #334155', 
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#0f172a',
+                      borderRadius: '16px',
+                      border: '1px solid #334155',
                       boxShadow: '10px 10px 20px #020617, -10px -10px 20px #1e293b',
                       color: '#f1f5f9'
-                    }} 
+                    }}
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="cpu" 
-                    stroke="#3b82f6" 
+                  <Area
+                    type="monotone"
+                    dataKey="cpu"
+                    stroke="#3b82f6"
                     strokeWidth={3}
-                    fillOpacity={1} 
-                    fill="url(#colorCpu)" 
+                    fillOpacity={1}
+                    fill="url(#colorCpu)"
                     name="CPU %"
                     isAnimationActive={false}
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="memory" 
-                    stroke="#a855f7" 
+                  <Area
+                    type="monotone"
+                    dataKey="memory"
+                    stroke="#a855f7"
                     strokeWidth={3}
-                    fillOpacity={1} 
-                    fill="url(#colorMem)" 
+                    fillOpacity={1}
+                    fill="url(#colorMem)"
                     name="RAM %"
                     isAnimationActive={false}
                   />
@@ -186,8 +214,8 @@ export function Dashboard() {
           </Card>
 
           {/* Intelligence Layer */}
-          <Card 
-            title="Anomaly Detection" 
+          <Card
+            title="Anomaly Detection"
             description="Active autonomous decisions"
             icon={BrainCircuit}
           >
@@ -204,10 +232,9 @@ export function Dashboard() {
                     >
                       <div className="flex items-center justify-between mb-4">
                         <h4 className="font-black text-white uppercase tracking-wider">{issue.title}</h4>
-                        <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest nm-inset bg-slate-900 ${
-                          (issue.confidence || 0) >= 0.8 ? 'text-emerald-500' :
-                          (issue.confidence || 0) >= 0.5 ? 'text-amber-500' : 'text-red-500'
-                        }`}>
+                        <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest nm-inset bg-slate-900 ${(issue.confidence || 0) >= 0.8 ? 'text-emerald-500' :
+                            (issue.confidence || 0) >= 0.5 ? 'text-amber-500' : 'text-red-500'
+                          }`}>
                           {`${Math.round((issue.confidence || 0) * 100)}%`} CONFIDENCE
                         </span>
                       </div>
@@ -224,7 +251,7 @@ export function Dashboard() {
                             : "NO_ACTION_REQUIRED"}
                         </Button>
                       </div>
-                    </Motion.div>
+                    </motion.div>
                   ))
                 ) : (
                   <div className="py-12 nm-inset rounded-2xl bg-slate-900/30 text-center text-slate-500 font-mono text-xs uppercase tracking-widest">
@@ -239,63 +266,63 @@ export function Dashboard() {
         {/* Sidebar Controls */}
         <div className="space-y-10">
           <Card title="System Mode" icon={Settings2}>
-             <div className="grid grid-cols-1 gap-4 mt-6">
-                {modes.map((mode) => (
-                  <button
-                    key={mode.id}
-                    onClick={() => handleModeChange(mode.id)}
-                    className={cn(
-                      'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300',
-                      systemMode === mode.id 
-                        ? 'nm-inset bg-slate-900 border border-accent-blue/30' 
-                        : 'nm-flat bg-slate-900 border border-transparent hover:border-slate-700'
-                    )}
-                  >
-                    <div className={cn(
-                      'nm-flat p-3 rounded-xl',
-                      systemMode === mode.id ? 'nm-inset text-accent-blue' : 'text-slate-500'
+            <div className="grid grid-cols-1 gap-4 mt-6">
+              {modes.map((mode) => (
+                <button
+                  key={mode.id}
+                  onClick={() => handleModeChange(mode.id)}
+                  className={cn(
+                    'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300',
+                    systemMode === mode.id
+                      ? 'nm-inset bg-slate-900 border border-accent-blue/30'
+                      : 'nm-flat bg-slate-900 border border-transparent hover:border-slate-700'
+                  )}
+                >
+                  <div className={cn(
+                    'nm-flat p-3 rounded-xl',
+                    systemMode === mode.id ? 'nm-inset text-accent-blue' : 'text-slate-500'
+                  )}>
+                    <mode.icon className="h-6 w-6" />
+                  </div>
+                  <div className="text-left">
+                    <span className={cn(
+                      'block font-black uppercase tracking-widest text-sm',
+                      systemMode === mode.id ? 'text-white' : 'text-slate-500'
                     )}>
-                       <mode.icon className="h-6 w-6" />
-                    </div>
-                    <div className="text-left">
-                       <span className={cn(
-                         'block font-black uppercase tracking-widest text-sm',
-                         systemMode === mode.id ? 'text-white' : 'text-slate-500'
-                       )}>
-                         {mode.label}
-                       </span>
-                       <span className="text-[10px] text-slate-500 uppercase font-mono">{mode.desc}</span>
-                    </div>
-                  </button>
-                ))}
-             </div>
+                      {mode.label}
+                    </span>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono">{mode.desc}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
           </Card>
 
           <Card title="Direct Protocols" icon={Zap}>
-             <div className="grid grid-cols-2 gap-5 mt-6">
-                <Button variant="outline" className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-accent-blue/50 group">
-                   <Zap className="h-6 w-6 text-amber-500 group-hover:scale-125 transition-transform duration-500" />
-                   <span className="text-[10px] font-black uppercase tracking-widest">System Boost</span>
-                </Button>
-                <Button variant="outline" className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-emerald-500/50 group">
-                   <Trash2 className="h-6 w-6 text-emerald-500 group-hover:scale-125 transition-transform duration-500" />
-                   <span className="text-[10px] font-black uppercase tracking-widest">Cache Flush</span>
-                </Button>
-             </div>
+            <div className="grid grid-cols-2 gap-5 mt-6">
+              <Button variant="outline" className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-accent-blue/50 group">
+                <Zap className="h-6 w-6 text-amber-500 group-hover:scale-125 transition-transform duration-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest">System Boost</span>
+              </Button>
+              <Button variant="outline" className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-emerald-500/50 group">
+                <Trash2 className="h-6 w-6 text-emerald-500 group-hover:scale-125 transition-transform duration-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Cache Flush</span>
+              </Button>
+            </div>
           </Card>
 
           <EventStream events={events} />
 
           <Card title="Stress Engine" description="Phase 4 Module" icon={Activity}>
-             <div className="mt-6 space-y-6">
-                <p className="text-xs text-slate-500 font-mono italic leading-relaxed uppercase">Initiate adversarial simulation to stress test autonomous response loops.</p>
-                <Link to="/system?tab=simulation">
-                  <Button className="w-full text-accent-blue nm-convex bg-slate-900 rounded-2xl gap-3">
-                    BATTLE_STATION_LAUNCH
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-             </div>
+            <div className="mt-6 space-y-6">
+              <p className="text-xs text-slate-500 font-mono italic leading-relaxed uppercase">Initiate adversarial simulation to stress test autonomous response loops.</p>
+              <Link to="/system?tab=simulation">
+                <Button className="w-full text-accent-blue nm-convex bg-slate-900 rounded-2xl gap-3">
+                  BATTLE_STATION_LAUNCH
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
           </Card>
         </div>
       </div>

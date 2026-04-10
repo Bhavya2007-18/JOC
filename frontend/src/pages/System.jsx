@@ -5,10 +5,10 @@ import { Button } from '../components/Button';
 import { useSystemData } from '../hooks/useSystemData';
 import { SimulationPanel } from '../components/SimulationPanel';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
-import { 
-  Activity, 
-  AlertTriangle, 
-  CheckCircle2, 
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle2,
   XCircle,
   Settings,
   Cpu,
@@ -27,9 +27,9 @@ import { cn } from '../utils/cn';
 export function System() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'analysis';
-  
+
   const { stats, processes, refresh } = useSystemData(5000);
-  
+
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
@@ -153,10 +153,12 @@ export function System() {
       }
 
       const result = res?.data;
-      if (result?.success) {
+      if (result?.success || result?.dry_run) {
         setActionStatus({
           type: 'success',
-          message: `PROTOCOL_SUCCESS: ${action} applied to target ${proc.name} (PID ${proc.pid}).`,
+          message: result?.dry_run
+            ? `Simulated action (DRY RUN): ${action} on ${proc.name} (PID ${proc.pid}).`
+            : `Action ${action} applied to ${proc.name} (PID ${proc.pid}).`,
         });
         refresh();
       } else {
@@ -188,12 +190,41 @@ export function System() {
     const issueId = issue.id || issue.target;
     setFixing(prev => ({ ...prev, [issueId]: true }));
     try {
-      const action = issue.action || 'kill_process';
-      const target = issue.target;
-      await systemApi.fix(action, target);
+      const action = issue.best_action?.action_type || issue.action || 'kill_process';
+      const target = issue.best_action?.target || issue.target;
+      const pid =
+        issue.best_action?.pid ??
+        issue.pid ??
+        issue.target_pid ??
+        issue.evidence?.fix_action?.pid;
+
+      if (action === 'kill_process' && !pid) {
+        throw new Error('PID required for safe process termination');
+      }
+
+      const res = await systemApi.fix(action, target, pid);
+
+      if (res?.data?.success || res?.data?.dry_run) {
+        setActionStatus({
+          type: 'success',
+          message: res?.data?.dry_run
+            ? `Simulated fix applied (DRY RUN): ${action}`
+            : `Fix applied successfully: ${action}`,
+        });
+      } else {
+        setActionStatus({
+          type: 'error',
+          message: res?.data?.message || 'Failed to apply fix',
+        });
+      }
+
       handleAnalyze();
     } catch (err) {
-      console.error('Core Fix Node failure:', err);
+      setActionStatus({
+        type: 'error',
+        message: 'Failed to apply fix',
+      });
+      console.error('Failed to fix issue:', err);
     } finally {
       setFixing(prev => ({ ...prev, [issueId]: false }));
     }
@@ -241,10 +272,10 @@ export function System() {
             key={tab.id}
             onClick={() => setSearchParams({ tab: tab.id })}
             className={cn(
-               'flex items-center gap-4 px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-300',
-               activeTab === tab.id 
-                 ? 'nm-convex text-accent-blue bg-slate-800' 
-                 : 'text-slate-500 hover:text-slate-300'
+              'flex items-center gap-4 px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-300',
+              activeTab === tab.id
+                ? 'nm-convex text-accent-blue bg-slate-800'
+                : 'text-slate-500 hover:text-slate-300'
             )}
           >
             <tab.icon className="h-4 w-4" />
@@ -270,10 +301,10 @@ export function System() {
                       <div className="flex items-center justify-between border-b border-slate-800 pb-6">
                         <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Cpu className="h-4 w-4 text-accent-blue" /> CPU_LOAD</span>
                         <div className="text-right">
-                          <span className="font-black text-white block font-mono text-xl">{report.summary?.cpu_usage}%</span>
-                          {typeof report.summary?.cpu_usage === 'number' && (
-                            <span className={cn('mt-2 inline-flex rounded-xl px-3 py-1 text-[9px] font-black tracking-widest uppercase', classifyUsage(report.summary.cpu_usage).badge)}>
-                              {classifyUsage(report.summary.cpu_usage).label}
+                          <span className="font-bold text-gray-900 block">{(report.summary?.cpu_percent ?? 0)}%</span>
+                          {typeof (report.summary?.cpu_percent ?? 0) === 'number' && (
+                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage((report.summary?.cpu_percent ?? 0)).badge}`}>
+                              {classifyUsage((report.summary?.cpu_percent ?? 0)).label}
                             </span>
                           )}
                         </div>
@@ -281,10 +312,10 @@ export function System() {
                       <div className="flex items-center justify-between border-b border-slate-800 pb-6">
                         <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Database className="h-4 w-4 text-purple-400" /> MEM_ADDR</span>
                         <div className="text-right">
-                          <span className="font-black text-white block font-mono text-xl">{report.summary?.ram_usage}%</span>
-                          {typeof report.summary?.ram_usage === 'number' && (
-                            <span className={cn('mt-2 inline-flex rounded-xl px-3 py-1 text-[9px] font-black tracking-widest uppercase', classifyUsage(report.summary.ram_usage).badge)}>
-                              {classifyUsage(report.summary.ram_usage).label}
+                          <span className="font-bold text-gray-900 block">{(report.summary?.memory_percent ?? 0)}%</span>
+                          {typeof (report.summary?.memory_percent ?? 0) === 'number' && (
+                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage((report.summary?.memory_percent ?? 0)).badge}`}>
+                              {classifyUsage((report.summary?.memory_percent ?? 0)).label}
                             </span>
                           )}
                         </div>
@@ -308,9 +339,14 @@ export function System() {
                                 <div className={cn('mt-1 nm-inset rounded-2xl p-4 bg-slate-950', issue.severity === 'high' ? 'text-red-500' : 'text-amber-400')}>
                                   <AlertTriangle className="h-6 w-6" />
                                 </div>
-                                <div className="space-y-2">
-                                  <h4 className="text-lg font-black text-white uppercase tracking-tight">{issue.title || issue.issue_type}</h4>
-                                  <p className="text-slate-400 text-sm leading-relaxed italic">{issue.description}</p>
+                                <div>
+                                  <h4 className="text-lg font-bold text-gray-900">{issue.title || issue.issue_type}</h4>
+                                  <p className="mt-1 text-gray-600 leading-relaxed">{issue.explanation || issue.description}</p>
+                                  {issue.best_action && (
+                                    <div className="mt-3 text-sm font-semibold text-blue-600">
+                                      🔥 Recommended: {issue.best_action.action_type} → {issue.best_action.target}
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                               <span className={cn('px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-[0.2em]',
@@ -329,7 +365,7 @@ export function System() {
                       ) : (
                         <div className="py-20 text-center nm-inset bg-slate-900/30 rounded-3xl border border-slate-800 flex flex-col items-center">
                           <div className="nm-flat p-6 rounded-full bg-slate-900 mb-6">
-                             <CheckCircle2 className="h-12 w-12 text-emerald-500 drop-shadow-[0_0_8px_#10b981]" />
+                            <CheckCircle2 className="h-12 w-12 text-emerald-500 drop-shadow-[0_0_8px_#10b981]" />
                           </div>
                           <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Engine Optimized</h3>
                           <p className="text-slate-500 font-mono text-xs mt-2 uppercase tracking-widest">No critical latency vectors detected</p>
@@ -342,12 +378,12 @@ export function System() {
             ) : (
               <div className="flex flex-col items-center justify-center py-32 nm-flat bg-slate-900 rounded-[3rem] border border-slate-800">
                 <div className="nm-inset p-10 rounded-full bg-slate-950 mb-10 group cursor-pointer hover:nm-flat transition-all" onClick={handleAnalyze}>
-                   <Activity className="h-20 w-20 text-accent-blue animate-pulse" />
+                  <Activity className="h-20 w-20 text-accent-blue animate-pulse" />
                 </div>
                 <h3 className="text-4xl font-black text-white uppercase italic tracking-tighter">Deep Scan Required</h3>
                 <p className="mt-4 text-slate-500 font-mono text-sm uppercase tracking-[0.3em] max-w-md text-center opacity-60">Initialize Neural Diagnostics to identify performance bottlenecks and security leaks.</p>
                 <Button size="lg" onClick={handleAnalyze} isLoading={loading} className="mt-12 px-16 h-16 text-xl tracking-[0.4em] nm-convex bg-slate-900 border-none text-white">
-                   RUN_SCAN
+                  RUN_SCAN
                 </Button>
               </div>
             )}
@@ -379,7 +415,7 @@ export function System() {
                         <td className="px-8 py-5">
                           <div className="flex items-center gap-4">
                             <div className="h-10 w-10 nm-flat rounded-xl bg-slate-900 flex items-center justify-center text-slate-500 group-hover:text-accent-blue transition-colors">
-                               <Settings className="h-5 w-5" />
+                              <Settings className="h-5 w-5" />
                             </div>
                             <div className="flex flex-col">
                               <span className="font-black text-white truncate max-w-[200px] text-sm uppercase tracking-tight">
@@ -404,55 +440,55 @@ export function System() {
                         <td className="px-8 py-5 font-mono text-xs text-slate-500 tracking-tighter">[{proc.pid}]</td>
                         <td className="px-8 py-5">
                           <div className="flex items-center gap-4">
-                             <div className="w-20 nm-inset bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
-                                <div className="bg-accent-blue h-full shadow-[0_0_8px_#3b82f6]" style={{ width: `${Math.min(100, proc.cpu_percent)}%` }} />
-                             </div>
-                             <span className="text-xs font-black text-white font-mono">
-                               {proc.cpu_percent}%{' '}
-                               {proc.trend === 'up' ? '▲' : proc.trend === 'down' ? '▼' : '▬'}
-                             </span>
+                            <div className="w-20 nm-inset bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                              <div className="bg-accent-blue h-full shadow-[0_0_8px_#3b82f6]" style={{ width: `${Math.min(100, proc.cpu_percent)}%` }} />
+                            </div>
+                            <span className="text-xs font-black text-white font-mono">
+                              {proc.cpu_percent}%{' '}
+                              {proc.trend === 'up' ? '▲' : proc.trend === 'down' ? '▼' : '▬'}
+                            </span>
                           </div>
                         </td>
                         <td className="px-8 py-5 text-xs font-black text-slate-400 font-mono">{proc.memory_percent}%</td>
                         <td className="px-8 py-5 text-right">
-                           <div className="flex items-center justify-end gap-3">
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="h-10 w-10 p-0 nm-flat bg-slate-900 rounded-xl" 
-                                title="Suspend Thread"
-                                onClick={() => requestProcessAction(proc, 'suspend')}
+                          <div className="flex items-center justify-end gap-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 w-10 p-0 nm-flat bg-slate-900 rounded-xl"
+                              title="Suspend Thread"
+                              onClick={() => requestProcessAction(proc, 'suspend')}
+                              disabled={fixing[proc.pid] || proc.protected}
+                            >
+                              <Pause className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 w-10 p-0 nm-flat bg-slate-900 rounded-xl group/kill"
+                              title="Terminate Thread"
+                              onClick={() => requestProcessAction(proc, 'kill')}
+                              disabled={fixing[proc.pid] || proc.protected}
+                            >
+                              <XOctagon className="h-4 w-4 text-red-700 group-hover/kill:text-red-500" />
+                            </Button>
+                            <div className="flex flex-col gap-1 ml-2">
+                              <button
+                                onClick={() => requestProcessAction(proc, 'priority', 'high')}
+                                className="nm-convex bg-slate-900 p-1 hover:text-accent-blue rounded text-slate-600 transition-colors"
                                 disabled={fixing[proc.pid] || proc.protected}
                               >
-                                <Pause className="h-4 w-4" />
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="h-10 w-10 p-0 nm-flat bg-slate-900 rounded-xl group/kill" 
-                                title="Terminate Thread"
-                                onClick={() => requestProcessAction(proc, 'kill')}
+                                <ChevronUp className="h-3 w-3" />
+                              </button>
+                              <button
+                                onClick={() => requestProcessAction(proc, 'priority', 'low')}
+                                className="nm-convex bg-slate-900 p-1 hover:text-accent-blue rounded text-slate-600 transition-colors"
                                 disabled={fixing[proc.pid] || proc.protected}
                               >
-                                <XOctagon className="h-4 w-4 text-red-700 group-hover/kill:text-red-500" />
-                              </Button>
-                              <div className="flex flex-col gap-1 ml-2">
-                                 <button 
-                                   onClick={() => requestProcessAction(proc, 'priority', 'high')}
-                                   className="nm-convex bg-slate-900 p-1 hover:text-accent-blue rounded text-slate-600 transition-colors"
-                                   disabled={fixing[proc.pid] || proc.protected}
-                                 >
-                                    <ChevronUp className="h-3 w-3" />
-                                 </button>
-                                 <button 
-                                   onClick={() => requestProcessAction(proc, 'priority', 'low')}
-                                   className="nm-convex bg-slate-900 p-1 hover:text-accent-blue rounded text-slate-600 transition-colors"
-                                   disabled={fixing[proc.pid] || proc.protected}
-                                 >
-                                    <ChevronDown className="h-3 w-3" />
-                                 </button>
-                              </div>
-                           </div>
+                                <ChevronDown className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </div>
                         </td>
                       </tr>
                     ))}

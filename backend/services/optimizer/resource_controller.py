@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import psutil
 
 from intelligence.action_store import ActionStore
+from intelligence.config import DRY_RUN
 from intelligence.models import ActionRecord, ActionType
 from services.system_monitor import get_cpu_stats, get_memory_stats
 from utils.logger import get_logger
@@ -58,6 +59,7 @@ def analyze_system_load(cpu_threshold: float, max_processes: int) -> List[Dict[s
 
 
 def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: bool) -> Dict[str, Any]:
+    effective_dry_run = bool(DRY_RUN)
     heavy_processes = analyze_system_load(cpu_threshold=cpu_threshold, max_processes=max_processes)
     score_before = _calculate_optimization_score()
 
@@ -82,13 +84,13 @@ def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: 
                     "new_priority": current_nice,
                     "changed": False,
                     "protected": True,
-                    "dry_run": dry_run,
+                    "dry_run": effective_dry_run,
                     "action_id": None,
                 }
             )
             continue
 
-        if dry_run:
+        if effective_dry_run:
             logger.info(
                 "Dry-run boost for pid=%s name=%s cpu=%s current_priority=%s suggested=%s",
                 pid,
@@ -112,7 +114,7 @@ def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: 
             )
             continue
 
-        result = change_process_priority_safe(pid=pid, priority=suggested_priority, dry_run=False)
+        result = change_process_priority_safe(pid=pid, priority=suggested_priority, dry_run=effective_dry_run)
 
         boosted.append(
             {
@@ -123,7 +125,7 @@ def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: 
                 "new_priority": _map_priority_for_platform(suggested_priority),
                 "changed": bool(result.get("success", False)),
                 "protected": False,
-                "dry_run": False,
+                "dry_run": effective_dry_run,
                 "action_id": result.get("action_id"),
             }
         )
@@ -132,7 +134,7 @@ def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: 
 
     logger.info(
         "Boost finished dry_run=%s score_before=%s score_after=%s processes=%s",
-        dry_run,
+        effective_dry_run,
         score_before,
         score_after,
         len(boosted),
@@ -146,8 +148,8 @@ def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: 
 
     return {
         "success": True,
-        "message": "Boost executed" if not dry_run else "Dry-run: boost simulated",
-        "dry_run": dry_run,
+        "message": "Boost executed" if not effective_dry_run else "Dry-run: boost simulated",
+        "dry_run": effective_dry_run,
         "optimization_score_before": score_before,
         "optimization_score_after": score_after,
         "processes": boosted,

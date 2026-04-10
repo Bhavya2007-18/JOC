@@ -32,6 +32,7 @@ from services.red_team import (
     ProcessSimulation,
 )
 from services.system_monitor import get_cpu_stats, get_memory_stats, get_top_processes
+from intelligence.config import DRY_RUN
 from services.red_team.attack_strategist import AttackStrategist
 from services.red_team.multi_vector import AttackPlan
 from services.orchestration.feedback_loop import FeedbackLoop
@@ -75,7 +76,7 @@ class IntegrityEngine:
                     simulation_id=queued_id,
                     simulation_type=request.simulation_type,
                     parameters=request.parameters,
-                    dry_run=request.dry_run,
+                    dry_run=DRY_RUN,
                     observation_window_seconds=request.observation_window_seconds,
                     correlation_id=queued_id,
                 )
@@ -134,7 +135,7 @@ class IntegrityEngine:
         synthetic_request = SimulationRunRequest(
             simulation_type=queued.simulation_type,
             parameters=queued.parameters,
-            dry_run=queued.dry_run,
+            dry_run=DRY_RUN,
             observation_window_seconds=queued.observation_window_seconds,
             chain=[],
             queue_if_busy=False,
@@ -202,7 +203,7 @@ class IntegrityEngine:
                     simulation_id=simulation_id,
                     correlation_id=correlation_id,
                     parameters=request.parameters,
-                    dry_run=request.dry_run,
+                    dry_run=DRY_RUN,
                 )
                 self._run_single_simulation(simulation, observations, start, timeline)
 

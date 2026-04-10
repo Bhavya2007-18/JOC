@@ -14,7 +14,12 @@ class MonitorLoop:
     def __init__(self, interval: int = 5):
         self.interval = interval
         self.engine = IntelligenceEngine()
-        self.running = False
+        self._thread = None
+        self._running = False
+        self._lock = threading.Lock()
+        self._stop_event = threading.Event()
+        self.latest_snapshot = None
+        self.latest_analysis = None
         MonitorLoop._instance = self
 
     @classmethod
@@ -22,15 +27,23 @@ class MonitorLoop:
         return cls._instance
 
     def start(self):
-        if self.running:
-            return
+        with self._lock:
+            if self._running:
+                return
 
-        self.running = True
-        thread = threading.Thread(target=self.run, daemon=True)
-        thread.start()
+            self._running = True
+            self._stop_event.clear()
+            self._thread = threading.Thread(target=self._run_loop, daemon=True)
+            self._thread.start()
 
     def stop(self):
-        self.running = False
+        with self._lock:
+            self._running = False
+            self._stop_event.set()
+
+        if self._thread and self._thread.is_alive():
+            self._thread.join(timeout=self.interval + 1)
+        self._thread = None
 
     def nudge(self):
         """Force an immediate snapshot + analysis cycle (called by simulation engine)."""
@@ -43,18 +56,21 @@ class MonitorLoop:
             logger.error(f"[MonitorLoop Nudge Error] {e}")
 
     def run(self):
-        while self.running:
+        self._run_loop()
+
+    def _run_loop(self):
+        while not self._stop_event.is_set():
             try:
                 logger.info("Loop running")
 
                 snapshot = collect_snapshot()
-                save_snapshot(snapshot)
-                threading.Thread(
-                    target=self.engine.analyze,
-                    args=(snapshot,),
-                    daemon=True
-                ).start()
-            except Exception as e:
-                print(f"[MonitorLoop Error] {e}")
+                self.latest_snapshot = snapshot
 
-            time.sleep(self.interval)
+                analysis = self.engine.analyze(snapshot)
+                self.latest_analysis = analysis
+
+                save_snapshot(snapshot)
+            except Exception as e:
+                logger.error(f"[MonitorLoop Error] {e}")
+
+            self._stop_event.wait(self.interval)

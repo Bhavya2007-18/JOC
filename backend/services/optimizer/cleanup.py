@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from intelligence.action_store import ActionStore
+from intelligence.config import DRY_RUN
 from intelligence.models import ActionRecord, ActionType
 from utils.logger import get_logger
 
@@ -102,29 +103,30 @@ def _cleanup_path(path: Path, dry_run: bool) -> Tuple[int, bool]:
 
 
 def run_cleanup(dry_run: bool = False) -> Dict[str, Any]:
+    effective_dry_run = bool(DRY_RUN)
     temp_dir = Path(tempfile.gettempdir())
     cache_dirs = _collect_safe_cache_dirs()
 
     items: List[Dict[str, Any]] = []
     total_freed = 0
 
-    temp_freed, temp_sim = _cleanup_path(temp_dir, dry_run=dry_run)
+    temp_freed, temp_sim = _cleanup_path(temp_dir, dry_run=effective_dry_run)
     items.append(
         {
             "path": str(temp_dir),
             "bytes_freed": int(temp_freed),
-            "simulated": temp_sim or dry_run,
+            "simulated": temp_sim or effective_dry_run,
         }
     )
     total_freed += int(temp_freed)
 
     for cache_dir in cache_dirs:
-        freed, sim = _cleanup_path(cache_dir, dry_run=dry_run)
+        freed, sim = _cleanup_path(cache_dir, dry_run=effective_dry_run)
         items.append(
             {
                 "path": str(cache_dir),
                 "bytes_freed": int(freed),
-                "simulated": sim or dry_run,
+                "simulated": sim or effective_dry_run,
             }
         )
         total_freed += int(freed)
@@ -141,8 +143,8 @@ def run_cleanup(dry_run: bool = False) -> Dict[str, Any]:
 
     result = {
         "success": True,
-        "message": "Cleanup completed" if not dry_run else "Dry-run: cleanup simulated",
-        "dry_run": dry_run,
+        "message": "Cleanup completed" if not effective_dry_run else "Dry-run: cleanup simulated",
+        "dry_run": effective_dry_run,
         "total_bytes_freed": int(total_freed),
         "items": items,
         "gc_before": before_gc,
@@ -152,11 +154,11 @@ def run_cleanup(dry_run: bool = False) -> Dict[str, Any]:
         "confidence": confidence,
     }
 
-    _log_cleanup_action(result, {"dry_run": dry_run})
+    _log_cleanup_action(result, {"dry_run": effective_dry_run})
 
     logger.info(
         "Cleanup finished dry_run=%s total_bytes_freed=%s items=%s",
-        dry_run,
+        effective_dry_run,
         total_freed,
         len(items),
     )

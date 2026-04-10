@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import copy
+from collections import deque
 import threading
 import time
 from typing import Any, Dict, List
@@ -13,8 +15,8 @@ from models.simulation_models import SimulationState
 class RuntimeStateManager:
     def __init__(self) -> None:
         self._state = SimulationState.idle
-        self._lock = threading.Lock()
-        self._transitions: List[Dict[str, Any]] = []
+        self._lock = threading.RLock()
+        self._transitions = deque(maxlen=500)
 
     def transition(self, new_state: SimulationState, correlation_id: str, note: str = "") -> None:
         with self._lock:
@@ -30,11 +32,16 @@ class RuntimeStateManager:
 
     def get_state(self) -> SimulationState:
         with self._lock:
-            return self._state
+            import copy
+            return copy.deepcopy(self._state)
 
     def get_transitions(self) -> List[Dict[str, Any]]:
         with self._lock:
-            return list(self._transitions)
+            return [copy.deepcopy(transition) for transition in self._transitions]
+
+    def size(self) -> int:
+        with self._lock:
+            return len(self._transitions)
 
 
 class RuntimeControl:
