@@ -6,7 +6,10 @@ import {
   HardDrive, 
   Settings2, 
   History, 
-  ShieldCheck 
+  ShieldCheck,
+  Minus,
+  Square,
+  X
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -20,40 +23,71 @@ const navigation = [
 
 export function Layout() {
   return (
-    <div className="flex min-h-screen bg-gray-50 text-gray-900 font-sans">
-      {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 w-64 border-r border-gray-200 bg-white shadow-sm z-30">
-        <div className="flex h-16 items-center border-b border-gray-100 px-6">
-          <ShieldCheck className="h-8 w-8 text-blue-600 mr-3" />
-          <span className="text-xl font-bold tracking-tight text-gray-800">JOC Engine</span>
+    <div className="flex h-screen bg-slate-800 text-slate-200 font-sans overflow-hidden p-3 gap-3">
+      {/* Sidebar - Glassmorphism */}
+      <aside className="w-64 rounded-3xl nm-flat bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 flex flex-col z-30">
+        <div className="p-8 flex items-center gap-3">
+          <div className="nm-inset p-2 rounded-xl bg-slate-900">
+            <ShieldCheck className="h-6 w-6 text-accent-blue" />
+          </div>
+          <span className="text-xl font-black tracking-tighter text-white uppercase italic">JOC_ENGINE</span>
         </div>
-        <nav className="mt-6 space-y-1 px-4">
+        
+        <nav className="mt-4 flex-1 px-4 space-y-3">
           {navigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.href}
               className={({ isActive }) =>
                 cn(
-                  'group flex items-center rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200',
+                  'group flex items-center rounded-2xl px-5 py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300',
                   isActive
-                    ? 'bg-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-100/50'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    ? 'nm-inset text-accent-blue bg-slate-900'
+                    : 'text-slate-500 hover:text-slate-200 hover:bg-slate-800/50'
                 )
               }
             >
-              <item.icon className={cn('mr-3 h-5 w-5 transition-colors', 'text-gray-400 group-hover:text-blue-500')} />
+              <item.icon className={cn('mr-4 h-5 w-5 transition-colors', 'group-hover:text-accent-blue')} />
               {item.name}
             </NavLink>
           ))}
         </nav>
+
+        <div className="p-6">
+           <div className="nm-inset rounded-2xl p-4 bg-slate-900/50 border border-slate-800">
+              <p className="text-[10px] font-mono text-slate-500 uppercase">System Status</p>
+              <p className="text-xs font-bold text-emerald-500 mt-1 flex items-center gap-2">
+                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                 Secure Connection
+              </p>
+           </div>
+        </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 ml-64 p-8">
-        <div className="mx-auto max-w-7xl">
-          <Outlet />
-        </div>
-      </main>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col gap-3 min-w-0">
+        {/* Mock Window Title Bar */}
+        <header className="h-12 rounded-2xl nm-flat bg-slate-900/60 backdrop-blur-md border border-slate-700/30 flex items-center justify-between px-6">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-slate-700" />
+            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">JOC_SENTINEL_V4.2</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3">
+               <Minus className="h-3.5 w-3.5 text-slate-600 hover:text-white cursor-pointer transition-colors" />
+               <Square className="h-2.5 w-2.5 text-slate-600 hover:text-white cursor-pointer transition-colors" />
+               <X className="h-4 w-4 text-slate-600 hover:text-red-500 cursor-pointer transition-colors" />
+            </div>
+          </div>
+        </header>
+
+        {/* Dynamic Content */}
+        <main className="flex-1 nm-inset rounded-3xl bg-slate-900/20 overflow-y-auto p-8 scrollbar-thin">
+          <div className="mx-auto max-w-7xl">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

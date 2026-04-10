@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { systemApi } from '../api/client';
 
 export function useSystemData(pollingInterval = 2000) {
@@ -27,27 +27,33 @@ export function useSystemData(pollingInterval = 2000) {
       const res = await systemApi.analyze();
       const data = res.data;
 
-      setStats({
-        cpu: { usage_percent: data.summary.cpu_percent },
-        memory: { percent: data.summary.memory_percent },
-        disk: { percent: data.summary.disk_percent || 0 }
-      });
+      if (data.summary) {
+        setStats({
+          cpu: { usage_percent: data.summary.cpu_percent || 0 },
+          memory: { percent: data.summary.memory_percent || 0 },
+          disk: { percent: data.summary.disk_percent || 0 }
+        });
+      }
 
-      setProcesses(
-        data.issues.flatMap(issue =>
-          (issue.affected_processes || []).map(p => ({
-            name: p.name,
-            pid: p.pid
-          }))
-        )
-      );
+      if (data.issues) {
+        setProcesses(
+          data.issues.flatMap(issue =>
+            (issue.affected_processes || []).map(p => ({
+              name: p.name,
+              pid: p.pid
+            }))
+          )
+        );
+        setAnomalies(data.issues);
+        setDecisions(data.issues);
+      }
 
-      setAnomalies(data.issues);
-      setDecisions(data.issues);
-      setHealth(data.system_health_score);
+      if (data.system_health_score !== undefined) {
+        setHealth(data.system_health_score);
+      }
 
       const seen = new Set();
-      if (data.changes) {
+      if (Array.isArray(data.changes)) {
         data.changes.forEach(change => {
           const key = `${change.type}-${change.name}`;
           if (!seen.has(key)) {

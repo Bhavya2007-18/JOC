@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+@theme {
+  --color-slate-950: #0a0a0c;
+  --color-slate-900: #121217;
+  --color-slate-800: #1e1e24;
+  --color-slate-700: #2a2b34;
+}
+
+:root {
+  --bg-primary: #1e1e24;
+  
+  /* Neomorphic Shadows - Cyber Tactile */
+  --shadow-nm-flat: 6px 6px 12px #121217, -6px -6px 12px #2a2b31;
+  --shadow-nm-inset: inset 4px 4px 8px #121217, inset -4px -4px 8px #2a2b31;
+  --shadow-nm-convex: linear-gradient(145deg, #202027, #1b1b20);
+  --shadow-nm-concave: linear-gradient(145deg, #1b1b20, #202027);
+  
+  /* Accent Colors */
+  --color-accent-blue: #3b82f6;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-emerald: #10b981;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Utilities for Neomorphism */
+.nm-flat {
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-nm-flat);
+}
+
+.nm-inset {
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-nm-inset);
+}
+
+.nm-convex {
+  background: var(--shadow-nm-convex);
+  box-shadow: var(--shadow-nm-flat);
+}
+
+.nm-concave {
+  background: var(--shadow-nm-concave);
+  box-shadow: var(--shadow-nm-flat);
+}

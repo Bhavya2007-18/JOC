@@ -6,21 +6,25 @@ import { System } from './pages/System';
 import { Storage } from './pages/Storage';
 import { Tweaks } from './pages/Tweaks';
 import { History } from './pages/History';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="system" element={<System />} />
-          <Route path="storage" element={<Storage />} />
-          <Route path="tweaks" element={<Tweaks />} />
-          <Route path="history" element={<History />} />
-        </Route>
-      </Routes>
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="system" element={<System />} />
+            <Route path="storage" element={<Storage />} />
+            <Route path="tweaks" element={<Tweaks />} />
+            <Route path="history" element={<History />} />
+          </Route>
+        </Routes>
+      </ErrorBoundary>
     </Router>
   );
 }
 
 export default App;
+

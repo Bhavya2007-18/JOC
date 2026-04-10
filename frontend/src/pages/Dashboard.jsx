@@ -6,7 +6,7 @@ import { SystemHealthScore } from '../components/SystemHealthScore';
 import { EventStream } from '../components/EventStream';
 import { useSystemData } from '../hooks/useSystemData';
 import { systemApi } from '../api/client';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { 
   Activity, 
   HardDrive, 
@@ -20,14 +20,13 @@ import {
   BrainCircuit,
   Settings2,
   Trash2,
-  ListRestart
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { cn } from '../utils/cn';
 
 export function Dashboard() {
   const { stats, processes, anomalies, decisions, health, loading, error, events, addEvent } = useSystemData(3000);
   const [chartData, setChartData] = useState([]);
-  const [baseline, setBaseline] = useState({ cpu: null, memory: null });
 
   useEffect(() => {
     if (!stats) return;
@@ -49,18 +48,18 @@ export function Dashboard() {
   }, [stats]);
 
   const quickStats = [
-    { name: 'CPU Usage', value: `${stats?.cpu?.usage_percent || 0}%`, icon: Cpu, color: 'text-blue-500', bg: 'bg-blue-50' },
-    { name: 'Memory', value: `${stats?.memory?.percent || 0}%`, icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50' },
-    { name: 'Disk Usage', value: `${stats?.disk?.percent || 0}%`, icon: HardDrive, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-    { name: 'Network', value: 'Active', icon: Monitor, color: 'text-amber-500', bg: 'bg-amber-50' },
+    { name: 'CPU Usage', value: `${stats?.cpu?.usage_percent || 0}%`, icon: Cpu, color: 'text-accent-blue' },
+    { name: 'Memory', value: `${stats?.memory?.percent || 0}%`, icon: Activity, color: 'text-purple-400' },
+    { name: 'Disk Usage', value: `${stats?.disk?.percent || 0}%`, icon: HardDrive, color: 'text-emerald-400' },
+    { name: 'Network', value: 'Active', icon: Monitor, color: 'text-cyan-400' },
   ];
 
   const [systemMode, setSystemMode] = useState('smart');
 
   const modes = [
-    { id: 'chill', label: 'Chill', icon: Clock, color: 'text-blue-500', desc: 'Power saving' },
-    { id: 'smart', label: 'Smart', icon: BrainCircuit, color: 'text-purple-500', desc: 'Balanced' },
-    { id: 'beast', label: 'Beast', icon: Zap, color: 'text-amber-500', desc: 'Max performance' },
+    { id: 'chill', label: 'Chill', icon: Clock, color: 'text-blue-400', desc: 'Power saving' },
+    { id: 'smart', label: 'Smart', icon: BrainCircuit, color: 'text-purple-400', desc: 'Balanced' },
+    { id: 'beast', label: 'Beast', icon: Zap, color: 'text-amber-400', desc: 'Max performance' },
   ];
 
   const handleModeChange = (modeId) => {
@@ -70,7 +69,6 @@ export function Dashboard() {
 
   const handleFix = async (issue) => {
     if (!issue.best_action) return;
-
     try {
       await systemApi.fix(
         issue.best_action.action_type,
@@ -85,106 +83,88 @@ export function Dashboard() {
   };
 
   return (
-    <div className="space-y-8 pb-12">
-      <Motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <div className="flex items-center justify-between">
+    <div className="space-y-10 pb-12">
+      <AnimatePresence mode="wait">
+        <Motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row items-center justify-between gap-6"
+        >
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center gap-2">
-              <ShieldCheck className="h-8 w-8 text-blue-600" />
-              Intelligence Dashboard
+            <h1 className="text-4xl font-black tracking-tighter text-white flex items-center gap-3 uppercase italic">
+              <div className="nm-flat p-3 rounded-2xl bg-slate-900">
+                <ShieldCheck className="h-10 w-10 text-accent-blue" />
+              </div>
+              Intelligence Center
             </h1>
-            <p className="mt-2 text-lg text-gray-600">Real-time system monitoring and autonomous optimization.</p>
+            <p className="mt-4 text-slate-400 font-mono text-sm tracking-widest uppercase">
+              Autonomous Optimization Unit // OS_VER 4.2.1
+            </p>
           </div>
-          <div className="flex items-center gap-4 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+          <div className="nm-flat p-4 rounded-3xl bg-slate-900 border border-slate-800">
              <SystemHealthScore score={health || 100} />
           </div>
-        </div>
-      </Motion.header>
+        </Motion.header>
+      </AnimatePresence>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {quickStats.map((stat, idx) => (
           <Motion.div
             key={stat.name}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="flex items-center rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+            className="nm-flat rounded-3xl p-6 bg-slate-900 border border-slate-800 flex flex-col items-center text-center group"
           >
-            <div className={`mr-4 rounded-xl ${stat.bg} p-4`}>
-              <stat.icon className={`h-6 w-6 ${stat.color}`} />
+            <div className="nm-inset p-4 rounded-2xl bg-slate-900 mb-4 group-hover:scale-105 transition-transform">
+              <stat.icon className={`h-8 w-8 ${stat.color}`} />
             </div>
-            <div>
-              <p className="text-sm font-medium text-gray-500">{stat.name}</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stat.value}
-                {stat.trend && <span className="ml-1 text-xs align-middle">{stat.trend}</span>}
-              </p>
-              {stat.state && (
-                <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${stat.state.badge}`}>
-                  {stat.state.label}
-                </span>
-              )}
-              {stat.name === 'CPU Usage' && baseline.cpu != null && (
-                <p className="mt-1 text-[11px] text-gray-500">
-                  Normal for you: {baseline.cpu.toFixed(1)}%. {cpuUsage > baseline.cpu ? 'Higher than usual.' : 'Within usual range.'}
-                </p>
-              )}
-              {stat.name === 'Memory' && baseline.memory != null && (
-                <p className="mt-1 text-[11px] text-gray-500">
-                  Normal for you: {baseline.memory.toFixed(1)}%. {memUsage > baseline.memory ? 'Higher than usual.' : 'Within usual range.'}
-                </p>
-              )}
-              {stat.name === 'CPU Usage' && (
-                <p className="mt-1 text-[11px] text-gray-500">
-                  Sustained high CPU can cause slowdowns and input lag in active applications.
-                </p>
-              )}
-              {stat.name === 'Memory' && (
-                <p className="mt-1 text-[11px] text-gray-500">
-                  High memory usage can lead to app freezes and disk swapping.
-                </p>
-              )}
-            </div>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{stat.name}</p>
+            <p className="text-3xl font-black text-white mt-1 font-mono">{stat.value}</p>
           </Motion.div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         {/* Real-time Graph */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-10">
           <Card 
-            title="System Performance" 
-            description="Live CPU and Memory utilization"
+            title="Telemetric Analysis" 
+            description="Live system resource overhead"
             icon={Activity}
           >
-            <div className="h-[300px] w-full mt-4">
+            <div className="h-[350px] w-full mt-6 nm-inset rounded-2xl bg-slate-900/50 p-4 border border-slate-800/50">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="colorCpu" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1}/>
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
                       <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorMem" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.1}/>
+                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.3}/>
                       <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.3} />
                   <XAxis dataKey="time" hide />
-                  <YAxis domain={[0, 100]} stroke="#9ca3af" fontSize={12} />
+                  <YAxis domain={[0, 100]} stroke="#64748b" fontSize={10} fontStyle="italic" />
                   <Tooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    contentStyle={{ 
+                      backgroundColor: '#0f172a', 
+                      borderRadius: '16px', 
+                      border: '1px solid #334155', 
+                      boxShadow: '10px 10px 20px #020617, -10px -10px 20px #1e293b',
+                      color: '#f1f5f9'
+                    }} 
                   />
                   <Area 
                     type="monotone" 
                     dataKey="cpu" 
                     stroke="#3b82f6" 
-                    strokeWidth={2}
+                    strokeWidth={3}
                     fillOpacity={1} 
                     fill="url(#colorCpu)" 
                     name="CPU %"
@@ -194,7 +174,7 @@ export function Dashboard() {
                     type="monotone" 
                     dataKey="memory" 
                     stroke="#a855f7" 
-                    strokeWidth={2}
+                    strokeWidth={3}
                     fillOpacity={1} 
                     fill="url(#colorMem)" 
                     name="RAM %"
@@ -207,49 +187,48 @@ export function Dashboard() {
 
           {/* Intelligence Layer */}
           <Card 
-            title="Intelligence Layer" 
-            description="Autonomous insights and decisions"
+            title="Anomaly Detection" 
+            description="Active autonomous decisions"
             icon={BrainCircuit}
           >
-            <div className="space-y-4 mt-4">
+            <div className="space-y-6 mt-6">
               <AnimatePresence mode="popLayout">
                 {decisions.length > 0 ? (
                   decisions.map((issue, idx) => (
-                    <motion.div
+                    <Motion.div
                       key={idx}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+                      className="p-6 rounded-3xl nm-flat bg-slate-900 border border-slate-800 hover:nm-convex transition-all"
                     >
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-gray-900">{issue.title}</h4>
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                          (issue.confidence || 0) >= 0.8 ? 'bg-green-100 text-green-700' :
-                          (issue.confidence || 0) >= 0.5 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="font-black text-white uppercase tracking-wider">{issue.title}</h4>
+                        <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest nm-inset bg-slate-900 ${
+                          (issue.confidence || 0) >= 0.8 ? 'text-emerald-500' :
+                          (issue.confidence || 0) >= 0.5 ? 'text-amber-500' : 'text-red-500'
                         }`}>
                           {`${Math.round((issue.confidence || 0) * 100)}%`} CONFIDENCE
                         </span>
                       </div>
-                      <p className="mt-1 text-sm text-gray-600 leading-relaxed">{issue.cause}</p>
-                      <div className="mt-3 flex items-center gap-3">
+                      <p className="text-sm text-slate-400 font-medium leading-relaxed italic">{issue.cause}</p>
+                      <div className="mt-6 flex items-center justify-end">
                         <Button
                           size="sm"
-                          variant="outline"
-                          className="text-xs h-8"
+                          variant="primary"
                           onClick={() => handleFix(issue)}
                           disabled={!issue.best_action}
                         >
                           {issue.best_action
-                            ? `Fix: ${issue.best_action.target}`
-                            : "No Action"}
+                            ? `RUN_PROTOCOL: ${issue.best_action.target}`
+                            : "NO_ACTION_REQUIRED"}
                         </Button>
                       </div>
                     </Motion.div>
                   ))
                 ) : (
-                  <div className="py-8 text-center text-gray-500 italic text-sm">
-                    No active intelligence decisions at this time.
+                  <div className="py-12 nm-inset rounded-2xl bg-slate-900/30 text-center text-slate-500 font-mono text-xs uppercase tracking-widest">
+                    Telemetry Clean: No active anomalies detected
                   </div>
                 )}
               </AnimatePresence>
@@ -257,58 +236,62 @@ export function Dashboard() {
           </Card>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-8">
-          {/* Quick Controls */}
+        {/* Sidebar Controls */}
+        <div className="space-y-10">
           <Card title="System Mode" icon={Settings2}>
-             <div className="flex flex-col gap-3 mt-4">
-                <div className="grid grid-cols-3 gap-2">
-                   {modes.map((mode) => (
-                     <button
-                       key={mode.id}
-                       onClick={() => handleModeChange(mode.id)}
-                       className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${
-                         systemMode === mode.id 
-                           ? 'border-blue-500 bg-blue-50' 
-                           : 'border-gray-100 bg-white hover:border-gray-200'
-                       }`}
-                     >
-                       <mode.icon className={`h-5 w-5 mb-1 ${systemMode === mode.id ? 'text-blue-600' : 'text-gray-400'}`} />
-                       <span className={`text-[10px] font-bold ${systemMode === mode.id ? 'text-blue-700' : 'text-gray-500'}`}>
+             <div className="grid grid-cols-1 gap-4 mt-6">
+                {modes.map((mode) => (
+                  <button
+                    key={mode.id}
+                    onClick={() => handleModeChange(mode.id)}
+                    className={cn(
+                      'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300',
+                      systemMode === mode.id 
+                        ? 'nm-inset bg-slate-900 border border-accent-blue/30' 
+                        : 'nm-flat bg-slate-900 border border-transparent hover:border-slate-700'
+                    )}
+                  >
+                    <div className={cn(
+                      'nm-flat p-3 rounded-xl',
+                      systemMode === mode.id ? 'nm-inset text-accent-blue' : 'text-slate-500'
+                    )}>
+                       <mode.icon className="h-6 w-6" />
+                    </div>
+                    <div className="text-left">
+                       <span className={cn(
+                         'block font-black uppercase tracking-widest text-sm',
+                         systemMode === mode.id ? 'text-white' : 'text-slate-500'
+                       )}>
                          {mode.label}
                        </span>
-                     </button>
-                   ))}
-                </div>
-                <div className="mt-2 p-3 rounded-lg bg-gray-50 text-[10px] text-gray-500 border border-gray-100">
-                   Active: <span className="font-bold text-gray-700 uppercase">{systemMode}</span> - {modes.find(m => m.id === systemMode)?.desc}
-                </div>
+                       <span className="text-[10px] text-slate-500 uppercase font-mono">{mode.desc}</span>
+                    </div>
+                  </button>
+                ))}
              </div>
           </Card>
 
-          <Card title="Quick Actions" icon={Zap}>
-             <div className="grid grid-cols-2 gap-3 mt-4">
-                <Button variant="outline" className="flex-col h-20 gap-2 border-gray-200 hover:border-blue-200 hover:bg-blue-50 group">
-                   <Zap className="h-5 w-5 text-amber-500 group-hover:scale-110 transition-transform" />
-                   <span className="text-xs font-semibold">Boost</span>
+          <Card title="Direct Protocols" icon={Zap}>
+             <div className="grid grid-cols-2 gap-5 mt-6">
+                <Button variant="outline" className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-accent-blue/50 group">
+                   <Zap className="h-6 w-6 text-amber-500 group-hover:scale-125 transition-transform duration-500" />
+                   <span className="text-[10px] font-black uppercase tracking-widest">System Boost</span>
                 </Button>
-                <Button variant="outline" className="flex-col h-20 gap-2 border-gray-200 hover:border-emerald-200 hover:bg-emerald-50 group">
-                   <Trash2 className="h-5 w-5 text-emerald-500 group-hover:scale-110 transition-transform" />
-                   <span className="text-xs font-semibold">Cleanup</span>
+                <Button variant="outline" className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-emerald-500/50 group">
+                   <Trash2 className="h-6 w-6 text-emerald-500 group-hover:scale-125 transition-transform duration-500" />
+                   <span className="text-[10px] font-black uppercase tracking-widest">Cache Flush</span>
                 </Button>
              </div>
           </Card>
 
-          {/* Event Stream */}
           <EventStream events={events} />
 
-          {/* Simulation Quick Launch */}
-          <Card title="Simulation Engine" description="Phase 4 Integration" icon={Activity}>
-             <div className="space-y-4 mt-4">
-                <p className="text-xs text-gray-500">Test system resilience with simulated stress events.</p>
+          <Card title="Stress Engine" description="Phase 4 Module" icon={Activity}>
+             <div className="mt-6 space-y-6">
+                <p className="text-xs text-slate-500 font-mono italic leading-relaxed uppercase">Initiate adversarial simulation to stress test autonomous response loops.</p>
                 <Link to="/system?tab=simulation">
-                  <Button className="w-full bg-gray-900 hover:bg-black text-white gap-2">
-                    Open Simulation Panel
+                  <Button className="w-full text-accent-blue nm-convex bg-slate-900 rounded-2xl gap-3">
+                    BATTLE_STATION_LAUNCH
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>

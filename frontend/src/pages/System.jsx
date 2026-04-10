@@ -10,22 +10,19 @@ import {
   AlertTriangle, 
   CheckCircle2, 
   XCircle,
-  Play,
   Settings,
   Cpu,
   Database,
   ListFilter,
   Terminal,
   ShieldAlert,
-  Zap,
-  Trash2,
   Pause,
-  PlayCircle,
   XOctagon,
   ChevronUp,
   ChevronDown
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
+import { cn } from '../utils/cn';
 
 export function System() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,9 +40,9 @@ export function System() {
   const [optimizing, setOptimizing] = useState(false);
 
   const classifyUsage = (value) => {
-    if (value < 50) return { label: 'NORMAL', tone: 'text-green-600', badge: 'bg-green-50 text-green-700' };
-    if (value < 80) return { label: 'HIGH', tone: 'text-amber-600', badge: 'bg-amber-50 text-amber-700' };
-    return { label: 'CRITICAL', tone: 'text-red-600', badge: 'bg-red-50 text-red-700' };
+    if (value < 50) return { label: 'OPTIMAL', tone: 'text-emerald-500', badge: 'nm-inset text-emerald-500 bg-slate-900 border-emerald-900/30' };
+    if (value < 80) return { label: 'WARNING', tone: 'text-amber-500', badge: 'nm-inset text-amber-500 bg-slate-900 border-amber-900/30' };
+    return { label: 'CRITICAL', tone: 'text-red-500', badge: 'nm-inset text-red-500 bg-slate-900 border-red-900/30' };
   };
 
   const handleAnalyze = async () => {
@@ -57,10 +54,10 @@ export function System() {
       if (response.status === 'success') {
         setReport(response.data);
       } else {
-        setError(response.message || 'Failed to analyze system. Please check if the backend is running.');
+        setError(response.message || 'Analysis Node Failure: Backend Unreachable');
       }
     } catch (err) {
-      setError('Failed to analyze system. Please check if the backend is running.');
+      setError('Analysis Node Failure: Internal Link Severed');
       console.error(err);
     } finally {
       setLoading(false);
@@ -71,14 +68,14 @@ export function System() {
     if (stats && (stats.cpu.usage_percent > 95 || stats.memory.percent > 95)) {
       setActionStatus({
         type: 'error',
-        message: 'Action blocked: system under stress. Try again when CPU and RAM load are lower.',
+        message: 'Action Blocked: System Stress detected. Authorization restricted.',
       });
       return;
     }
     if (proc.protected && action !== 'resume') {
       setActionStatus({
         type: 'error',
-        message: `Action blocked. ${proc.name} is a protected system process.`,
+        message: `Security Override: ${proc.name} is a protected core process.`,
       });
       return;
     }
@@ -108,10 +105,10 @@ export function System() {
         preview,
       });
     } catch (err) {
-      console.error(`Failed to preview ${action} for process ${proc.pid}:`, err);
+      console.error(`Link failure during ${action} preview:`, err);
       setActionStatus({
         type: 'error',
-        message: `Failed to preview ${action} action.`,
+        message: 'Protocol Preview Error: Failed to simulate outcome.',
       });
       setFixing(prev => ({ ...prev, [proc.pid]: false }));
     }
@@ -123,7 +120,7 @@ export function System() {
 
     const risk = actionPreview.preview?.risk;
     if (risk === 'medium') {
-      const ok = window.confirm('This action is medium risk and may affect running applications. Continue?');
+      const ok = window.confirm('DANGER: Medium-risk protocol requested. Authorization required. Continue?');
       if (!ok) {
         setActionPreview(null);
         setFixing(prev => ({ ...prev, [proc.pid]: false }));
@@ -131,11 +128,11 @@ export function System() {
       }
     }
     if (risk === 'high') {
-      const typed = window.prompt('High-risk action. Type CONFIRM to proceed.');
-      if (typed !== 'CONFIRM') {
+      const typed = window.prompt('CRITICAL THREAT: High-risk action. Type CONFIRM_EXECUTION to bypass safety interlinks.');
+      if (typed !== 'CONFIRM_EXECUTION') {
         setActionStatus({
           type: 'error',
-          message: 'Action cancelled: confirmation phrase not entered.',
+          message: 'Protocol Aborted: Authorization Phrase Mismatch.',
         });
         setActionPreview(null);
         setFixing(prev => ({ ...prev, [proc.pid]: false }));
@@ -159,20 +156,20 @@ export function System() {
       if (result?.success) {
         setActionStatus({
           type: 'success',
-          message: `Action ${action} applied to ${proc.name} (PID ${proc.pid}).`,
+          message: `PROTOCOL_SUCCESS: ${action} applied to target ${proc.name} (PID ${proc.pid}).`,
         });
         refresh();
       } else {
         setActionStatus({
           type: 'error',
-          message: result?.message || `Failed to apply ${action} to ${proc.name}.`,
+          message: result?.message || `PROTOCOL_FAILURE: Target ${proc.name} resisted intervention.`,
         });
       }
     } catch (err) {
-      console.error(`Failed to execute ${action} for process ${proc.pid}:`, err);
+      console.error(`Unexpected process error:`, err);
       setActionStatus({
         type: 'error',
-        message: `Unexpected error while applying ${action} to ${proc.name}.`,
+        message: 'PROTOCOL_CRASH: Unexpected feedback loop during execution.',
       });
     } finally {
       setFixing(prev => ({ ...prev, [proc.pid]: false }));
@@ -196,57 +193,59 @@ export function System() {
       await systemApi.fix(action, target);
       handleAnalyze();
     } catch (err) {
-      console.error('Failed to fix issue:', err);
+      console.error('Core Fix Node failure:', err);
     } finally {
       setFixing(prev => ({ ...prev, [issueId]: false }));
     }
   };
 
   const tabs = [
-    { id: 'analysis', label: 'System Analysis', icon: Activity },
+    { id: 'analysis', label: 'Analysis Node', icon: Activity },
     { id: 'processes', label: 'Process Control', icon: ListFilter },
-    { id: 'simulation', label: 'Simulation Engine', icon: Terminal },
+    { id: 'simulation', label: 'Battle Station', icon: Terminal },
   ];
 
   return (
-    <div className="space-y-8 pb-20">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-10 pb-20">
+      <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">System Control</h1>
-          <p className="mt-2 text-lg text-gray-600">Advanced management and automated optimization of system resources.</p>
+          <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">System_Command</h1>
+          <p className="mt-2 text-slate-400 font-mono text-sm tracking-widest uppercase opacity-70">Deep Integration Hub // Neural_Net_Sync</p>
         </div>
       </header>
 
       {error && (
-        <div className="flex items-center gap-3 rounded-xl bg-red-50 p-4 text-red-800 ring-1 ring-red-200">
-          <XCircle className="h-5 w-5" />
-          <p className="text-sm font-medium">{error}</p>
+        <div className="flex items-center gap-4 rounded-2xl nm-flat bg-red-950/20 p-6 text-red-400 border border-red-900/30">
+          <XCircle className="h-6 w-6" />
+          <p className="text-sm font-black tracking-widest uppercase">{error}</p>
         </div>
       )}
 
       {actionStatus && (
         <div
-          className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium ${
+          className={cn(
+            'flex items-center justify-between rounded-2xl px-6 py-4 text-xs font-black uppercase tracking-[0.2em]',
             actionStatus.type === 'success'
-              ? 'bg-green-50 text-green-800 ring-1 ring-green-200'
-              : 'bg-red-50 text-red-800 ring-1 ring-red-200'
-          }`}
+              ? 'nm-flat bg-emerald-950/20 text-emerald-400 border border-emerald-900/30'
+              : 'nm-flat bg-red-950/20 text-red-400 border border-red-900/30'
+          )}
         >
           <span>{actionStatus.message}</span>
         </div>
       )}
 
       {/* Tab Navigation */}
-      <div className="flex p-1 bg-gray-100 rounded-xl w-fit">
+      <div className="flex p-2 nm-inset bg-slate-900 border border-slate-800 rounded-3xl w-fit">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setSearchParams({ tab: tab.id })}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
-              activeTab === tab.id 
-                ? 'bg-white text-blue-600 shadow-sm' 
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
+            className={cn(
+               'flex items-center gap-4 px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-300',
+               activeTab === tab.id 
+                 ? 'nm-convex text-accent-blue bg-slate-800' 
+                 : 'text-slate-500 hover:text-slate-300'
+            )}
           >
             <tab.icon className="h-4 w-4" />
             {tab.label}
@@ -258,251 +257,97 @@ export function System() {
         {activeTab === 'analysis' && (
           <Motion.div
             key="analysis"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="space-y-8"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
+            className="space-y-10"
           >
             {report ? (
               <>
-                <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                  <Card title="Resource Snapshot" icon={ShieldAlert} className="lg:col-span-1 border-t-4 border-t-blue-500">
-                    <div className="space-y-6 py-2">
-                      <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                        <span className="text-gray-600 flex items-center gap-2"><Cpu className="h-4 w-4" /> CPU</span>
+                <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+                  <Card title="Telemetry Snapshot" icon={ShieldAlert} className="lg:col-span-1 border-t-2 border-t-accent-blue">
+                    <div className="space-y-8 py-4">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-6">
+                        <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Cpu className="h-4 w-4 text-accent-blue" /> CPU_LOAD</span>
                         <div className="text-right">
-                          <span className="font-bold text-gray-900 block">{report.summary?.cpu_usage}%</span>
+                          <span className="font-black text-white block font-mono text-xl">{report.summary?.cpu_usage}%</span>
                           {typeof report.summary?.cpu_usage === 'number' && (
-                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage(report.summary.cpu_usage).badge}`}>
+                            <span className={cn('mt-2 inline-flex rounded-xl px-3 py-1 text-[9px] font-black tracking-widest uppercase', classifyUsage(report.summary.cpu_usage).badge)}>
                               {classifyUsage(report.summary.cpu_usage).label}
                             </span>
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                        <span className="text-gray-600 flex items-center gap-2"><Database className="h-4 w-4" /> RAM</span>
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-6">
+                        <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Database className="h-4 w-4 text-purple-400" /> MEM_ADDR</span>
                         <div className="text-right">
-                          <span className="font-bold text-gray-900 block">{report.summary?.ram_usage}%</span>
+                          <span className="font-black text-white block font-mono text-xl">{report.summary?.ram_usage}%</span>
                           {typeof report.summary?.ram_usage === 'number' && (
-                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage(report.summary.ram_usage).badge}`}>
+                            <span className={cn('mt-2 inline-flex rounded-xl px-3 py-1 text-[9px] font-black tracking-widest uppercase', classifyUsage(report.summary.ram_usage).badge)}>
                               {classifyUsage(report.summary.ram_usage).label}
                             </span>
                           )}
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-600">Anomaly Index</span>
-                        <span className={`font-bold ${report.issues?.length > 0 ? 'text-amber-600' : 'text-green-600'}`}>
+                        <span className="text-slate-400 font-mono uppercase text-xs">DECODED_ISSUES</span>
+                        <span className={cn('font-black font-mono text-xl', report.issues?.length > 0 ? 'text-amber-500' : 'text-emerald-500')}>
                           {report.issues?.length || 0}
                         </span>
                       </div>
                     </div>
                   </Card>
 
-                  <Card title="Intelligence Recommendations" description="Automated actions to optimize system stability" className="lg:col-span-2">
-                    <div className="space-y-4">
+                  <Card title="Neural Recommendations" description="Automated protocols for engine stability" className="lg:col-span-2">
+                    <div className="space-y-6 mt-6">
                       {report.issues?.length > 0 ? (
                         report.issues.map((issue, idx) => (
-                          <div key={idx} className="flex flex-col gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-6 hover:bg-white hover:shadow-sm transition-all">
+                          <div key={idx} className="nm-flat bg-slate-900 border border-slate-800 rounded-3xl p-8 hover:nm-convex transition-all group">
                             <div className="flex items-start justify-between">
-                              <div className="flex items-start gap-4">
-                                <div className={`mt-1 rounded-lg p-2 ${issue.severity === 'high' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>
-                                  <AlertTriangle className="h-5 w-5" />
+                              <div className="flex items-start gap-6">
+                                <div className={cn('mt-1 nm-inset rounded-2xl p-4 bg-slate-950', issue.severity === 'high' ? 'text-red-500' : 'text-amber-400')}>
+                                  <AlertTriangle className="h-6 w-6" />
                                 </div>
-                                <div>
-                                  <h4 className="text-lg font-bold text-gray-900">{issue.title || issue.issue_type}</h4>
-                                  <p className="mt-1 text-gray-600 leading-relaxed">{issue.description}</p>
+                                <div className="space-y-2">
+                                  <h4 className="text-lg font-black text-white uppercase tracking-tight">{issue.title || issue.issue_type}</h4>
+                                  <p className="text-slate-400 text-sm leading-relaxed italic">{issue.description}</p>
                                 </div>
                               </div>
-                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                                issue.severity === 'high' ? 'bg-red-50 text-red-700 ring-1 ring-red-200' : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'
-                              }`}>
-                                {issue.severity || 'Medium'}
+                              <span className={cn('px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-[0.2em]',
+                                issue.severity === 'high' ? 'nm-inset bg-red-950 text-red-500 border border-red-900/50' : 'nm-inset bg-amber-950 text-amber-500 border border-amber-900/50'
+                              )}>
+                                SEV_{issue.severity || 'MED'}
                               </span>
                             </div>
-                            <div className="flex justify-end pt-3 border-t border-gray-100/50">
-                              <Button size="sm" onClick={() => handleFix(issue)} isLoading={fixing[issue.id || issue.target]} className="bg-green-600 hover:bg-green-700">
-                                Execute Resolution
+                            <div className="flex justify-end mt-8">
+                              <Button size="sm" onClick={() => handleFix(issue)} isLoading={fixing[issue.id || issue.target]} className="nm-convex bg-slate-900 text-emerald-500 border-none hover:text-emerald-400">
+                                EXECUTE_FIX_PROTOCOL
                               </Button>
                             </div>
                           </div>
                         ))
                       ) : (
-                        <div className="py-12 text-center">
-                          <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                          <h3 className="text-lg font-bold text-gray-900">Optimal Performance</h3>
-                          <p className="text-gray-500">No critical performance issues detected.</p>
+                        <div className="py-20 text-center nm-inset bg-slate-900/30 rounded-3xl border border-slate-800 flex flex-col items-center">
+                          <div className="nm-flat p-6 rounded-full bg-slate-900 mb-6">
+                             <CheckCircle2 className="h-12 w-12 text-emerald-500 drop-shadow-[0_0_8px_#10b981]" />
+                          </div>
+                          <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Engine Optimized</h3>
+                          <p className="text-slate-500 font-mono text-xs mt-2 uppercase tracking-widest">No critical latency vectors detected</p>
                         </div>
                       )}
                     </div>
                   </Card>
                 </div>
-
-                <Card title="Optimization Engine" description="Dry-run safe optimizations before applying" className="border-dashed border-blue-200">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                      <p className="text-sm text-gray-600">
-                        Run a dry-run boost and cleanup to preview the impact before committing changes.
-                      </p>
-                    </div>
-                    <div className="flex gap-3">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        isLoading={optimizing}
-                        onClick={async () => {
-                          setOptimizing(true);
-                          setActionStatus(null);
-                          try {
-                            const res = await optimizerApi.safeBoost({ cpu_threshold: 50, max_processes: 5, dry_run: true });
-                            if (res.status === 'success') {
-                              setOptimizationPreview(res.data);
-                            } else {
-                              setActionStatus({
-                                type: 'error',
-                                message: res.message || 'Failed to preview boost operation.',
-                              });
-                            }
-                            setActionStatus({
-                              type: 'success',
-                              message: 'Dry-run boost completed. Review preview before applying.',
-                            });
-                          } catch (err) {
-                            console.error('Failed to preview boost:', err);
-                            setActionStatus({
-                              type: 'error',
-                              message: 'Failed to preview boost operation.',
-                            });
-                          } finally {
-                            setOptimizing(false);
-                          }
-                        }}
-                      >
-                        Preview Boost
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        isLoading={optimizing}
-                        onClick={async () => {
-                          setOptimizing(true);
-                          setActionStatus(null);
-                          try {
-                            const res = await optimizerApi.safeCleanup({ dry_run: true });
-                            if (res.status === 'success') {
-                              setOptimizationPreview(res.data);
-                            } else {
-                              setActionStatus({
-                                type: 'error',
-                                message: res.message || 'Failed to preview cleanup operation.',
-                              });
-                            }
-                            setActionStatus({
-                              type: 'success',
-                              message: 'Dry-run cleanup completed. Review preview before applying.',
-                            });
-                          } catch (err) {
-                            console.error('Failed to preview cleanup:', err);
-                            setActionStatus({
-                              type: 'error',
-                              message: 'Failed to preview cleanup operation.',
-                            });
-                          } finally {
-                            setOptimizing(false);
-                          }
-                        }}
-                      >
-                        Preview Cleanup
-                      </Button>
-                    </div>
-                  </div>
-
-                  {optimizationPreview && (
-                    <div className="mt-4 border-t border-gray-100 pt-4 space-y-3">
-                      {typeof optimizationPreview.total_bytes_freed === 'number' && (
-                        <p className="text-xs text-gray-600">
-                          Estimated bytes freed: <span className="font-semibold">{optimizationPreview.total_bytes_freed}</span>
-                        </p>
-                      )}
-                      {Array.isArray(optimizationPreview.processes) && optimizationPreview.processes.length > 0 && (
-                        <div className="max-h-40 overflow-y-auto text-xs text-gray-700 space-y-1">
-                          {optimizationPreview.processes.map((p) => (
-                            <div key={p.pid} className="flex justify-between">
-                              <span className="truncate max-w-[140px]">{p.name}</span>
-                              <span>
-                                {p.cpu_percent?.toFixed ? p.cpu_percent.toFixed(1) : p.cpu_percent}% → priority {p.new_priority}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      <div className="flex justify-between items-center gap-2 pt-2">
-                        {typeof optimizationPreview.risk === 'string' && (
-                          <span className="text-[11px] font-semibold text-gray-500">
-                            Risk: <span className="uppercase">{optimizationPreview.risk}</span>{' '}
-                            {typeof optimizationPreview.confidence === 'number' &&
-                              `(confidence ${(optimizationPreview.confidence * 100).toFixed(0)}%)`}
-                          </span>
-                        )}
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setOptimizationPreview(null)}
-                          >
-                            Dismiss
-                          </Button>
-                          <Button
-                            size="sm"
-                            className="bg-blue-600 text-white"
-                            onClick={async () => {
-                              if (!optimizationPreview) return;
-                              setOptimizing(true);
-                              try {
-                                if (Array.isArray(optimizationPreview.processes)) {
-                                  await optimizerApi.boost({ cpu_threshold: 50, max_processes: 5, dry_run: false });
-                                  setActionStatus({
-                                    type: 'success',
-                                    message: 'Optimization boost executed successfully.',
-                                  });
-                                  setOptimizationPreview(null);
-                                  refresh();
-                                } else {
-                                  const resCleanup = await optimizerApi.cleanup({ dry_run: false });
-                                  setActionStatus({
-                                    type: 'success',
-                                    message: `Cleanup executed. Freed ${resCleanup.data.total_bytes_freed} bytes.`,
-                                  });
-                                  setOptimizationPreview(null);
-                                }
-                              } catch (err) {
-                                console.error('Failed to execute optimization:', err);
-                                setActionStatus({
-                                  type: 'error',
-                                  message: 'Failed to execute optimization.',
-                                });
-                              } finally {
-                                setOptimizing(false);
-                              }
-                            }}
-                          >
-                            Apply
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </Card>
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center py-24 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div className="bg-blue-50 p-6 rounded-full mb-6">
-                   <Activity className="h-12 w-12 text-blue-600" />
+              <div className="flex flex-col items-center justify-center py-32 nm-flat bg-slate-900 rounded-[3rem] border border-slate-800">
+                <div className="nm-inset p-10 rounded-full bg-slate-950 mb-10 group cursor-pointer hover:nm-flat transition-all" onClick={handleAnalyze}>
+                   <Activity className="h-20 w-20 text-accent-blue animate-pulse" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900">Run Deep Analysis</h3>
-                <p className="mt-2 text-gray-500 max-w-sm text-center">Initialize the JOC engine to scan for performance bottlenecks and security anomalies.</p>
-                <Button size="lg" onClick={handleAnalyze} isLoading={loading} className="mt-8 px-12 h-14 text-lg">
-                   Analyze System
+                <h3 className="text-4xl font-black text-white uppercase italic tracking-tighter">Deep Scan Required</h3>
+                <p className="mt-4 text-slate-500 font-mono text-sm uppercase tracking-[0.3em] max-w-md text-center opacity-60">Initialize Neural Diagnostics to identify performance bottlenecks and security leaks.</p>
+                <Button size="lg" onClick={handleAnalyze} isLoading={loading} className="mt-12 px-16 h-16 text-xl tracking-[0.4em] nm-convex bg-slate-900 border-none text-white">
+                   RUN_SCAN
                 </Button>
               </div>
             )}
@@ -512,98 +357,96 @@ export function System() {
         {activeTab === 'processes' && (
           <Motion.div
             key="processes"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
           >
-            <Card title="Active Processes" description="Real-time resource allocation by application">
-              <div className="mt-6 overflow-hidden rounded-xl border border-gray-100">
-                <table className="w-full text-left">
-                  <thead className="bg-gray-50 border-b border-gray-100">
+            <Card title="Active Threads" description="Real-time resource allocation telemetry" icon={ListFilter}>
+              <div className="mt-8 overflow-hidden rounded-[2rem] nm-inset bg-slate-950 border border-slate-900">
+                <table className="w-full text-left border-collapse">
+                  <thead className="bg-slate-900 border-b border-slate-800">
                     <tr>
-                      <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Process</th>
-                      <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">PID</th>
-                      <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">CPU</th>
-                      <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Memory</th>
-                      <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Actions</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Target_Process</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">PID</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">CPU_LOAD</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">RAM_ALLOC</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Interrupts</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 bg-white">
+                  <tbody className="divide-y divide-slate-800/50">
                     {processes.map((proc) => (
-                      <tr key={proc.pid} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="h-8 w-8 rounded bg-gray-100 flex items-center justify-center text-gray-500">
-                               <Settings className="h-4 w-4" />
+                      <tr key={proc.pid} className="group hover:bg-slate-900/30 transition-all">
+                        <td className="px-8 py-5">
+                          <div className="flex items-center gap-4">
+                            <div className="h-10 w-10 nm-flat rounded-xl bg-slate-900 flex items-center justify-center text-slate-500 group-hover:text-accent-blue transition-colors">
+                               <Settings className="h-5 w-5" />
                             </div>
                             <div className="flex flex-col">
-                              <span className="font-bold text-gray-900 truncate max-w-[150px]">
+                              <span className="font-black text-white truncate max-w-[200px] text-sm uppercase tracking-tight">
                                 {proc.name}
                               </span>
-                              {proc.protected && (
-                                <span className="mt-0.5 inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                                  System Protected
+                              {proc.protected ? (
+                                <span className="mt-1 inline-flex items-center rounded-lg nm-inset bg-slate-900 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-slate-500">
+                                  CORE_PROTECT
                                 </span>
-                              )}
-                              {!proc.protected && proc.cpu_percent < 20 && proc.memory_percent < 10 && (
-                                <span className="mt-0.5 inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-700">
-                                  Safe To Kill
+                              ) : proc.cpu_percent >= 70 ? (
+                                <span className="mt-1 inline-flex items-center rounded-lg nm-inset bg-red-950 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-red-500">
+                                  HIGH_INTERRUPT
                                 </span>
-                              )}
-                              {!proc.protected && proc.cpu_percent >= 70 && (
-                                <span className="mt-0.5 inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-red-700">
-                                  High Impact
+                              ) : (
+                                <span className="mt-1 inline-flex items-center rounded-lg nm-inset bg-emerald-950 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-emerald-500">
+                                  STABLE_NODE
                                 </span>
                               )}
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 font-mono text-sm text-gray-500">{proc.pid}</td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                             <div className="w-12 bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                                <div className="bg-blue-500 h-full" style={{ width: `${Math.min(100, proc.cpu_percent)}%` }} />
+                        <td className="px-8 py-5 font-mono text-xs text-slate-500 tracking-tighter">[{proc.pid}]</td>
+                        <td className="px-8 py-5">
+                          <div className="flex items-center gap-4">
+                             <div className="w-20 nm-inset bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                                <div className="bg-accent-blue h-full shadow-[0_0_8px_#3b82f6]" style={{ width: `${Math.min(100, proc.cpu_percent)}%` }} />
                              </div>
-                             <span className="text-sm font-bold text-gray-700">
+                             <span className="text-xs font-black text-white font-mono">
                                {proc.cpu_percent}%{' '}
-                               {proc.trend === 'up' ? '↑' : proc.trend === 'down' ? '↓' : '→'}
+                               {proc.trend === 'up' ? '▲' : proc.trend === 'down' ? '▼' : '▬'}
                              </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">{proc.memory_percent}%</td>
-                        <td className="px-6 py-4 text-right">
-                           <div className="flex items-center justify-end gap-1">
+                        <td className="px-8 py-5 text-xs font-black text-slate-400 font-mono">{proc.memory_percent}%</td>
+                        <td className="px-8 py-5 text-right">
+                           <div className="flex items-center justify-end gap-3">
                               <Button 
                                 variant="outline" 
                                 size="sm" 
-                                className="h-8 w-8 p-0" 
-                                title="Suspend"
+                                className="h-10 w-10 p-0 nm-flat bg-slate-900 rounded-xl" 
+                                title="Suspend Thread"
                                 onClick={() => requestProcessAction(proc, 'suspend')}
                                 disabled={fixing[proc.pid] || proc.protected}
                               >
-                                <Pause className="h-3.5 w-3.5" />
+                                <Pause className="h-4 w-4" />
                               </Button>
                               <Button 
                                 variant="outline" 
                                 size="sm" 
-                                className="h-8 w-8 p-0" 
-                                title="Kill"
+                                className="h-10 w-10 p-0 nm-flat bg-slate-900 rounded-xl group/kill" 
+                                title="Terminate Thread"
                                 onClick={() => requestProcessAction(proc, 'kill')}
                                 disabled={fixing[proc.pid] || proc.protected}
                               >
-                                <XOctagon className="h-3.5 w-3.5 text-red-500" />
+                                <XOctagon className="h-4 w-4 text-red-700 group-hover/kill:text-red-500" />
                               </Button>
-                              <div className="flex flex-col gap-0.5 ml-1">
+                              <div className="flex flex-col gap-1 ml-2">
                                  <button 
                                    onClick={() => requestProcessAction(proc, 'priority', 'high')}
-                                   className="p-0.5 hover:bg-gray-100 rounded"
+                                   className="nm-convex bg-slate-900 p-1 hover:text-accent-blue rounded text-slate-600 transition-colors"
                                    disabled={fixing[proc.pid] || proc.protected}
                                  >
                                     <ChevronUp className="h-3 w-3" />
                                  </button>
                                  <button 
                                    onClick={() => requestProcessAction(proc, 'priority', 'low')}
-                                   className="p-0.5 hover:bg-gray-100 rounded"
+                                   className="nm-convex bg-slate-900 p-1 hover:text-accent-blue rounded text-slate-600 transition-colors"
                                    disabled={fixing[proc.pid] || proc.protected}
                                  >
                                     <ChevronDown className="h-3 w-3" />
@@ -618,27 +461,25 @@ export function System() {
               </div>
             </Card>
             {actionPreview && (
-              <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50/40 p-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-blue-600">
-                      Dry Run Preview
-                    </p>
-                    <p className="mt-1 text-sm text-blue-900">
-                      {actionPreview.preview?.message || 'Action would be applied to this process.'}
-                    </p>
-                    <p className="mt-2 text-xs text-blue-700">
-                      Target: {actionPreview.proc.name} (PID {actionPreview.proc.pid})
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={cancelProcessAction}>
-                      Cancel
-                    </Button>
-                    <Button size="sm" onClick={confirmProcessAction} className="bg-blue-600 text-white">
-                      Confirm
-                    </Button>
-                  </div>
+              <div className="mt-10 rounded-[2rem] nm-flat bg-slate-900 border border-accent-blue/40 p-10 flex flex-col md:flex-row items-center justify-between gap-10">
+                <div className="flex-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-blue inline-block nm-inset px-4 py-1 rounded-full mb-4">
+                    Neural_Simulation_Link
+                  </p>
+                  <p className="text-xl font-bold text-white tracking-tight leading-relaxed">
+                    {actionPreview.preview?.message || 'Protocol outcome verified. Authorization required for state mutation.'}
+                  </p>
+                  <p className="mt-4 text-xs font-mono text-slate-500 uppercase">
+                    Target_Entity: <span className="text-white">{actionPreview.proc.name}</span> // PID: <span className="text-white">{actionPreview.proc.pid}</span>
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <Button size="md" variant="secondary" onClick={cancelProcessAction}>
+                    ABORT_COMMAND
+                  </Button>
+                  <Button size="md" onClick={confirmProcessAction} className="bg-accent-blue text-white nm-convex border-none">
+                    CONFIRM_EXECUTION
+                  </Button>
                 </div>
               </div>
             )}
@@ -648,9 +489,9 @@ export function System() {
         {activeTab === 'simulation' && (
           <Motion.div
             key="simulation"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
           >
             <SimulationPanel />
           </Motion.div>

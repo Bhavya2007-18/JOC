@@ -8,15 +8,16 @@ import {
   RotateCcw, 
   CheckCircle2, 
   Clock, 
-  Search,
   AlertTriangle,
-  Info,
   Calendar,
   Terminal,
   Activity,
-  FileText
+  FileText,
+  BrainCircuit,
+  Database
 } from 'lucide-react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../utils/cn';
 
 export function History() {
   const [reverting, setReverting] = useState({});
@@ -25,7 +26,6 @@ export function History() {
   const [activeTab, setActiveTab] = useState('actions');
 
   const [history, setHistory] = useState([]);
-
   const [behavior, setBehavior] = useState(null);
 
   useEffect(() => {
@@ -72,12 +72,12 @@ export function History() {
       const response = await systemApi.revertAction(actionId);
       setStatus({ 
         type: 'success', 
-        message: response.data.message || `Successfully reverted action ${actionId}` 
+        message: response.data.message || `PROTOCOL_REVERTED: State restored for ${actionId}` 
       });
     } catch (err) {
       setStatus({ 
         type: 'error', 
-        message: `Failed to revert action. Please check if the backend is running.` 
+        message: `LINK_FAILURE: Could not initiate state reversal.` 
       });
       console.error(err);
     } finally {
@@ -85,128 +85,136 @@ export function History() {
     }
   };
 
+  const tabs = [
+    { id: 'actions', label: 'System Protocols', icon: Activity },
+    { id: 'simulations', label: 'Engagement History', icon: Terminal },
+  ];
+
   return (
-    <div className="space-y-8 pb-20">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-10 pb-20">
+      <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Operation Logs</h1>
-          <p className="mt-2 text-lg text-gray-600">Audit trail of all autonomous and manual system modifications.</p>
+          <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">Operation_Logs</h1>
+          <p className="mt-2 text-slate-400 font-mono text-sm tracking-widest uppercase opacity-70">Decoded Audit Trail // State_Mutation_Record</p>
         </div>
       </header>
 
       {behavior && (
-        <Card className="border-none shadow-sm ring-1 ring-blue-100 bg-blue-50/40">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="nm-flat bg-slate-900 border border-accent-blue/20 rounded-[2.5rem] p-10 flex flex-col md:flex-row items-center justify-between gap-10 shadow-[0_0_30px_rgba(59,130,246,0.1)] relative overflow-hidden group hover:nm-convex transition-all duration-500">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+             <BrainCircuit className="h-40 w-40 text-accent-blue" />
+          </div>
+          <div className="relative z-10 flex flex-col md:flex-row items-center gap-10 text-center md:text-left">
+            <div className="nm-inset p-6 rounded-[2rem] bg-slate-950">
+               <Activity className="h-10 w-10 text-accent-blue drop-shadow-[0_0_8px_#3b82f6]" />
+            </div>
             <div>
-              <h2 className="text-sm font-bold text-blue-900 uppercase tracking-widest">Behavior Insights</h2>
-              <p className="mt-1 text-sm text-blue-900">
-                You typically use around {behavior.avgCpu?.toFixed(1) ?? 0}% CPU and {behavior.avgMem?.toFixed(1) ?? 0}% memory across the day.
+              <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4">Baseline Behavior Analysis</h2>
+              <p className="text-xl font-bold text-white tracking-tight leading-relaxed max-w-xl italic">
+                Telemetry verify baseline at <span className="text-accent-blue font-mono">{behavior.avgCpu?.toFixed(1) ?? 0}%</span> CPU and <span className="text-purple-400 font-mono">{behavior.avgMem?.toFixed(1) ?? 0}%</span> RAM.
               </p>
             </div>
-            {behavior.peakHours.length > 0 && (
-              <div className="text-xs text-blue-900">
-                Peak hours:{' '}
-                {behavior.peakHours
-                  .slice(0, 2)
-                  .map((h) => `${h.hour}:00`)
-                  .join(' – ')}
-              </div>
-            )}
           </div>
-        </Card>
+          {behavior.peakHours.length > 0 && (
+            <div className="relative z-10 nm-inset p-6 rounded-3xl bg-slate-950/50 flex flex-col items-center">
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Peak_Hours</span>
+              <div className="text-2xl font-black text-white font-mono">
+                {behavior.peakHours[0].hour}:00
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Tab Navigation */}
-      <div className="flex p-1 bg-gray-100 rounded-xl w-fit">
-        <button
-          onClick={() => setActiveTab('actions')}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
-            activeTab === 'actions' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <Activity className="h-4 w-4" />
-          System Actions
-        </button>
-        <button
-          onClick={() => setActiveTab('simulations')}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
-            activeTab === 'simulations' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <Terminal className="h-4 w-4" />
-          Simulation History
-        </button>
+      <div className="flex p-2 nm-inset bg-slate-900 border border-slate-800 rounded-3xl w-fit">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={cn(
+               'flex items-center gap-4 px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-300',
+               activeTab === tab.id 
+                 ? 'nm-convex text-accent-blue bg-slate-800' 
+                 : 'text-slate-500 hover:text-slate-300'
+            )}
+          >
+            <tab.icon className="h-4 w-4" />
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {status && (
         <Motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`flex items-center gap-4 rounded-xl p-6 shadow-sm ring-1 ring-inset ${
-            status.type === 'success' ? 'bg-green-50 text-green-800 ring-green-200' : 'bg-red-50 text-red-800 ring-red-200'
-          }`}
+          className={cn(
+            "flex items-center gap-6 rounded-3xl p-8 font-black uppercase tracking-[0.2em] italic",
+            status.type === 'success' ? 'nm-flat bg-emerald-950/20 text-emerald-400 border border-emerald-900/30 font-mono' : 'nm-flat bg-red-950/20 text-red-400 border border-red-900/30 font-mono'
+          )}
         >
-          {status.type === 'success' ? <CheckCircle2 className="h-6 w-6" /> : <AlertTriangle className="h-6 w-6" />}
-          <p className="font-bold text-lg">{status.message}</p>
+          {status.type === 'success' ? <CheckCircle2 className="h-8 w-8" /> : <AlertTriangle className="h-8 w-8" />}
+          <p className="text-lg">{status.message}</p>
         </Motion.div>
       )}
 
       <AnimatePresence mode="wait">
         {activeTab === 'actions' ? (
-          <motion.div
+          <Motion.div
             key="actions"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
           >
-            <Card className="overflow-hidden border-none shadow-sm ring-1 ring-gray-200">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50/50">
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-gray-500">Action</th>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-gray-500">Target</th>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-gray-500">Timestamp</th>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-gray-500 text-right">Operation</th>
+            <Card title="Protocol Record" icon={Database} className="border-t-2 border-accent-blue">
+              <div className="mt-8 overflow-hidden rounded-[2rem] nm-inset bg-slate-950 border border-slate-900">
+                <table className="w-full text-left border-collapse">
+                  <thead className="bg-slate-900 border-b border-slate-800">
+                    <tr>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Mutation_Protocol</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Target_ID</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Temporal_Marker</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Intervention</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-slate-800/50">
                     {history.map((item) => (
-                      <tr key={item.id} className="group hover:bg-blue-50/30 transition-all duration-200">
-                        <td className="px-6 py-5">
-                          <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-blue-100 p-2 group-hover:bg-white shadow-sm transition-all duration-300">
-                              <HistoryIcon className="h-4 w-4 text-blue-600" />
+                      <tr key={item.id} className="group hover:bg-slate-900/30 transition-all duration-300">
+                        <td className="px-8 py-5">
+                          <div className="flex items-center gap-4">
+                            <div className="nm-flat h-10 w-10 rounded-xl bg-slate-900 flex items-center justify-center text-slate-500 group-hover:text-accent-blue transition-all group-hover:nm-inset">
+                              <HistoryIcon className="h-5 w-5" />
                             </div>
-                            <span className="font-bold text-gray-900">{item.action}</span>
+                            <span className="font-black text-white text-sm uppercase tracking-tight italic">{item.action}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-5">
-                          <span className="text-sm font-bold text-gray-500 group-hover:text-blue-700 transition-colors">{item.target}</span>
+                        <td className="px-8 py-5">
+                          <span className="text-xs font-mono font-black text-slate-500 group-hover:text-accent-blue transition-colors">[{item.target}]</span>
                         </td>
-                        <td className="px-6 py-5">
-                          <div className="flex flex-col">
-                            <span className="text-sm font-bold text-gray-700 flex items-center gap-1.5">
-                              <Calendar className="h-3.5 w-3.5 text-gray-400" />
+                        <td className="px-8 py-5">
+                          <div className="flex flex-col gap-1">
+                            <span className="text-[10px] font-black text-white flex items-center gap-2 font-mono">
+                              <Calendar className="h-3 w-3 text-slate-600" />
                               {item.timestamp.split(' ')[0]}
                             </span>
-                            <span className="text-xs font-medium text-gray-400 flex items-center gap-1.5 mt-0.5">
-                              <Clock className="h-3.5 w-3.5" />
+                            <span className="text-[9px] font-black text-slate-500 flex items-center gap-2 font-mono uppercase">
+                              <Clock className="h-3 w-3" />
                               {item.timestamp.split(' ')[1]}
                             </span>
                           </div>
                         </td>
-                        <td className="px-6 py-5 text-right">
+                        <td className="px-8 py-5 text-right">
                           {item.revertible && (
                             <Button 
                               size="sm" 
                               variant="outline" 
                               onClick={() => handleRevert(item.id)}
                               isLoading={reverting[item.id]}
-                              className="px-4 font-black uppercase tracking-widest group-hover:bg-white group-hover:border-blue-500 group-hover:text-blue-600 shadow-sm"
+                              className="px-6 h-10 nm-flat bg-slate-900 border-none rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:text-white"
                             >
-                              <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-                              Revert
+                              <RotateCcw className="mr-2 h-3.5 w-3.5" />
+                              Restore
                             </Button>
                           )}
                         </td>
@@ -216,54 +224,56 @@ export function History() {
                 </table>
               </div>
             </Card>
-          </motion.div>
+          </Motion.div>
         ) : (
-          <motion.div
+          <Motion.div
             key="simulations"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-10"
           >
             {simHistory.length > 0 ? (
               simHistory.map((report, idx) => (
-                <Card key={idx} title={`Run #${simHistory.length - idx}`} icon={Terminal} className="hover:shadow-md transition-shadow">
-                   <div className="flex justify-between items-center mb-4">
+                <Card key={idx} title={`SIM_CORE_RUN_${simHistory.length - idx}`} icon={Terminal} className="hover:nm-convex transition-all group">
+                   <div className="flex justify-between items-center mb-10 py-4 border-b border-slate-800">
                       <div className="flex flex-col">
-                         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Type</span>
-                         <span className="text-sm font-bold text-gray-900">{report.simulation_type}</span>
+                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-2">Protocol_Type</span>
+                         <span className="text-lg font-black text-white italic uppercase">{report.simulation_type}</span>
                       </div>
-                      <div className="text-right">
-                         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Score</span>
-                         <div className={`text-xl font-black ${
-                           report.score >= 80 ? 'text-green-600' : report.score >= 50 ? 'text-amber-600' : 'text-red-600'
-                         }`}>{report.score}</div>
-                      </div>
-                   </div>
-                   <div className="space-y-2 mb-4">
-                      <div className="flex items-center justify-between text-xs">
-                         <span className="text-gray-500">Anomalies Detected</span>
-                         <span className="font-bold text-gray-900">{report.anomalies_detected.length}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-xs">
-                         <span className="text-gray-500">Response Actions</span>
-                         <span className="font-bold text-gray-900">{report.response_actions.length}</span>
+                      <div className="text-right nm-inset p-4 rounded-2xl bg-slate-950">
+                         <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">Resilience</span>
+                         <div className={cn('text-2xl font-black font-mono',
+                           report.score >= 80 ? 'text-emerald-500' : report.score >= 50 ? 'text-amber-500' : 'text-red-500'
+                         )}>{report.score}</div>
                       </div>
                    </div>
-                   <Button variant="outline" size="sm" className="w-full text-[10px] font-bold uppercase tracking-widest">
-                      <FileText className="h-3 w-3 mr-2" />
-                      View Full Report
+                   <div className="grid grid-cols-2 gap-6 mb-8">
+                      <div className="nm-inset p-4 rounded-2xl bg-slate-950/30 flex flex-col items-center">
+                         <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2 text-center">ANOMALIES_DECODED</span>
+                         <span className="font-mono text-xl text-white font-black">{report.anomalies_detected.length}</span>
+                      </div>
+                      <div className="nm-inset p-4 rounded-2xl bg-slate-950/30 flex flex-col items-center">
+                         <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2 text-center">NEURAL_RESPONSES</span>
+                         <span className="font-mono text-xl text-white font-black">{report.response_actions.length}</span>
+                      </div>
+                   </div>
+                   <Button variant="outline" size="md" className="w-full text-[10px] font-black uppercase tracking-[0.4em] nm-flat bg-slate-900 border-none rounded-xl h-12">
+                      <FileText className="h-4 w-4 mr-3 text-accent-blue" />
+                      View_Telemetry_Log
                    </Button>
                 </Card>
               ))
             ) : (
-              <div className="col-span-2 py-20 text-center bg-white rounded-3xl border-2 border-dashed border-gray-100">
-                 <Terminal className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                 <h3 className="text-lg font-bold text-gray-900">No Simulation History</h3>
-                 <p className="text-gray-500">Run a simulation from the System page to see results here.</p>
+              <div className="col-span-2 py-32 text-center nm-flat bg-slate-900 rounded-[3rem] border border-slate-800 flex flex-col items-center">
+                 <div className="nm-inset p-10 rounded-full bg-slate-950 mb-10">
+                    <Terminal className="h-20 w-20 text-slate-700" />
+                 </div>
+                 <h3 className="text-4xl font-black text-white uppercase italic tracking-tighter">Engagement History Null</h3>
+                 <p className="mt-4 text-slate-500 font-mono text-sm uppercase tracking-[0.3em] max-w-md opacity-60">Run localized stress simulations to populate battle station logs.</p>
               </div>
             )}
-          </motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </div>

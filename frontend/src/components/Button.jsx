@@ -1,24 +1,33 @@
 import { cn } from '../utils/cn';
 
-export function Button({ className, variant = 'primary', size = 'md', isLoading, children, ...props }) {
+export function Button({ 
+  className, 
+  variant = 'primary', 
+  size = 'md', 
+  isLoading, 
+  children, 
+  type = 'button',
+  ...props 
+}) {
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800',
-    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 active:bg-gray-400',
-    danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
-    outline: 'border border-gray-300 bg-transparent hover:bg-gray-100',
-    ghost: 'bg-transparent hover:bg-gray-100',
+    primary: 'nm-convex text-accent-blue hover:text-blue-400 active:nm-inset',
+    secondary: 'nm-flat text-slate-300 hover:text-white active:nm-inset',
+    danger: 'nm-convex text-red-500 hover:text-red-400 active:nm-inset',
+    outline: 'nm-flat border border-slate-700 text-slate-400 hover:text-slate-200 active:nm-inset',
+    ghost: 'bg-transparent text-slate-400 hover:bg-slate-800/50',
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2',
-    lg: 'px-6 py-3 text-lg',
+    sm: 'px-3 py-1.5 text-xs uppercase tracking-widest',
+    md: 'px-6 py-2.5 text-sm font-bold uppercase tracking-wider',
+    lg: 'px-8 py-4 text-base font-bold uppercase tracking-widest',
   };
 
   return (
     <button
+      type={type}
       className={cn(
-        'inline-flex items-center justify-center rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+        'inline-flex items-center justify-center rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed',
         variants[variant],
         sizes[size],
         className
