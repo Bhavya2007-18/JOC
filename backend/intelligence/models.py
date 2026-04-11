@@ -20,6 +20,7 @@ class ProcessInfo:
 	io_read_bytes: Optional[int] = None
 	io_write_bytes: Optional[int] = None
 	username: Optional[str] = None
+	net_connections: int = 0
 
 
 @dataclass
@@ -44,6 +45,7 @@ class SystemSnapshot:
 	top_processes: List[ProcessInfo]
 	disk_heavy_processes: List[ProcessInfo]
 	boot_time: float
+	active_window: Optional[str] = None
 	services: List[Dict[str, str]] = field(default_factory=list)
 
 

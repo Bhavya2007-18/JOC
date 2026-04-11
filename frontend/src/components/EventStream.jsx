@@ -56,7 +56,7 @@ export function EventStream({ events = [] }) {
                   <div className="flex-1 min-w-0">
                     <CipheredText text={event.message} />
                     <span className="mt-2 block text-[10px] opacity-50 font-mono tracking-tighter uppercase whitespace-nowrap">
-                      [{event.timestamp}] DECODED_LOG_{event.id?.slice(-4)}
+                      [{event.timestamp}] DECODED_LOG_{String(event.id).slice(-4)}
                     </span>
                   </div>
                 </Motion.div>

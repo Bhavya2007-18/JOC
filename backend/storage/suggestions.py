@@ -74,7 +74,7 @@ def generate_full_suggestions(
 				"type": "junk",
 				"title": "Clear junk files",
 				"description": "Remove temporary and cache files",
-				"recoverable_space": bytes_to_human(junk_size),
+				"size": bytes_to_human(junk_size),
 			}
 		)
 
@@ -84,7 +84,7 @@ def generate_full_suggestions(
 				"type": "duplicates",
 				"title": "Remove duplicate files",
 				"description": "Delete redundant copies of the same files",
-				"recoverable_space": bytes_to_human(duplicate_size),
+				"size": bytes_to_human(duplicate_size),
 			}
 		)
 
@@ -94,7 +94,7 @@ def generate_full_suggestions(
 				"type": "cold_files",
 				"title": "Clean unused files",
 				"description": "Remove files not used in a long time",
-				"recoverable_space": bytes_to_human(cold_size),
+				"size": bytes_to_human(cold_size),
 			}
 		)
 

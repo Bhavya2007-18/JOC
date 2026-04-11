@@ -202,7 +202,7 @@ export function Storage() {
             {/* Suggestions */}
             <Card title="Neural Optimization" description="Intelligence-derived resource recovery" icon={RefreshCw}>
               <div className="space-y-6 mt-6">
-                {report.suggestions?.map((suggestion, idx) => (
+                {report.suggestions?.actions?.map((suggestion, idx) => (
                   <div key={idx} className="flex flex-col gap-6 rounded-3xl nm-flat bg-slate-900 border border-slate-800 p-8 hover:nm-convex transition-all group relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                        <RefreshCw className="h-20 w-20 text-accent-blue" />

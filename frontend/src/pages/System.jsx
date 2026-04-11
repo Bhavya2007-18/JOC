@@ -28,7 +28,7 @@ export function System() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'analysis';
 
-  const { stats, processes, refresh } = useSystemData(5000);
+  const { stats, processes, refresh, causalGraph } = useSystemData(5000);
 
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState(null);
@@ -301,9 +301,9 @@ export function System() {
                       <div className="flex items-center justify-between border-b border-slate-800 pb-6">
                         <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Cpu className="h-4 w-4 text-accent-blue" /> CPU_LOAD</span>
                         <div className="text-right">
-                          <span className="font-bold text-gray-900 block">{(report.summary?.cpu_percent ?? 0)}%</span>
+                          <span className="font-black text-white font-mono text-xl block">{(report.summary?.cpu_percent ?? 0)}%</span>
                           {typeof (report.summary?.cpu_percent ?? 0) === 'number' && (
-                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage((report.summary?.cpu_percent ?? 0)).badge}`}>
+                            <span className={`mt-2 inline-flex rounded-xl px-3 py-1 text-[9px] font-black tracking-widest uppercase ${classifyUsage((report.summary?.cpu_percent ?? 0)).badge}`}>
                               {classifyUsage((report.summary?.cpu_percent ?? 0)).label}
                             </span>
                           )}
@@ -312,9 +312,9 @@ export function System() {
                       <div className="flex items-center justify-between border-b border-slate-800 pb-6">
                         <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Database className="h-4 w-4 text-purple-400" /> MEM_ADDR</span>
                         <div className="text-right">
-                          <span className="font-bold text-gray-900 block">{(report.summary?.memory_percent ?? 0)}%</span>
+                          <span className="font-black text-white font-mono text-xl block">{(report.summary?.memory_percent ?? 0)}%</span>
                           {typeof (report.summary?.memory_percent ?? 0) === 'number' && (
-                            <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${classifyUsage((report.summary?.memory_percent ?? 0)).badge}`}>
+                            <span className={`mt-2 inline-flex rounded-xl px-3 py-1 text-[9px] font-black tracking-widest uppercase ${classifyUsage((report.summary?.memory_percent ?? 0)).badge}`}>
                               {classifyUsage((report.summary?.memory_percent ?? 0)).label}
                             </span>
                           )}
@@ -340,11 +340,11 @@ export function System() {
                                   <AlertTriangle className="h-6 w-6" />
                                 </div>
                                 <div>
-                                  <h4 className="text-lg font-bold text-gray-900">{issue.title || issue.issue_type}</h4>
-                                  <p className="mt-1 text-gray-600 leading-relaxed">{issue.explanation || issue.description}</p>
+                                  <h4 className="text-lg font-black tracking-tight text-white uppercase">{issue.title || issue.issue_type}</h4>
+                                  <p className="mt-2 text-slate-400 text-sm leading-relaxed italic">{issue.explanation || issue.description}</p>
                                   {issue.best_action && (
-                                    <div className="mt-3 text-sm font-semibold text-blue-600">
-                                      🔥 Recommended: {issue.best_action.action_type} → {issue.best_action.target}
+                                    <div className="mt-4 text-xs font-black tracking-widest uppercase text-accent-blue nm-inset bg-slate-900 w-fit px-3 py-1.5 rounded-lg">
+                                      🔥 STRATEGY: {issue.best_action.action_type} → {issue.best_action.target}
                                     </div>
                                   )}
                                 </div>
@@ -374,6 +374,28 @@ export function System() {
                     </div>
                   </Card>
                 </div>
+                
+                {causalGraph && causalGraph.edges && causalGraph.edges.length > 0 && (
+                  <Card title="Causal Topological Graph" description="Root cause relationship tracker" className="mt-8 border-l-2 border-l-purple-500">
+                    <div className="flex flex-wrap gap-4 mt-6">
+                      {causalGraph.edges.map((edge, i) => (
+                        <div key={i} className="flex items-center gap-3 nm-flat bg-slate-900 px-4 py-2 rounded-2xl">
+                          <span className="font-mono text-xs text-white bg-slate-800 px-2 py-1 rounded truncate max-w-[150px]">{edge.from}</span>
+                          <span className="text-slate-500 text-[10px] uppercase font-black tracking-widest flex items-center gap-1">
+                             —[ {(edge.weight * 100).toFixed(0)}% ]→
+                          </span>
+                          <span className="font-mono text-xs text-purple-400 bg-purple-900/20 border border-purple-900/50 px-2 py-1 rounded">{edge.to}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {causalGraph.root_cause_node && (
+                      <div className="mt-6 text-sm text-slate-400 font-mono italic">
+                        <Database className="h-4 w-4 inline mr-2 text-red-500"/>
+                        Topological Root Cause Isolated: <span className="text-white font-black">{causalGraph.root_cause_node}</span>
+                      </div>
+                    )}
+                  </Card>
+                )}
               </>
             ) : (
               <div className="flex flex-col items-center justify-center py-32 nm-flat bg-slate-900 rounded-[3rem] border border-slate-800">

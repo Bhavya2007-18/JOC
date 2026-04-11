@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { systemApi } from '../api/client';
+import { systemApi, intelligenceApi } from '../api/client';
 
 export function useSystemData(pollingInterval = 2000) {
   const [stats, setStats] = useState(null);
@@ -10,6 +10,8 @@ export function useSystemData(pollingInterval = 2000) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [events, setEvents] = useState([]);
+  const [forecast, setForecast] = useState(null);
+  const [causalGraph, setCausalGraph] = useState(null);
   const previousCpuByPid = useRef({});
 
   const addEvent = useCallback((message, type = 'info') => {
@@ -59,6 +61,34 @@ export function useSystemData(pollingInterval = 2000) {
         });
       }
 
+      try {
+        const timelineRes = await systemApi.getTimeline(10);
+        if (timelineRes.data && timelineRes.data.events) {
+            setEvents(timelineRes.data.events.map(ev => ({
+              id: ev.timestamp,
+              timestamp: new Date(ev.timestamp * 1000).toLocaleTimeString(),
+              message: ev.message,
+              type: ev.event_type || 'info'
+            })));
+        }
+      } catch (err) {
+        // Timeline fetch failed
+      }
+
+      try {
+        const forecastRes = await intelligenceApi.getForecast();
+        if (forecastRes.data && !forecastRes.data.status) {
+           setForecast(forecastRes.data);
+        }
+      } catch (err) {}
+
+      try {
+        const cgRes = await intelligenceApi.getCausalGraph();
+        if (cgRes.data) {
+           setCausalGraph(cgRes.data);
+        }
+      } catch (err) {}
+
       setLoading(false);
       setError(null);
     } catch (err) {
@@ -94,6 +124,8 @@ export function useSystemData(pollingInterval = 2000) {
     loading,
     error,
     events,
+    forecast,
+    causalGraph,
     addEvent,
     refresh: fetchData
   };

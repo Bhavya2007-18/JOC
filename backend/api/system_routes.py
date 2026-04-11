@@ -19,6 +19,7 @@ from services.system_monitor import (
     get_network_stats,
     get_top_processes,
 )
+from storage.db import get_timeline_events
 
 
 router = APIRouter(prefix="/system", tags=["system"])
@@ -60,4 +61,10 @@ def get_top_processes_route(limit: int = 10) -> ProcessesResponse:
     raw_processes = get_top_processes(limit=limit)
     processes: List[ProcessInfoModel] = [ProcessInfoModel(**process) for process in raw_processes]
     return ProcessesResponse(top_processes=processes)
+
+@router.get("/timeline")
+def get_timeline(limit: int = 50):
+    """Return historical system timeline events."""
+    events = get_timeline_events(limit=limit)
+    return {"events": events}
 

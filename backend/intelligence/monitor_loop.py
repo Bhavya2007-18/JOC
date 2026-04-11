@@ -3,6 +3,8 @@ import threading
 
 from intelligence.snapshot_provider import collect_snapshot
 from intelligence.engine import IntelligenceEngine
+from intelligence.predictive_engine import PredictiveEngine
+from intelligence.causal_graph import CausalGraphEngine
 from storage.db import save_snapshot
 from utils.logger import get_logger
 
@@ -20,6 +22,10 @@ class MonitorLoop:
         self._stop_event = threading.Event()
         self.latest_snapshot = None
         self.latest_analysis = None
+        self.predictive_engine = PredictiveEngine(window_size=60)
+        self.causal_engine = CausalGraphEngine()
+        self.latest_prediction = None
+        self.latest_causal_graph = None
         MonitorLoop._instance = self
 
     @classmethod
@@ -65,6 +71,12 @@ class MonitorLoop:
 
                 snapshot = collect_snapshot()
                 self.latest_snapshot = snapshot
+
+                self.predictive_engine.observe(snapshot)
+                self.causal_engine.observe(snapshot)
+                
+                self.latest_prediction = self.predictive_engine.forecast(minutes_ahead=5)
+                self.latest_causal_graph = self.causal_engine.generate_graph()
 
                 analysis = self.engine.analyze(snapshot)
                 self.latest_analysis = analysis

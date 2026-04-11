@@ -25,7 +25,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '../utils/cn';
 
 export function Dashboard() {
-  const { stats, processes, anomalies, decisions, health, loading, error, events, addEvent } = useSystemData(3000);
+  const { stats, processes, anomalies, decisions, health, loading, error, events, forecast, addEvent } = useSystemData(3000);
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export function Dashboard() {
 
   return (
     <div className="space-y-8 pb-12">
-      <motion.header
+      <Motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -100,16 +100,20 @@ export function Dashboard() {
               Autonomous Optimization Unit // OS_VER 4.2.1
             </p>
           </div>
-          <div className="flex items-center gap-4 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
-            <SystemHealthScore score={health} />
+          <div className="nm-flat p-4 rounded-3xl bg-slate-900 border border-slate-800">
+            <SystemHealthScore score={health || 100} />
           </div>
         </div>
-      </motion.header>
+      </Motion.header>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {quickStats.map((stat, idx) => (
-          <motion.div
+        {quickStats.map((stat, idx) => {
+          const baseline = { cpu: 45, memory: 60 }; // Default simulated baselines
+          const cpuUsage = stats?.cpu?.usage_percent || 0;
+          const memUsage = stats?.memory?.percent || 0;
+          return (
+          <Motion.div
             key={stat.name}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -120,39 +124,39 @@ export function Dashboard() {
               <stat.icon className={`h-8 w-8 ${stat.color}`} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">{stat.name}</p>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{stat.name}</p>
+              <p className="text-3xl font-black text-white mt-1 font-mono">
                 {stat.value}
-                {stat.trend && <span className="ml-1 text-xs align-middle">{stat.trend}</span>}
+                {stat.trend && <span className="ml-2 text-xs align-middle text-slate-400">{stat.trend}</span>}
               </p>
               {stat.state && (
-                <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase ${stat.state.badge}`}>
+                <span className={`mt-2 inline-flex rounded-full px-2 py-0.5 text-[10px] font-black tracking-widest uppercase ${stat.state.badge}`}>
                   {stat.state.label}
                 </span>
               )}
-              {stat.name === 'CPU Usage' && baseline.cpu != null && (
-                <p className="mt-1 text-[11px] text-gray-500">
-                  Normal for you: {baseline.cpu.toFixed(1)}%. {cpuUsage > baseline.cpu ? 'Higher than usual.' : 'Within usual range.'}
+              {stat.name === 'CPU Usage' && forecast?.cpu && (
+                <p className="mt-2 text-[10px] text-accent-blue opacity-80 uppercase tracking-widest font-mono">
+                  Forecast(5m): {forecast.cpu['5m']?.toFixed(1)}% {forecast.cpu.trend === 'up' ? '↗' : forecast.cpu.trend === 'down' ? '↘' : '→'}
                 </p>
               )}
-              {stat.name === 'Memory' && baseline.memory != null && (
-                <p className="mt-1 text-[11px] text-gray-500">
-                  Normal for you: {baseline.memory.toFixed(1)}%. {memUsage > baseline.memory ? 'Higher than usual.' : 'Within usual range.'}
+              {stat.name === 'CPU Usage' && !forecast?.cpu && baseline.cpu != null && (
+                <p className="mt-2 text-[10px] text-slate-400 opacity-60">
+                  Normal: {baseline.cpu.toFixed(1)}%. {cpuUsage > baseline.cpu ? 'High load.' : 'Stable.'}
                 </p>
               )}
-              {stat.name === 'CPU Usage' && (
-                <p className="mt-1 text-[11px] text-gray-500">
-                  Sustained high CPU can cause slowdowns and input lag in active applications.
+              {stat.name === 'Memory' && forecast?.memory && (
+                <p className="mt-2 text-[10px] text-accent-blue opacity-80 uppercase tracking-widest font-mono">
+                  Forecast(5m): {forecast.memory['5m']?.toFixed(1)}% {forecast.memory.trend === 'up' ? '↗' : forecast.memory.trend === 'down' ? '↘' : '→'}
                 </p>
               )}
-              {stat.name === 'Memory' && (
-                <p className="mt-1 text-[11px] text-gray-500">
-                  High memory usage can lead to app freezes and disk swapping.
+              {stat.name === 'Memory' && !forecast?.memory && baseline.memory != null && (
+                <p className="mt-2 text-[10px] text-slate-400 opacity-60">
+                  Normal: {baseline.memory.toFixed(1)}%. {memUsage > baseline.memory ? 'High load.' : 'Stable.'}
                 </p>
               )}
             </div>
-          </motion.div>
-        ))}
+          </Motion.div>
+        )})}
       </div>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
@@ -251,7 +255,7 @@ export function Dashboard() {
                             : "NO_ACTION_REQUIRED"}
                         </Button>
                       </div>
-                    </motion.div>
+                    </Motion.div>
                   ))
                 ) : (
                   <div className="py-12 nm-inset rounded-2xl bg-slate-900/30 text-center text-slate-500 font-mono text-xs uppercase tracking-widest">

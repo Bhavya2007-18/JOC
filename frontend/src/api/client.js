@@ -53,6 +53,8 @@ safeAnalyze: () => wrapRequest(() => api.get('/analyze')),
 getActionHistory: () => api.get('/action/history'),
 revertAction: (actionId) =>
   api.post('/action/revert', { action_id: actionId }),
+getTimeline: (limit = 50) => api.get(`/system/timeline?limit=${limit}`),
+rollbackAction: (rollbackId) => api.post('/action/rollback_intercept', { rollback_id: rollbackId }),
 };
 
 export const intelligenceApi = {
@@ -63,6 +65,8 @@ export const intelligenceApi = {
   safePatterns: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/patterns?window_minutes=${windowMinutes}`)),
   safeAnomalies: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/anomalies?window_minutes=${windowMinutes}`)),
   safeDecisions: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/decisions?window_minutes=${windowMinutes}`)),
+  getForecast: () => api.get('/intelligence/forecast'),
+  getCausalGraph: () => api.get('/intelligence/causal-graph'),
 };
 
 export const optimizerApi = {

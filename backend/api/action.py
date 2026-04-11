@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from intelligence.fixer import FixEngine
+from services.rollback import rollback_manager
 
 router = APIRouter()
 engine = FixEngine()
@@ -32,3 +33,14 @@ def get_action_history():
     # Return newest first
     result.reverse()
     return {"actions": result}
+
+class RollbackExecRequest(BaseModel):
+    rollback_id: str
+
+@router.post("/action/rollback_intercept")
+def rollback_intercept(request: RollbackExecRequest):
+    """Executes a rollback payload previously saved by RollbackManager"""
+    success = rollback_manager.execute_rollback(request.rollback_id)
+    if success:
+        return {"status": "success", "message": f"Successfully reversed action {request.rollback_id}"}
+    return {"status": "error", "message": "Failed to reverse action or invalid ID"}

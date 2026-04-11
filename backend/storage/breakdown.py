@@ -21,8 +21,8 @@ def get_category_breakdown(files: list) -> dict:
 	breakdown = {}
 	for category, total_raw_size in sorted_categories:
 		breakdown[category] = {
-			"size": bytes_to_human(total_raw_size),
-			"raw_size": total_raw_size,
+			"readable_size": bytes_to_human(total_raw_size),
+			"total_size": total_raw_size,
 		}
 
 	return breakdown
