@@ -27,6 +27,7 @@ import {
 import { Link } from 'react-router-dom';
 import { cn } from '../utils/cn';
 import { StatCardBg } from '../components/StatCardBg';
+import { ModeCardBg } from '../components/ModeCardBg';
 
 export function Dashboard() {
   const { stats, processes, anomalies, decisions, health, loading, error, events, forecast, addEvent } = useSystemData(3000);
@@ -406,31 +407,30 @@ export function Dashboard() {
                   onClick={() => handleModeChange(mode.id)}
                   disabled={modeLoading}
                   className={cn(
-                    'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300',
+                    'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300 relative overflow-hidden group/mode',
                     systemMode === mode.id
                       ? 'nm-inset bg-slate-900 border border-accent-blue/30'
                       : 'nm-flat bg-slate-900 border border-transparent hover:border-slate-700',
                     modeLoading && 'opacity-50 cursor-wait'
                   )}
                 >
-                  <div className={cn(
-                    'nm-flat p-3 rounded-xl',
-                    systemMode === mode.id ? 'nm-inset text-accent-blue' : 'text-slate-500'
-                  )}>
-                    {modeLoading && systemMode !== mode.id ? (
-                      <mode.icon className="h-6 w-6" />
-                    ) : (
-                      <mode.icon className="h-6 w-6" />
-                    )}
-                  </div>
-                  <div className="text-left">
-                    <span className={cn(
-                      'block font-black uppercase tracking-widest text-sm',
-                      systemMode === mode.id ? 'text-white' : 'text-slate-500'
+                  <ModeCardBg type={mode.id} />
+                  <div className="flex items-center gap-5 relative z-10 w-full">
+                    <div className={cn(
+                      'nm-flat p-3 rounded-xl transition-all duration-300',
+                      systemMode === mode.id ? 'nm-inset text-accent-blue' : 'text-slate-500 group-hover/mode:text-slate-300'
                     )}>
-                      {mode.label}
-                    </span>
-                    <span className="text-[10px] text-slate-500 uppercase font-mono">{mode.desc}</span>
+                      <mode.icon className="h-6 w-6" />
+                    </div>
+                    <div className="text-left">
+                      <span className={cn(
+                        'block font-black uppercase tracking-widest text-sm transition-colors duration-300',
+                        systemMode === mode.id ? 'text-white' : 'text-slate-500 group-hover/mode:text-slate-400'
+                      )}>
+                        {mode.label}
+                      </span>
+                      <span className="text-[10px] text-slate-500 uppercase font-mono">{mode.desc}</span>
+                    </div>
                   </div>
                   {modeLoading && systemMode === mode.id && (
                     <Loader2 className="h-4 w-4 text-accent-blue animate-spin ml-auto" />
