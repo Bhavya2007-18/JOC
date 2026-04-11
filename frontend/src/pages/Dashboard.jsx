@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../utils/cn';
+import { StatCardBg } from '../components/StatCardBg';
 
 export function Dashboard() {
   const { stats, processes, anomalies, decisions, health, loading, error, events, forecast, addEvent } = useSystemData(3000);
@@ -233,42 +234,55 @@ export function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="nm-flat rounded-3xl p-6 bg-slate-900 border border-slate-800 flex flex-col items-center text-center group"
+            className="nm-flat rounded-3xl bg-slate-900 border border-slate-800 group relative overflow-hidden"
           >
-            <div className="nm-inset p-4 rounded-2xl bg-slate-900 mb-4 group-hover:scale-105 transition-transform">
-              <stat.icon className={`h-8 w-8 ${stat.color}`} />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{stat.name}</p>
-              <p className="text-3xl font-black text-white mt-1 font-mono">
-                {stat.value}
-                {stat.trend && <span className="ml-2 text-xs align-middle text-slate-400">{stat.trend}</span>}
-              </p>
-              {stat.state && (
-                <span className={`mt-2 inline-flex rounded-full px-2 py-0.5 text-[10px] font-black tracking-widest uppercase ${stat.state.badge}`}>
-                  {stat.state.label}
-                </span>
-              )}
-              {stat.name === 'CPU Usage' && forecast?.cpu && (
-                <p className="mt-2 text-[10px] text-accent-blue opacity-80 uppercase tracking-widest font-mono">
-                  Forecast(5m): {forecast.cpu['5m']?.toFixed(1)}% {forecast.cpu.trend === 'up' ? '↗' : forecast.cpu.trend === 'down' ? '↘' : '→'}
+            <StatCardBg type={stat.name} />
+            {/* Card content - perfectly structured layout */}
+            <div className="relative z-10 flex flex-col items-center text-center p-6 h-full min-h-[180px]">
+              {/* Icon - top section */}
+              <div className="nm-inset p-4 rounded-2xl bg-slate-900 group-hover:scale-105 transition-transform duration-300 shrink-0">
+                <stat.icon className={`h-8 w-8 ${stat.color}`} />
+              </div>
+              {/* Label + Value - middle section */}
+              <div className="flex flex-col items-center mt-4 flex-1">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest leading-none">{stat.name}</p>
+                <p className="text-3xl font-black text-white mt-2 font-mono leading-none tabular-nums">
+                  {stat.value}
                 </p>
-              )}
-              {stat.name === 'CPU Usage' && !forecast?.cpu && baseline.cpu != null && (
-                <p className="mt-2 text-[10px] text-slate-400 opacity-60">
-                  Normal: {baseline.cpu.toFixed(1)}%. {cpuUsage > baseline.cpu ? 'High load.' : 'Stable.'}
-                </p>
-              )}
-              {stat.name === 'Memory' && forecast?.memory && (
-                <p className="mt-2 text-[10px] text-accent-blue opacity-80 uppercase tracking-widest font-mono">
-                  Forecast(5m): {forecast.memory['5m']?.toFixed(1)}% {forecast.memory.trend === 'up' ? '↗' : forecast.memory.trend === 'down' ? '↘' : '→'}
-                </p>
-              )}
-              {stat.name === 'Memory' && !forecast?.memory && baseline.memory != null && (
-                <p className="mt-2 text-[10px] text-slate-400 opacity-60">
-                  Normal: {baseline.memory.toFixed(1)}%. {memUsage > baseline.memory ? 'High load.' : 'Stable.'}
-                </p>
-              )}
+              </div>
+              {/* Forecast label - bottom section, always same height */}
+              <div className="mt-3 h-5 flex items-center justify-center shrink-0">
+                {stat.name === 'CPU Usage' && forecast?.cpu && (
+                  <p className="text-[10px] text-accent-blue opacity-80 uppercase tracking-widest font-mono">
+                    Forecast(5m): {forecast.cpu['5m']?.toFixed(1)}% {forecast.cpu.trend === 'up' ? '↗' : forecast.cpu.trend === 'down' ? '↘' : '→'}
+                  </p>
+                )}
+                {stat.name === 'CPU Usage' && !forecast?.cpu && (
+                  <p className="text-[10px] text-slate-500 font-mono">
+                    Normal: {(stats?.cpu?.usage_percent || 0) > 45 ? 'High load' : 'Stable'}
+                  </p>
+                )}
+                {stat.name === 'Memory' && forecast?.memory && (
+                  <p className="text-[10px] text-accent-blue opacity-80 uppercase tracking-widest font-mono">
+                    Forecast(5m): {forecast.memory['5m']?.toFixed(1)}% {forecast.memory.trend === 'up' ? '↗' : forecast.memory.trend === 'down' ? '↘' : '→'}
+                  </p>
+                )}
+                {stat.name === 'Memory' && !forecast?.memory && (
+                  <p className="text-[10px] text-slate-500 font-mono">
+                    Normal: {(stats?.memory?.percent || 0) > 60 ? 'High load' : 'Stable'}
+                  </p>
+                )}
+                {stat.name === 'Disk Usage' && (
+                  <p className="text-[10px] text-slate-500 font-mono">
+                    {(stats?.disk?.percent || 0) > 80 ? 'Critical' : (stats?.disk?.percent || 0) > 60 ? 'Moderate' : 'Healthy'}
+                  </p>
+                )}
+                {stat.name === 'Network' && (
+                  <p className="text-[10px] text-emerald-500 font-mono tracking-widest uppercase">
+                    ● Online
+                  </p>
+                )}
+              </div>
             </div>
           </Motion.div>
         )})}
