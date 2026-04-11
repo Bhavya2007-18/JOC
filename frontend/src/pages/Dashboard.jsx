@@ -234,8 +234,15 @@ export function Dashboard() {
             key={stat.name}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="nm-flat rounded-3xl bg-slate-900 border border-slate-800 group relative overflow-hidden"
+            whileHover={{ scale: 1.02, y: -4 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ 
+              delay: idx * 0.1,
+              type: "spring",
+              stiffness: 500,
+              damping: 30
+            }}
+            className="nm-flat rounded-3xl bg-slate-900 border border-slate-800 group relative overflow-hidden cursor-pointer"
           >
             <StatCardBg type={stat.name} />
             {/* Card content - perfectly structured layout */}
@@ -402,10 +409,13 @@ export function Dashboard() {
           <Card title="System Mode" icon={Settings2}>
             <div className="grid grid-cols-1 gap-4 mt-6">
               {modes.map((mode) => (
-                <button
+                <Motion.button
                   key={mode.id}
                   onClick={() => handleModeChange(mode.id)}
                   disabled={modeLoading}
+                  whileHover={{ scale: 1.02, x: 2 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 600, damping: 25 }}
                   className={cn(
                     'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300 relative overflow-hidden group/mode',
                     systemMode === mode.id
@@ -435,7 +445,7 @@ export function Dashboard() {
                   {modeLoading && systemMode === mode.id && (
                     <Loader2 className="h-4 w-4 text-accent-blue animate-spin ml-auto" />
                   )}
-                </button>
+                </Motion.button>
               ))}
             </div>
           </Card>

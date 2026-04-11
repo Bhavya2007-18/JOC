@@ -1,4 +1,4 @@
-import React from 'react';
+import { motion } from 'framer-motion';
 import { NavLink, Outlet } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -14,6 +14,8 @@ import {
 import { cn } from '../utils/cn';
 import { SystemModeProvider } from '../context/SystemModeContext';
 import { DynamicBackground } from './DynamicBackground/DynamicBackground';
+
+const navSpring = { type: "spring", stiffness: 400, damping: 30 };
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -40,21 +42,27 @@ export function Layout() {
         
         <nav className="mt-4 flex-1 px-4 space-y-3">
           {navigation.map((item) => (
-            <NavLink
+            <motion.div
               key={item.name}
-              to={item.href}
-              className={({ isActive }) =>
-                cn(
-                  'group flex items-center rounded-2xl px-5 py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300',
-                  isActive
-                    ? 'nm-inset text-accent-blue bg-slate-900'
-                    : 'text-slate-500 hover:text-slate-200 hover:bg-slate-800/50'
-                )
-              }
+              whileHover={{ scale: 1.02, x: 5 }}
+              whileTap={{ scale: 0.98 }}
+              transition={navSpring}
             >
-              <item.icon className={cn('mr-4 h-5 w-5 transition-colors', 'group-hover:text-accent-blue')} />
-              {item.name}
-            </NavLink>
+              <NavLink
+                to={item.href}
+                className={({ isActive }) =>
+                  cn(
+                    'group flex items-center rounded-2xl px-5 py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300',
+                    isActive
+                      ? 'nm-inset text-accent-blue bg-slate-900'
+                      : 'text-slate-500 hover:text-slate-200 hover:bg-slate-800/50'
+                  )
+                }
+              >
+                <item.icon className={cn('mr-4 h-5 w-5 transition-colors', 'group-hover:text-accent-blue')} />
+                {item.name}
+              </NavLink>
+            </motion.div>
           ))}
         </nav>
 

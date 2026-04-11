@@ -1,4 +1,12 @@
+import { motion } from 'framer-motion';
 import { cn } from '../utils/cn';
+
+const springConfig = {
+  type: "spring",
+  stiffness: 500,
+  damping: 30,
+  mass: 1
+};
 
 export function Button({ 
   className, 
@@ -10,10 +18,10 @@ export function Button({
   ...props 
 }) {
   const variants = {
-    primary: 'nm-convex text-accent-blue hover:text-blue-400 active:nm-inset',
-    secondary: 'nm-flat text-slate-300 hover:text-white active:nm-inset',
-    danger: 'nm-convex text-red-500 hover:text-red-400 active:nm-inset',
-    outline: 'nm-flat border border-slate-700 text-slate-400 hover:text-slate-200 active:nm-inset',
+    primary: 'nm-convex text-accent-blue hover:text-blue-400',
+    secondary: 'nm-flat text-slate-300 hover:text-white',
+    danger: 'nm-convex text-red-500 hover:text-red-400',
+    outline: 'nm-flat border border-slate-700 text-slate-400 hover:text-slate-200',
     ghost: 'bg-transparent text-slate-400 hover:bg-slate-800/50',
   };
 
@@ -24,13 +32,17 @@ export function Button({
   };
 
   return (
-    <button
+    <motion.button
       type={type}
+      whileHover={{ scale: 1.02, transition: springConfig }}
+      whileTap={{ scale: 0.96 }}
       className={cn(
-        'inline-flex items-center justify-center rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed',
+        'inline-flex items-center justify-center rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed',
         variants[variant],
         sizes[size],
-        className
+        className,
+        // Swap to inset shadow on tap via simple tailwind class since motion can't easily animate complex box-shadows without lag
+        'active:nm-inset'
       )}
       disabled={isLoading}
       {...props}
@@ -39,6 +51,6 @@ export function Button({
         <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
       ) : null}
       {children}
-    </button>
+    </motion.button>
   );
 }
