@@ -6,6 +6,7 @@ import { SystemHealthScore } from '../components/SystemHealthScore';
 import { EventStream } from '../components/EventStream';
 import { useSystemData } from '../hooks/useSystemData';
 import { systemApi, optimizerApi } from '../api/client';
+import { useSystemMode } from '../context/SystemModeContext';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
@@ -28,6 +29,7 @@ import { cn } from '../utils/cn';
 
 export function Dashboard() {
   const { stats, processes, anomalies, decisions, health, loading, error, events, forecast, addEvent } = useSystemData(3000);
+  const { systemMode, setSystemMode } = useSystemMode();
   const [chartData, setChartData] = useState([]);
   const [modeLoading, setModeLoading] = useState(false);
   const [boostLoading, setBoostLoading] = useState(false);
@@ -60,8 +62,6 @@ export function Dashboard() {
     { name: 'Network', value: 'Active', icon: Monitor, color: 'text-cyan-400' },
   ];
 
-  const [systemMode, setSystemMode] = useState('smart');
-
   const modes = [
     { id: 'chill', label: 'Chill', icon: Clock, color: 'text-blue-400', desc: 'Power saving' },
     { id: 'smart', label: 'Smart', icon: BrainCircuit, color: 'text-purple-400', desc: 'Balanced' },
@@ -80,16 +80,14 @@ export function Dashboard() {
     setModeLoading(true);
     setProtocolStatus(null);
     try {
-      const res = await systemApi.setMode(modeId);
-      const data = res.data;
-      setSystemMode(modeId);
+      await setSystemMode(modeId);
       addEvent(
-        `Mode switched to ${modeId.toUpperCase()}${data.dry_run ? ' [DRY RUN]' : ''} — ${data.affected_processes} processes adjusted`,
+        `Mode switched to ${modeId.toUpperCase()} — State mutation confirmed`,
         'config'
       );
       setProtocolStatus({
         type: 'success',
-        message: data.message || `Mode set to ${modeId.toUpperCase()}`,
+        message: `Mode set to ${modeId.toUpperCase()}`,
       });
     } catch (err) {
       console.error('Mode switch failed:', err);

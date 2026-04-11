@@ -12,6 +12,8 @@ import {
   X
 } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { SystemModeProvider } from '../context/SystemModeContext';
+import { DynamicBackground } from './DynamicBackground/DynamicBackground';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -23,9 +25,12 @@ const navigation = [
 
 export function Layout() {
   return (
-    <div className="flex h-screen bg-slate-800 text-slate-200 font-sans overflow-hidden p-3 gap-3">
-      {/* Sidebar - Glassmorphism */}
-      <aside className="w-64 rounded-3xl nm-flat bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 flex flex-col z-30">
+    <SystemModeProvider>
+      <div className="relative flex h-screen text-slate-200 font-sans overflow-hidden p-3 gap-3">
+        <DynamicBackground />
+        
+        {/* Sidebar - Glassmorphism */}
+        <aside className="w-64 rounded-3xl glass-card bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 flex flex-col z-30">
         <div className="p-8 flex items-center gap-3">
           <div className="nm-inset p-2 rounded-xl bg-slate-900">
             <ShieldCheck className="h-6 w-6 text-accent-blue" />
@@ -88,6 +93,7 @@ export function Layout() {
           </div>
         </main>
       </div>
-    </div>
+      </div>
+    </SystemModeProvider>
   );
 }

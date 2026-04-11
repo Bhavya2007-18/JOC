@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { systemApi, optimizerApi } from '../api/client';
+import { useSystemMode } from '../context/SystemModeContext';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { useSystemData } from '../hooks/useSystemData';
@@ -29,6 +30,7 @@ export function System() {
   const activeTab = searchParams.get('tab') || 'analysis';
 
   const { stats, processes, refresh, causalGraph } = useSystemData(5000);
+  const { systemMode } = useSystemMode();
 
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState(null);
