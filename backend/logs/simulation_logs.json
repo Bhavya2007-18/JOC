@@ -1449,5 +1449,108 @@
       "state": "IDLE",
       "note": "Engine returned to IDLE"
     }
+  },
+  {
+    "timestamp": 1775939017.2784586,
+    "correlation_id": "27d14853-49f2-4b32-8b76-628ef274cbdb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775939017.057846,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1775939033.8198645,
+    "correlation_id": "global",
+    "event": "stop_requested",
+    "payload": {
+      "reason": "User stopped"
+    }
+  },
+  {
+    "timestamp": 1775939047.8192654,
+    "correlation_id": "27d14853-49f2-4b32-8b76-628ef274cbdb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775939047.817495,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running cpu_spike"
+    }
+  },
+  {
+    "timestamp": 1775939047.8743708,
+    "correlation_id": "27d14853-49f2-4b32-8b76-628ef274cbdb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775939047.8718848,
+      "state": "FAILED",
+      "note": "Simulation failed: Memory safety ceiling exceeded: 90.6% >= 90.0%"
+    }
+  },
+  {
+    "timestamp": 1775939047.8767006,
+    "correlation_id": "27d14853-49f2-4b32-8b76-628ef274cbdb",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "73493fc5-57bb-41bd-aaf3-8e714afca36d",
+      "simulation_type": "cpu_spike",
+      "parameters": {
+        "intensity": 0.5,
+        "duration_seconds": 30
+      },
+      "timeline": {
+        "start": 1775939017.0578134,
+        "anomaly_detected_at": null,
+        "decision_made_at": null,
+        "completed_at": 1775939047.8752117,
+        "transitions": [
+          {
+            "timestamp": 1775939017.057846,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1775939047.817495,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running cpu_spike"
+          },
+          {
+            "timestamp": 1775939047.8718848,
+            "state": "FAILED",
+            "note": "Simulation failed: Memory safety ceiling exceeded: 90.6% >= 90.0%"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 30.81739830970764,
+        "detection_delay": 0.0
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 0,
+        "total_score": 0,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [],
+      "logs_ref": "D:\\WORK AND STUDY\\projects\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "FAILED",
+      "correlation_id": "27d14853-49f2-4b32-8b76-628ef274cbdb",
+      "feedback": null,
+      "attack_plan": null
+    }
+  },
+  {
+    "timestamp": 1775939047.878302,
+    "correlation_id": "27d14853-49f2-4b32-8b76-628ef274cbdb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775939047.877468,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
   }
 ]

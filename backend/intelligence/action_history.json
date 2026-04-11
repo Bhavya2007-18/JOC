@@ -676,11 +676,53 @@
         "memory_after": 83.1
       },
       "message": "[DRY RUN] Mode switched: BEAST -> SMART. Power plan: Balanced. 0 processes adjusted.",
-      "timestamp": 1775936003.5942843
+      "timestamp": 1775936003.5942843,
+      "action_id": "mode-smart-1775936003594"
     },
     "parameters": {
       "mode": "smart",
       "previous_mode": "beast"
+    }
+  },
+  {
+    "action_id": "mode-chill-1775938984168",
+    "action_type": "system_tweak",
+    "target": "system_mode_chill",
+    "timestamp": 1775938984.1683238,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "chill",
+      "previous_mode": "smart",
+      "mode_info": {
+        "label": "CHILL",
+        "subtitle": "Power Saving",
+        "description": "Reduced CPU frequency, limited background processes, battery saving, low thermals.",
+        "icon": "\ud83d\udca4"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "Power Saver",
+        "guid": "a1841308-3541-4fab-bc81-f71556f20b4a",
+        "message": "DRY RUN: Would set power plan to Power Saver"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 23.9,
+        "cpu_after": 23.4,
+        "memory_before": 91.6,
+        "memory_after": 91.9
+      },
+      "message": "[DRY RUN] Mode switched: SMART -> CHILL. Power plan: Power Saver. 0 processes adjusted.",
+      "timestamp": 1775938984.168309
+    },
+    "parameters": {
+      "mode": "chill",
+      "previous_mode": "smart"
     }
   }
 ]
