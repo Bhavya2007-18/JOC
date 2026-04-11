@@ -15,6 +15,7 @@ import {
   Database
 } from 'lucide-react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
+import { StorageScanAnimation } from '../components/StorageScanAnimation';
 import { cn } from '../utils/cn';
 
 export function Storage() {
@@ -27,9 +28,16 @@ export function Storage() {
   const handleScan = async () => {
     setLoading(true);
     setError(null);
+    setReport(null); // Clear to show animation
     setStatus(null);
+    
+    const minTimePromise = new Promise(resolve => setTimeout(resolve, 3500));
+    
     try {
-      const response = await storageApi.scan({ path: 'C:/Users' });
+      const [response] = await Promise.all([
+        storageApi.scan({ path: 'C:/Users' }),
+        minTimePromise
+      ]);
       setReport(response.data);
     } catch (err) {
       setError('Telemetric scan failed. Primary link severed.');
@@ -135,11 +143,27 @@ export function Storage() {
       )}
 
       {report ? (
-        <div className="space-y-10">
+        <Motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } }
+          }}
+          className="space-y-10"
+        >
           {/* Overview Grid */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             {categories.map((cat) => (
-              <div key={cat.id} className="relative nm-flat bg-slate-900 rounded-[2rem] p-8 border border-slate-800 hover:nm-convex transition-all duration-300 group overflow-hidden">
+              <Motion.div 
+                key={cat.id} 
+                variants={{
+                  hidden: { opacity: 0, y: 20, scale: 0.98 },
+                  visible: { opacity: 1, y: 0, scale: 1 }
+                }}
+                whileHover={{ y: -5, scale: 1.01 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="relative nm-flat bg-slate-900 rounded-[2rem] p-8 border border-slate-800 hover:nm-convex transition-all duration-300 group overflow-hidden"
+              >
                 <div className={cn(
                   "absolute top-0 left-0 w-1.5 h-full opacity-50 shadow-[0_0_15px_currentColor]",
                   cat.id === 'junk' ? 'bg-red-500 text-red-500' : cat.id === 'duplicates' ? 'bg-amber-500 text-amber-500' : 'bg-accent-blue text-accent-blue'
@@ -150,28 +174,26 @@ export function Storage() {
                       <cat.icon className={cn('h-6 w-6', cat.color)} />
                     </div>
                     <div className="text-right">
-                       <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">{cat.name}</p>
-                       <p className="text-2xl font-black text-white font-mono">{cat.data?.readable_size || '0 B'}</p>
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Impact_Found</p>
+                      <h4 className="text-2xl font-black text-white font-mono">{cat.data?.readable_size || '0 B'}</h4>
                     </div>
                   </div>
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-center text-[10px] font-black text-slate-500 uppercase font-mono italic">
-                       <span>Objects_Found: {cat.data?.junk_files?.length || cat.data?.duplicates?.length || cat.data?.cold_files?.length || 0}</span>
-                    </div>
-                    <Button 
-                      size="md" 
-                      onClick={() => handleCleanup(cat.id)}
-                      isLoading={cleaning[cat.id]}
-                      className={cn(
-                        "w-full rounded-2xl h-12 uppercase tracking-[0.3em] text-[10px] font-black",
-                        cat.id === 'junk' ? 'nm-convex bg-red-950/20 text-red-500' : 'nm-flat bg-slate-900 border-none text-slate-400 hover:text-white'
-                      )}
-                    >
-                      EXEC_PURGE
-                    </Button>
+                  <div>
+                    <h3 className="font-black text-white uppercase italic tracking-tight text-lg">{cat.name}</h3>
+                    <p className="text-xs text-slate-500 mt-2 font-mono uppercase tracking-widest leading-relaxed">
+                      Sector Analysis isolated {cat.data?.junk_files?.length || cat.data?.duplicates?.length || cat.data?.cold_files?.length || 0} residual fragments in {cat.id} subspace.
+                    </p>
                   </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleCleanup(cat.id)}
+                    isLoading={cleaning[cat.id]}
+                    className="w-full nm-convex bg-slate-900 border-none group-hover:bg-slate-800 transition-colors"
+                  >
+                    INIT_PURGE_PROTOCOL
+                  </Button>
                 </div>
-              </div>
+              </Motion.div>
             ))}
           </div>
 
@@ -229,8 +251,10 @@ export function Storage() {
               </div>
             </Card>
           </div>
-        </div>
-      ) : !loading && (
+        </Motion.div>
+      ) : loading ? (
+        <StorageScanAnimation />
+      ) : (
         <Motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
