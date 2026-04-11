@@ -1480,5 +1480,765 @@
         "memory_percent": 1.9
       }
     ]
+  },
+  {
+    "timestamp": 1775938141.299336,
+    "hour_of_day": 1,
+    "cpu_percent": 12.8,
+    "memory_percent": 82.3,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 91.0,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 4.1,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.9,
+        "memory_percent": 3.4
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.5,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 24080,
+        "name": "brave.exe",
+        "cpu_percent": 0.3,
+        "memory_percent": 4.5
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938143.823849,
+    "hour_of_day": 1,
+    "cpu_percent": 6.6,
+    "memory_percent": 82.3,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 94.1,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 3.4,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 24080,
+        "name": "brave.exe",
+        "cpu_percent": 1.1,
+        "memory_percent": 4.5
+      },
+      {
+        "pid": 22740,
+        "name": "brave.exe",
+        "cpu_percent": 0.5,
+        "memory_percent": 1.2
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.5,
+        "memory_percent": 0.0
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938145.785971,
+    "hour_of_day": 1,
+    "cpu_percent": 11.0,
+    "memory_percent": 82.3,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 92.6,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 1.6,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 6696,
+        "name": "svchost.exe",
+        "cpu_percent": 1.0,
+        "memory_percent": 0.1
+      },
+      {
+        "pid": 8312,
+        "name": "mc-fw-host.exe",
+        "cpu_percent": 0.8,
+        "memory_percent": 0.9
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.4,
+        "memory_percent": 0.0
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938147.7058525,
+    "hour_of_day": 1,
+    "cpu_percent": 4.1,
+    "memory_percent": 82.4,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 94.7,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 1.6,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 1.1,
+        "memory_percent": 3.5
+      },
+      {
+        "pid": 34372,
+        "name": "dwm.exe",
+        "cpu_percent": 0.3,
+        "memory_percent": 2.5
+      },
+      {
+        "pid": 29160,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.3,
+        "memory_percent": 1.4
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938152.504906,
+    "hour_of_day": 1,
+    "cpu_percent": 5.8,
+    "memory_percent": 82.4,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 94.0,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 3.4,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.7,
+        "memory_percent": 3.5
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.5,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 24080,
+        "name": "brave.exe",
+        "cpu_percent": 0.3,
+        "memory_percent": 4.5
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938154.8607206,
+    "hour_of_day": 1,
+    "cpu_percent": 3.1,
+    "memory_percent": 82.3,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 95.4,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 2.0,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 24080,
+        "name": "brave.exe",
+        "cpu_percent": 0.4,
+        "memory_percent": 4.5
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.3,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.2,
+        "memory_percent": 3.4
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938156.8695467,
+    "hour_of_day": 1,
+    "cpu_percent": 3.4,
+    "memory_percent": 82.3,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 95.4,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 1.7,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 8512,
+        "name": "PLANET9DA.exe",
+        "cpu_percent": 0.4,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.3,
+        "memory_percent": 3.5
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.3,
+        "memory_percent": 0.0
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938159.0244148,
+    "hour_of_day": 1,
+    "cpu_percent": 5.8,
+    "memory_percent": 82.3,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 95.5,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 1.8,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 1.1,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.8,
+        "memory_percent": 3.3
+      },
+      {
+        "pid": 24080,
+        "name": "brave.exe",
+        "cpu_percent": 0.5,
+        "memory_percent": 4.5
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938162.9564257,
+    "hour_of_day": 1,
+    "cpu_percent": 5.9,
+    "memory_percent": 82.0,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 91.3,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 4.2,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.6,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.4,
+        "memory_percent": 3.3
+      },
+      {
+        "pid": 8512,
+        "name": "PLANET9DA.exe",
+        "cpu_percent": 0.3,
+        "memory_percent": 0.3
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938165.324102,
+    "hour_of_day": 1,
+    "cpu_percent": 2.8,
+    "memory_percent": 82.1,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 94.8,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 1.9,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.5,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 8512,
+        "name": "PLANET9DA.exe",
+        "cpu_percent": 0.4,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 34372,
+        "name": "dwm.exe",
+        "cpu_percent": 0.3,
+        "memory_percent": 2.5
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938167.3533342,
+    "hour_of_day": 1,
+    "cpu_percent": 1.8,
+    "memory_percent": 82.1,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 96.9,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 1.7,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 6696,
+        "name": "svchost.exe",
+        "cpu_percent": 0.4,
+        "memory_percent": 0.1
+      },
+      {
+        "pid": 29160,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.2,
+        "memory_percent": 1.4
+      },
+      {
+        "pid": 8312,
+        "name": "mc-fw-host.exe",
+        "cpu_percent": 0.2,
+        "memory_percent": 0.9
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938169.277154,
+    "hour_of_day": 1,
+    "cpu_percent": 6.5,
+    "memory_percent": 82.1,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 95.4,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 1.6,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 24080,
+        "name": "brave.exe",
+        "cpu_percent": 0.5,
+        "memory_percent": 4.5
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.5,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.3,
+        "memory_percent": 3.3
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938265.5570831,
+    "hour_of_day": 1,
+    "cpu_percent": 13.4,
+    "memory_percent": 82.6,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 85.7,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 18524,
+        "name": "brave.exe",
+        "cpu_percent": 5.6,
+        "memory_percent": 3.6
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 3.5,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 28368,
+        "name": "brave.exe",
+        "cpu_percent": 1.6,
+        "memory_percent": 1.5
+      },
+      {
+        "pid": 29160,
+        "name": "Antigravity.exe",
+        "cpu_percent": 0.5,
+        "memory_percent": 1.4
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938272.100943,
+    "hour_of_day": 1,
+    "cpu_percent": 14.0,
+    "memory_percent": 82.6,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 84.9,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 18524,
+        "name": "brave.exe",
+        "cpu_percent": 5.6,
+        "memory_percent": 3.6
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 4.0,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 28368,
+        "name": "brave.exe",
+        "cpu_percent": 1.8,
+        "memory_percent": 1.5
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.5,
+        "memory_percent": 0.0
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938275.2024925,
+    "hour_of_day": 1,
+    "cpu_percent": 8.7,
+    "memory_percent": 82.6,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 86.1,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 18524,
+        "name": "brave.exe",
+        "cpu_percent": 5.4,
+        "memory_percent": 3.6
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 3.3,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 28368,
+        "name": "brave.exe",
+        "cpu_percent": 1.8,
+        "memory_percent": 1.5
+      },
+      {
+        "pid": 35308,
+        "name": "Antigravity.exe",
+        "cpu_percent": 1.2,
+        "memory_percent": 3.3
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938277.6079023,
+    "hour_of_day": 1,
+    "cpu_percent": 9.8,
+    "memory_percent": 82.7,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 85.3,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 18524,
+        "name": "brave.exe",
+        "cpu_percent": 5.6,
+        "memory_percent": 3.6
+      },
+      {
+        "pid": 28368,
+        "name": "brave.exe",
+        "cpu_percent": 2.4,
+        "memory_percent": 1.5
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 2.1,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 6696,
+        "name": "svchost.exe",
+        "cpu_percent": 0.5,
+        "memory_percent": 0.1
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938281.4717863,
+    "hour_of_day": 1,
+    "cpu_percent": 10.7,
+    "memory_percent": 82.7,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 87.7,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 18524,
+        "name": "brave.exe",
+        "cpu_percent": 5.5,
+        "memory_percent": 3.6
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 2.8,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 28368,
+        "name": "brave.exe",
+        "cpu_percent": 1.9,
+        "memory_percent": 1.5
+      },
+      {
+        "pid": 6696,
+        "name": "svchost.exe",
+        "cpu_percent": 0.6,
+        "memory_percent": 0.1
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938286.9001248,
+    "hour_of_day": 1,
+    "cpu_percent": 16.9,
+    "memory_percent": 82.7,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 82.7,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 18524,
+        "name": "brave.exe",
+        "cpu_percent": 5.9,
+        "memory_percent": 3.6
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 4.1,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 28368,
+        "name": "brave.exe",
+        "cpu_percent": 2.0,
+        "memory_percent": 1.5
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 1.1,
+        "memory_percent": 0.0
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938289.8065426,
+    "hour_of_day": 1,
+    "cpu_percent": 11.2,
+    "memory_percent": 82.7,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 86.2,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 18524,
+        "name": "brave.exe",
+        "cpu_percent": 5.2,
+        "memory_percent": 3.6
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 3.0,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 28368,
+        "name": "brave.exe",
+        "cpu_percent": 2.0,
+        "memory_percent": 1.5
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.6,
+        "memory_percent": 0.0
+      }
+    ]
+  },
+  {
+    "timestamp": 1775938292.2482429,
+    "hour_of_day": 1,
+    "cpu_percent": 8.2,
+    "memory_percent": 82.8,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 86.9,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 18524,
+        "name": "brave.exe",
+        "cpu_percent": 5.6,
+        "memory_percent": 3.5
+      },
+      {
+        "pid": 29984,
+        "name": "python.exe",
+        "cpu_percent": 2.1,
+        "memory_percent": 0.3
+      },
+      {
+        "pid": 28368,
+        "name": "brave.exe",
+        "cpu_percent": 1.7,
+        "memory_percent": 1.5
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_percent": 0.6,
+        "memory_percent": 0.0
+      }
+    ]
   }
 ]

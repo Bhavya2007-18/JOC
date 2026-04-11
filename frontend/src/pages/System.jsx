@@ -5,6 +5,7 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { useSystemData } from '../hooks/useSystemData';
 import { SimulationPanel } from '../components/SimulationPanel';
+import { DeepScanAnimation } from '../components/DeepScanAnimation';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
@@ -49,10 +50,19 @@ export function System() {
 
   const handleAnalyze = async () => {
     setLoading(true);
+    setReport(null); // Clear previous report to show animation
     setError(null);
     setActionStatus(null);
+    
+    // Ensure animation plays for at least 3.5 seconds for visual weight
+    const minTimePromise = new Promise(resolve => setTimeout(resolve, 3500));
+    
     try {
-      const response = await systemApi.safeAnalyze();
+      const [response] = await Promise.all([
+        systemApi.safeAnalyze(),
+        minTimePromise
+      ]);
+      
       if (response.status === 'success') {
         setReport(response.data);
       } else {
@@ -332,48 +342,74 @@ export function System() {
                   </Card>
 
                   <Card title="Neural Recommendations" description="Automated protocols for engine stability" className="lg:col-span-2">
-                    <div className="space-y-6 mt-6">
-                      {report.issues?.length > 0 ? (
-                        report.issues.map((issue, idx) => (
-                          <div key={idx} className="nm-flat bg-slate-900 border border-slate-800 rounded-3xl p-8 hover:nm-convex transition-all group">
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-start gap-6">
-                                <div className={cn('mt-1 nm-inset rounded-2xl p-4 bg-slate-950', issue.severity === 'high' ? 'text-red-500' : 'text-amber-400')}>
-                                  <AlertTriangle className="h-6 w-6" />
-                                </div>
-                                <div>
-                                  <h4 className="text-lg font-black tracking-tight text-white uppercase">{issue.title || issue.issue_type}</h4>
-                                  <p className="mt-2 text-slate-400 text-sm leading-relaxed italic">{issue.explanation || issue.description}</p>
-                                  {issue.best_action && (
-                                    <div className="mt-4 text-xs font-black tracking-widest uppercase text-accent-blue nm-inset bg-slate-900 w-fit px-3 py-1.5 rounded-lg">
-                                      🔥 STRATEGY: {issue.best_action.action_type} → {issue.best_action.target}
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                              <span className={cn('px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-[0.2em]',
-                                issue.severity === 'high' ? 'nm-inset bg-red-950 text-red-500 border border-red-900/50' : 'nm-inset bg-amber-950 text-amber-500 border border-amber-900/50'
+                  <Motion.div 
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      visible: { transition: { staggerChildren: 0.15 } }
+                    }}
+                    className="space-y-6 mt-6"
+                  >
+                    {report.issues?.length > 0 ? (
+                      report.issues.map((issue, idx) => (
+                        <Motion.div 
+                          key={idx} 
+                          variants={{
+                            hidden: { opacity: 0, y: 20, scale: 0.98 },
+                            visible: { opacity: 1, y: 0, scale: 1 }
+                          }}
+                          whileHover={{ y: -4, scale: 1.01 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                          className="nm-flat bg-slate-900 border border-slate-800 rounded-3xl p-8 hover:nm-convex transition-all group relative overflow-hidden"
+                        >
+                          {issue.severity === 'high' && (
+                            <div className="absolute top-0 left-0 w-1 h-full bg-red-500/40 animate-pulse" />
+                          )}
+                          <div className="flex items-start justify-between relative z-10">
+                            <div className="flex items-start gap-6">
+                              <div className={cn(
+                                'mt-1 nm-inset rounded-2xl p-4 bg-slate-950 transition-colors duration-500', 
+                                issue.severity === 'high' ? 'text-red-500 group-hover:text-red-400' : 'text-amber-400 group-hover:text-amber-300'
                               )}>
-                                SEV_{issue.severity || 'MED'}
-                              </span>
+                                <AlertTriangle className="h-6 w-6" />
+                              </div>
+                              <div>
+                                <h4 className="text-lg font-black tracking-tight text-white uppercase">{issue.title || issue.issue_type}</h4>
+                                <p className="mt-2 text-slate-400 text-sm leading-relaxed italic">{issue.explanation || issue.description}</p>
+                                {issue.best_action && (
+                                  <div className="mt-4 text-xs font-black tracking-widest uppercase text-accent-blue nm-inset bg-slate-900 w-fit px-3 py-1.5 rounded-lg">
+                                    🔥 STRATEGY: {issue.best_action.action_type} → {issue.best_action.target}
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                            <div className="flex justify-end mt-8">
-                              <Button size="sm" onClick={() => handleFix(issue)} isLoading={fixing[issue.id || issue.target]} className="nm-convex bg-slate-900 text-emerald-500 border-none hover:text-emerald-400">
-                                EXECUTE_FIX_PROTOCOL
-                              </Button>
-                            </div>
+                            <span className={cn('px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-[0.2em]',
+                              issue.severity === 'high' ? 'nm-inset bg-red-950 text-red-500 border border-red-900/50' : 'nm-inset bg-amber-950 text-amber-500 border border-amber-900/50'
+                            )}>
+                              SEV_{issue.severity || 'MED'}
+                            </span>
                           </div>
-                        ))
-                      ) : (
-                        <div className="py-20 text-center nm-inset bg-slate-900/30 rounded-3xl border border-slate-800 flex flex-col items-center">
-                          <div className="nm-flat p-6 rounded-full bg-slate-900 mb-6">
-                            <CheckCircle2 className="h-12 w-12 text-emerald-500 drop-shadow-[0_0_8px_#10b981]" />
+                          <div className="flex justify-end mt-8 relative z-10">
+                            <Button size="sm" onClick={() => handleFix(issue)} isLoading={fixing[issue.id || issue.target]} className="nm-convex bg-slate-900 text-emerald-500 border-none hover:text-emerald-400">
+                              EXECUTE_FIX_PROTOCOL
+                            </Button>
                           </div>
-                          <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Engine Optimized</h3>
-                          <p className="text-slate-500 font-mono text-xs mt-2 uppercase tracking-widest">No critical latency vectors detected</p>
+                        </Motion.div>
+                      ))
+                    ) : (
+                      <Motion.div 
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="py-20 text-center nm-inset bg-slate-900/30 rounded-3xl border border-slate-800 flex flex-col items-center"
+                      >
+                        <div className="nm-flat p-6 rounded-full bg-slate-900 mb-6">
+                          <CheckCircle2 className="h-12 w-12 text-emerald-500 drop-shadow-[0_0_8px_#10b981]" />
                         </div>
-                      )}
-                    </div>
+                        <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Engine Optimized</h3>
+                        <p className="text-slate-500 font-mono text-xs mt-2 uppercase tracking-widest">No critical latency vectors detected</p>
+                      </Motion.div>
+                    )}
+                  </Motion.div>
                   </Card>
                 </div>
                 
@@ -399,10 +435,17 @@ export function System() {
                   </Card>
                 )}
               </>
+            ) : loading ? (
+              <DeepScanAnimation />
             ) : (
               <div className="flex flex-col items-center justify-center py-32 nm-flat bg-slate-900 rounded-[3rem] border border-slate-800">
                 <div className="nm-inset p-10 rounded-full bg-slate-950 mb-10 group cursor-pointer hover:nm-flat transition-all" onClick={handleAnalyze}>
-                  <Activity className="h-20 w-20 text-accent-blue animate-pulse" />
+                  <Motion.div 
+                    whileHover={{ scale: 1.1, rotate: 180 }}
+                    transition={{ type: "spring", stiffness: 200 }}
+                  >
+                    <Activity className="h-20 w-20 text-accent-blue" />
+                  </Motion.div>
                 </div>
                 <h3 className="text-4xl font-black text-white uppercase italic tracking-tighter">Deep Scan Required</h3>
                 <p className="mt-4 text-slate-500 font-mono text-sm uppercase tracking-[0.3em] max-w-md text-center opacity-60">Initialize Neural Diagnostics to identify performance bottlenecks and security leaks.</p>

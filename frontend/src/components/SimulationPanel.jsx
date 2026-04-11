@@ -19,6 +19,7 @@ import {
   Shield,
   Swords,
 } from 'lucide-react';
+import { BattleStationAnimation } from './BattleStationAnimation';
 import { cn } from '../utils/cn';
 
 const SIMULATION_TYPES = [
@@ -221,23 +222,11 @@ export function SimulationPanel() {
       <AnimatePresence>
         {isRunning && (
           <Motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="rounded-[2.5rem] nm-flat bg-slate-900 border border-accent-blue/40 p-10 relative overflow-hidden"
           >
-            <div className="absolute top-0 left-0 w-2 bg-accent-blue h-full animate-pulse shadow-[0_0_15px_#3b82f6]" />
-            <div className="flex items-center gap-8">
-              <div className="rounded-full nm-inset p-5 bg-slate-950">
-                <Loader2 className="h-10 w-10 text-accent-blue animate-spin" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">Stress Test Active</h3>
-                <p className="text-sm text-slate-400 font-mono tracking-widest mt-2 uppercase opacity-70">
-                   Neural Engine is monitoring response vectors for {selectedType.replace(/_/g, ' ').toUpperCase()}.
-                </p>
-              </div>
-            </div>
+            <BattleStationAnimation intensity={intensity} type={selectedType} />
           </Motion.div>
         )}
 
