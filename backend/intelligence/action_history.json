@@ -213,5 +213,247 @@
       "failed": []
     },
     "parameters": {}
+  },
+  {
+    "action_id": "mode-beast-1775925551059",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1775925551.0595865,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "beast",
+      "previous_mode": "smart",
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "DRY RUN: Would set power plan to High Performance"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 4.6,
+        "cpu_after": 4.6,
+        "memory_before": 81.2,
+        "memory_after": 81.2
+      },
+      "message": "[DRY RUN] Mode switched: SMART \u2192 BEAST. Power plan: High Performance. 0 processes adjusted.",
+      "timestamp": 1775925551.0595822
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "smart"
+    }
+  },
+  {
+    "action_id": "mode-chill-1775926209247",
+    "action_type": "system_tweak",
+    "target": "system_mode_chill",
+    "timestamp": 1775926209.2477407,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "chill",
+      "previous_mode": "smart",
+      "mode_info": {
+        "label": "CHILL",
+        "subtitle": "Power Saving",
+        "description": "Reduced CPU frequency, limited background processes, battery saving, low thermals.",
+        "icon": "\ud83d\udca4"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "Power Saver",
+        "guid": "a1841308-3541-4fab-bc81-f71556f20b4a",
+        "message": "DRY RUN: Would set power plan to Power Saver"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 15.8,
+        "cpu_after": 15.8,
+        "memory_before": 78.4,
+        "memory_after": 78.4
+      },
+      "message": "[DRY RUN] Mode switched: SMART -> CHILL. Power plan: Power Saver. 0 processes adjusted.",
+      "timestamp": 1775926209.2477357,
+      "action_id": "mode-chill-1775926209247"
+    },
+    "parameters": {
+      "mode": "chill",
+      "previous_mode": "smart"
+    }
+  },
+  {
+    "action_id": "mode-beast-1775926210075",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1775926210.0750875,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "beast",
+      "previous_mode": "chill",
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "DRY RUN: Would set power plan to High Performance"
+      },
+      "affected_processes": 2,
+      "processes": [
+        {
+          "pid": 14600,
+          "name": "python.exe",
+          "cpu_percent": 4.2,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 30992,
+          "name": "Antigravity.exe",
+          "cpu_percent": 1.8,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        }
+      ],
+      "metrics": {
+        "cpu_before": 15.8,
+        "cpu_after": 5.4,
+        "memory_before": 78.4,
+        "memory_after": 78.6
+      },
+      "message": "[DRY RUN] Mode switched: CHILL -> BEAST. Power plan: High Performance. 2 processes adjusted.",
+      "timestamp": 1775926210.0750837,
+      "action_id": "mode-beast-1775926210075"
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "chill"
+    }
+  },
+  {
+    "action_id": "mode-smart-1775926210599",
+    "action_type": "system_tweak",
+    "target": "system_mode_smart",
+    "timestamp": 1775926210.5993307,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "smart",
+      "previous_mode": "beast",
+      "mode_info": {
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "DRY RUN: Would set power plan to Balanced"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 5.4,
+        "cpu_after": 5.4,
+        "memory_before": 78.6,
+        "memory_after": 78.6
+      },
+      "message": "[DRY RUN] Mode switched: BEAST -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1775926210.5993273
+    },
+    "parameters": {
+      "mode": "smart",
+      "previous_mode": "beast"
+    }
+  },
+  {
+    "action_id": "cleanup-1775926964265",
+    "action_type": "system_tweak",
+    "target": "cleanup",
+    "timestamp": 1775926964.2650907,
+    "status": "completed",
+    "reversible": false,
+    "result": {
+      "success": true,
+      "message": "Dry-run: cleanup simulated",
+      "dry_run": true,
+      "total_bytes_freed": 1451857773,
+      "items": [
+        {
+          "path": "C:\\Users\\bhavy\\AppData\\Local\\Temp",
+          "bytes_freed": 1451857773,
+          "simulated": true
+        }
+      ],
+      "gc_before": [
+        {
+          "collections": 0,
+          "collected": 0,
+          "uncollectable": 0
+        },
+        {
+          "collections": 14,
+          "collected": 448,
+          "uncollectable": 0
+        },
+        {
+          "collections": 0,
+          "collected": 0,
+          "uncollectable": 0
+        }
+      ],
+      "gc_after": [
+        {
+          "collections": 0,
+          "collected": 0,
+          "uncollectable": 0
+        },
+        {
+          "collections": 14,
+          "collected": 448,
+          "uncollectable": 0
+        },
+        {
+          "collections": 1,
+          "collected": 312,
+          "uncollectable": 0
+        }
+      ],
+      "timestamp": 1775926964.2650907,
+      "risk": "low",
+      "confidence": 0.8
+    },
+    "parameters": {
+      "dry_run": true
+    }
   }
 ]

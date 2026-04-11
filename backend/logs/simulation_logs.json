@@ -250,5 +250,718 @@
       "state": "IDLE",
       "note": "Engine returned to IDLE"
     }
+  },
+  {
+    "timestamp": 1775923959.1339843,
+    "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775923959.130469,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1775923972.235429,
+    "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775923972.0326436,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running cpu_spike"
+    }
+  },
+  {
+    "timestamp": 1775923972.4572532,
+    "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775923972.3873136,
+      "state": "OBSERVING",
+      "note": "Observation window started"
+    }
+  },
+  {
+    "timestamp": 1775923994.6785357,
+    "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775923994.67764,
+      "state": "ANALYZING",
+      "note": "Analyzing responses"
+    }
+  },
+  {
+    "timestamp": 1775923994.684946,
+    "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775923994.6841578,
+      "state": "COMPLETED",
+      "note": "Simulation completed"
+    }
+  },
+  {
+    "timestamp": 1775923994.6899264,
+    "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "0a4f22ae-bd90-4490-a862-84ba92693f49",
+      "simulation_type": "cpu_spike",
+      "parameters": {},
+      "timeline": {
+        "start": 1775923959.128715,
+        "anomaly_detected_at": null,
+        "decision_made_at": 1775923994.676682,
+        "completed_at": 1775923994.6792324,
+        "transitions": [
+          {
+            "timestamp": 1775923959.130469,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1775923972.0326436,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running cpu_spike"
+          },
+          {
+            "timestamp": 1775923972.3873136,
+            "state": "OBSERVING",
+            "note": "Observation window started"
+          },
+          {
+            "timestamp": 1775923994.67764,
+            "state": "ANALYZING",
+            "note": "Analyzing responses"
+          },
+          {
+            "timestamp": 1775923994.6841578,
+            "state": "COMPLETED",
+            "note": "Simulation completed"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 35.550517320632935,
+        "detection_delay": 35.550517320632935
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 0,
+        "total_score": 0,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [
+        {
+          "metadata": {
+            "type": "cpu_spike",
+            "simulation_id": "0a4f22ae-bd90-4490-a862-84ba92693f49",
+            "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+            "parameters": {}
+          },
+          "result": {
+            "simulation": "cpu_spike",
+            "dry_run": true,
+            "threads": 2,
+            "duration": 5.0,
+            "throttle_seconds": 0.001
+          },
+          "timestamp": 1775923972.3664522
+        },
+        {
+          "decision": "Suggest cleanup to free memory",
+          "reason": "Average memory usage is 84.3%, above the safe threshold",
+          "confidence": "low",
+          "data_used": {
+            "average_memory_percent": 84.26666666666667
+          },
+          "related_anomalies": [],
+          "suggested_actions": [
+            {
+              "action_type": "run_cleanup",
+              "target": "system",
+              "parameters": {
+                "endpoint": "/optimize/cleanup",
+                "dry_run": true
+              }
+            }
+          ]
+        }
+      ],
+      "logs_ref": "D:\\WORK AND STUDY\\projects\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "COMPLETED",
+      "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+      "feedback": {
+        "red_reward": 0.0,
+        "blue_detected": false,
+        "detection_latency": 35.551,
+        "red_evolution": {
+          "episodes_completed": 0,
+          "exploration_rate": 50.0,
+          "top_strategies": [],
+          "win_rates": [],
+          "recent_detection_rate": 0.0,
+          "q_table_size": 0,
+          "current_best": "none"
+        },
+        "blue_evolution": {
+          "baseline_cpu": 0.0,
+          "baseline_memory": 0.0,
+          "baseline_std_cpu": 10.0,
+          "baseline_std_memory": 10.0,
+          "samples_seen": 0,
+          "total_detections": 0,
+          "total_misses": 1,
+          "detection_rate": 0.0,
+          "avg_detection_latency": 0.0,
+          "recent_latencies": [],
+          "patterns_known": 1,
+          "action_success_rates": {
+            "Suggest cleanup to free memory": 0.0
+          },
+          "best_action": "Suggest cleanup to free memory"
+        }
+      },
+      "attack_plan": null
+    }
+  },
+  {
+    "timestamp": 1775923994.6916351,
+    "correlation_id": "e65c0d0c-0252-43d7-a823-4e1dd7a6f5d8",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775923994.690848,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
+  },
+  {
+    "timestamp": 1775926974.6793478,
+    "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775926974.4941242,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1775926982.91807,
+    "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775926982.9169755,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running cpu_spike"
+    }
+  },
+  {
+    "timestamp": 1775926982.9712844,
+    "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775926982.9702373,
+      "state": "OBSERVING",
+      "note": "Observation window started"
+    }
+  },
+  {
+    "timestamp": 1775927025.085301,
+    "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927025.0849543,
+      "state": "ANALYZING",
+      "note": "Analyzing responses"
+    }
+  },
+  {
+    "timestamp": 1775927025.088362,
+    "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927025.0874043,
+      "state": "COMPLETED",
+      "note": "Simulation completed"
+    }
+  },
+  {
+    "timestamp": 1775927025.091485,
+    "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "3c51d75d-1cd8-4d7b-adf8-ff61d2bc5782",
+      "simulation_type": "cpu_spike",
+      "parameters": {
+        "intensity": 0.5,
+        "duration_seconds": 30
+      },
+      "timeline": {
+        "start": 1775926974.4940922,
+        "anomaly_detected_at": null,
+        "decision_made_at": null,
+        "completed_at": 1775927025.08561,
+        "transitions": [
+          {
+            "timestamp": 1775926974.4941242,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1775926982.9169755,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running cpu_spike"
+          },
+          {
+            "timestamp": 1775926982.9702373,
+            "state": "OBSERVING",
+            "note": "Observation window started"
+          },
+          {
+            "timestamp": 1775927025.0849543,
+            "state": "ANALYZING",
+            "note": "Analyzing responses"
+          },
+          {
+            "timestamp": 1775927025.0874043,
+            "state": "COMPLETED",
+            "note": "Simulation completed"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 50.59151768684387,
+        "detection_delay": 50.59151768684387
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 0,
+        "total_score": 0,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [
+        {
+          "metadata": {
+            "type": "cpu_spike",
+            "simulation_id": "3c51d75d-1cd8-4d7b-adf8-ff61d2bc5782",
+            "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+            "parameters": {
+              "intensity": 0.5,
+              "duration_seconds": 30
+            }
+          },
+          "result": {
+            "simulation": "cpu_spike",
+            "dry_run": true,
+            "threads": 1,
+            "duration": 5.0,
+            "throttle_seconds": 0.001
+          },
+          "timestamp": 1775926982.9698708
+        }
+      ],
+      "logs_ref": "D:\\WORK AND STUDY\\projects\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "COMPLETED",
+      "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+      "feedback": {
+        "red_reward": 0.0,
+        "blue_detected": false,
+        "detection_latency": 50.592,
+        "red_evolution": {
+          "episodes_completed": 0,
+          "exploration_rate": 50.0,
+          "top_strategies": [],
+          "win_rates": [],
+          "recent_detection_rate": 0.0,
+          "q_table_size": 0,
+          "current_best": "none"
+        },
+        "blue_evolution": {
+          "baseline_cpu": 0.0,
+          "baseline_memory": 0.0,
+          "baseline_std_cpu": 10.0,
+          "baseline_std_memory": 10.0,
+          "samples_seen": 0,
+          "total_detections": 0,
+          "total_misses": 2,
+          "detection_rate": 0.0,
+          "avg_detection_latency": 0.0,
+          "recent_latencies": [],
+          "patterns_known": 1,
+          "action_success_rates": {
+            "Suggest cleanup to free memory": 0.0
+          },
+          "best_action": "Suggest cleanup to free memory"
+        }
+      },
+      "attack_plan": null
+    }
+  },
+  {
+    "timestamp": 1775927025.092381,
+    "correlation_id": "4f0f2bd1-76bf-4683-93a8-5d9ef3ff31cb",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927025.0920544,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
+  },
+  {
+    "timestamp": 1775927117.9102173,
+    "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927117.9086378,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1775927136.136191,
+    "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927135.9390354,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running memory_stress"
+    }
+  },
+  {
+    "timestamp": 1775927136.4304833,
+    "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927136.3026772,
+      "state": "OBSERVING",
+      "note": "Observation window started"
+    }
+  },
+  {
+    "timestamp": 1775927180.6067758,
+    "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927180.3653238,
+      "state": "ANALYZING",
+      "note": "Analyzing responses"
+    }
+  },
+  {
+    "timestamp": 1775927181.268379,
+    "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927181.074766,
+      "state": "COMPLETED",
+      "note": "Simulation completed"
+    }
+  },
+  {
+    "timestamp": 1775927181.7597296,
+    "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "d5fb0e01-a00c-45d2-b05e-090c9e55a31a",
+      "simulation_type": "memory_stress",
+      "parameters": {
+        "intensity": 0.5,
+        "duration_seconds": 30
+      },
+      "timeline": {
+        "start": 1775927117.9085977,
+        "anomaly_detected_at": null,
+        "decision_made_at": null,
+        "completed_at": 1775927180.6949959,
+        "transitions": [
+          {
+            "timestamp": 1775927117.9086378,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1775927135.9390354,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running memory_stress"
+          },
+          {
+            "timestamp": 1775927136.3026772,
+            "state": "OBSERVING",
+            "note": "Observation window started"
+          },
+          {
+            "timestamp": 1775927180.3653238,
+            "state": "ANALYZING",
+            "note": "Analyzing responses"
+          },
+          {
+            "timestamp": 1775927181.074766,
+            "state": "COMPLETED",
+            "note": "Simulation completed"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 62.78639817237854,
+        "detection_delay": 62.78639817237854
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 0,
+        "total_score": 0,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [
+        {
+          "metadata": {
+            "type": "memory_stress",
+            "simulation_id": "d5fb0e01-a00c-45d2-b05e-090c9e55a31a",
+            "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+            "parameters": {
+              "intensity": 0.5,
+              "duration_seconds": 30
+            }
+          },
+          "result": {
+            "simulation": "memory_stress",
+            "dry_run": true,
+            "chunk_mb": 16,
+            "steps": 5,
+            "pause_seconds": 0.4
+          },
+          "timestamp": 1775927136.3025393
+        }
+      ],
+      "logs_ref": "D:\\WORK AND STUDY\\projects\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "COMPLETED",
+      "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+      "feedback": {
+        "red_reward": 0.0,
+        "blue_detected": false,
+        "detection_latency": 62.786,
+        "red_evolution": {
+          "episodes_completed": 0,
+          "exploration_rate": 50.0,
+          "top_strategies": [],
+          "win_rates": [],
+          "recent_detection_rate": 0.0,
+          "q_table_size": 0,
+          "current_best": "none"
+        },
+        "blue_evolution": {
+          "baseline_cpu": 0.0,
+          "baseline_memory": 0.0,
+          "baseline_std_cpu": 10.0,
+          "baseline_std_memory": 10.0,
+          "samples_seen": 0,
+          "total_detections": 0,
+          "total_misses": 3,
+          "detection_rate": 0.0,
+          "avg_detection_latency": 0.0,
+          "recent_latencies": [],
+          "patterns_known": 1,
+          "action_success_rates": {
+            "Suggest cleanup to free memory": 0.0
+          },
+          "best_action": "Suggest cleanup to free memory"
+        }
+      },
+      "attack_plan": null
+    }
+  },
+  {
+    "timestamp": 1775927182.052077,
+    "correlation_id": "30cf113d-d532-45ac-84fe-a2688638530b",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927181.8378885,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
+  },
+  {
+    "timestamp": 1775927662.6732092,
+    "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927662.4984236,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1775927673.2904181,
+    "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927673.0579164,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running network_burst"
+    }
+  },
+  {
+    "timestamp": 1775927673.5540078,
+    "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927673.4494188,
+      "state": "OBSERVING",
+      "note": "Observation window started"
+    }
+  },
+  {
+    "timestamp": 1775927714.3815467,
+    "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927714.38077,
+      "state": "ANALYZING",
+      "note": "Analyzing responses"
+    }
+  },
+  {
+    "timestamp": 1775927714.3847425,
+    "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927714.3840015,
+      "state": "COMPLETED",
+      "note": "Simulation completed"
+    }
+  },
+  {
+    "timestamp": 1775927714.385957,
+    "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "e55c334c-2fd5-4805-93b2-2cedb3f1bd57",
+      "simulation_type": "network_burst",
+      "parameters": {
+        "intensity": 0.5,
+        "duration_seconds": 30
+      },
+      "timeline": {
+        "start": 1775927662.4983757,
+        "anomaly_detected_at": null,
+        "decision_made_at": null,
+        "completed_at": 1775927714.381991,
+        "transitions": [
+          {
+            "timestamp": 1775927662.4984236,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1775927673.0579164,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running network_burst"
+          },
+          {
+            "timestamp": 1775927673.4494188,
+            "state": "OBSERVING",
+            "note": "Observation window started"
+          },
+          {
+            "timestamp": 1775927714.38077,
+            "state": "ANALYZING",
+            "note": "Analyzing responses"
+          },
+          {
+            "timestamp": 1775927714.3840015,
+            "state": "COMPLETED",
+            "note": "Simulation completed"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 51.883615255355835,
+        "detection_delay": 51.883615255355835
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 0,
+        "total_score": 0,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [
+        {
+          "metadata": {
+            "type": "network_burst",
+            "simulation_id": "e55c334c-2fd5-4805-93b2-2cedb3f1bd57",
+            "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+            "parameters": {
+              "intensity": 0.5,
+              "duration_seconds": 30
+            }
+          },
+          "result": {
+            "simulation": "network_burst",
+            "dry_run": true,
+            "packet_size": 1024,
+            "packet_count": 500,
+            "endpoint": "127.0.0.1:9999"
+          },
+          "timestamp": 1775927673.4490943
+        }
+      ],
+      "logs_ref": "D:\\WORK AND STUDY\\projects\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "COMPLETED",
+      "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+      "feedback": {
+        "red_reward": 0.0,
+        "blue_detected": false,
+        "detection_latency": 51.884,
+        "red_evolution": {
+          "episodes_completed": 0,
+          "exploration_rate": 50.0,
+          "top_strategies": [],
+          "win_rates": [],
+          "recent_detection_rate": 0.0,
+          "q_table_size": 0,
+          "current_best": "none"
+        },
+        "blue_evolution": {
+          "baseline_cpu": 0.0,
+          "baseline_memory": 0.0,
+          "baseline_std_cpu": 10.0,
+          "baseline_std_memory": 10.0,
+          "samples_seen": 0,
+          "total_detections": 0,
+          "total_misses": 4,
+          "detection_rate": 0.0,
+          "avg_detection_latency": 0.0,
+          "recent_latencies": [],
+          "patterns_known": 1,
+          "action_success_rates": {
+            "Suggest cleanup to free memory": 0.0
+          },
+          "best_action": "Suggest cleanup to free memory"
+        }
+      },
+      "attack_plan": null
+    }
+  },
+  {
+    "timestamp": 1775927714.3866532,
+    "correlation_id": "2a6aefa5-fb0b-4181-a082-c547effe2147",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1775927714.3862865,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
   }
 ]

@@ -55,6 +55,8 @@ revertAction: (actionId) =>
   api.post('/action/revert', { action_id: actionId }),
 getTimeline: (limit = 50) => api.get(`/system/timeline?limit=${limit}`),
 rollbackAction: (rollbackId) => api.post('/action/rollback_intercept', { rollback_id: rollbackId }),
+setMode: (mode) => api.post('/system/mode', { mode }),
+getMode: () => api.get('/system/mode'),
 };
 
 export const intelligenceApi = {
@@ -87,7 +89,7 @@ export const optimizerApi = {
 };
 
 export const simulationApi = {
-  run: (payload) => api.post('/simulate/run', payload),
+  run: (payload) => api.post('/simulate/run', payload, { timeout: 300000 }),
   getReport: (id) => api.get(`/simulation/${id}`),
   getHistory: () => api.get('/simulation/history'),
   stop: (reason) => api.post('/simulate/stop', { reason }),

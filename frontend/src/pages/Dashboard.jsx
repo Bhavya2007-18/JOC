@@ -5,7 +5,7 @@ import { Button } from '../components/Button';
 import { SystemHealthScore } from '../components/SystemHealthScore';
 import { EventStream } from '../components/EventStream';
 import { useSystemData } from '../hooks/useSystemData';
-import { systemApi } from '../api/client';
+import { systemApi, optimizerApi } from '../api/client';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
@@ -20,6 +20,8 @@ import {
   BrainCircuit,
   Settings2,
   Trash2,
+  Loader2,
+  CheckCircle2,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../utils/cn';
@@ -27,6 +29,10 @@ import { cn } from '../utils/cn';
 export function Dashboard() {
   const { stats, processes, anomalies, decisions, health, loading, error, events, forecast, addEvent } = useSystemData(3000);
   const [chartData, setChartData] = useState([]);
+  const [modeLoading, setModeLoading] = useState(false);
+  const [boostLoading, setBoostLoading] = useState(false);
+  const [flushLoading, setFlushLoading] = useState(false);
+  const [protocolStatus, setProtocolStatus] = useState(null);
 
   useEffect(() => {
     if (!stats) return;
@@ -62,9 +68,96 @@ export function Dashboard() {
     { id: 'beast', label: 'Beast', icon: Zap, color: 'text-amber-400', desc: 'Max performance' },
   ];
 
-  const handleModeChange = (modeId) => {
-    setSystemMode(modeId);
-    addEvent(`System mode changed to ${modeId.toUpperCase()}`, 'config');
+  // Clear protocol status after 5 seconds
+  useEffect(() => {
+    if (!protocolStatus) return;
+    const timer = setTimeout(() => setProtocolStatus(null), 5000);
+    return () => clearTimeout(timer);
+  }, [protocolStatus]);
+
+  const handleModeChange = async (modeId) => {
+    if (modeLoading) return;
+    setModeLoading(true);
+    setProtocolStatus(null);
+    try {
+      const res = await systemApi.setMode(modeId);
+      const data = res.data;
+      setSystemMode(modeId);
+      addEvent(
+        `Mode switched to ${modeId.toUpperCase()}${data.dry_run ? ' [DRY RUN]' : ''} — ${data.affected_processes} processes adjusted`,
+        'config'
+      );
+      setProtocolStatus({
+        type: 'success',
+        message: data.message || `Mode set to ${modeId.toUpperCase()}`,
+      });
+    } catch (err) {
+      console.error('Mode switch failed:', err);
+      addEvent(`Mode switch to ${modeId.toUpperCase()} FAILED`, 'error');
+      setProtocolStatus({
+        type: 'error',
+        message: `Failed to switch to ${modeId.toUpperCase()} mode`,
+      });
+    } finally {
+      setModeLoading(false);
+    }
+  };
+
+  const handleSystemBoost = async () => {
+    if (boostLoading) return;
+    setBoostLoading(true);
+    setProtocolStatus(null);
+    try {
+      const res = await optimizerApi.boost({ cpu_threshold: 30, max_processes: 10 });
+      const data = res.data;
+      const processCount = data.processes?.length || 0;
+      addEvent(
+        `System Boost ${data.dry_run ? '[DRY RUN] ' : ''}executed — ${processCount} processes optimized`,
+        'success'
+      );
+      setProtocolStatus({
+        type: 'success',
+        message: `${data.dry_run ? '[SIMULATED] ' : ''}${data.message}. ${processCount} processes targeted.`,
+      });
+    } catch (err) {
+      console.error('System boost failed:', err);
+      addEvent('System Boost FAILED', 'error');
+      setProtocolStatus({
+        type: 'error',
+        message: 'System Boost protocol failed. Target resisted intervention.',
+      });
+    } finally {
+      setBoostLoading(false);
+    }
+  };
+
+  const handleCacheFlush = async () => {
+    if (flushLoading) return;
+    setFlushLoading(true);
+    setProtocolStatus(null);
+    try {
+      const res = await optimizerApi.cleanup({});
+      const data = res.data;
+      const freed = data.total_bytes_freed || 0;
+      const freedMB = (freed / (1024 * 1024)).toFixed(2);
+      addEvent(
+        `Cache Flush ${data.dry_run ? '[DRY RUN] ' : ''}completed — ${freedMB} MB freed`,
+        'success'
+      );
+      setProtocolStatus({
+        type: 'success',
+        message: `${data.dry_run ? '[SIMULATED] ' : ''}${data.message}. ${freedMB} MB recovered.`,
+      });
+    } catch (err) {
+      console.error('Cache flush failed:', err);
+      addEvent('Cache Flush FAILED', 'error');
+      setProtocolStatus({
+        type: 'error',
+        message: 'Cache Flush protocol failed. Residual data resisted purge.',
+      });
+    } finally {
+      setFlushLoading(false);
+    }
   };
 
   const handleFix = async (issue) => {
@@ -105,6 +198,30 @@ export function Dashboard() {
           </div>
         </div>
       </Motion.header>
+
+      {/* Protocol Status Toast */}
+      <AnimatePresence>
+        {protocolStatus && (
+          <Motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            className={cn(
+              'flex items-center gap-4 rounded-2xl px-6 py-4 text-xs font-black uppercase tracking-[0.15em] border',
+              protocolStatus.type === 'success'
+                ? 'nm-flat bg-emerald-950/20 text-emerald-400 border-emerald-900/30'
+                : 'nm-flat bg-red-950/20 text-red-400 border-red-900/30'
+            )}
+          >
+            {protocolStatus.type === 'success' ? (
+              <CheckCircle2 className="h-5 w-5 shrink-0" />
+            ) : (
+              <AlertTriangle className="h-5 w-5 shrink-0" />
+            )}
+            <span>{protocolStatus.message}</span>
+          </Motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -275,18 +392,24 @@ export function Dashboard() {
                 <button
                   key={mode.id}
                   onClick={() => handleModeChange(mode.id)}
+                  disabled={modeLoading}
                   className={cn(
                     'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300',
                     systemMode === mode.id
                       ? 'nm-inset bg-slate-900 border border-accent-blue/30'
-                      : 'nm-flat bg-slate-900 border border-transparent hover:border-slate-700'
+                      : 'nm-flat bg-slate-900 border border-transparent hover:border-slate-700',
+                    modeLoading && 'opacity-50 cursor-wait'
                   )}
                 >
                   <div className={cn(
                     'nm-flat p-3 rounded-xl',
                     systemMode === mode.id ? 'nm-inset text-accent-blue' : 'text-slate-500'
                   )}>
-                    <mode.icon className="h-6 w-6" />
+                    {modeLoading && systemMode !== mode.id ? (
+                      <mode.icon className="h-6 w-6" />
+                    ) : (
+                      <mode.icon className="h-6 w-6" />
+                    )}
                   </div>
                   <div className="text-left">
                     <span className={cn(
@@ -297,6 +420,9 @@ export function Dashboard() {
                     </span>
                     <span className="text-[10px] text-slate-500 uppercase font-mono">{mode.desc}</span>
                   </div>
+                  {modeLoading && systemMode === mode.id && (
+                    <Loader2 className="h-4 w-4 text-accent-blue animate-spin ml-auto" />
+                  )}
                 </button>
               ))}
             </div>
@@ -304,13 +430,35 @@ export function Dashboard() {
 
           <Card title="Direct Protocols" icon={Zap}>
             <div className="grid grid-cols-2 gap-5 mt-6">
-              <Button variant="outline" className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-accent-blue/50 group">
-                <Zap className="h-6 w-6 text-amber-500 group-hover:scale-125 transition-transform duration-500" />
-                <span className="text-[10px] font-black uppercase tracking-widest">System Boost</span>
+              <Button
+                variant="outline"
+                className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-accent-blue/50 group"
+                onClick={handleSystemBoost}
+                disabled={boostLoading}
+              >
+                {boostLoading ? (
+                  <Loader2 className="h-6 w-6 text-amber-500 animate-spin" />
+                ) : (
+                  <Zap className="h-6 w-6 text-amber-500 group-hover:scale-125 transition-transform duration-500" />
+                )}
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  {boostLoading ? 'Boosting...' : 'System Boost'}
+                </span>
               </Button>
-              <Button variant="outline" className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-emerald-500/50 group">
-                <Trash2 className="h-6 w-6 text-emerald-500 group-hover:scale-125 transition-transform duration-500" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Cache Flush</span>
+              <Button
+                variant="outline"
+                className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-emerald-500/50 group"
+                onClick={handleCacheFlush}
+                disabled={flushLoading}
+              >
+                {flushLoading ? (
+                  <Loader2 className="h-6 w-6 text-emerald-500 animate-spin" />
+                ) : (
+                  <Trash2 className="h-6 w-6 text-emerald-500 group-hover:scale-125 transition-transform duration-500" />
+                )}
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  {flushLoading ? 'Flushing...' : 'Cache Flush'}
+                </span>
               </Button>
             </div>
           </Card>
