@@ -28,6 +28,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '../utils/cn';
 import { StatCardBg } from '../components/StatCardBg';
 import { ModeCardBg } from '../components/ModeCardBg';
+import { ProtocolBg } from '../components/ProtocolBg';
 
 export function Dashboard() {
   const { stats, processes, anomalies, decisions, health, loading, error, events, forecast, addEvent } = useSystemData(3000);
@@ -369,28 +370,34 @@ export function Dashboard() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="p-6 rounded-3xl nm-flat bg-slate-900 border border-slate-800 hover:nm-convex transition-all"
+                      className="p-6 rounded-3xl nm-flat bg-slate-900 border border-slate-800 hover:nm-convex transition-all relative overflow-hidden group/anomaly"
                     >
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="font-black text-white uppercase tracking-wider">{issue.title}</h4>
-                        <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest nm-inset bg-slate-900 ${(issue.confidence || 0) >= 0.8 ? 'text-emerald-500' :
-                            (issue.confidence || 0) >= 0.5 ? 'text-amber-500' : 'text-red-500'
-                          }`}>
-                          {`${Math.round((issue.confidence || 0) * 100)}%`} CONFIDENCE
-                        </span>
-                      </div>
-                      <p className="text-sm text-slate-400 font-medium leading-relaxed italic">{issue.cause}</p>
-                      <div className="mt-6 flex items-center justify-end">
-                        <Button
-                          size="sm"
-                          variant="primary"
-                          onClick={() => handleFix(issue)}
-                          disabled={!issue.best_action}
-                        >
-                          {issue.best_action
-                            ? `RUN_PROTOCOL: ${issue.best_action.target}`
-                            : "NO_ACTION_REQUIRED"}
-                        </Button>
+                      <ProtocolBg 
+                        type="anomaly" 
+                        color={(issue.confidence || 0) >= 0.8 ? 'text-emerald-500' : (issue.confidence || 0) >= 0.5 ? 'text-amber-500' : 'text-red-500'} 
+                      />
+                      <div className="relative z-10">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="font-black text-white uppercase tracking-wider">{issue.title}</h4>
+                          <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest nm-inset bg-slate-900 ${(issue.confidence || 0) >= 0.8 ? 'text-emerald-500' :
+                              (issue.confidence || 0) >= 0.5 ? 'text-amber-500' : 'text-red-500'
+                            }`}>
+                            {`${Math.round((issue.confidence || 0) * 100)}%`} CONFIDENCE
+                          </span>
+                        </div>
+                        <p className="text-sm text-slate-400 font-medium leading-relaxed italic">{issue.cause}</p>
+                        <div className="mt-6 flex items-center justify-end">
+                          <Button
+                            size="sm"
+                            variant="primary"
+                            onClick={() => handleFix(issue)}
+                            disabled={!issue.best_action}
+                          >
+                            {issue.best_action
+                              ? `RUN_PROTOCOL: ${issue.best_action.target}`
+                              : "NO_ACTION_REQUIRED"}
+                          </Button>
+                        </div>
                       </div>
                     </Motion.div>
                   ))
@@ -454,33 +461,39 @@ export function Dashboard() {
             <div className="grid grid-cols-2 gap-5 mt-6">
               <Button
                 variant="outline"
-                className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-accent-blue/50 group"
+                className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-accent-blue/50 group relative overflow-hidden"
                 onClick={handleSystemBoost}
                 disabled={boostLoading}
               >
-                {boostLoading ? (
-                  <Loader2 className="h-6 w-6 text-amber-500 animate-spin" />
-                ) : (
-                  <Zap className="h-6 w-6 text-amber-500 group-hover:scale-125 transition-transform duration-500" />
-                )}
-                <span className="text-[10px] font-black uppercase tracking-widest">
-                  {boostLoading ? 'Boosting...' : 'System Boost'}
-                </span>
+                <ProtocolBg type="boost" />
+                <div className="flex flex-col items-center gap-3 relative z-10">
+                  {boostLoading ? (
+                    <Loader2 className="h-6 w-6 text-amber-500 animate-spin" />
+                  ) : (
+                    <Zap className="h-6 w-6 text-amber-500 group-hover:scale-125 transition-transform duration-500" />
+                  )}
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    {boostLoading ? 'Boosting...' : 'System Boost'}
+                  </span>
+                </div>
               </Button>
               <Button
                 variant="outline"
-                className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-emerald-500/50 group"
+                className="flex-col h-28 gap-3 nm-flat bg-slate-900 rounded-3xl border-slate-800 hover:border-emerald-500/50 group relative overflow-hidden"
                 onClick={handleCacheFlush}
                 disabled={flushLoading}
               >
-                {flushLoading ? (
-                  <Loader2 className="h-6 w-6 text-emerald-500 animate-spin" />
-                ) : (
-                  <Trash2 className="h-6 w-6 text-emerald-500 group-hover:scale-125 transition-transform duration-500" />
-                )}
-                <span className="text-[10px] font-black uppercase tracking-widest">
-                  {flushLoading ? 'Flushing...' : 'Cache Flush'}
-                </span>
+                <ProtocolBg type="flush" />
+                <div className="flex flex-col items-center gap-3 relative z-10">
+                  {flushLoading ? (
+                    <Loader2 className="h-6 w-6 text-emerald-500 animate-spin" />
+                  ) : (
+                    <Trash2 className="h-6 w-6 text-emerald-500 group-hover:scale-125 transition-transform duration-500" />
+                  )}
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    {flushLoading ? 'Flushing...' : 'Cache Flush'}
+                  </span>
+                </div>
               </Button>
             </div>
           </Card>
@@ -490,10 +503,13 @@ export function Dashboard() {
           <Card title="Stress Engine" description="Phase 4 Module" icon={Activity}>
             <div className="mt-6 space-y-6">
               <p className="text-xs text-slate-500 font-mono italic leading-relaxed uppercase">Initiate adversarial simulation to stress test autonomous response loops.</p>
-              <Link to="/system?tab=simulation">
-                <Button className="w-full text-accent-blue nm-convex bg-slate-900 rounded-2xl gap-3">
-                  BATTLE_STATION_LAUNCH
-                  <ArrowRight className="h-4 w-4" />
+              <Link to="/system?tab=simulation" className="block">
+                <Button className="w-full text-accent-blue nm-convex bg-slate-900 rounded-2xl gap-3 relative overflow-hidden h-14 group/battle">
+                  <ProtocolBg type="battle" />
+                  <div className="flex items-center justify-center gap-3 relative z-10">
+                    BATTLE_STATION_LAUNCH
+                    <ArrowRight className="h-4 w-4 group-hover/battle:translate-x-1 transition-transform" />
+                  </div>
                 </Button>
               </Link>
             </div>
