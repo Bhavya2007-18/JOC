@@ -94,6 +94,12 @@ async def broadcast_state_task():
                     "data": monitor.latest_intelligence
                 })
                 
+            if monitor and hasattr(monitor, 'latest_autonomy_state') and monitor.latest_autonomy_state:
+                await manager.broadcast({
+                    "type": "autonomy_update",
+                    "data": monitor.latest_autonomy_state
+                })
+                
         except asyncio.CancelledError:
             break
         except Exception as e:
@@ -122,6 +128,10 @@ async def websocket_live(websocket: WebSocket):
     start_broadcast_task()
     try:
         while True:
-            await websocket.receive_text()
+            data = await websocket.receive_json()
+            if data.get("type") == "ping":
+                await websocket.send_json({"type": "pong"})
     except WebSocketDisconnect:
+        manager.disconnect(websocket)
+    except Exception:
         manager.disconnect(websocket)

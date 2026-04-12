@@ -12,6 +12,7 @@ from api.optimizer_routes import router as optimizer_router
 from api.intelligence_routes import router as intelligence_router
 from api.simulation_routes import router as simulation_router
 from api.sentinel_routes import router as sentinel_router, start_broadcast_task
+from api.autonomy_routes import router as autonomy_router
 from intelligence.config import DRY_RUN
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
@@ -70,3 +71,4 @@ app.include_router(optimizer_router)
 app.include_router(intelligence_router)
 app.include_router(simulation_router)
 app.include_router(sentinel_router)
+app.include_router(autonomy_router)
