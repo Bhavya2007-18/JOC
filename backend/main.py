@@ -1,6 +1,14 @@
+from pathlib import Path
+import sys
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+
+BACKEND_DIR = Path(__file__).resolve().parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
+
 from storage.db import init_db
 from api.analyze import router as analyze_router
 from api.fix import router as fix_router
@@ -11,6 +19,7 @@ from api.system_routes import router as system_router
 from api.optimizer_routes import router as optimizer_router
 from api.intelligence_routes import router as intelligence_router
 from api.simulation_routes import router as simulation_router
+from api.security_routes import router as security_router
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
 
@@ -56,3 +65,4 @@ app.include_router(system_router)
 app.include_router(optimizer_router)
 app.include_router(intelligence_router)
 app.include_router(simulation_router)
+app.include_router(security_router)
