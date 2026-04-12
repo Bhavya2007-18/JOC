@@ -20,6 +20,7 @@ from api.optimizer_routes import router as optimizer_router
 from api.intelligence_routes import router as intelligence_router
 from api.simulation_routes import router as simulation_router
 from api.security_routes import router as security_router
+from security.security_monitor import start_security_monitor
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
 
@@ -46,6 +47,14 @@ def startup_event():
 @app.on_event("startup")
 def start_monitor():
     monitor.start()
+
+
+@app.on_event("startup")
+def start_security_loop():
+    import threading
+
+    thread = threading.Thread(target=start_security_monitor, daemon=True)
+    thread.start()
 
 
 app.add_middleware(
