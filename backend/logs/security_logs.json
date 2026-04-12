@@ -584,5 +584,211 @@
         }
       ]
     }
+  },
+  {
+    "timestamp": "2026-04-12T20:37:27.581093+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:37:27.583094+00:00",
+    "data": {
+      "risk_score": 25,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "123_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process bad.exe flagged as suspicious.",
+          "pid": 123,
+          "process_name": "bad.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 123,
+          "process_name": "bad.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:37:27.585353+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "88_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process is not recognized.",
+          "pid": 88,
+          "process_name": "mystery.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 88,
+          "process_name": "mystery.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:39:48.306773+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "5956_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AdskIdentityManager.exe (PID 5956) is not recognized.",
+          "pid": 5956,
+          "process_name": "AdskIdentityManager.exe"
+        },
+        {
+          "id": "10356_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AdskLicensingService.exe (PID 10356) is not recognized.",
+          "pid": 10356,
+          "process_name": "AdskLicensingService.exe"
+        },
+        {
+          "id": "3912_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process MemCompression flagged as suspicious (CPU: 0.0%, RAM: 1378.1 MB).",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "id": "3912_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process MemCompression is mostly idle with low CPU but high RAM usage (1378.1 MB).",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "id": "3912_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process MemCompression detected (PID 3912).",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5956,
+          "process_name": "AdskIdentityManager.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 10356,
+          "process_name": "AdskLicensingService.exe"
+        },
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:50:36.387096+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "5620_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxPlayerBeta.exe (PID 5620) is not recognized.",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        },
+        {
+          "id": "21784_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxCrashHandler.exe (PID 21784) is not recognized.",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        }
+      ]
+    }
   }
 ]

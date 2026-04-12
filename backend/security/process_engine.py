@@ -29,6 +29,7 @@ def classify_process(proc: ProcessInfo) -> ProcessInfo:
 
     if name in KNOWN_SAFE_PROCESSES:
         proc.classification = "known_safe"
+        return proc
     elif name in FOREGROUND_APPS:
         proc.classification = "known_safe"
         proc.is_background = False

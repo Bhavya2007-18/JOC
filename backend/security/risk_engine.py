@@ -1,18 +1,12 @@
 """Risk scoring stage for detected threats."""
 
-from backend.security.sec_models import RiskLevel, ThreatItem, ThreatSeverity
+from backend.security.sec_models import RiskLevel, ThreatItem
 
 
 def calculate_risk(threats: list[ThreatItem]) -> tuple[int, RiskLevel]:
-    """Calculate risk score (0-100) and mapped risk level from threat severities."""
-    severity_points = {
-        ThreatSeverity.HIGH: 25,
-        ThreatSeverity.MEDIUM: 15,
-        ThreatSeverity.LOW: 5,
-    }
-
-    score = sum(severity_points.get(threat.severity, 0) for threat in threats)
-    score = max(0, min(100, int(score)))
+    """Calculate score from unique affected processes and map to a risk level."""
+    unique_processes = {threat.process_name for threat in threats if threat.process_name}
+    score = min(100, len(unique_processes) * 10)
 
     if score <= 25:
         level = RiskLevel.LOW

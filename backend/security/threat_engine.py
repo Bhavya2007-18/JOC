@@ -1,18 +1,29 @@
 """Rule-based threat detection from process signals."""
 
+from backend.security.sec_config import IGNORE_SYSTEM_PROCESSES
 from backend.security.sec_models import ProcessInfo, ThreatItem, ThreatSeverity
 
 
 def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
     """Convert analyzed processes into structured threat items."""
     threats: list[ThreatItem] = []
-    seen_ids: set[str] = set()
+    seen: set[tuple[str, str]] = set()
 
     for proc in processes:
+        name = (proc.name or "unknown").lower()
+        if name in IGNORE_SYSTEM_PROCESSES:
+            continue
+
+        if proc.classification == "known_safe":
+            continue
+
+        process_name = name
+
         if proc.classification == "suspicious":
             category = "suspicious_process"
             threat_id = f"{proc.pid}_{category}".lower()
-            if threat_id not in seen_ids:
+            key = (process_name, category)
+            if key not in seen:
                 threats.append(
                     ThreatItem(
                         id=threat_id,
@@ -27,12 +38,13 @@ def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
                         process_name=proc.name,
                     )
                 )
-                seen_ids.add(threat_id)
+                seen.add(key)
 
-        if proc.classification == "unknown":
+        if proc.classification == "unknown" and proc.cpu_percent > 1:
             category = "unknown_process"
             threat_id = f"{proc.pid}_{category}".lower()
-            if threat_id not in seen_ids:
+            key = (process_name, category)
+            if key not in seen:
                 threats.append(
                     ThreatItem(
                         id=threat_id,
@@ -46,12 +58,13 @@ def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
                         process_name=proc.name,
                     )
                 )
-                seen_ids.add(threat_id)
+                seen.add(key)
 
         if proc.is_idle:
             category = "idle_resource_hog"
             threat_id = f"{proc.pid}_{category}".lower()
-            if threat_id not in seen_ids:
+            key = (process_name, category)
+            if key not in seen:
                 threats.append(
                     ThreatItem(
                         id=threat_id,
@@ -66,12 +79,13 @@ def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
                         process_name=proc.name,
                     )
                 )
-                seen_ids.add(threat_id)
+                seen.add(key)
 
         if proc.is_background and proc.classification == "suspicious":
             category = "background_suspicious"
             threat_id = f"{proc.pid}_{category}".lower()
-            if threat_id not in seen_ids:
+            key = (process_name, category)
+            if key not in seen:
                 threats.append(
                     ThreatItem(
                         id=threat_id,
@@ -86,6 +100,6 @@ def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
                         process_name=proc.name,
                     )
                 )
-                seen_ids.add(threat_id)
+                seen.add(key)
 
     return threats
