@@ -10,10 +10,15 @@ dist
 .cache
 backend/venv/
 backend/__pycache__/
+**/__pycache__/
 *.pyc
 backend/.env
 backend/*.log
 backend/storage/*.db
+backend/logs/
 backend/logs/simulation_logs.json
 backend/storage/behavior_logs.json
 frontend/package-lock.json
+backend/logs/simulation_logs.json
+frontend/package-lock.json
+backend/intelligence/action_history.json

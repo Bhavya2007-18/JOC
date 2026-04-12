@@ -1,3 +1,5 @@
+import os
+
 # Global configuration for JOC
 
 # 🔥 System thresholds
@@ -10,9 +12,8 @@ SNAPSHOT_INTERVAL_SECONDS = 5
 MAX_HISTORY_LENGTH = 100
 
 # 🔥 Safety flags
-DRY_RUN = False  # Phase 2 will use this heavily
-
-# 🔥 Scoring weights (future use)
+DRY_RUN = os.getenv("JOC_DRY_RUN", "true").lower() == "true"
+# 🔥 Scoring weights 
 CPU_WEIGHT = 0.4
 MEMORY_WEIGHT = 0.4
 PROCESS_WEIGHT = 0.2

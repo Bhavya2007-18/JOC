@@ -1,5 +1,6 @@
 import sqlite3
 import json
+import time
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -25,6 +26,17 @@ def init_db():
             memory_percent REAL,
             process_count INTEGER,
             data TEXT
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS timeline_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp REAL,
+            event_type TEXT,
+            severity TEXT,
+            message TEXT,
+            metadata TEXT
         )
     """)
 
@@ -65,3 +77,41 @@ def load_recent_snapshots(limit=20):
     conn.close()
 
     return [json.loads(row["data"]) for row in rows]
+
+
+def log_timeline_event(event_type: str, severity: str, message: str, metadata: dict = None):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO timeline_events (timestamp, event_type, severity, message, metadata)
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        time.time(),
+        event_type,
+        severity,
+        message,
+        json.dumps(metadata or {})
+    ))
+    conn.commit()
+    conn.close()
+
+
+def get_timeline_events(limit=50):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT timestamp, event_type, severity, message, metadata 
+        FROM timeline_events 
+        ORDER BY timestamp DESC 
+        LIMIT ?
+    """, (limit,))
+    rows = cursor.fetchall()
+    conn.close()
+    
+    return [{
+        "timestamp": row["timestamp"],
+        "event_type": row["event_type"],
+        "severity": row["severity"],
+        "message": row["message"],
+        "metadata": json.loads(row["metadata"]) if row["metadata"] else {}
+    } for row in rows]

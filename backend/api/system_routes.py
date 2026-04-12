@@ -1,6 +1,7 @@
-from typing import List
+from typing import List, Literal
 
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 from models.system_models import (
     CpuStats,
@@ -19,9 +20,15 @@ from services.system_monitor import (
     get_network_stats,
     get_top_processes,
 )
+from services.optimizer.power_mode import apply_system_mode, get_current_mode
+from storage.db import get_timeline_events
 
 
 router = APIRouter(prefix="/system", tags=["system"])
+
+
+class SetModeRequest(BaseModel):
+    mode: Literal["chill", "smart", "beast"]
 
 
 @router.get("/stats", response_model=SystemStatsResponse)
@@ -61,3 +68,21 @@ def get_top_processes_route(limit: int = 10) -> ProcessesResponse:
     processes: List[ProcessInfoModel] = [ProcessInfoModel(**process) for process in raw_processes]
     return ProcessesResponse(top_processes=processes)
 
+@router.get("/timeline")
+def get_timeline(limit: int = 50):
+    """Return historical system timeline events."""
+    events = get_timeline_events(limit=limit)
+    return {"events": events}
+
+
+@router.post("/mode")
+def set_system_mode(payload: SetModeRequest):
+    """Switch the system operating mode (chill / smart / beast)."""
+    result = apply_system_mode(payload.mode)
+    return result
+
+
+@router.get("/mode")
+def get_system_mode():
+    """Return the current system operating mode."""
+    return {"mode": get_current_mode()}

@@ -23,6 +23,9 @@ from api.security_routes import router as security_router
 from api.security_alerts_routes import router as security_alerts_router
 from backend.api.security_monitor_routes import router as monitor_router
 from security.security_monitor import start_security_monitor
+from api.sentinel_routes import router as sentinel_router, start_broadcast_task
+from api.autonomy_routes import router as autonomy_router
+from intelligence.config import DRY_RUN
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
 
@@ -43,12 +46,23 @@ async def add_error_handling(request: Request, call_next):
 
 @app.on_event("startup")
 def startup_event():
+    print(f"SYSTEM RUNNING IN DRY MODE: {DRY_RUN}")
+    if DRY_RUN:
+        print("WARNING: ALL SYSTEM ACTIONS ARE IN DRY RUN MODE")
+        print("=" * 50)
+        print("SYSTEM RUNNING IN SAFE SIMULATION MODE")
+        print("No real system changes will occur")
+        print("=" * 50)
     init_db()
 
 
 @app.on_event("startup")
 def start_monitor():
     monitor.start()
+
+@app.on_event("startup")
+def start_sentinel_ws():
+    start_broadcast_task()
 
 
 @app.on_event("startup")
@@ -61,7 +75,7 @@ def start_security_loop():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*", "http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -79,3 +93,5 @@ app.include_router(simulation_router)
 app.include_router(security_router)
 app.include_router(security_alerts_router)
 app.include_router(monitor_router)
+app.include_router(sentinel_router)
+app.include_router(autonomy_router)

@@ -6,65 +6,27 @@ import uuid
 import psutil
 
 from intelligence.action_store import ActionStore
+from intelligence.config import DRY_RUN
+from intelligence.constants import CRITICAL_PROCESSES
 from intelligence.models import ActionRecord, ActionType
-
-from config import DRY_RUN
-
-
-CRITICAL_PROCESSES = [
-    "explorer.exe",
-    "winlogon.exe",
-    "csrss.exe",
-    "services.exe",
-    "lsass.exe",
-    "system",
-    "svchost.exe",
-]
+from services.optimizer.process_manager import kill_process_safe
 
 
 class FixEngine:
     def kill_process_by_pid(self, pid: int) -> dict:
-        try:
-            proc = psutil.Process(pid)
-            name = proc.name()
+        result = kill_process_safe(pid=pid, dry_run=DRY_RUN)
+        if not result.get("success", False):
+            return {"error": result.get("message", f"Failed to terminate process {pid}")}
 
-            if name.lower() in CRITICAL_PROCESSES:
-                return {"error": f"Refusing to kill critical process: {name}"}
-
-            if DRY_RUN:
-                result = {
-                    "action": "kill_process_pid",
-                    "pid": pid,
-                    "name": name,
-                    "simulated": True
-                }
-            else:
-                proc.kill()
-                result = {
-                    "action": "kill_process_pid",
-                    "pid": pid,
-                    "name": name,
-                    "simulated": False
-                }
-
-            record = self._build_action_record(
-                action_type=ActionType.KILL_PROCESS,
-                target=name,
-                reversible=False,
-                result=result,
-                parameters={"pid": pid},
-            )
-
-            self.store.add_action(record)
-
-            response = dict(result)
-            response["action_id"] = record.action_id
-            return response
-
-        except psutil.NoSuchProcess:
-            return {"error": f"No process found with PID {pid}"}
-        except psutil.AccessDenied:
-            return {"error": f"Access denied to process {pid}"}
+        response = {
+            "action": "kill_process_pid",
+            "pid": pid,
+            "name": result.get("name", ""),
+            "simulated": bool(result.get("dry_run", False)),
+        }
+        if result.get("action_id"):
+            response["action_id"] = result["action_id"]
+        return response
     def __init__(self) -> None:
         self.store = ActionStore()
 
@@ -93,7 +55,8 @@ class FixEngine:
         Attempts to kill all processes matching the given name.
         """
 
-        if process_name.lower() in CRITICAL_PROCESSES:
+        normalized_target = process_name.lower().replace(".exe", "")
+        if normalized_target in CRITICAL_PROCESSES:
             result = {
                 "error": f"Refusing to kill critical process: {process_name}"
             }
@@ -119,15 +82,21 @@ class FixEngine:
                 if not name:
                     continue
 
-                target = process_name.lower().replace(".exe", "")
+                target = normalized_target
                 proc_name = name.lower().replace(".exe", "")
 
-                if target in proc_name:
-                    if DRY_RUN:
+                if proc_name in CRITICAL_PROCESSES:
+                    continue
+
+                if target == proc_name:
+                    outcome = kill_process_safe(pid=proc.info["pid"], dry_run=DRY_RUN)
+                    if outcome.get("success", False):
                         killed.append(proc.info["pid"])
                     else:
-                        proc.kill()
-                        killed.append(proc.info["pid"])
+                        failed.append({
+                            "pid": proc.info.get("pid"),
+                            "error": outcome.get("message", "Failed to terminate process")
+                        })
 
             except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
                 failed.append({
@@ -135,12 +104,21 @@ class FixEngine:
                     "error": str(e)
                 })
 
-        result = {
-            "action": "kill_process",
-            "target": process_name,
-            "killed_pids": killed,
-            "failed": failed
-        }
+        if not killed:
+            result = {
+                "action": "kill_process",
+                "target": process_name,
+                "killed_pids": [],
+                "failed": failed,
+                "warning": "No matching process found"
+            }
+        else:
+            result = {
+                "action": "kill_process",
+                "target": process_name,
+                "killed_pids": killed,
+                "failed": failed
+            }
         record = self._build_action_record(
             action_type=ActionType.KILL_PROCESS,
             target=process_name,
@@ -156,7 +134,7 @@ class FixEngine:
     def execute_tweak(self, tweak_name: str) -> dict:
         from intelligence.tweaks.executor import execute_tweak
 
-        result = execute_tweak(tweak_name)
+        result = execute_tweak(tweak_name, dry_run=DRY_RUN)
         record = self._build_action_record(
             action_type=ActionType.SYSTEM_TWEAK,
             target=tweak_name,

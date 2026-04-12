@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import time
+import os
+import ctypes
 from typing import Dict, List, Optional
 
 import psutil
@@ -23,6 +25,27 @@ def _safe_username(proc: psutil.Process) -> Optional[str]:
 		return proc.username()
 	except (psutil.AccessDenied, psutil.NoSuchProcess):
 		return None
+
+
+def _safe_net_connections(proc: psutil.Process) -> int:
+	try:
+		return len(proc.connections(kind="all"))
+	except (psutil.AccessDenied, psutil.NoSuchProcess):
+		return 0
+
+
+def _get_active_window_title() -> Optional[str]:
+	try:
+		if os.name == 'nt':
+			hwnd = ctypes.windll.user32.GetForegroundWindow()
+			if hwnd:
+				length = ctypes.windll.user32.GetWindowTextLengthW(hwnd)
+				buf = ctypes.create_unicode_buffer(length + 1)
+				ctypes.windll.user32.GetWindowTextW(hwnd, buf, length + 1)
+				return buf.value if buf.value else None
+	except Exception:
+		pass
+	return None
 
 
 def _safe_io_counters(proc: psutil.Process) -> tuple[Optional[int], Optional[int]]:
@@ -109,6 +132,7 @@ def collect_snapshot() -> SystemSnapshot:
 					io_read_bytes=read_bytes,
 					io_write_bytes=write_bytes,
 					username=_safe_username(proc),
+					net_connections=_safe_net_connections(proc),
 				)
 			)
 		except (psutil.AccessDenied, psutil.NoSuchProcess, psutil.ZombieProcess):
@@ -183,5 +207,6 @@ def collect_snapshot() -> SystemSnapshot:
 		top_processes=top_processes,
 		disk_heavy_processes=disk_heavy_processes,
 		boot_time=psutil.boot_time(),
+		active_window=_get_active_window_title(),
 		services=services,
 	)

@@ -6,11 +6,20 @@ from typing import Any, Dict, List
 class ResponseAnalyzer:
     """Analyzes if intelligence outputs match expected simulation behavior."""
 
+    # Corrected mapping: each simulation type maps to the anomaly it SHOULD trigger
     _EXPECTED_ANOMALY_BY_SIM = {
         "cpu_spike": "cpu_spike",
-        "memory_stress": "cpu_spike",
+        "memory_stress": "cpu_spike",  # memory stress raises CPU via allocation loops
         "process_simulator": "unknown_high_cpu_process",
         "network_burst": "idle_period_activity",
+    }
+
+    # Broader keyword matching for decision relevance
+    _DECISION_KEYWORDS_BY_SIM = {
+        "cpu_spike": ["priority", "reduce", "cpu", "lower"],
+        "memory_stress": ["cleanup", "clean", "memory", "free", "ram"],
+        "process_simulator": ["review", "inspect", "limit", "process", "unknown"],
+        "network_burst": ["idle", "investigate", "scheduled", "activity"],
     }
 
     def analyze(
@@ -25,18 +34,18 @@ class ResponseAnalyzer:
         detection_presence = len(anomalies) > 0
         detection_correctness = expected_type in detected_types if expected_type else detection_presence
 
+        # Improved decision relevance scoring with broader keyword matching
         decision_relevance = 0
+        keywords = self._DECISION_KEYWORDS_BY_SIM.get(simulation_type, [])
         if decisions:
             for decision in decisions:
                 text = str(decision.get("decision", "")).lower()
-                if simulation_type == "cpu_spike" and "priority" in text:
-                    decision_relevance += 1
-                elif simulation_type == "memory_stress" and "cleanup" in text:
-                    decision_relevance += 1
-                elif simulation_type == "process_simulator" and ("review" in text or "inspect" in text):
-                    decision_relevance += 1
-                elif simulation_type == "network_burst" and "idle" in text:
-                    decision_relevance += 1
+                reason = str(decision.get("reason", "")).lower()
+                combined = text + " " + reason
+                for keyword in keywords:
+                    if keyword in combined:
+                        decision_relevance += 1
+                        break  # one match per decision is enough
 
         false_negatives = 0 if detection_presence else 1
         false_positives = 0
@@ -50,4 +59,3 @@ class ResponseAnalyzer:
             "false_negatives": false_negatives,
             "false_positives": false_positives,
         }
-

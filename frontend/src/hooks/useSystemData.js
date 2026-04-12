@@ -1,14 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
-import { systemApi, intelligenceApi, optimizerApi } from '../api/client';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { systemApi, intelligenceApi } from '../api/client';
 
 export function useSystemData(pollingInterval = 2000) {
   const [stats, setStats] = useState(null);
   const [processes, setProcesses] = useState([]);
   const [anomalies, setAnomalies] = useState([]);
   const [decisions, setDecisions] = useState([]);
+  const [health, setHealth] = useState(100);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [events, setEvents] = useState([]);
+  const [forecast, setForecast] = useState(null);
+  const [causalGraph, setCausalGraph] = useState(null);
+  const previousCpuByPid = useRef({});
 
   const addEvent = useCallback((message, type = 'info') => {
     const newEvent = {
@@ -22,24 +26,69 @@ export function useSystemData(pollingInterval = 2000) {
 
   const fetchData = useCallback(async () => {
     try {
-      const [statsRes, procRes, anomalyRes, decisionRes] = await Promise.all([
-        systemApi.getStats(),
-        systemApi.getProcesses(10),
-        intelligenceApi.getAnomalies(5),
-        intelligenceApi.getDecisions(5)
-      ]);
+      const res = await systemApi.analyze();
+      const data = res.data;
 
-      setStats(statsRes.data);
-      setProcesses(procRes.data.top_processes);
-      
-      // Check for new anomalies to add to event stream
-      if (anomalyRes.data.anomalies.length > anomalies.length) {
-        const newAnomalies = anomalyRes.data.anomalies.slice(0, anomalyRes.data.anomalies.length - anomalies.length);
-        newAnomalies.forEach(a => addEvent(`Anomaly Detected: ${a.description}`, 'warning'));
+      if (data.summary) {
+        setStats({
+          cpu: { usage_percent: data.summary.cpu_percent || 0 },
+          memory: { percent: data.summary.memory_percent || 0 },
+          disk: { percent: data.summary.disk_percent || 0 }
+        });
       }
-      
-      setAnomalies(anomalyRes.data.anomalies);
-      setDecisions(decisionRes.data.decisions);
+
+      setProcesses(
+        data.issues.flatMap(issue =>
+          (issue.affected_processes || []).map(p => ({
+            name: p.name,
+            pid: p.pid
+          }))
+        )
+      );
+
+      setAnomalies(data.issues);
+      setDecisions(data.issues);
+      setHealth(Number(data.system_health_score || 0));
+
+      const seen = new Set();
+      if (Array.isArray(data.changes)) {
+        data.changes.forEach(change => {
+          const key = `${change.type}-${change.name}`;
+          if (!seen.has(key)) {
+            addEvent(`${change.type}: ${change.name || ''}`, 'info');
+            seen.add(key);
+          }
+        });
+      }
+
+      try {
+        const timelineRes = await systemApi.getTimeline(10);
+        if (timelineRes.data && timelineRes.data.events) {
+            setEvents(timelineRes.data.events.map(ev => ({
+              id: ev.timestamp,
+              timestamp: new Date(ev.timestamp * 1000).toLocaleTimeString(),
+              message: ev.message,
+              type: ev.event_type || 'info'
+            })));
+        }
+      } catch (err) {
+        // Timeline fetch failed
+      }
+
+      try {
+        const forecastRes = await intelligenceApi.getForecast();
+        if (forecastRes.data && !forecastRes.data.status) {
+           setForecast(forecastRes.data);
+        }
+      } catch (err) {}
+
+      try {
+        const cgRes = await intelligenceApi.getCausalGraph();
+        if (cgRes.data) {
+           setCausalGraph(cgRes.data);
+        }
+      } catch (err) {}
+
       setLoading(false);
       setError(null);
     } catch (err) {
@@ -47,12 +96,23 @@ export function useSystemData(pollingInterval = 2000) {
       setError(err.message);
       // Don't set loading to false here to show stale data while retrying
     }
-  }, [anomalies.length, addEvent]);
+  }, [addEvent]);
 
   useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, pollingInterval);
-    return () => clearInterval(interval);
+    let isMounted = true;
+
+    const poll = async () => {
+      while (isMounted) {
+        await fetchData(); // wait for request to finish
+        await new Promise(res => setTimeout(res, pollingInterval));
+      }
+    };
+
+    poll();
+
+    return () => {
+      isMounted = false;
+    };
   }, [fetchData, pollingInterval]);
 
   return {
@@ -60,9 +120,12 @@ export function useSystemData(pollingInterval = 2000) {
     processes,
     anomalies,
     decisions,
+    health,
     loading,
     error,
     events,
+    forecast,
+    causalGraph,
     addEvent,
     refresh: fetchData
   };

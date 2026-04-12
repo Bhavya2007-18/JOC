@@ -6,38 +6,161 @@ from intelligence.engine import IntelligenceEngine
 from storage.db import save_snapshot
 from utils.logger import get_logger
 
+# Phase 2 Core Engines
+from intelligence.baseline_engine import BaselineEngine
+from intelligence.threat_engine import ThreatEngine
+from intelligence.causal_engine import CausalEngine
+from intelligence.predictive_engine import PredictiveEngine
+from intelligence.xai_engine import XAIEngine
+
+# Phase 3 Autonomy Layer
+from autonomy.orchestrator import AutonomyOrchestrator
+
+from state.system_state import get_state
+import asyncio
+
 logger = get_logger("monitor")
 
 class MonitorLoop:
+    _instance = None
+
     def __init__(self, interval: int = 5):
         self.interval = interval
         self.engine = IntelligenceEngine()
-        self.running = False
+        self._thread = None
+        self._running = False
+        self._lock = threading.Lock()
+        self._stop_event = threading.Event()
+        self._stop_event = threading.Event()
+        self.latest_snapshot = None
+        self.latest_analysis = None
+        
+        # Instantiate Intelligence Layer
+        self.baseline_engine = BaselineEngine(window_size=60)
+        self.threat_engine = ThreatEngine()
+        self.causal_engine = CausalEngine()
+        self.predictive_engine = PredictiveEngine()
+        self.xai_engine = XAIEngine()
+        
+        # Instantiate Autonomy Layer
+        self.autonomy_orchestrator = AutonomyOrchestrator()
+        
+        self.latest_intelligence = {
+            "threat": {},
+            "prediction": {},
+            "explanation": {},
+            "baseline": {}
+        }
+        self.latest_autonomy_state = {}
+        MonitorLoop._instance = self
+
+    @classmethod
+    def get_instance(cls):
+        return cls._instance
 
     def start(self):
-        if self.running:
-            return
+        with self._lock:
+            if self._running:
+                return
 
-        self.running = True
-        thread = threading.Thread(target=self.run, daemon=True)
-        thread.start()
+            self._running = True
+            self._stop_event.clear()
+            self._thread = threading.Thread(target=self._run_loop, daemon=True)
+            self._thread.start()
 
     def stop(self):
-        self.running = False
+        with self._lock:
+            self._running = False
+            self._stop_event.set()
+
+        if self._thread and self._thread.is_alive():
+            self._thread.join(timeout=self.interval + 1)
+        self._thread = None
+
+    def nudge(self):
+        """Force an immediate snapshot + analysis cycle (called by simulation engine)."""
+        try:
+            logger.info("Nudge: forced immediate snapshot")
+            snapshot = collect_snapshot()
+            save_snapshot(snapshot)
+            self.engine.analyze(snapshot)
+        except Exception as e:
+            logger.error(f"[MonitorLoop Nudge Error] {e}")
 
     def run(self):
-        while self.running:
+        self._run_loop()
+
+    def _run_loop(self):
+        while not self._stop_event.is_set():
             try:
                 logger.info("Loop running")
 
                 snapshot = collect_snapshot()
-                save_snapshot(snapshot)
-                threading.Thread(
-                    target=self.engine.analyze,
-                    args=(snapshot,),
-                    daemon=True
-                ).start()
-            except Exception as e:
-                print(f"[MonitorLoop Error] {e}")
+                self.latest_snapshot = snapshot
 
-            time.sleep(self.interval)
+                # Stage 0: Process Data Extraction
+                cpu = snapshot.cpu_percent
+                ram = snapshot.memory_percent
+                processes = [
+                    {"name": p.name, "pid": p.pid, "cpu_percent": p.cpu_percent, "memory_percent": p.memory_percent} 
+                    for p in snapshot.top_processes
+                ]
+                
+                # Execute original analysis logic for diagnostic issues
+                analysis = self.engine.analyze(snapshot)
+                self.latest_analysis = analysis
+
+                # --- Phase 2 Intelligence Pipeline ---
+                
+                # Stage 1: Baseline
+                baseline_data = self.baseline_engine.analyze(cpu, ram)
+                cpu_z = baseline_data.get("cpu_z_score")
+                ram_z = baseline_data.get("ram_z_score")
+                
+                # Stage 2: Threat
+                threat_data = self.threat_engine.compute(cpu, ram, cpu_z, ram_z)
+                
+                # Stage 3: Causal
+                self.causal_engine.ingest_snapshot(cpu, ram, processes, cpu_z, ram_z)
+                causal_data = self.causal_engine.get_root_cause()
+                
+                # Stage 4: Prediction
+                self.predictive_engine.observe(cpu, ram, snapshot.timestamp)
+                pred_data = self.predictive_engine.forecast()
+                
+                # Stage 5: XAI Narrative Generation
+                explanation = self.xai_engine.generate(
+                    cpu, ram, baseline_data, threat_data, causal_data, pred_data
+                )
+                
+                # Compile Unified Intelligence Object
+                self.latest_intelligence = {
+                    "threat": threat_data,
+                    "prediction": pred_data,
+                    "explanation": explanation,
+                    "baseline": baseline_data,
+                    "causal_graph": causal_data
+                }
+                
+                # Phase 3: Autonomy Loop
+                autonomy_result = self.autonomy_orchestrator.tick(self.latest_intelligence)
+                self.latest_autonomy_state = autonomy_result
+                
+                # Broadcast Threat Score to SystemState directly
+                try:
+                    # Async task wrapper since monitor is running loop in separate thread
+                    loop = asyncio.get_event_loop()
+                    if loop.is_running():
+                         asyncio.run_coroutine_threadsafe(
+                             get_state().update({"threat_level": threat_data["threat_score"]}),
+                             loop
+                         )
+                except RuntimeError:
+                    # No loop, ignore
+                    pass
+
+                save_snapshot(snapshot)
+            except Exception as e:
+                logger.error(f"[MonitorLoop Error] {e}")
+
+            self._stop_event.wait(self.interval)

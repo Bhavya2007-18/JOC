@@ -10,4 +10,4 @@ from .resource_controller import (
     get_optimization_suggestions,
 )
 from .cleanup import run_cleanup
-
+from .power_mode import apply_system_mode, get_current_mode

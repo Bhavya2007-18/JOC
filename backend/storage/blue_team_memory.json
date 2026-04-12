@@ -1,0 +1,77 @@
+{
+  "baseline_cpu": 0.0,
+  "baseline_memory": 0.0,
+  "baseline_std_cpu": 10.0,
+  "baseline_std_memory": 10.0,
+  "samples_seen": 0,
+  "known_patterns": {
+    "fp_empty": {
+      "attack_type": "cpu_spike",
+      "best_response": "Suggest cleanup to free memory",
+      "best_score": 0,
+      "encounter_count": 5
+    }
+  },
+  "action_success_rates": {
+    "Suggest cleanup to free memory": 0.0
+  },
+  "action_attempts": {
+    "Suggest cleanup to free memory": 2
+  },
+  "total_detections": 0,
+  "total_misses": 5,
+  "detection_latencies": [],
+  "avg_detection_latency": 0.0,
+  "history": [
+    {
+      "simulation_type": "cpu_spike",
+      "blue_score": 0,
+      "detected": false,
+      "detection_latency": 35.551,
+      "response_time": 35.551,
+      "fingerprint": "fp_empty",
+      "verdict": "failed",
+      "timestamp": 1775923994.6832716
+    },
+    {
+      "simulation_type": "cpu_spike",
+      "blue_score": 0,
+      "detected": false,
+      "detection_latency": 50.592,
+      "response_time": 50.592,
+      "fingerprint": "fp_empty",
+      "verdict": "failed",
+      "timestamp": 1775927025.0866802
+    },
+    {
+      "simulation_type": "memory_stress",
+      "blue_score": 0,
+      "detected": false,
+      "detection_latency": 62.786,
+      "response_time": 62.786,
+      "fingerprint": "fp_empty",
+      "verdict": "failed",
+      "timestamp": 1775927180.9991024
+    },
+    {
+      "simulation_type": "network_burst",
+      "blue_score": 0,
+      "detected": false,
+      "detection_latency": 51.884,
+      "response_time": 51.884,
+      "fingerprint": "fp_empty",
+      "verdict": "failed",
+      "timestamp": 1775927714.3834982
+    },
+    {
+      "simulation_type": "cpu_spike",
+      "blue_score": 0,
+      "detected": false,
+      "detection_latency": 54.037,
+      "response_time": 54.037,
+      "fingerprint": "fp_empty",
+      "verdict": "failed",
+      "timestamp": 1775938172.6895466
+    }
+  ]
+}

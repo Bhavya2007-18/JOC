@@ -1,1 +1,97 @@
 @import "tailwindcss";
+
+@theme {
+  --color-slate-950: #0a0a0c;
+  --color-slate-900: #121217;
+  --color-slate-800: #1e1e24;
+  --color-slate-700: #2a2b34;
+}
+
+:root {
+  --bg-primary: #1e1e24;
+  
+  /* Neomorphic Shadows - Cyber Tactile */
+  --shadow-nm-flat: 6px 6px 12px #121217, -6px -6px 12px #2a2b31;
+  --shadow-nm-inset: inset 4px 4px 8px #121217, inset -4px -4px 8px #2a2b31;
+  --shadow-nm-convex: linear-gradient(145deg, #202027, #1b1b20);
+  --shadow-nm-concave: linear-gradient(145deg, #1b1b20, #202027);
+  
+  /* Accent Colors */
+  --color-accent-blue: #3b82f6;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-emerald: #10b981;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Utilities for Neomorphism */
+.nm-flat {
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-nm-flat);
+}
+
+.nm-inset {
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-nm-inset);
+}
+
+.nm-convex {
+  background: var(--shadow-nm-convex);
+  box-shadow: var(--shadow-nm-flat);
+}
+
+.nm-concave {
+  background: var(--shadow-nm-concave);
+  box-shadow: var(--shadow-nm-flat);
+}
+
+/* Mode Identity Filters */
+.mode-chill {
+  filter: saturate(0.8) contrast(0.9);
+  transition: filter 1s ease-in-out;
+}
+
+.mode-smart {
+  filter: saturate(1) contrast(1);
+  transition: filter 1s ease-in-out;
+}
+
+.mode-beast {
+  filter: saturate(1.4) contrast(1.1) brightness(1.1);
+  animation: micro-flicker 0.2s infinite alternate ease-in-out;
+  transition: filter 1s ease-in-out;
+}
+
+@keyframes micro-flicker {
+  0% { opacity: 0.98; filter: saturate(1.4) contrast(1.1); }
+  100% { opacity: 1; filter: saturate(1.5) contrast(1.15) brightness(1.2); }
+}
+
+/* Glassmorphism Utilities */
+.glass-card {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card-hover:hover {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.1);
+}
+
+/* Texture Animations */
+@keyframes noise-drift {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+.animate-noise-drift {
+  animation: noise-drift 20s steps(10) infinite;
+}
