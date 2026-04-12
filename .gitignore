@@ -16,9 +16,7 @@ backend/storage/*.db
 backend/logs/
 backend/logs/simulation_logs.json
 backend/storage/behavior_logs.json
-backend/intelligence/action_history.json
 frontend/package-lock.json
-backend/intelligence/action_history.json
-backend/intelligence/action_history.json
 backend/logs/simulation_logs.json
 frontend/package-lock.json
+backend/intelligence/action_history.json
