@@ -3,10 +3,18 @@ import threading
 
 from intelligence.snapshot_provider import collect_snapshot
 from intelligence.engine import IntelligenceEngine
-from intelligence.predictive_engine import PredictiveEngine
-from intelligence.causal_graph import CausalGraphEngine
 from storage.db import save_snapshot
 from utils.logger import get_logger
+
+# Phase 2 Core Engines
+from intelligence.baseline_engine import BaselineEngine
+from intelligence.threat_engine import ThreatEngine
+from intelligence.causal_engine import CausalEngine
+from intelligence.predictive_engine import PredictiveEngine
+from intelligence.xai_engine import XAIEngine
+
+from state.system_state import get_state
+import asyncio
 
 logger = get_logger("monitor")
 
@@ -20,12 +28,23 @@ class MonitorLoop:
         self._running = False
         self._lock = threading.Lock()
         self._stop_event = threading.Event()
+        self._stop_event = threading.Event()
         self.latest_snapshot = None
         self.latest_analysis = None
-        self.predictive_engine = PredictiveEngine(window_size=60)
-        self.causal_engine = CausalGraphEngine()
-        self.latest_prediction = None
-        self.latest_causal_graph = None
+        
+        # Instantiate Intelligence Layer
+        self.baseline_engine = BaselineEngine(window_size=60)
+        self.threat_engine = ThreatEngine()
+        self.causal_engine = CausalEngine()
+        self.predictive_engine = PredictiveEngine()
+        self.xai_engine = XAIEngine()
+        
+        self.latest_intelligence = {
+            "threat": {},
+            "prediction": {},
+            "explanation": {},
+            "baseline": {}
+        }
         MonitorLoop._instance = self
 
     @classmethod
@@ -72,14 +91,62 @@ class MonitorLoop:
                 snapshot = collect_snapshot()
                 self.latest_snapshot = snapshot
 
-                self.predictive_engine.observe(snapshot)
-                self.causal_engine.observe(snapshot)
+                # Stage 0: Process Data Extraction
+                cpu = snapshot.cpu_percent
+                ram = snapshot.memory_percent
+                processes = [
+                    {"name": p.name, "pid": p.pid, "cpu_percent": p.cpu_percent, "memory_percent": p.memory_percent} 
+                    for p in snapshot.top_processes
+                ]
                 
-                self.latest_prediction = self.predictive_engine.forecast(minutes_ahead=5)
-                self.latest_causal_graph = self.causal_engine.generate_graph()
-
+                # Execute original analysis logic for diagnostic issues
                 analysis = self.engine.analyze(snapshot)
                 self.latest_analysis = analysis
+
+                # --- Phase 2 Intelligence Pipeline ---
+                
+                # Stage 1: Baseline
+                baseline_data = self.baseline_engine.analyze(cpu, ram)
+                cpu_z = baseline_data.get("cpu_z_score")
+                ram_z = baseline_data.get("ram_z_score")
+                
+                # Stage 2: Threat
+                threat_data = self.threat_engine.compute(cpu, ram, cpu_z, ram_z)
+                
+                # Stage 3: Causal
+                self.causal_engine.ingest_snapshot(cpu, ram, processes, cpu_z, ram_z)
+                causal_data = self.causal_engine.get_root_cause()
+                
+                # Stage 4: Prediction
+                self.predictive_engine.observe(cpu, ram, snapshot.timestamp)
+                pred_data = self.predictive_engine.forecast()
+                
+                # Stage 5: XAI Narrative Generation
+                explanation = self.xai_engine.generate(
+                    cpu, ram, baseline_data, threat_data, causal_data, pred_data
+                )
+                
+                # Compile Unified Intelligence Object
+                self.latest_intelligence = {
+                    "threat": threat_data,
+                    "prediction": pred_data,
+                    "explanation": explanation,
+                    "baseline": baseline_data,
+                    "causal_graph": causal_data
+                }
+                
+                # Broadcast Threat Score to SystemState directly
+                try:
+                    # Async task wrapper since monitor is running loop in separate thread
+                    loop = asyncio.get_event_loop()
+                    if loop.is_running():
+                         asyncio.run_coroutine_threadsafe(
+                             get_state().update({"threat_level": threat_data["threat_score"]}),
+                             loop
+                         )
+                except RuntimeError:
+                    # No loop, ignore
+                    pass
 
                 save_snapshot(snapshot)
             except Exception as e:

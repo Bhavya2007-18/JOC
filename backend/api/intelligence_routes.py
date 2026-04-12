@@ -153,16 +153,37 @@ def get_decisions(window_minutes: Optional[int] = Query(default=60, ge=1, le=144
 
     return DecisionsResponse(decisions=decisions)
 
-@router.get("/forecast")
-def get_forecast():
+@router.get("/threat")
+def get_threat():
     monitor = MonitorLoop.get_instance()
-    if monitor and monitor.latest_prediction:
-        return monitor.latest_prediction
-    return {"status": "loading_prediction_engine"}
+    if monitor and hasattr(monitor, 'latest_intelligence'):
+        return monitor.latest_intelligence.get("threat", {})
+    return {"status": "loading_engines"}
+
+@router.get("/prediction")
+def get_prediction():
+    monitor = MonitorLoop.get_instance()
+    if monitor and hasattr(monitor, 'latest_intelligence'):
+        return monitor.latest_intelligence.get("prediction", {})
+    return {"status": "loading_engines"}
+
+@router.get("/explanation")
+def get_explanation():
+    monitor = MonitorLoop.get_instance()
+    if monitor and hasattr(monitor, 'latest_intelligence'):
+        return monitor.latest_intelligence.get("explanation", {})
+    return {"status": "loading_engines"}
 
 @router.get("/causal-graph")
 def get_causal_graph():
     monitor = MonitorLoop.get_instance()
-    if monitor and monitor.latest_causal_graph:
-        return monitor.latest_causal_graph
+    if monitor and hasattr(monitor, 'latest_intelligence'):
+        return monitor.latest_intelligence.get("causal_graph", {})
     return {"nodes": [], "edges": [], "root_cause_node": None}
+
+@router.get("/full")
+def get_full_intelligence():
+    monitor = MonitorLoop.get_instance()
+    if monitor and hasattr(monitor, 'latest_intelligence'):
+        return monitor.latest_intelligence
+    return {"status": "loading_engines"}

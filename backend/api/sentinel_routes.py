@@ -84,6 +84,16 @@ async def broadcast_state_task():
                 "type": "state_update",
                 "data": state_dict
             })
+            
+            # Broadcast the complete intelligent threat/pred/xai payload
+            from intelligence.monitor_loop import MonitorLoop
+            monitor = MonitorLoop.get_instance()
+            if monitor and hasattr(monitor, 'latest_intelligence') and monitor.latest_intelligence:
+                await manager.broadcast({
+                    "type": "intelligence_update",
+                    "data": monitor.latest_intelligence
+                })
+                
         except asyncio.CancelledError:
             break
         except Exception as e:

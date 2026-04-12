@@ -20,6 +20,13 @@ class SimulationEngine:
         self.event_manager = get_event_manager()
 
     def _compute_threat(self, cpu: float, ram: float) -> int:
+        from intelligence.monitor_loop import MonitorLoop
+        monitor = MonitorLoop.get_instance()
+        if monitor and hasattr(monitor, 'threat_engine'):
+            # Fetch the actual multi-factor smoothed threat score
+            return monitor.threat_engine.last_score
+        
+        # Fallback if engine is unconnected
         score = (cpu * 0.6) + (ram * 0.4)
         return min(max(int(score), 0), 100)
 
