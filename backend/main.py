@@ -11,6 +11,7 @@ from api.system_routes import router as system_router
 from api.optimizer_routes import router as optimizer_router
 from api.intelligence_routes import router as intelligence_router
 from api.simulation_routes import router as simulation_router
+from api.sentinel_routes import router as sentinel_router, start_broadcast_task
 from intelligence.config import DRY_RUN
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
@@ -46,10 +47,14 @@ def startup_event():
 def start_monitor():
     monitor.start()
 
+@app.on_event("startup")
+def start_sentinel_ws():
+    start_broadcast_task()
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*", "http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -64,3 +69,4 @@ app.include_router(system_router)
 app.include_router(optimizer_router)
 app.include_router(intelligence_router)
 app.include_router(simulation_router)
+app.include_router(sentinel_router)

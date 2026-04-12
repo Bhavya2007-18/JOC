@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { connectWebSocket, disconnectWebSocket } from './lib/websocket';
 import { Layout } from './components/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { System } from './pages/System';
@@ -9,6 +10,13 @@ import { History } from './pages/History';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
+  useEffect(() => {
+    connectWebSocket();
+    return () => {
+      disconnectWebSocket();
+    };
+  }, []);
+
   return (
     <Router>
       <ErrorBoundary>
