@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 from backend.security.security_monitor import (
+    get_health,
     get_status,
     set_interval,
     start_security_monitor,
@@ -41,3 +42,8 @@ def set_security_monitor_interval(payload: IntervalPayload):
 @router.get("/security/monitor/status")
 def get_security_monitor_status():
     return get_status()
+
+
+@router.get("/security/monitor/health")
+def monitor_health():
+    return get_health()
