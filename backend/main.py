@@ -20,6 +20,8 @@ from api.optimizer_routes import router as optimizer_router
 from api.intelligence_routes import router as intelligence_router
 from api.simulation_routes import router as simulation_router
 from api.security_routes import router as security_router
+from api.security_alerts_routes import router as security_alerts_router
+from backend.api.security_monitor_routes import router as monitor_router
 from security.security_monitor import start_security_monitor
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
@@ -75,3 +77,5 @@ app.include_router(optimizer_router)
 app.include_router(intelligence_router)
 app.include_router(simulation_router)
 app.include_router(security_router)
+app.include_router(security_alerts_router)
+app.include_router(monitor_router)

@@ -1,0 +1,347 @@
+[
+  {
+    "timestamp": "2026-04-12T21:59:43.071823+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:00:34.168251+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "21784_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxCrashHandler.exe (PID 21784) is not recognized.",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:01:24.109755+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:02:14.575260+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:06:16.463770+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:07:06.944372+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:07:21.254984+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:07:55.508368+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:08:11.361120+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "5620_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxPlayerBeta.exe (PID 5620) is not recognized.",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        },
+        {
+          "id": "16816_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process GenuineService.exe (PID 16816) is not recognized.",
+          "pid": 16816,
+          "process_name": "GenuineService.exe"
+        },
+        {
+          "id": "16964_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process SynTPEnh.exe (PID 16964) is not recognized.",
+          "pid": 16964,
+          "process_name": "SynTPEnh.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16816,
+          "process_name": "GenuineService.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16964,
+          "process_name": "SynTPEnh.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:08:47.273521+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "16816_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process GenuineService.exe (PID 16816) is not recognized.",
+          "pid": 16816,
+          "process_name": "GenuineService.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16816,
+          "process_name": "GenuineService.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:09:02.487164+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "15856_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process MouseWithoutBorders.exe (PID 15856) is not recognized.",
+          "pid": 15856,
+          "process_name": "MouseWithoutBorders.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 15856,
+          "process_name": "MouseWithoutBorders.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:09:35.719707+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "16964_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process SynTPEnh.exe (PID 16964) is not recognized.",
+          "pid": 16964,
+          "process_name": "SynTPEnh.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16964,
+          "process_name": "SynTPEnh.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:09:45.107471+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "5620_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxPlayerBeta.exe (PID 5620) is not recognized.",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        },
+        {
+          "id": "21784_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxCrashHandler.exe (PID 21784) is not recognized.",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        },
+        {
+          "id": "2460_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process vgtray.exe (PID 2460) is not recognized.",
+          "pid": 2460,
+          "process_name": "vgtray.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 2460,
+          "process_name": "vgtray.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:10:25.495220+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "5620_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxPlayerBeta.exe (PID 5620) is not recognized.",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:11:16.526012+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:12:06.822248+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  }
+]
