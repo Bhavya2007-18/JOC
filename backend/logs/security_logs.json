@@ -1,0 +1,588 @@
+[
+  {
+    "timestamp": "2026-04-12T20:18:54.474791+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:18:54.475790+00:00",
+    "data": {
+      "risk_score": 25,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "123_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process bad.exe flagged as suspicious.",
+          "pid": 123,
+          "process_name": "bad.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 123,
+          "process_name": "bad.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:18:54.476791+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "88_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process is not recognized.",
+          "pid": 88,
+          "process_name": "mystery.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 88,
+          "process_name": "mystery.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:22:23.004115+00:00",
+    "data": {
+      "risk_score": 100,
+      "risk_level": "high",
+      "threats": [
+        {
+          "id": "13576_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process Postman.exe flagged as suspicious (CPU: 475.0%, RAM: 663.7 MB).",
+          "pid": 13576,
+          "process_name": "Postman.exe"
+        },
+        {
+          "id": "13576_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process Postman.exe detected (PID 13576).",
+          "pid": 13576,
+          "process_name": "Postman.exe"
+        },
+        {
+          "id": "5620_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxPlayerBeta.exe (PID 5620) is not recognized.",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        },
+        {
+          "id": "2884_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Postman.exe (PID 2884) is not recognized.",
+          "pid": 2884,
+          "process_name": "Postman.exe"
+        },
+        {
+          "id": "15176_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process cer_service.exe (PID 15176) is not recognized.",
+          "pid": 15176,
+          "process_name": "cer_service.exe"
+        },
+        {
+          "id": "23152_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process dwm.exe (PID 23152) is not recognized.",
+          "pid": 23152,
+          "process_name": "dwm.exe"
+        },
+        {
+          "id": "3912_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process MemCompression flagged as suspicious (CPU: 0.0%, RAM: 1396.1 MB).",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "id": "3912_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process MemCompression is mostly idle with low CPU but high RAM usage (1396.1 MB).",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "id": "3912_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process MemCompression detected (PID 3912).",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "id": "14768_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process firefox.exe is mostly idle with low CPU but high RAM usage (897.6 MB).",
+          "pid": 14768,
+          "process_name": "firefox.exe"
+        },
+        {
+          "id": "17116_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Code.exe is mostly idle with low CPU but high RAM usage (592.0 MB).",
+          "pid": 17116,
+          "process_name": "Code.exe"
+        },
+        {
+          "id": "13124_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Code.exe is mostly idle with low CPU but high RAM usage (464.5 MB).",
+          "pid": 13124,
+          "process_name": "Code.exe"
+        },
+        {
+          "id": "9108_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Code.exe is mostly idle with low CPU but high RAM usage (396.7 MB).",
+          "pid": 9108,
+          "process_name": "Code.exe"
+        },
+        {
+          "id": "21172_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Discord.exe (PID 21172) is not recognized.",
+          "pid": 21172,
+          "process_name": "Discord.exe"
+        },
+        {
+          "id": "21172_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Discord.exe is mostly idle with low CPU but high RAM usage (384.5 MB).",
+          "pid": 21172,
+          "process_name": "Discord.exe"
+        },
+        {
+          "id": "5840_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process MsMpEng.exe (PID 5840) is not recognized.",
+          "pid": 5840,
+          "process_name": "MsMpEng.exe"
+        },
+        {
+          "id": "5840_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process MsMpEng.exe is mostly idle with low CPU but high RAM usage (339.9 MB).",
+          "pid": 5840,
+          "process_name": "MsMpEng.exe"
+        },
+        {
+          "id": "14408_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process explorer.exe is mostly idle with low CPU but high RAM usage (334.6 MB).",
+          "pid": 14408,
+          "process_name": "explorer.exe"
+        },
+        {
+          "id": "6548_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Spotify.exe (PID 6548) is not recognized.",
+          "pid": 6548,
+          "process_name": "Spotify.exe"
+        },
+        {
+          "id": "16316_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process WhatsApp.Root.exe (PID 16316) is not recognized.",
+          "pid": 16316,
+          "process_name": "WhatsApp.Root.exe"
+        },
+        {
+          "id": "19552_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Spotify.exe (PID 19552) is not recognized.",
+          "pid": 19552,
+          "process_name": "Spotify.exe"
+        },
+        {
+          "id": "16824_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Postman.exe (PID 16824) is not recognized.",
+          "pid": 16824,
+          "process_name": "Postman.exe"
+        },
+        {
+          "id": "13032_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process StartMenuExperienceHost.exe (PID 13032) is not recognized.",
+          "pid": 13032,
+          "process_name": "StartMenuExperienceHost.exe"
+        },
+        {
+          "id": "20716_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AdskAccessCore.exe (PID 20716) is not recognized.",
+          "pid": 20716,
+          "process_name": "AdskAccessCore.exe"
+        },
+        {
+          "id": "10744_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process SearchHost.exe (PID 10744) is not recognized.",
+          "pid": 10744,
+          "process_name": "SearchHost.exe"
+        },
+        {
+          "id": "3020_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process TextInputHost.exe (PID 3020) is not recognized.",
+          "pid": 3020,
+          "process_name": "TextInputHost.exe"
+        },
+        {
+          "id": "4340_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RiotClientServices.exe (PID 4340) is not recognized.",
+          "pid": 4340,
+          "process_name": "RiotClientServices.exe"
+        },
+        {
+          "id": "10284_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Discord.exe (PID 10284) is not recognized.",
+          "pid": 10284,
+          "process_name": "Discord.exe"
+        },
+        {
+          "id": "19904_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Discord.exe (PID 19904) is not recognized.",
+          "pid": 19904,
+          "process_name": "Discord.exe"
+        },
+        {
+          "id": "21736_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process msedgewebview2.exe (PID 21736) is not recognized.",
+          "pid": 21736,
+          "process_name": "msedgewebview2.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 13576,
+          "process_name": "Postman.exe"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 13576,
+          "process_name": "Postman.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 2884,
+          "process_name": "Postman.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 15176,
+          "process_name": "cer_service.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 23152,
+          "process_name": "dwm.exe"
+        },
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 3912,
+          "process_name": "MemCompression"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 14768,
+          "process_name": "firefox.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 17116,
+          "process_name": "Code.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 13124,
+          "process_name": "Code.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 9108,
+          "process_name": "Code.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 21172,
+          "process_name": "Discord.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 21172,
+          "process_name": "Discord.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5840,
+          "process_name": "MsMpEng.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 5840,
+          "process_name": "MsMpEng.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 14408,
+          "process_name": "explorer.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 6548,
+          "process_name": "Spotify.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16316,
+          "process_name": "WhatsApp.Root.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 19552,
+          "process_name": "Spotify.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16824,
+          "process_name": "Postman.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 13032,
+          "process_name": "StartMenuExperienceHost.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20716,
+          "process_name": "AdskAccessCore.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 10744,
+          "process_name": "SearchHost.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 3020,
+          "process_name": "TextInputHost.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 4340,
+          "process_name": "RiotClientServices.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 10284,
+          "process_name": "Discord.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 19904,
+          "process_name": "Discord.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 21736,
+          "process_name": "msedgewebview2.exe"
+        }
+      ]
+    }
+  }
+]

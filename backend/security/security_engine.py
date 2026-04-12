@@ -3,6 +3,7 @@
 from .process_engine import get_processes
 from .recommendation_engine import generate_recommendations
 from .risk_engine import calculate_risk
+from .sec_logger import save_security_log
 from .threat_engine import detect_threats
 
 
@@ -13,7 +14,7 @@ def analyze_security() -> dict:
     score, level = calculate_risk(threats)
     recommendations = generate_recommendations(threats)
 
-    return {
+    result = {
         "risk_score": score,
         "risk_level": level.name.lower(),
         "threats": [
@@ -40,3 +41,6 @@ def analyze_security() -> dict:
             for recommendation in recommendations
         ],
     }
+
+    save_security_log(result)
+    return result
