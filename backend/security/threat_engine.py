@@ -11,7 +11,7 @@ def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
     for proc in processes:
         if proc.classification == "suspicious":
             category = "suspicious_process"
-            threat_id = f"{proc.pid}_{category}"
+            threat_id = f"{proc.pid}_{category}".lower()
             if threat_id not in seen_ids:
                 threats.append(
                     ThreatItem(
@@ -31,7 +31,7 @@ def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
 
         if proc.classification == "unknown":
             category = "unknown_process"
-            threat_id = f"{proc.pid}_{category}"
+            threat_id = f"{proc.pid}_{category}".lower()
             if threat_id not in seen_ids:
                 threats.append(
                     ThreatItem(
@@ -50,7 +50,7 @@ def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
 
         if proc.is_idle:
             category = "idle_resource_hog"
-            threat_id = f"{proc.pid}_{category}"
+            threat_id = f"{proc.pid}_{category}".lower()
             if threat_id not in seen_ids:
                 threats.append(
                     ThreatItem(
@@ -70,7 +70,7 @@ def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:
 
         if proc.is_background and proc.classification == "suspicious":
             category = "background_suspicious"
-            threat_id = f"{proc.pid}_{category}"
+            threat_id = f"{proc.pid}_{category}".lower()
             if threat_id not in seen_ids:
                 threats.append(
                     ThreatItem(

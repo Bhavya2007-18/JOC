@@ -1,22 +1,71 @@
-"""Recommendation generation stage."""
+"""Recommendation generation stage from detected threats."""
+
+from backend.security.sec_models import Recommendation, ThreatItem, ThreatSeverity
 
 
-def _recommendation_for(threat: dict) -> str:
-    threat_type = threat.get("type", "unknown")
+def generate_recommendations(threats: list[ThreatItem]) -> list[Recommendation]:
+    """Convert threat items into actionable recommendation objects."""
+    recommendations: list[Recommendation] = []
+    seen: set[tuple[str, int | None]] = set()
 
-    if threat_type == "high_resource_usage":
-        name = threat.get("details", {}).get("name", "unknown process")
-        return f"Review {name} for unusual CPU or RAM behavior and verify it is trusted."
+    for threat in threats:
+        key = (threat.category, threat.pid)
+        if key in seen:
+            continue
 
-    if threat_type == "unknown_network_activity":
-        pid = threat.get("details", {}).get("pid", "unknown")
-        return f"Inspect network activity for PID {pid} and confirm application legitimacy."
+        if threat.category == "suspicious_process":
+            recommendations.append(
+                Recommendation(
+                    category=threat.category,
+                    action="Terminate process",
+                    explanation="Process shows abnormal CPU/RAM usage",
+                    urgency=ThreatSeverity.HIGH,
+                    process_name=threat.process_name,
+                    pid=threat.pid,
+                )
+            )
+            seen.add(key)
+            continue
 
-    return "Investigate detected behavior and confirm whether it is expected."
+        if threat.category == "background_suspicious":
+            recommendations.append(
+                Recommendation(
+                    category=threat.category,
+                    action="Investigate background process",
+                    explanation="Suspicious activity running in background",
+                    urgency=ThreatSeverity.HIGH,
+                    process_name=threat.process_name,
+                    pid=threat.pid,
+                )
+            )
+            seen.add(key)
+            continue
 
+        if threat.category == "unknown_process":
+            recommendations.append(
+                Recommendation(
+                    category=threat.category,
+                    action="Review process manually",
+                    explanation="Process is not recognized",
+                    urgency=ThreatSeverity.MEDIUM,
+                    process_name=threat.process_name,
+                    pid=threat.pid,
+                )
+            )
+            seen.add(key)
+            continue
 
-def generate_recommendations(threats: list[dict]) -> list[str]:
-    """Return minimal human-readable recommendations."""
-    if not threats:
-        return ["No immediate threats detected. Continue routine monitoring."]
-    return [_recommendation_for(threat) for threat in threats]
+        if threat.category == "idle_resource_hog":
+            recommendations.append(
+                Recommendation(
+                    category=threat.category,
+                    action="Close unused application",
+                    explanation="Process consuming memory while idle",
+                    urgency=ThreatSeverity.MEDIUM,
+                    process_name=threat.process_name,
+                    pid=threat.pid,
+                )
+            )
+            seen.add(key)
+
+    return recommendations
