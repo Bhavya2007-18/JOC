@@ -4,8 +4,6 @@ let ws = null;
 let reconnectWait = 1000;
 const MAX_RECONNECT_WAIT = 10000;
 let isIntentionalDisconnect = false;
-let pingInterval = null;
-let lastPongTime = Date.now();
 
 export function connectWebSocket() {
   if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
@@ -18,26 +16,11 @@ export function connectWebSocket() {
   const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
   // Allow overriding host for prod
   const host = window.location.hostname === 'localhost' ? 'localhost:8000' : window.location.host;
-  ws = new WebSocket(`${protocol}://${host}/api/ws/live`);
+  ws = new WebSocket(`${protocol}://${host}/ws/live`);
 
   ws.onopen = () => {
     useSystemStore.getState().setState({ connected: true });
     reconnectWait = 1000; // reset
-    lastPongTime = Date.now();
-    
-    // Heartbeat mechanism
-    if (pingInterval) clearInterval(pingInterval);
-    pingInterval = setInterval(() => {
-      if (ws && ws.readyState === WebSocket.OPEN) {
-        // If we haven't received any message (pong or data) in 30s, assume dead
-        if (Date.now() - lastPongTime > 30000) {
-          console.warn("WebSocket dead - missing heartbeats. Closing...");
-          ws.close();
-        } else {
-          ws.send(JSON.stringify({ type: 'ping' }));
-        }
-      }
-    }, 10000);
   };
 
   ws.onmessage = (event) => {
@@ -52,18 +35,9 @@ export function connectWebSocket() {
           threatLevel: stateData.threat_level,
           simulationStatus: stateData.simulation_status,
         });
-      } else if (parsed.type === 'intelligence_update') {
-        useSystemStore.getState().setIntelligenceFeed(parsed.data);
-      } else if (parsed.type === 'autonomy_update') {
-        useSystemStore.getState().setAutonomyFeed(parsed.data);
       } else if (parsed.type === 'event') {
         useSystemStore.getState().addEvent(parsed.data);
-      } else if (parsed.type === 'pong') {
-        // Just record pong time, handled below
       }
-      
-      // Update pong time on ANY valid message from backend
-      lastPongTime = Date.now();
     } catch (err) {
       console.error('Error parsing WS message:', err);
     }
@@ -71,7 +45,6 @@ export function connectWebSocket() {
 
   ws.onclose = () => {
     useSystemStore.getState().setState({ connected: false });
-    if (pingInterval) clearInterval(pingInterval);
     ws = null;
     if (!isIntentionalDisconnect) {
       setTimeout(connectWebSocket, reconnectWait);
@@ -87,7 +60,6 @@ export function connectWebSocket() {
 
 export function disconnectWebSocket() {
   isIntentionalDisconnect = true;
-  if (pingInterval) clearInterval(pingInterval);
   if (ws) {
     ws.close();
     ws = null;

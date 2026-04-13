@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import { BattleStationAnimation } from './BattleStationAnimation';
 import { cn } from '../utils/cn';
-import { autonomyApi } from '../api/client';
 
 const SIMULATION_TYPES = [
   { id: 'cpu_spike', name: 'CPU Stress', icon: Flame, description: 'Simulate high CPU load across all cores', color: 'text-orange-500' },
@@ -43,37 +42,15 @@ export function SimulationPanel() {
   const [duration, setDuration] = useState(30);
   const [difficulty, setDifficulty] = useState('auto');
   const [showHistory, setShowHistory] = useState(false);
-  const [auditLogs, setAuditLogs] = useState([]);
-  const [showAudit, setShowAudit] = useState(false);
 
   useEffect(() => {
     fetchHistory();
   }, [fetchHistory]);
 
-  const fetchAudit = async () => {
-    try {
-      const res = await autonomyApi.getAuditHistory();
-      if (res.data?.audit) {
-        setAuditLogs(res.data.audit);
-      }
-    } catch (err) {
-      console.error('Failed to fetch audit logic:', err);
-    }
-  };
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchAudit();
-  }, [isRunning]);
-
   // Refresh history when a simulation completes
   useEffect(() => {
     if (report && (report.status === 'completed' || report.status === 'failed')) {
       fetchHistory();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchAudit();
     }
   }, [report, fetchHistory]);
 
@@ -471,68 +448,6 @@ export function SimulationPanel() {
                   ) : (
                     <p className="text-[11px] text-slate-500 italic font-mono uppercase tracking-widest text-center py-8 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">
                       No historical records. Execute a simulation to begin.
-                    </p>
-                  )}
-                </div>
-              </Motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </Card>
-
-      {/* Determinisitc Audit Log DVR */}
-      <Card
-        title="Autonomy Audit Trail"
-        description="Deterministic decision replayer"
-        icon={Shield}
-      >
-        <div className="mt-6">
-          <button
-            onClick={() => {
-              setShowAudit(!showAudit);
-              fetchAudit();
-            }}
-            className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] hover:text-white transition-colors"
-          >
-            {showAudit ? 'HIDE_AUDIT_LOG' : `SHOW_AUDIT_LOG (${auditLogs.length} Ticks)`}
-          </button>
-          
-          <AnimatePresence>
-            {showAudit && (
-              <Motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="overflow-hidden mt-6"
-              >
-                <div className="space-y-4 max-h-[500px] overflow-y-auto scrollbar-thin pr-2">
-                  {auditLogs.length > 0 ? (
-                    [...auditLogs].reverse().map((log, idx) => (
-                      <div key={idx} className="nm-flat bg-slate-900 rounded-2xl p-5 border border-slate-800 flex justify-between gap-4">
-                        <div>
-                          <div className="flex gap-4 items-center">
-                            <span className="text-[10px] nm-inset bg-slate-950 px-2 py-1 rounded text-slate-500 font-mono">
-                              {new Date(log.timestamp * 1000).toLocaleTimeString()}
-                            </span>
-                            <span className="text-xs font-black uppercase tracking-widest text-emerald-500 text-shadow-[0_0_5px_rgba(16,185,129,0.5)]">
-                              {log.decision?.action || 'NO_ACTION'}
-                            </span>
-                          </div>
-                          {log.decision?.target && (
-                            <p className="mt-2 text-xs text-slate-400 font-mono">
-                              TARGET: {log.decision.target}
-                            </p>
-                          )}
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.2em]">Sys_State</p>
-                          <p className="text-xs font-mono text-slate-400 mt-1">CPU: {log.state_snapshot?.cpu?.toFixed(0)}% | THREAT: {log.state_snapshot?.threat}</p>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-[11px] text-slate-500 italic font-mono uppercase tracking-widest text-center py-8 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">
-                      No deterministic ticks logged from the Orchestrator loop.
                     </p>
                   )}
                 </div>

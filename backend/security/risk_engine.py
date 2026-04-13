@@ -1,6 +1,6 @@
 """Risk scoring stage for detected threats."""
 
-from backend.security.sec_models import RiskLevel, ThreatItem
+from security.sec_models import RiskLevel, ThreatItem
 
 
 def calculate_risk(threats: list[ThreatItem]) -> tuple[int, RiskLevel]:

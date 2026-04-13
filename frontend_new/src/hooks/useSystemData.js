@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { systemApi } from '../api/client';
+import { systemApi, intelligenceApi } from '../api/client';
 
 export function useSystemData(pollingInterval = 2000) {
   const [stats, setStats] = useState(null);
@@ -9,13 +9,9 @@ export function useSystemData(pollingInterval = 2000) {
   const [health, setHealth] = useState(100);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [lastUpdated, setLastUpdated] = useState(null);
   const [events, setEvents] = useState([]);
-  const [prediction, setPrediction] = useState(null);
-  const [explanation, setExplanation] = useState(null);
-  const [bestAction, setBestAction] = useState(null);
-  const [confidence, setConfidence] = useState(null);
-  const [riskLevel, setRiskLevel] = useState(null);
+  const [forecast, setForecast] = useState(null);
+  const [causalGraph, setCausalGraph] = useState(null);
   const previousCpuByPid = useRef({});
 
   const addEvent = useCallback((message, type = 'info') => {
@@ -30,15 +26,8 @@ export function useSystemData(pollingInterval = 2000) {
 
   const fetchData = useCallback(async () => {
     try {
-      setLoading(true);
       const res = await systemApi.analyze();
       const data = res.data;
-
-      setPrediction(data.prediction || {});
-      setExplanation(data.explanation || {});
-      setBestAction(data.best_action || {});
-      setConfidence(data.confidence ?? null);
-      setRiskLevel(data.risk_level || "NORMAL");
 
       if (data.summary) {
         setStats({
@@ -48,14 +37,14 @@ export function useSystemData(pollingInterval = 2000) {
         });
       }
 
-      setProcesses(
-        data.issues.flatMap(issue =>
-          (issue.affected_processes || []).map(p => ({
-            name: p.name,
-            pid: p.pid
-          }))
-        )
-      );
+      try {
+        const procRes = await systemApi.getProcesses(20);
+        if (procRes.data && procRes.data.top_processes) {
+          setProcesses(procRes.data.top_processes);
+        }
+      } catch (err) {
+        console.error("Failed to fetch processes", err);
+      }
 
       setAnomalies(data.issues);
       setDecisions(data.issues);
@@ -86,8 +75,21 @@ export function useSystemData(pollingInterval = 2000) {
         // Timeline fetch failed
       }
 
+      try {
+        const forecastRes = await intelligenceApi.getForecast();
+        if (forecastRes.data && !forecastRes.data.status) {
+           setForecast(forecastRes.data);
+        }
+      } catch (err) {}
+
+      try {
+        const cgRes = await intelligenceApi.getCausalGraph();
+        if (cgRes.data) {
+           setCausalGraph(cgRes.data);
+        }
+      } catch (err) {}
+
       setLoading(false);
-      setLastUpdated(Date.now());
       setError(null);
     } catch (err) {
       console.error('Failed to fetch system data:', err);
@@ -121,13 +123,9 @@ export function useSystemData(pollingInterval = 2000) {
     health,
     loading,
     error,
-    lastUpdated,
     events,
-    prediction,
-    explanation,
-    bestAction,
-    confidence,
-    riskLevel,
+    forecast,
+    causalGraph,
     addEvent,
     refresh: fetchData
   };

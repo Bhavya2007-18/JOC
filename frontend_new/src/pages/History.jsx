@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { systemApi, intelligenceApi } from '../api/client';
+import { systemApi, intelligenceApi, autonomyApi } from '../api/client';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { useSimulation } from '../hooks/useSimulation';
@@ -27,6 +27,15 @@ export function History() {
 
   const [history, setHistory] = useState([]);
   const [behavior, setBehavior] = useState(null);
+  const [autonomyLog, setAutonomyLog] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+    autonomyApi.getAuditHistory().then((res) => {
+      if (mounted) setAutonomyLog(res.data?.audit || []);
+    }).catch(() => {});
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -88,14 +97,15 @@ export function History() {
   const tabs = [
     { id: 'actions', label: 'System Protocols', icon: Activity },
     { id: 'simulations', label: 'Engagement History', icon: Terminal },
+    { id: 'autonomy', label: 'Autonomy Audit', icon: BrainCircuit },
   ];
 
   return (
     <div className="space-y-10 pb-20">
       <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">Operation_Logs</h1>
-          <p className="mt-2 text-slate-400 font-mono text-sm tracking-widest uppercase opacity-70">Decoded Audit Trail // State_Mutation_Record</p>
+          <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">Operation Logs</h1>
+          <p className="mt-2 text-slate-400 font-mono text-sm tracking-widest uppercase opacity-70">Decoded Audit Trail // State Mutation Record</p>
         </div>
       </header>
 
@@ -117,7 +127,7 @@ export function History() {
           </div>
           {behavior.peakHours.length > 0 && (
             <div className="relative z-10 nm-inset p-6 rounded-3xl bg-slate-950/50 flex flex-col items-center">
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Peak_Hours</span>
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Peak Hours</span>
               <div className="text-2xl font-black text-white font-mono">
                 {behavior.peakHours[0].hour}:00
               </div>
@@ -160,7 +170,7 @@ export function History() {
       )}
 
       <AnimatePresence mode="wait">
-        {activeTab === 'actions' ? (
+        {activeTab === 'actions' && (
           <Motion.div
             key="actions"
             initial={{ opacity: 0, scale: 0.98 }}
@@ -172,9 +182,9 @@ export function History() {
                 <table className="w-full text-left border-collapse">
                   <thead className="bg-slate-900 border-b border-slate-800">
                     <tr>
-                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Mutation_Protocol</th>
-                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Target_ID</th>
-                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Temporal_Marker</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Mutation Protocol</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Target ID</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Temporal Marker</th>
                       <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Intervention</th>
                     </tr>
                   </thead>
@@ -225,7 +235,9 @@ export function History() {
               </div>
             </Card>
           </Motion.div>
-        ) : (
+        )}
+        
+        {activeTab === 'simulations' && (
           <Motion.div
             key="simulations"
             initial={{ opacity: 0, scale: 0.98 }}
@@ -273,6 +285,55 @@ export function History() {
                  <p className="mt-4 text-slate-500 font-mono text-sm uppercase tracking-[0.3em] max-w-md opacity-60">Run localized stress simulations to populate battle station logs.</p>
               </div>
             )}
+          </Motion.div>
+        )}
+
+        {activeTab === 'autonomy' && (
+          <Motion.div
+            key="autonomy"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
+          >
+            <Card title="Autonomy Audit Trail" icon={BrainCircuit} className="border-t-2 border-purple-500">
+              <div className="mt-8 overflow-hidden rounded-[2rem] nm-inset bg-slate-950 border border-slate-900">
+                <table className="w-full text-left border-collapse">
+                  <thead className="bg-slate-900 border-b border-slate-800">
+                    <tr>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Temporal Marker</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Event Subtype</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/50">
+                    {autonomyLog.map((logItem, idx) => (
+                      <tr key={idx} className="group hover:bg-slate-900/30 transition-all duration-300">
+                        <td className="px-8 py-5">
+                          <span className="text-[10px] font-black text-slate-400 font-mono">
+                            {logItem.timestamp ? new Date(logItem.timestamp * 1000).toLocaleString() : 'N/A'}
+                          </span>
+                        </td>
+                        <td className="px-8 py-5">
+                          <span className="text-[10px] font-black text-purple-400 nm-inset bg-purple-950/20 px-3 py-1.5 rounded-lg border border-purple-900/30 font-mono uppercase">
+                            {logItem.decision_type || logItem.event_type || 'SYS_EVENT'}
+                          </span>
+                        </td>
+                        <td className="px-8 py-5 text-xs text-slate-300">
+                          {logItem.action_taken || logItem.reasoning || JSON.stringify(logItem)}
+                        </td>
+                      </tr>
+                    ))}
+                    {autonomyLog.length === 0 && (
+                      <tr>
+                        <td colSpan="3" className="px-8 py-10 text-center text-slate-500 font-mono text-sm">
+                          No autonomy events recorded.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
           </Motion.div>
         )}
       </AnimatePresence>

@@ -21,7 +21,7 @@ from api.intelligence_routes import router as intelligence_router
 from api.simulation_routes import router as simulation_router
 from api.security_routes import router as security_router
 from api.security_alerts_routes import router as security_alerts_router
-from backend.api.security_monitor_routes import router as monitor_router
+from api.security_monitor_routes import router as monitor_router
 from security.security_monitor import start_security_monitor
 from api.sentinel_routes import router as sentinel_router, start_broadcast_task
 from api.autonomy_routes import router as autonomy_router

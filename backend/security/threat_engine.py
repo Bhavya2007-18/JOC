@@ -1,7 +1,7 @@
 """Rule-based threat detection from process signals."""
 
-from backend.security.sec_config import IGNORE_SYSTEM_PROCESSES
-from backend.security.sec_models import ProcessInfo, ThreatItem, ThreatSeverity
+from security.sec_config import IGNORE_SYSTEM_PROCESSES
+from security.sec_models import ProcessInfo, ThreatItem, ThreatSeverity
 
 
 def detect_threats(processes: list[ProcessInfo]) -> list[ThreatItem]:

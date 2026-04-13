@@ -1,0 +1,527 @@
+﻿{
+    "value":  [
+                  {
+                      "id":  "f9be09d1-3969-4a2e-b0ac-7fc4fb3842e0",
+                      "timestamp":  "2026-04-12T19:51:54.309346+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "e00cc1f6-3753-46c6-817f-1150a0720ed2"
+                                   }
+                  },
+                  {
+                      "id":  "e00cc1f6-3753-46c6-817f-1150a0720ed2",
+                      "timestamp":  "2026-04-12T19:51:54.309331+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  6.859461925227887,
+                                     "ram":  17.991582843814662
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.2485104476904255,
+                                       "tick_count":  18
+                                   }
+                  },
+                  {
+                      "id":  "fa3d06d9-d7c5-46d7-b8f9-15ef8729346c",
+                      "timestamp":  "2026-04-12T19:51:52.952901+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "2b6ba1d7-9a4b-46b6-9c66-182770623cee"
+                                   }
+                  },
+                  {
+                      "id":  "2b6ba1d7-9a4b-46b6-9c66-182770623cee",
+                      "timestamp":  "2026-04-12T19:51:52.952888+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  6.9348662380799695,
+                                     "ram":  15.94895464622232
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.2288382088430229,
+                                       "tick_count":  17
+                                   }
+                  },
+                  {
+                      "id":  "ea912a6a-dcca-4042-a9bd-fa9eb51ae9d1",
+                      "timestamp":  "2026-04-12T19:51:51.924626+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "ffb974cf-0a5a-46f5-9e6b-147a8bb26831"
+                                   }
+                  },
+                  {
+                      "id":  "ffb974cf-0a5a-46f5-9e6b-147a8bb26831",
+                      "timestamp":  "2026-04-12T19:51:51.924607+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  2.042730847134041,
+                                     "ram":  28.599828723154133
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.30642559570288175,
+                                       "tick_count":  16
+                                   }
+                  },
+                  {
+                      "id":  "2eb574df-aea8-4377-b436-a218c0c98070",
+                      "timestamp":  "2026-04-12T19:51:50.691203+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "f6db1b72-af20-4f22-afea-2c852cebc810"
+                                   }
+                  },
+                  {
+                      "id":  "f6db1b72-af20-4f22-afea-2c852cebc810",
+                      "timestamp":  "2026-04-12T19:51:50.691190+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  2.622239038639462,
+                                     "ram":  27.670208991248472
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.30292448029887936,
+                                       "tick_count":  15
+                                   }
+                  },
+                  {
+                      "id":  "0a73b23e-a9cf-41a9-b7a7-e284cc1c111c",
+                      "timestamp":  "2026-04-12T19:51:49.127456+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "6ef34339-f00d-4337-a831-15a95e9de7fc"
+                                   }
+                  },
+                  {
+                      "id":  "6ef34339-f00d-4337-a831-15a95e9de7fc",
+                      "timestamp":  "2026-04-12T19:51:49.127442+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  4.3792141864051874,
+                                     "ram":  18.09785971439195
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.22477073900797137,
+                                       "tick_count":  14
+                                   }
+                  },
+                  {
+                      "id":  "814dfc96-2b90-4769-a005-46c6d3770192",
+                      "timestamp":  "2026-04-12T19:51:47.191439+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "639fa3fb-0c8b-4ecd-a0fa-92771b65329f"
+                                   }
+                  },
+                  {
+                      "id":  "639fa3fb-0c8b-4ecd-a0fa-92771b65329f",
+                      "timestamp":  "2026-04-12T19:51:47.191426+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  3.5712526891822094,
+                                     "ram":  24.226081848738104
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.27797334537920315,
+                                       "tick_count":  13
+                                   }
+                  },
+                  {
+                      "id":  "3b6f13c9-2712-4f95-a02e-1f623e0871c8",
+                      "timestamp":  "2026-04-12T19:51:45.648037+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "30f7bc12-7b35-4cfa-a704-d9fbb16e4173"
+                                   }
+                  },
+                  {
+                      "id":  "30f7bc12-7b35-4cfa-a704-d9fbb16e4173",
+                      "timestamp":  "2026-04-12T19:51:45.648019+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  3.916199967569858,
+                                     "ram":  28.159456212721885
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.32075656180291745,
+                                       "tick_count":  12
+                                   }
+                  },
+                  {
+                      "id":  "4af23990-630e-4c54-b861-aa0d4fdbd2b8",
+                      "timestamp":  "2026-04-12T19:51:44.127031+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "c03ec3e9-8cfb-4437-bc5d-4099065ec6f8"
+                                   }
+                  },
+                  {
+                      "id":  "c03ec3e9-8cfb-4437-bc5d-4099065ec6f8",
+                      "timestamp":  "2026-04-12T19:51:44.127013+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  5.141956274736315,
+                                     "ram":  24.400183151752785
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.295421394264891,
+                                       "tick_count":  11
+                                   }
+                  },
+                  {
+                      "id":  "b6fe75be-79ab-4ab3-8829-ddd553710252",
+                      "timestamp":  "2026-04-12T19:51:43.085976+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "716e103c-dcc4-43d0-9cfa-19c3f8ce912b"
+                                   }
+                  },
+                  {
+                      "id":  "716e103c-dcc4-43d0-9cfa-19c3f8ce912b",
+                      "timestamp":  "2026-04-12T19:51:43.085961+00:00",
+                      "type":  "red_action",
+                      "action":  "memory_leak_wave",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  4.536631609521875,
+                                     "ram":  17.82182770234308
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.22358459311864956,
+                                       "tick_count":  10
+                                   }
+                  },
+                  {
+                      "id":  "5bbbf539-c7d6-4419-a927-dbbda3786f6c",
+                      "timestamp":  "2026-04-12T19:51:42.076175+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "05efad3f-1eba-4fb4-861b-a480f9f19063"
+                                   }
+                  },
+                  {
+                      "id":  "05efad3f-1eba-4fb4-861b-a480f9f19063",
+                      "timestamp":  "2026-04-12T19:51:42.076149+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  13.733555483840968,
+                                     "ram":  0.6065103729577901
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.1434006585679876,
+                                       "tick_count":  9
+                                   }
+                  },
+                  {
+                      "id":  "61dd3687-78fb-4e63-8296-a226b5a9f45d",
+                      "timestamp":  "2026-04-12T19:51:41.067297+00:00",
+                      "type":  "blue_action",
+                      "action":  "throttle_process",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  -5.0,
+                                     "ram":  -1.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "517b0a0f-b164-4e4a-aae5-b29dd9979af2"
+                                   }
+                  },
+                  {
+                      "id":  "517b0a0f-b164-4e4a-aae5-b29dd9979af2",
+                      "timestamp":  "2026-04-12T19:51:41.067283+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  6.912422853164789,
+                                     "ram":  0.5557998945380391
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.07468222747702828,
+                                       "tick_count":  8
+                                   }
+                  },
+                  {
+                      "id":  "dd9740cb-c26a-47a8-932a-0745653249c5",
+                      "timestamp":  "2026-04-12T19:51:40.059388+00:00",
+                      "type":  "blue_action",
+                      "action":  "log_only",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  0.0,
+                                     "ram":  0.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "bd79e65d-4731-48ef-92ee-da620186bc0a"
+                                   }
+                  },
+                  {
+                      "id":  "bd79e65d-4731-48ef-92ee-da620186bc0a",
+                      "timestamp":  "2026-04-12T19:51:40.059365+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  5.619776994362978,
+                                     "ram":  1.8774006582760696
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.07497177652639048,
+                                       "tick_count":  7
+                                   }
+                  },
+                  {
+                      "id":  "11898570-92bc-4b89-afd9-843540d63b55",
+                      "timestamp":  "2026-04-12T19:51:38.820330+00:00",
+                      "type":  "blue_action",
+                      "action":  "log_only",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  0.0,
+                                     "ram":  0.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "3e7373ee-dee1-47bb-a7fd-b3389dfd39bb"
+                                   }
+                  },
+                  {
+                      "id":  "3e7373ee-dee1-47bb-a7fd-b3389dfd39bb",
+                      "timestamp":  "2026-04-12T19:51:38.820313+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  14.003283462402118,
+                                     "ram":  1.8127223073140768
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.15816005769716196,
+                                       "tick_count":  6
+                                   }
+                  },
+                  {
+                      "id":  "f00ac80f-fd23-4420-a7a6-b9de7fd2908b",
+                      "timestamp":  "2026-04-12T19:51:37.200651+00:00",
+                      "type":  "blue_action",
+                      "action":  "log_only",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  0.0,
+                                     "ram":  0.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "f76165bd-566d-4bb1-85df-8baff0af8105"
+                                   }
+                  },
+                  {
+                      "id":  "f76165bd-566d-4bb1-85df-8baff0af8105",
+                      "timestamp":  "2026-04-12T19:51:37.200637+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  11.235367608502376,
+                                     "ram":  0.7598968020619683
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.11995264410564344,
+                                       "tick_count":  5
+                                   }
+                  },
+                  {
+                      "id":  "87a61c61-b003-4dc7-bfed-d00be1f43a80",
+                      "timestamp":  "2026-04-12T19:51:36.093936+00:00",
+                      "type":  "blue_action",
+                      "action":  "log_only",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  0.0,
+                                     "ram":  0.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "7779ad96-8fc9-4c3a-bc67-f67c62ac42a7"
+                                   }
+                  },
+                  {
+                      "id":  "7779ad96-8fc9-4c3a-bc67-f67c62ac42a7",
+                      "timestamp":  "2026-04-12T19:51:36.093925+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  7.951931708962264,
+                                     "ram":  1.9815973762324017
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.09933529085194666,
+                                       "tick_count":  4
+                                   }
+                  },
+                  {
+                      "id":  "9b561696-11ef-4fec-8fc0-255ce3fe8f33",
+                      "timestamp":  "2026-04-12T19:51:34.717978+00:00",
+                      "type":  "blue_action",
+                      "action":  "log_only",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  0.0,
+                                     "ram":  0.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "1cb4a8be-0e2b-466b-9310-a28a1315f766"
+                                   }
+                  },
+                  {
+                      "id":  "1cb4a8be-0e2b-466b-9310-a28a1315f766",
+                      "timestamp":  "2026-04-12T19:51:34.717966+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  9.334771996056435,
+                                     "ram":  0.3500891880674908
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.09684861184123926,
+                                       "tick_count":  3
+                                   }
+                  },
+                  {
+                      "id":  "28076d98-f305-43e9-ae02-68dfffc1df9a",
+                      "timestamp":  "2026-04-12T19:51:33.269255+00:00",
+                      "type":  "blue_action",
+                      "action":  "log_only",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  0.0,
+                                     "ram":  0.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "de475ad9-410b-4abb-a309-d6913a537957"
+                                   }
+                  },
+                  {
+                      "id":  "de475ad9-410b-4abb-a309-d6913a537957",
+                      "timestamp":  "2026-04-12T19:51:33.269240+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  9.75559475931976,
+                                     "ram":  0.9914694842016187
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.10747064243521379,
+                                       "tick_count":  2
+                                   }
+                  },
+                  {
+                      "id":  "b7e3f3a4-9ebf-4e16-ae17-97d9b07fd138",
+                      "timestamp":  "2026-04-12T19:51:31.765281+00:00",
+                      "type":  "blue_action",
+                      "action":  "log_only",
+                      "source":  "blue_agent",
+                      "impact":  {
+                                     "cpu":  0.0,
+                                     "ram":  0.0
+                                 },
+                      "metadata":  {
+                                       "responding_to":  "2170c8d4-7af6-43f1-ab15-6c0a4fe6882e"
+                                   }
+                  },
+                  {
+                      "id":  "2170c8d4-7af6-43f1-ab15-6c0a4fe6882e",
+                      "timestamp":  "2026-04-12T19:51:31.765261+00:00",
+                      "type":  "red_action",
+                      "action":  "cpu_probe",
+                      "source":  "red_agent",
+                      "impact":  {
+                                     "cpu":  6.285583699699623,
+                                     "ram":  0.9050585612649156
+                                 },
+                      "metadata":  {
+                                       "intensity":  0.07190642260964539,
+                                       "tick_count":  1
+                                   }
+                  }
+              ],
+    "Count":  36
+}

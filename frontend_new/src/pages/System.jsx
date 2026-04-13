@@ -252,8 +252,8 @@ export function System() {
     <div className="space-y-10 pb-20">
       <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">System_Command</h1>
-          <p className="mt-2 text-slate-400 font-mono text-sm tracking-widest uppercase opacity-70">Deep Integration Hub // Neural_Net_Sync</p>
+          <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">System Command</h1>
+          <p className="mt-2 text-slate-400 font-mono text-sm tracking-widest uppercase opacity-70">Deep Integration Hub // Neural Net Sync</p>
         </div>
       </header>
 
@@ -311,7 +311,7 @@ export function System() {
                   <Card title="Telemetry Snapshot" icon={ShieldAlert} className="lg:col-span-1 border-t-2 border-t-accent-blue">
                     <div className="space-y-8 py-4">
                       <div className="flex items-center justify-between border-b border-slate-800 pb-6">
-                        <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Cpu className="h-4 w-4 text-accent-blue" /> CPU_LOAD</span>
+                        <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Cpu className="h-4 w-4 text-accent-blue" /> CPU LOAD</span>
                         <div className="text-right">
                           <span className="font-black text-white font-mono text-xl block">{(report.summary?.cpu_percent ?? 0)}%</span>
                           {typeof (report.summary?.cpu_percent ?? 0) === 'number' && (
@@ -322,7 +322,7 @@ export function System() {
                         </div>
                       </div>
                       <div className="flex items-center justify-between border-b border-slate-800 pb-6">
-                        <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Database className="h-4 w-4 text-purple-400" /> MEM_ADDR</span>
+                        <span className="text-slate-400 font-mono uppercase text-xs flex items-center gap-3"><Database className="h-4 w-4 text-purple-400" /> MEM ADDR</span>
                         <div className="text-right">
                           <span className="font-black text-white font-mono text-xl block">{(report.summary?.memory_percent ?? 0)}%</span>
                           {typeof (report.summary?.memory_percent ?? 0) === 'number' && (
@@ -333,7 +333,7 @@ export function System() {
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-slate-400 font-mono uppercase text-xs">DECODED_ISSUES</span>
+                        <span className="text-slate-400 font-mono uppercase text-xs">DECODED ISSUES</span>
                         <span className={cn('font-black font-mono text-xl', report.issues?.length > 0 ? 'text-amber-500' : 'text-emerald-500')}>
                           {report.issues?.length || 0}
                         </span>
@@ -391,7 +391,7 @@ export function System() {
                           </div>
                           <div className="flex justify-end mt-8 relative z-10">
                             <Button size="sm" onClick={() => handleFix(issue)} isLoading={fixing[issue.id || issue.target]} className="nm-convex bg-slate-900 text-emerald-500 border-none hover:text-emerald-400">
-                              EXECUTE_FIX_PROTOCOL
+                              EXECUTE FIX PROTOCOL
                             </Button>
                           </div>
                         </Motion.div>
@@ -450,7 +450,7 @@ export function System() {
                 <h3 className="text-4xl font-black text-white uppercase italic tracking-tighter">Deep Scan Required</h3>
                 <p className="mt-4 text-slate-500 font-mono text-sm uppercase tracking-[0.3em] max-w-md text-center opacity-60">Initialize Neural Diagnostics to identify performance bottlenecks and security leaks.</p>
                 <Button size="lg" onClick={handleAnalyze} isLoading={loading} className="mt-12 px-16 h-16 text-xl tracking-[0.4em] nm-convex bg-slate-900 border-none text-white">
-                  RUN_SCAN
+                  RUN SCAN
                 </Button>
               </div>
             )}
@@ -469,10 +469,10 @@ export function System() {
                 <table className="w-full text-left border-collapse">
                   <thead className="bg-slate-900 border-b border-slate-800">
                     <tr>
-                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Target_Process</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Target Process</th>
                       <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">PID</th>
-                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">CPU_LOAD</th>
-                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">RAM_ALLOC</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">CPU LOAD</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">RAM ALLOC</th>
                       <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Interrupts</th>
                     </tr>
                   </thead>
@@ -490,15 +490,15 @@ export function System() {
                               </span>
                               {proc.protected ? (
                                 <span className="mt-1 inline-flex items-center rounded-lg nm-inset bg-slate-900 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-slate-500">
-                                  CORE_PROTECT
+                                  CORE PROTECT
                                 </span>
                               ) : proc.cpu_percent >= 70 ? (
                                 <span className="mt-1 inline-flex items-center rounded-lg nm-inset bg-red-950 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-red-500">
-                                  HIGH_INTERRUPT
+                                  HIGH INTERRUPT
                                 </span>
                               ) : (
                                 <span className="mt-1 inline-flex items-center rounded-lg nm-inset bg-emerald-950 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-emerald-500">
-                                  STABLE_NODE
+                                  STABLE NODE
                                 </span>
                               )}
                             </div>
@@ -567,21 +567,21 @@ export function System() {
               <div className="mt-10 rounded-[2rem] nm-flat bg-slate-900 border border-accent-blue/40 p-10 flex flex-col md:flex-row items-center justify-between gap-10">
                 <div className="flex-1">
                   <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-blue inline-block nm-inset px-4 py-1 rounded-full mb-4">
-                    Neural_Simulation_Link
+                    Neural Simulation Link
                   </p>
                   <p className="text-xl font-bold text-white tracking-tight leading-relaxed">
                     {actionPreview.preview?.message || 'Protocol outcome verified. Authorization required for state mutation.'}
                   </p>
                   <p className="mt-4 text-xs font-mono text-slate-500 uppercase">
-                    Target_Entity: <span className="text-white">{actionPreview.proc.name}</span> // PID: <span className="text-white">{actionPreview.proc.pid}</span>
+                    Target Entity: <span className="text-white">{actionPreview.proc.name}</span> // PID: <span className="text-white">{actionPreview.proc.pid}</span>
                   </p>
                 </div>
                 <div className="flex gap-4">
                   <Button size="md" variant="secondary" onClick={cancelProcessAction}>
-                    ABORT_COMMAND
+                    ABORT COMMAND
                   </Button>
                   <Button size="md" onClick={confirmProcessAction} className="bg-accent-blue text-white nm-convex border-none">
-                    CONFIRM_EXECUTION
+                    CONFIRM EXECUTION
                   </Button>
                 </div>
               </div>

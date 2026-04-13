@@ -30,7 +30,7 @@ export function Tweaks() {
   const tweaks = [
     { 
       id: 'gaming_boost', 
-      name: 'Combat_Mode', 
+      name: 'Combat Mode', 
       description: 'Purge background services (OneDrive, Search, Edge, Teams) and lock power vectors to maximum performance.', 
       icon: Gamepad2, 
       color: 'text-purple-400', 
@@ -44,7 +44,7 @@ export function Tweaks() {
     },
     { 
       id: 'battery_saver', 
-      name: 'Stealth_Mode', 
+      name: 'Stealth Mode', 
       description: 'Hibernate heavy background protocols and engage ultra-efficiency power state.', 
       icon: Battery, 
       color: 'text-emerald-400', 
@@ -58,7 +58,7 @@ export function Tweaks() {
     },
     { 
       id: 'performance_boost', 
-      name: 'Neural_Sync', 
+      name: 'Neural Sync', 
       description: 'Dynamic reprioritization of system resources based on active process telemetry.', 
       icon: Zap, 
       color: 'text-amber-400', 
@@ -72,7 +72,7 @@ export function Tweaks() {
     },
     { 
       id: 'clean_ram', 
-      name: 'Memory_Flush', 
+      name: 'Memory Flush', 
       description: 'Deep sector purge of inactive memory segments using advanced Windows Memory APIs.', 
       icon: Cpu, 
       color: 'text-accent-blue', 
@@ -103,7 +103,7 @@ export function Tweaks() {
     } catch (err) {
       setStatus({ 
         type: 'error', 
-        message: `LINK_FAILURE: Could not retrieve telemetric preview.` 
+        message: `LINK FAILURE: Could not retrieve telemetric preview.` 
       });
     } finally {
       setPreviewing(prev => ({ ...prev, [tweak.id]: false }));
@@ -117,7 +117,7 @@ export function Tweaks() {
     try {
       const response = await optimizerApi.executeTweak(tweak.id);
       const data = response.data;
-      const msg = data.result?.message || data.message || `PROTOCOL_EXECUTED: ${tweak.name} successfully deployed.`;
+      const msg = data.result?.message || data.message || `PROTOCOL EXECUTED: ${tweak.name} successfully deployed.`;
       setStatus({ type: 'success', message: msg });
     } catch (err) {
       setStatus({ 
@@ -133,8 +133,8 @@ export function Tweaks() {
   return (
     <div className="space-y-10 pb-20">
       <header>
-        <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">System_Tweaks</h1>
-        <p className="mt-2 text-slate-400 font-mono text-sm tracking-widest uppercase opacity-70">Parameter Overrides // Neural_Optimization_Matrix</p>
+        <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">System Tweaks</h1>
+        <p className="mt-2 text-slate-400 font-mono text-sm tracking-widest uppercase opacity-70">Parameter Overrides // Neural Optimization Matrix</p>
       </header>
 
       {status && (
@@ -278,7 +278,7 @@ export function Tweaks() {
                   isLoading={executing[tweak.id]}
                   className="flex-1 h-14 nm-convex bg-slate-900 border-none rounded-xl text-[10px] font-black uppercase tracking-[0.3em] font-mono text-white shadow-[0_0_20px_rgba(59,130,246,0.1)]"
                 >
-                  EXECUTE_PROTOCOL <ChevronRight className="ml-3 h-4 w-4" />
+                  EXECUTE PROTOCOL <ChevronRight className="ml-3 h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -295,7 +295,7 @@ export function Tweaks() {
             <Monitor className="h-16 w-16 text-accent-blue drop-shadow-[0_0_15px_#3b82f6]" />
           </div>
           <div>
-            <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Smart_Engine_Neural_Matrix</h3>
+            <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Smart Engine Neural Matrix</h3>
             <p className="mt-4 text-slate-400 font-mono text-sm uppercase tracking-widest max-w-2xl leading-relaxed opacity-70 italic">
               JOC Engine telemetric analysis detected localized hardware clusters. Suggestions are derived from pattern-matching against 144 nodes of successful optimization states.
             </p>

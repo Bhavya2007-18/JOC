@@ -77,10 +77,10 @@ export const optimizerApi = {
   getSuggestions: (cpuThreshold = 30, maxProcesses = 10) => 
     api.get(`/optimize/suggestions?cpu_threshold=${cpuThreshold}&max_processes=${maxProcesses}`),
   processAction: {
-    kill: (pid) => api.post('/process/kill', { pid }),
-    priority: (pid, priority) => api.post('/process/priority', { pid, priority }),
-    suspend: (pid) => api.post('/process/suspend', { pid }),
-    resume: (pid) => api.post('/process/resume', { pid }),
+    kill: (pid, dryRun = false) => api.post('/process/kill', { pid, dry_run: dryRun }),
+    priority: (pid, priority, dryRun = false) => api.post('/process/priority', { pid, priority, dry_run: dryRun }),
+    suspend: (pid, dryRun = false) => api.post('/process/suspend', { pid, dry_run: dryRun }),
+    resume: (pid, dryRun = false) => api.post('/process/resume', { pid, dry_run: dryRun }),
   },
   executeTweak: (tweakName) => api.post('/tweak/execute', { tweak_name: tweakName }),
   revertAction: (actionId) => api.post('/action/revert', { action_id: actionId }),
@@ -104,6 +104,9 @@ export const storageApi = {
 
 export const autonomyApi = {
   getAuditHistory: () => api.get('/api/autonomy/audit/history'),
+  enable: () => api.post('/api/autonomy/enable'),
+  disable: () => api.post('/api/autonomy/disable'),
 };
+
 
 export default api;
