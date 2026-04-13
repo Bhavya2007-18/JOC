@@ -2,8 +2,8 @@
 
 import unittest
 
-from backend.security.risk_engine import calculate_risk
-from backend.security.sec_models import RiskLevel, ThreatItem, ThreatSeverity
+from security.risk_engine import calculate_risk
+from security.sec_models import RiskLevel, ThreatItem, ThreatSeverity
 
 
 class TestRiskEngine(unittest.TestCase):

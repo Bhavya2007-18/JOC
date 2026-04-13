@@ -3,7 +3,7 @@ import threading
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from backend.security.security_monitor import (
+from security.security_monitor import (
     get_health,
     get_status,
     set_interval,

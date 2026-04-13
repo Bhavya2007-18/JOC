@@ -6,8 +6,8 @@ from unittest.mock import patch
 
 import psutil
 
-from backend.security.process_engine import MAX_PROCESSES, classify_process, get_processes
-from backend.security.sec_models import ProcessInfo
+from security.process_engine import MAX_PROCESSES, classify_process, get_processes
+from security.sec_models import ProcessInfo
 
 
 class _FakeProcess:
@@ -36,7 +36,7 @@ class TestProcessEngine(unittest.TestCase):
             _FakeProcess(12, "gamma.exe", "C:/gamma.exe", 10.0, 100 * 1024 * 1024),
         ]
 
-        with patch("backend.security.process_engine.psutil.process_iter", return_value=fake_items):
+        with patch("security.process_engine.psutil.process_iter", return_value=fake_items):
             results = get_processes()
 
         self.assertEqual(len(results), 3)
@@ -48,7 +48,7 @@ class TestProcessEngine(unittest.TestCase):
             _FakeProcess(21, "ok.exe", "C:/ok.exe", 5.0, 50 * 1024 * 1024),
         ]
 
-        with patch("backend.security.process_engine.psutil.process_iter", return_value=fake_items):
+        with patch("security.process_engine.psutil.process_iter", return_value=fake_items):
             results = get_processes()
 
         self.assertEqual(len(results), 1)
@@ -60,7 +60,7 @@ class TestProcessEngine(unittest.TestCase):
             for i in range(1, 80)
         ]
 
-        with patch("backend.security.process_engine.psutil.process_iter", return_value=fake_items):
+        with patch("security.process_engine.psutil.process_iter", return_value=fake_items):
             results = get_processes()
 
         self.assertEqual(len(results), MAX_PROCESSES)

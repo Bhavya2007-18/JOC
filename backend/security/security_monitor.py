@@ -5,8 +5,8 @@ import time
 import json
 from datetime import datetime, timezone
 
-from backend.security.alert_engine import check_for_alert, save_alert
-from backend.security.security_engine import analyze_security
+from security.alert_engine import check_for_alert, save_alert
+from security.security_engine import analyze_security
 
 running = False
 interval = 10

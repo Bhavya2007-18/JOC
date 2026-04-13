@@ -2,8 +2,8 @@
 
 import unittest
 
-from backend.security.sec_models import ProcessInfo, ThreatSeverity
-from backend.security.threat_engine import detect_threats
+from security.sec_models import ProcessInfo, ThreatSeverity
+from security.threat_engine import detect_threats
 
 
 class TestThreatEngine(unittest.TestCase):

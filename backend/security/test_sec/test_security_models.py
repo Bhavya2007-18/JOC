@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.security.sec_models import (
+from security.sec_models import (
     ProcessInfo,
     Recommendation,
     RiskLevel,

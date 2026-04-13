@@ -2772,5 +2772,81 @@
         "memory_percent": 3.4
       }
     ]
+  },
+  {
+    "timestamp": 1776100901.5357847,
+    "hour_of_day": 22,
+    "cpu_percent": 40.5,
+    "memory_percent": 82.6,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 54.3,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 33280,
+        "name": "brave.exe",
+        "cpu_percent": 9.1,
+        "memory_percent": 1.9
+      },
+      {
+        "pid": 5016,
+        "name": "AppHelperCap.exe",
+        "cpu_percent": 7.7,
+        "memory_percent": 0.1
+      },
+      {
+        "pid": 34888,
+        "name": "python.exe",
+        "cpu_percent": 6.4,
+        "memory_percent": 0.4
+      },
+      {
+        "pid": 32704,
+        "name": "brave.exe",
+        "cpu_percent": 4.5,
+        "memory_percent": 2.8
+      }
+    ]
+  },
+  {
+    "timestamp": 1776100904.9170985,
+    "hour_of_day": 22,
+    "cpu_percent": 35.5,
+    "memory_percent": 82.4,
+    "top_processes": [
+      {
+        "pid": 0,
+        "name": "System Idle Process",
+        "cpu_percent": 57.2,
+        "memory_percent": 0.0
+      },
+      {
+        "pid": 33280,
+        "name": "brave.exe",
+        "cpu_percent": 8.6,
+        "memory_percent": 1.9
+      },
+      {
+        "pid": 5016,
+        "name": "AppHelperCap.exe",
+        "cpu_percent": 7.5,
+        "memory_percent": 0.1
+      },
+      {
+        "pid": 34888,
+        "name": "python.exe",
+        "cpu_percent": 5.8,
+        "memory_percent": 0.4
+      },
+      {
+        "pid": 21364,
+        "name": "Discord.exe",
+        "cpu_percent": 5.0,
+        "memory_percent": 5.1
+      }
+    ]
   }
 ]

@@ -2,8 +2,8 @@
 
 import unittest
 
-from backend.security.recommendation_engine import generate_recommendations
-from backend.security.sec_models import Recommendation, ThreatItem, ThreatSeverity
+from security.recommendation_engine import generate_recommendations
+from security.sec_models import Recommendation, ThreatItem, ThreatSeverity
 
 
 class TestRecommendationEngine(unittest.TestCase):

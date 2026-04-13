@@ -1,6 +1,6 @@
 """Recommendation generation stage from detected threats."""
 
-from backend.security.sec_models import Recommendation, ThreatItem, ThreatSeverity
+from security.sec_models import Recommendation, ThreatItem, ThreatSeverity
 
 
 def generate_recommendations(threats: list[ThreatItem]) -> list[Recommendation]:
