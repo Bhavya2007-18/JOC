@@ -13,6 +13,9 @@ from intelligence.causal_engine import CausalEngine
 from intelligence.predictive_engine import PredictiveEngine
 from intelligence.xai_engine import XAIEngine
 
+# Phase 3 Autonomy Layer
+from autonomy.orchestrator import AutonomyOrchestrator
+
 from state.system_state import get_state
 import asyncio
 
@@ -39,12 +42,16 @@ class MonitorLoop:
         self.predictive_engine = PredictiveEngine()
         self.xai_engine = XAIEngine()
         
+        # Instantiate Autonomy Layer
+        self.autonomy_orchestrator = AutonomyOrchestrator()
+        
         self.latest_intelligence = {
             "threat": {},
             "prediction": {},
             "explanation": {},
             "baseline": {}
         }
+        self.latest_autonomy_state = {}
         MonitorLoop._instance = self
 
     @classmethod
@@ -134,6 +141,10 @@ class MonitorLoop:
                     "baseline": baseline_data,
                     "causal_graph": causal_data
                 }
+                
+                # Phase 3: Autonomy Loop
+                autonomy_result = self.autonomy_orchestrator.tick(self.latest_intelligence)
+                self.latest_autonomy_state = autonomy_result
                 
                 # Broadcast Threat Score to SystemState directly
                 try:

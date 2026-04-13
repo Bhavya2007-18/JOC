@@ -1,6 +1,14 @@
+from pathlib import Path
+import sys
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+
+BACKEND_DIR = Path(__file__).resolve().parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
+
 from storage.db import init_db
 from api.analyze import router as analyze_router
 from api.fix import router as fix_router
@@ -11,7 +19,12 @@ from api.system_routes import router as system_router
 from api.optimizer_routes import router as optimizer_router
 from api.intelligence_routes import router as intelligence_router
 from api.simulation_routes import router as simulation_router
+from api.security_routes import router as security_router
+from api.security_alerts_routes import router as security_alerts_router
+from backend.api.security_monitor_routes import router as monitor_router
+from security.security_monitor import start_security_monitor
 from api.sentinel_routes import router as sentinel_router, start_broadcast_task
+from api.autonomy_routes import router as autonomy_router
 from intelligence.config import DRY_RUN
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
@@ -52,6 +65,14 @@ def start_sentinel_ws():
     start_broadcast_task()
 
 
+@app.on_event("startup")
+def start_security_loop():
+    import threading
+
+    thread = threading.Thread(target=start_security_monitor, daemon=True)
+    thread.start()
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*", "http://localhost:5173", "http://127.0.0.1:5173"],
@@ -69,4 +90,8 @@ app.include_router(system_router)
 app.include_router(optimizer_router)
 app.include_router(intelligence_router)
 app.include_router(simulation_router)
+app.include_router(security_router)
+app.include_router(security_alerts_router)
+app.include_router(monitor_router)
 app.include_router(sentinel_router)
+app.include_router(autonomy_router)

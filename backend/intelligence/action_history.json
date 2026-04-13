@@ -724,5 +724,75 @@
       "mode": "chill",
       "previous_mode": "smart"
     }
+  },
+  {
+    "action_id": "mode-beast-1775993261866",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1775993261.8669899,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "beast",
+      "previous_mode": "smart",
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "DRY RUN: Would set power plan to High Performance"
+      },
+      "affected_processes": 4,
+      "processes": [
+        {
+          "pid": 11732,
+          "name": "brave.exe",
+          "cpu_percent": 5.1,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 29608,
+          "name": "brave.exe",
+          "cpu_percent": 3.3,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 25092,
+          "name": "python.exe",
+          "cpu_percent": 2.4,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 13764,
+          "name": "fdm.exe",
+          "cpu_percent": 1.5,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        }
+      ],
+      "metrics": {
+        "cpu_before": 25.7,
+        "cpu_after": 22.0,
+        "memory_before": 81.1,
+        "memory_after": 81.2
+      },
+      "message": "[DRY RUN] Mode switched: SMART -> BEAST. Power plan: High Performance. 4 processes adjusted.",
+      "timestamp": 1775993261.8669856
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "smart"
+    }
   }
 ]

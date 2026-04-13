@@ -4,6 +4,8 @@ dist
 *.log
 .env
 .env.local
+.venv/
+.venv-*/
 .vite
 .cache
 backend/venv/

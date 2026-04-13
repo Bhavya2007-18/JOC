@@ -113,6 +113,8 @@ class SimulationEngine:
         if self._task and not self._task.done():
             self._task.cancel()
         self._task = None
+        if hasattr(self.red_agent, 'reset'):
+            self.red_agent.reset()
 
     async def set_speed(self, interval: float) -> None:
         self._interval = max(0.1, interval)

@@ -7,6 +7,9 @@ import { EventStream } from '../components/EventStream';
 import { IntelligenceStrip } from '../components/IntelligenceStrip';
 import { DecisionTracePanel } from '../components/DecisionTracePanel';
 import { useSystemData } from '../hooks/useSystemData';
+import { GlassPanel } from '../components/GlassPanel';
+import { AutonomyEventStream } from '../components/AutonomyEventStream';
+import useSystemStore from '../store/useSystemStore';
 import { systemApi, optimizerApi } from '../api/client';
 import { useSystemMode } from '../context/SystemModeContext';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
@@ -33,22 +36,24 @@ import { ModeCardBg } from '../components/ModeCardBg';
 import { ProtocolBg } from '../components/ProtocolBg';
 
 export function Dashboard() {
-  const {
-    stats,
-    processes,
-    anomalies,
-    decisions,
-    health,
-    loading,
-    error,
-    lastUpdated,
-    events,
-    prediction,
-    bestAction,
-    confidence,
-    riskLevel,
-    addEvent
-  } = useSystemData(3000);
+const {
+  stats,
+  processes,
+  anomalies,
+  decisions,
+  health,
+  loading,
+  error,
+  lastUpdated,
+  events,
+  prediction,
+  bestAction,
+  confidence,
+  riskLevel,
+  addEvent
+} = useSystemData(3000);
+
+const { intelligenceFeed, autonomyFeed } = useSystemStore();
   const { systemMode, setSystemMode } = useSystemMode();
   const [chartData, setChartData] = useState([]);
   const [modeLoading, setModeLoading] = useState(false);
@@ -252,9 +257,6 @@ export function Dashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {quickStats.map((stat, idx) => {
-          const baseline = { cpu: 45, memory: 60 }; // Default simulated baselines
-          const cpuUsage = stats?.cpu?.usage_percent || 0;
-          const memUsage = stats?.memory?.percent || 0;
           return (
           <Motion.div
             key={stat.name}
@@ -325,21 +327,43 @@ export function Dashboard() {
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         {/* Real-time Graph */}
         <div className="lg:col-span-2 space-y-10">
-          <Card
-            title="Telemetric Analysis"
-            description="Live system resource overhead"
-            icon={Activity}
+          <GlassPanel
+            title="Telemetric Analysis & Threat Intelligence"
+            accentColor="blue"
           >
-            <div className="h-[350px] w-full mt-6 nm-inset rounded-2xl bg-slate-900/50 p-4 border border-slate-800/50">
+            <div className="flex items-center justify-between mt-2 mb-4 px-2">
+              <div className="flex items-center space-x-6">
+                <div>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Live Threat Score</p>
+                  <div className="flex items-end space-x-2">
+                    <span className="text-4xl font-black text-white font-mono leading-none">
+                      {intelligenceFeed?.threat?.threat_score || 0}
+                    </span>
+                    <span className="text-xs text-accent-blue/80 font-mono italic mb-1">/ 100</span>
+                  </div>
+                </div>
+                {/* Visual Threat Severity Bar */}
+                <div className="h-2 w-32 bg-slate-800 rounded-full overflow-hidden mt-3 shadow-inner">
+                  <div 
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{ 
+                      width: `${intelligenceFeed?.threat?.threat_score || 0}%`,
+                      backgroundColor: (intelligenceFeed?.threat?.threat_score || 0) > 75 ? '#ef4444' : (intelligenceFeed?.threat?.threat_score || 0) > 40 ? '#f59e0b' : '#3b82f6'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="h-[300px] w-full rounded-2xl bg-slate-900/10 border border-slate-800/20 backdrop-blur-md">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="colorCpu" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.6} />
                       <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="colorMem" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.3} />
+                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.6} />
                       <stop offset="95%" stopColor="#a855f7" stopOpacity={0} />
                     </linearGradient>
                   </defs>
@@ -348,10 +372,10 @@ export function Dashboard() {
                   <YAxis domain={[0, 100]} stroke="#64748b" fontSize={10} fontStyle="italic" />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0f172a',
+                      backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                      backdropFilter: 'blur(10px)',
                       borderRadius: '16px',
-                      border: '1px solid #334155',
-                      boxShadow: '10px 10px 20px #020617, -10px -10px 20px #1e293b',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
                       color: '#f1f5f9'
                     }}
                   />
@@ -378,15 +402,41 @@ export function Dashboard() {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-          </Card>
+          </GlassPanel>
 
-          {/* Intelligence Layer */}
-          <Card
-            title="Anomaly Detection"
-            description="Active autonomous decisions"
-            icon={BrainCircuit}
+          {/* Intelligence & XAI Layer */}
+          <GlassPanel
+            title="XAI Narrative & Anomaly Detection"
+            accentColor="emerald"
+            hoverEffect={true}
           >
-            <div className="space-y-6 mt-6">
+            <div className="space-y-6 mt-2">
+              {/* XAI Stream Module */}
+              {intelligenceFeed?.explanation && (
+                <div className="mb-8 p-4 rounded-2xl bg-black/40 border border-emerald-900/40 relative overflow-hidden backdrop-blur-sm shadow-inner group">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500/50 group-hover:bg-emerald-400 transition-colors" />
+                  <h4 className="text-[10px] font-black text-emerald-500/80 uppercase tracking-[0.2em] mb-2 flex items-center">
+                    <BrainCircuit className="w-3 h-3 mr-2" /> XAI Narrative Stream
+                  </h4>
+                  <p className="text-sm text-emerald-50 leading-relaxed font-mono opacity-90">
+                    {typeof intelligenceFeed.explanation === 'string' ? intelligenceFeed.explanation : JSON.stringify(intelligenceFeed.explanation)}
+                  </p>
+                  
+                  {/* Predictive Vector Component */}
+                  {intelligenceFeed.prediction?.threshold_breach_predicted && (
+                    <div className="mt-4 p-3 rounded-xl bg-amber-950/30 border border-amber-900/50 flex">
+                      <AlertTriangle className="w-4 h-4 text-amber-500 mr-3 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-xs text-amber-500 font-bold uppercase tracking-wider mb-1">Pre-emptive Alert</p>
+                        <p className="text-xs text-amber-200/70 font-mono">
+                          Statistical trend mapping predicts imminent capacity exhaustion within prediction horizon.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <AnimatePresence mode="popLayout">
                 {decisions.length > 0 ? (
                   decisions.map((issue, idx) => (
@@ -395,7 +445,7 @@ export function Dashboard() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="p-6 rounded-3xl nm-flat bg-slate-900 border border-slate-800 hover:nm-convex transition-all relative overflow-hidden group/anomaly"
+                      className="p-6 rounded-3xl nm-flat bg-slate-900/60 border border-slate-700/50 hover:border-emerald-500/30 transition-all relative overflow-hidden group/anomaly backdrop-blur-md"
                     >
                       <ProtocolBg 
                         type="anomaly" 
@@ -403,14 +453,14 @@ export function Dashboard() {
                       />
                       <div className="relative z-10">
                         <div className="flex items-center justify-between mb-4">
-                          <h4 className="font-black text-white uppercase tracking-wider">{issue.title}</h4>
-                          <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest nm-inset bg-slate-900 ${(issue.confidence || 0) >= 0.8 ? 'text-emerald-500' :
-                              (issue.confidence || 0) >= 0.5 ? 'text-amber-500' : 'text-red-500'
+                          <h4 className="font-black text-white uppercase tracking-wider">{typeof issue.title === 'string' ? issue.title : issue.decision || 'Anomaly Detected'}</h4>
+                          <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest bg-slate-950/80 border ${(issue.confidence || 0) >= 0.8 ? 'text-emerald-400 border-emerald-900/50' :
+                              (issue.confidence || 0) >= 0.5 ? 'text-amber-400 border-amber-900/50' : 'text-red-400 border-red-900/50'
                             }`}>
                             {`${Math.round((issue.confidence || 0) * 100)}%`} CONFIDENCE
                           </span>
                         </div>
-                        <p className="text-sm text-slate-400 font-medium leading-relaxed italic">{issue.cause}</p>
+                        <p className="text-sm text-slate-300 font-medium leading-relaxed italic border-l-2 border-slate-700 pl-4 py-1">{typeof issue.cause === 'string' ? issue.cause : issue.reason || 'Complex behavioral deviation'}</p>
                         <div className="mt-6 flex items-center justify-end">
                           <Button
                             size="sm"
@@ -427,19 +477,43 @@ export function Dashboard() {
                     </Motion.div>
                   ))
                 ) : (
-                  <div className="py-12 nm-inset rounded-2xl bg-slate-900/30 text-center text-slate-500 font-mono text-xs uppercase tracking-widest">
-                    Telemetry Clean: No active anomalies detected
+                  <div className="py-12 rounded-2xl bg-slate-900/20 border border-white/5 text-center text-slate-500 font-mono text-xs uppercase tracking-widest backdrop-blur-sm">
+                    Telemetry Clean: No active analytical vectors detected
                   </div>
                 )}
               </AnimatePresence>
             </div>
-          </Card>
+            
+            {/* Timeline Module */}
+            <div className="mt-8 border-t border-slate-800/60 pt-6">
+              <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center">
+                <Clock className="w-3 h-3 mr-2 text-emerald-500/50" /> Analytical Timeline
+              </h4>
+              <div className="relative border-l border-slate-700/50 ml-2 space-y-5 pb-2">
+                <div className="relative pl-6">
+                  <div className="absolute w-2 h-2 rounded-full bg-emerald-500 left-[-4.5px] top-1.5 shadow-[0_0_8px_#10b981]" />
+                  <p className="text-[10px] text-emerald-400 font-mono mb-0.5">T-0s [LIVE]</p>
+                  <p className="text-xs text-slate-300">Continuous telemetry monitoring active.</p>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute w-2 h-2 rounded-full bg-amber-500 left-[-4.5px] top-1.5 border border-slate-900" />
+                  <p className="text-[10px] text-amber-500/70 font-mono mb-0.5">T-30s [CAUSAL_GRAPH_UPDATE]</p>
+                  <p className="text-xs text-slate-400">Threat predictive thresholds mapped against recent events.</p>
+                </div>
+                <div className="relative pl-6 opacity-60">
+                  <div className="absolute w-2 h-2 rounded-full bg-slate-600 left-[-4.5px] top-1.5 border border-slate-900" />
+                  <p className="text-[10px] text-slate-500 font-mono mb-0.5">T-60s [MEMORY_FEEDBACK]</p>
+                  <p className="text-xs text-slate-500">Autonomous feedback cycle logged baseline.</p>
+                </div>
+              </div>
+            </div>
+          </GlassPanel>
         </div>
 
         {/* Sidebar Controls */}
         <div className="space-y-10">
-          <Card title="System Mode" icon={Settings2}>
-            <div className="grid grid-cols-1 gap-4 mt-6">
+          <GlassPanel title="System Mode" accentColor="purple">
+            <div className="grid grid-cols-1 gap-4 mt-2">
               {modes.map((mode) => (
                 <Motion.button
                   key={mode.id}
@@ -449,25 +523,25 @@ export function Dashboard() {
                   whileTap={{ scale: 0.96 }}
                   transition={{ type: "spring", stiffness: 600, damping: 25 }}
                   className={cn(
-                    'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300 relative overflow-hidden group/mode',
+                    'flex items-center gap-5 p-5 rounded-2xl transition-all duration-300 relative overflow-hidden group/mode cursor-pointer',
                     systemMode === mode.id
-                      ? 'nm-inset bg-slate-900 border border-accent-blue/30'
-                      : 'nm-flat bg-slate-900 border border-transparent hover:border-slate-700',
+                      ? 'bg-slate-800/80 border border-accent-blue/50 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+                      : 'bg-slate-900/40 border border-white/5 hover:border-white/10 hover:bg-slate-800/50',
                     modeLoading && 'opacity-50 cursor-wait'
                   )}
                 >
                   <ModeCardBg type={mode.id} />
                   <div className="flex items-center gap-5 relative z-10 w-full">
                     <div className={cn(
-                      'nm-flat p-3 rounded-xl transition-all duration-300',
-                      systemMode === mode.id ? 'nm-inset text-accent-blue' : 'text-slate-500 group-hover/mode:text-slate-300'
+                      'p-3 rounded-xl transition-all duration-300',
+                      systemMode === mode.id ? 'bg-slate-900 text-accent-blue shadow-inner' : 'text-slate-500 group-hover/mode:text-slate-300'
                     )}>
                       <mode.icon className="h-6 w-6" />
                     </div>
                     <div className="text-left">
                       <span className={cn(
                         'block font-black uppercase tracking-widest text-sm transition-colors duration-300',
-                        systemMode === mode.id ? 'text-white' : 'text-slate-500 group-hover/mode:text-slate-400'
+                        systemMode === mode.id ? 'text-white' : 'text-slate-400 group-hover/mode:text-slate-300'
                       )}>
                         {mode.label}
                       </span>
@@ -480,7 +554,7 @@ export function Dashboard() {
                 </Motion.button>
               ))}
             </div>
-          </Card>
+          </GlassPanel>
 
           <Card title="Direct Protocols" icon={Zap}>
             <div className="grid grid-cols-2 gap-5 mt-6">
@@ -523,7 +597,19 @@ export function Dashboard() {
             </div>
           </Card>
 
-          <EventStream events={events} />
+          {/* Conditional Dual-Stream Event Telemetry */}
+          <div className="space-y-6">
+            <EventStream events={events} />
+            {(systemMode === 'beast' || autonomyFeed) && (
+              <Motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                transition={{ duration: 0.5 }}
+              >
+                <AutonomyEventStream autonomyFeed={autonomyFeed} />
+              </Motion.div>
+            )}
+          </div>
 
           <DecisionTracePanel decisions={decisions} />
 

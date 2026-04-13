@@ -1,0 +1,224 @@
+[
+  {
+    "timestamp": "2026-04-12T22:28:09.705849+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "5620_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxPlayerBeta.exe (PID 5620) is not recognized.",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5620,
+          "process_name": "RobloxPlayerBeta.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:28:55.659423+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:30:35.908770+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "21784_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxCrashHandler.exe (PID 21784) is not recognized.",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:31:21.697420+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "15856_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process MouseWithoutBorders.exe (PID 15856) is not recognized.",
+          "pid": 15856,
+          "process_name": "MouseWithoutBorders.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 15856,
+          "process_name": "MouseWithoutBorders.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:50:33.824940+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:50:39.901504+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "16964_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process SynTPEnh.exe (PID 16964) is not recognized.",
+          "pid": 16964,
+          "process_name": "SynTPEnh.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16964,
+          "process_name": "SynTPEnh.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:51:20.508169+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:51:26.814459+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:52:12.647016+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:52:19.968862+00:00",
+    "data": {
+      "risk_score": 0,
+      "risk_level": "low",
+      "threats": [],
+      "recommendations": []
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:53:04.353734+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "21784_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process RobloxCrashHandler.exe (PID 21784) is not recognized.",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 21784,
+          "process_name": "RobloxCrashHandler.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-12T22:53:12.511578+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "17224_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process MouseWithoutBorders.exe (PID 17224) is not recognized.",
+          "pid": 17224,
+          "process_name": "MouseWithoutBorders.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 17224,
+          "process_name": "MouseWithoutBorders.exe"
+        }
+      ]
+    }
+  }
+]

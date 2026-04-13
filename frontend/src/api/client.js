@@ -67,7 +67,7 @@ export const intelligenceApi = {
   safePatterns: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/patterns?window_minutes=${windowMinutes}`)),
   safeAnomalies: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/anomalies?window_minutes=${windowMinutes}`)),
   safeDecisions: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/decisions?window_minutes=${windowMinutes}`)),
-  getForecast: () => api.get('/intelligence/forecast'),
+  getForecast: () => api.get('/intelligence/prediction'),
   getCausalGraph: () => api.get('/intelligence/causal-graph'),
 };
 
@@ -100,6 +100,10 @@ export const storageApi = {
   cleanup: (type, { confirm = true, dryRun = false } = {}) =>
     api.post('/cleanup', { type, confirm, dry_run: dryRun }),
   analysis: (params) => api.get('/storage/analysis', { params }),
+};
+
+export const autonomyApi = {
+  getAuditHistory: () => api.get('/api/autonomy/audit/history'),
 };
 
 export default api;
