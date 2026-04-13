@@ -23,3 +23,5 @@ backend/logs/simulation_logs.json
 frontend/package-lock.json
 backend/intelligence/action_history.json
 backend/logs
+/backend/logs
+memory.json

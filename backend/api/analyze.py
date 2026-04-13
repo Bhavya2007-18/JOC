@@ -4,7 +4,10 @@ from typing import Any, Dict
 
 from fastapi import APIRouter
 from intelligence.engine import IntelligenceEngine
+from intelligence.runtime_optimizer import RuntimeOptimizer
 from intelligence.snapshot_provider import collect_snapshot
+from training.learning.global_memory import memory
+from training.taxonomy import ScenarioTraits
 from storage.db import save_snapshot
 from utils.system import is_admin
 
@@ -205,6 +208,24 @@ def analyze():
         if isinstance(suggested_actions, list) and suggested_actions:
             best_action = _serialize(suggested_actions[0])
 
+    optimizer = RuntimeOptimizer(memory)
+    cpu_percent = float(getattr(snapshot, "cpu_percent", 0) or 0)
+    memory_percent = float(getattr(snapshot, "memory_percent", 0) or 0)
+
+    traits = ScenarioTraits(
+        resource_type="memory" if memory_percent > cpu_percent else "cpu",
+        pattern="spike",
+        process_concentration="single",
+        severity_band="high" if memory_percent > 80 else "moderate",
+        has_root_cause_process=True if best_action.get("pid") else False,
+    )
+
+    best_action = optimizer.get_boosted_action(
+        scenario="memory_stress" if memory_percent > cpu_percent else "cpu_spike",
+        traits=traits,
+        fallback_action=best_action,
+    )
+
     raw_confidence = getattr(analysis, "confidence", None)
     if isinstance(raw_confidence, (int, float)):
         confidence = max(0.0, min(1.0, float(raw_confidence)))
@@ -218,6 +239,11 @@ def analyze():
             confidence = sum(issue_confidences) / max(len(issue_confidences), 1)
         else:
             confidence = 0.5
+
+    if isinstance(best_action, dict) and "confidence" in best_action:
+        boosted_conf = best_action.get("confidence")
+        if isinstance(boosted_conf, (int, float)):
+            confidence = max(0.0, min(1.0, float(boosted_conf)))
 
     return {
         "summary": {
