@@ -1073,5 +1073,84 @@
         }
       ]
     }
+  },
+  {
+    "timestamp": "2026-04-13T18:04:36.265065+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "24672_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process Antigravity.exe flagged as suspicious (CPU: 124.3%, RAM: 663.0 MB).",
+          "pid": 24672,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "24672_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process Antigravity.exe detected (PID 24672).",
+          "pid": 24672,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "7540_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 7540) is not recognized.",
+          "pid": 7540,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "5004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (333.1 MB).",
+          "pid": 5004,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 24672,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 24672,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 7540,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 5004,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
   }
 ]
