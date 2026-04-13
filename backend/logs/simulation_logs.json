@@ -1682,5 +1682,143 @@
       "state": "IDLE",
       "note": "Engine returned to IDLE"
     }
+  },
+  {
+    "timestamp": 1776083737.3539155,
+    "correlation_id": "35f000f2-5c42-4472-b180-955085ab2830",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776083737.1272094,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1776083750.397045,
+    "correlation_id": "35f000f2-5c42-4472-b180-955085ab2830",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776083750.3860462,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running cpu_spike"
+    }
+  },
+  {
+    "timestamp": 1776083750.7440457,
+    "correlation_id": "35f000f2-5c42-4472-b180-955085ab2830",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776083750.4879003,
+      "state": "OBSERVING",
+      "note": "Observation window started"
+    }
+  },
+  {
+    "timestamp": 1776083754.057548,
+    "correlation_id": "global",
+    "event": "stop_requested",
+    "payload": {
+      "reason": "User stopped"
+    }
+  },
+  {
+    "timestamp": 1776083768.0338347,
+    "correlation_id": "35f000f2-5c42-4472-b180-955085ab2830",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776083768.022658,
+      "state": "FAILED",
+      "note": "Simulation failed: Simulation aborted by kill switch"
+    }
+  },
+  {
+    "timestamp": 1776083768.0470953,
+    "correlation_id": "35f000f2-5c42-4472-b180-955085ab2830",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "d338923a-983a-402c-8291-f8d672f86401",
+      "simulation_type": "cpu_spike",
+      "parameters": {
+        "intensity": 0.5,
+        "duration_seconds": 30
+      },
+      "timeline": {
+        "start": 1776083737.1272094,
+        "anomaly_detected_at": null,
+        "decision_made_at": null,
+        "completed_at": 1776083768.0358362,
+        "transitions": [
+          {
+            "timestamp": 1776083737.1272094,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1776083750.3860462,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running cpu_spike"
+          },
+          {
+            "timestamp": 1776083750.4879003,
+            "state": "OBSERVING",
+            "note": "Observation window started"
+          },
+          {
+            "timestamp": 1776083768.022658,
+            "state": "FAILED",
+            "note": "Simulation failed: Simulation aborted by kill switch"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 30.908626794815063,
+        "detection_delay": 0.0
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 0,
+        "total_score": 0,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [
+        {
+          "metadata": {
+            "type": "cpu_spike",
+            "simulation_id": "d338923a-983a-402c-8291-f8d672f86401",
+            "correlation_id": "35f000f2-5c42-4472-b180-955085ab2830",
+            "parameters": {
+              "intensity": 0.5,
+              "duration_seconds": 30
+            }
+          },
+          "result": {
+            "simulation": "cpu_spike",
+            "dry_run": true,
+            "threads": 1,
+            "duration": 5.0,
+            "throttle_seconds": 0.001
+          },
+          "timestamp": 1776083750.47176
+        }
+      ],
+      "logs_ref": "C:\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "FAILED",
+      "correlation_id": "35f000f2-5c42-4472-b180-955085ab2830",
+      "feedback": null,
+      "attack_plan": null
+    }
+  },
+  {
+    "timestamp": 1776083768.0580952,
+    "correlation_id": "35f000f2-5c42-4472-b180-955085ab2830",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776083768.0500946,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
   }
 ]

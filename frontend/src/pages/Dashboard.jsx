@@ -4,6 +4,8 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { SystemHealthScore } from '../components/SystemHealthScore';
 import { EventStream } from '../components/EventStream';
+import { IntelligenceStrip } from '../components/IntelligenceStrip';
+import { DecisionTracePanel } from '../components/DecisionTracePanel';
 import { useSystemData } from '../hooks/useSystemData';
 import { systemApi, optimizerApi } from '../api/client';
 import { useSystemMode } from '../context/SystemModeContext';
@@ -31,7 +33,22 @@ import { ModeCardBg } from '../components/ModeCardBg';
 import { ProtocolBg } from '../components/ProtocolBg';
 
 export function Dashboard() {
-  const { stats, processes, anomalies, decisions, health, loading, error, events, forecast, addEvent } = useSystemData(3000);
+  const {
+    stats,
+    processes,
+    anomalies,
+    decisions,
+    health,
+    loading,
+    error,
+    lastUpdated,
+    events,
+    prediction,
+    bestAction,
+    confidence,
+    riskLevel,
+    addEvent
+  } = useSystemData(3000);
   const { systemMode, setSystemMode } = useSystemMode();
   const [chartData, setChartData] = useState([]);
   const [modeLoading, setModeLoading] = useState(false);
@@ -178,6 +195,14 @@ export function Dashboard() {
 
   return (
     <div className="space-y-8 pb-12">
+      <IntelligenceStrip
+        prediction={prediction}
+        bestAction={bestAction}
+        confidence={confidence}
+        riskLevel={riskLevel}
+        lastUpdated={lastUpdated}
+      />
+
       <Motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -261,22 +286,22 @@ export function Dashboard() {
               </div>
               {/* Forecast label - bottom section, always same height */}
               <div className="mt-3 h-5 flex items-center justify-center shrink-0">
-                {stat.name === 'CPU Usage' && forecast?.cpu && (
+                {stat.name === 'CPU Usage' && prediction?.predicted_cpu && (
                   <p className="text-[10px] text-accent-blue opacity-80 uppercase tracking-widest font-mono">
-                    Forecast(5m): {forecast.cpu['5m']?.toFixed(1)}% {forecast.cpu.trend === 'up' ? '↗' : forecast.cpu.trend === 'down' ? '↘' : '→'}
+                    Forecast(5m): {prediction.predicted_cpu['5m']?.toFixed(1)}% {prediction.predicted_cpu.trend === 'up' ? '↗' : prediction.predicted_cpu.trend === 'down' ? '↘' : '→'}
                   </p>
                 )}
-                {stat.name === 'CPU Usage' && !forecast?.cpu && (
+                {stat.name === 'CPU Usage' && !prediction?.predicted_cpu && (
                   <p className="text-[10px] text-slate-500 font-mono">
                     Normal: {(stats?.cpu?.usage_percent || 0) > 45 ? 'High load' : 'Stable'}
                   </p>
                 )}
-                {stat.name === 'Memory' && forecast?.memory && (
+                {stat.name === 'Memory' && prediction?.predicted_ram && (
                   <p className="text-[10px] text-accent-blue opacity-80 uppercase tracking-widest font-mono">
-                    Forecast(5m): {forecast.memory['5m']?.toFixed(1)}% {forecast.memory.trend === 'up' ? '↗' : forecast.memory.trend === 'down' ? '↘' : '→'}
+                    Forecast(5m): {prediction.predicted_ram['5m']?.toFixed(1)}% {prediction.predicted_ram.trend === 'up' ? '↗' : prediction.predicted_ram.trend === 'down' ? '↘' : '→'}
                   </p>
                 )}
-                {stat.name === 'Memory' && !forecast?.memory && (
+                {stat.name === 'Memory' && !prediction?.predicted_ram && (
                   <p className="text-[10px] text-slate-500 font-mono">
                     Normal: {(stats?.memory?.percent || 0) > 60 ? 'High load' : 'Stable'}
                   </p>
@@ -499,6 +524,8 @@ export function Dashboard() {
           </Card>
 
           <EventStream events={events} />
+
+          <DecisionTracePanel decisions={decisions} />
 
           <Card title="Stress Engine" description="Phase 4 Module" icon={Activity}>
             <div className="mt-6 space-y-6">
