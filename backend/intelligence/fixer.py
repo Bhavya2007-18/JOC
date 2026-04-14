@@ -131,21 +131,22 @@ class FixEngine:
         response["action_id"] = record.action_id
         return response
 
-    def execute_tweak(self, tweak_name: str) -> dict:
+    def execute_tweak(self, tweak_name: str, dry_run: bool = None) -> dict:
         from intelligence.tweaks.executor import execute_tweak
 
-        result = execute_tweak(tweak_name, dry_run=DRY_RUN)
+        result = execute_tweak(tweak_name, dry_run=dry_run)
         record = self._build_action_record(
             action_type=ActionType.SYSTEM_TWEAK,
             target=tweak_name,
             reversible=True,
             result=result,
-            parameters={},
+            parameters={"requested_dry_run": dry_run},
         )
         self.store.add_action(record)
-        response = dict(result)
-        response["action_id"] = record.action_id
-        return response
+        return {
+            "action_id": record.action_id,
+            "result": result
+        }
 
     def revert_action(self, action_id: str) -> dict:
         from intelligence.tweaks.executor import revert_tweak

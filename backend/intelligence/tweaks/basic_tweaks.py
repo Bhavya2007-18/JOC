@@ -82,16 +82,18 @@ class GamingBoost(SystemTweak):
 
         return {
             "status": "success",
-            "message": f"Gaming Boost applied. {len(killed)} background processes stopped.",
+            "summary": f"Gaming Boost applied. {len(killed)} background processes stopped.",
             "dry_run": DRY_RUN,
-            "power_plan": power_result,
-            "processes_killed": killed,
+            "effects": {
+                "processes_killed": killed,
+                "power_plan": power_result,
+                "details": [
+                    f"Stopped {len(killed)} background apps (OneDrive, Search, Edge updates, etc.)",
+                    "Activated Windows High Performance power plan",
+                    "Prioritized foreground applications",
+                ],
+            },
             "processes_failed": failed,
-            "details": [
-                f"Stopped {len(killed)} background apps (OneDrive, Search, Edge updates, etc.)",
-                "Activated Windows High Performance power plan",
-                "Prioritized foreground applications",
-            ],
         }
 
     def revert(self) -> Dict[str, object]:
@@ -142,16 +144,18 @@ class BatterySaver(SystemTweak):
 
         return {
             "status": "success",
-            "message": f"Battery Saver applied. {len(suspended)} heavy apps suspended.",
+            "summary": f"Battery Saver applied. {len(suspended)} heavy apps suspended.",
             "dry_run": DRY_RUN,
-            "power_plan": power_result,
-            "processes_suspended": suspended,
+            "effects": {
+                "processes_suspended": suspended,
+                "power_plan": power_result,
+                "details": [
+                    f"Suspended {len(suspended)} resource-heavy apps",
+                    "Activated Windows Power Saver plan",
+                    "Reduced background CPU activity",
+                ],
+            },
             "processes_failed": failed,
-            "details": [
-                f"Suspended {len(suspended)} resource-heavy apps",
-                "Activated Windows Power Saver plan",
-                "Reduced background CPU activity",
-            ],
         }
 
     def revert(self) -> Dict[str, object]:
@@ -203,15 +207,17 @@ class PerformanceBoost(SystemTweak):
 
         return {
             "status": "success",
-            "message": f"Performance Boost applied. {len(lowered)} high-CPU processes reprioritized.",
+            "summary": f"Performance Boost applied. {len(lowered)} high-CPU processes reprioritized.",
             "dry_run": DRY_RUN,
-            "processes_lowered": lowered,
+            "effects": {
+                "processes_lowered": lowered,
+                "details": [
+                    f"Lowered priority of {len(lowered)} CPU-heavy processes",
+                    "System caches will be freed on next idle cycle",
+                    "Memory allocation optimized for active applications",
+                ],
+            },
             "processes_failed": failed,
-            "details": [
-                f"Lowered priority of {len(lowered)} CPU-heavy processes",
-                "System caches will be freed on next idle cycle",
-                "Memory allocation optimized for active applications",
-            ],
         }
 
     def revert(self) -> Dict[str, object]:
@@ -249,17 +255,19 @@ class CleanRAM(SystemTweak):
 
         return {
             "status": "success",
-            "message": f"RAM cleaned. {max(0, freed_mb)} MB freed across {len(freed_processes)} processes.",
+            "summary": f"RAM cleaned. {max(0, freed_mb)} MB freed across {len(freed_processes)} processes.",
             "dry_run": DRY_RUN,
-            "memory_before_percent": mem_before.percent,
-            "memory_after_percent": mem_after.percent,
-            "freed_mb": max(0, freed_mb),
-            "processes_cleaned": len(freed_processes),
-            "details": [
-                f"Cleared inactive memory pages from {len(freed_processes)} processes",
-                f"Memory usage: {mem_before.percent}% → {mem_after.percent}%",
-                f"Freed approximately {max(0, freed_mb)} MB",
-            ],
+            "effects": {
+                "memory_before_percent": mem_before.percent,
+                "memory_after_percent": mem_after.percent,
+                "freed_mb": max(0, freed_mb),
+                "processes_cleaned": freed_processes,
+                "details": [
+                    f"Cleared inactive memory pages from {len(freed_processes)} processes",
+                    f"Memory usage: {mem_before.percent}% → {mem_after.percent}%",
+                    f"Freed approximately {max(0, freed_mb)} MB",
+                ],
+            },
         }
 
     def revert(self) -> Dict[str, object]:

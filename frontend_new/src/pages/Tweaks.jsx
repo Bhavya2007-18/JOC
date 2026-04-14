@@ -90,15 +90,16 @@ export function Tweaks() {
     setPreviewing(prev => ({ ...prev, [tweak.id]: true }));
     setStatus(null);
     try {
-      const response = await optimizerApi.executeTweak(tweak.id);
+      const response = await optimizerApi.executeTweak(tweak.id, { dryRun: true });
       const data = response.data;
+      const res = data.result || data;
       setPreview({
         tweakId: tweak.id,
         tweakName: tweak.name,
-        result: data.result || data,
-        details: data.result?.details || tweak.actions,
-        dryRun: data.result?.dry_run ?? true,
-        processesAffected: data.result?.processes_killed || data.result?.processes_suspended || data.result?.processes_lowered || [],
+        result: res,
+        details: res.details || tweak.actions,
+        dryRun: res.dry_run ?? true,
+        processesAffected: res.processes_killed || res.processes_suspended || res.processes_lowered || res.processes_cleaned || [],
       });
     } catch (err) {
       setStatus({ 
@@ -115,9 +116,10 @@ export function Tweaks() {
     setStatus(null);
     setPreview(null);
     try {
-      const response = await optimizerApi.executeTweak(tweak.id);
+      const response = await optimizerApi.executeTweak(tweak.id, { dryRun: false });
       const data = response.data;
-      const msg = data.result?.message || data.message || `PROTOCOL EXECUTED: ${tweak.name} successfully deployed.`;
+      const res = data.result || data;
+      const msg = res.message || res.summary || `PROTOCOL EXECUTED: ${tweak.name} successfully deployed.`;
       setStatus({ type: 'success', message: msg });
     } catch (err) {
       setStatus({ 
@@ -240,7 +242,9 @@ export function Tweaks() {
                         {tweak.type}
                       </span>
                       <span className={cn('text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full nm-inset border-none shadow-[0_0_10px_currentColor]',
-                        tweak.impact === 'HIGH_STRESS' ? 'text-red-500' : 'text-accent-blue'
+                        tweak.impact === 'HIGH_STRESS' ? 'text-red-500' : 
+                        tweak.impact === 'MODERATE' ? 'text-amber-400' :
+                        tweak.impact === 'LOW_RISK' ? 'text-emerald-400' : 'text-accent-blue'
                       )}>
                         IMPACT: {tweak.impact}
                       </span>
