@@ -1,4 +1,5 @@
 from training.red_team.scenarios.cpu_spike import generate_cpu_spike_scenario
+from training.red_team.scenarios.distributed_memory_leak import generate_distributed_memory_leak_scenario
 from training.red_team.scenarios.memory_leak import generate_memory_leak_scenario
 from intelligence.engine import IntelligenceEngine
 from training.red_team.virtual_snapshot import VirtualSnapshot, VirtualProcessInfo
@@ -57,6 +58,7 @@ def run_training_episode() -> list[dict]:
     scenarios = [
         ("cpu_spike", generate_cpu_spike_scenario()),
         ("memory_leak", generate_memory_leak_scenario()),
+        ("distributed_memory_leak", generate_distributed_memory_leak_scenario()),
     ]
     engine = IntelligenceEngine()
 
@@ -85,10 +87,21 @@ def run_training_episode() -> list[dict]:
                 if action_type:
                     concentration = "distributed"
                     if snapshot.top_processes:
-                        top_cpu = max(float(p.cpu_percent or 0.0) for p in snapshot.top_processes)
-                        total_cpu = max(float(snapshot.cpu_percent or 0.0), 1.0)
-                        if (top_cpu / total_cpu) >= 0.6:
-                            concentration = "single"
+                        if scenario_name == "distributed_memory_leak":
+                            max_process_memory = max(
+                                float(p.memory_percent or 0.0)
+                                for p in snapshot.top_processes
+                            )
+                            total_memory = max(float(snapshot.memory_percent or 0.0), 1.0)
+                            if max_process_memory < 0.3 * total_memory:
+                                concentration = "distributed"
+                            else:
+                                concentration = "single"
+                        else:
+                            top_cpu = max(float(p.cpu_percent or 0.0) for p in snapshot.top_processes)
+                            total_cpu = max(float(snapshot.cpu_percent or 0.0), 1.0)
+                            if (top_cpu / total_cpu) >= 0.6:
+                                concentration = "single"
 
                     if snapshot.cpu_percent >= 90:
                         severity_band = "critical"
@@ -103,7 +116,11 @@ def run_training_episode() -> list[dict]:
                             if float(snapshot.memory_percent or 0.0) > float(snapshot.cpu_percent or 0.0)
                             else "cpu"
                         ),
-                        pattern="leak" if scenario_name == "memory_leak" else "spike",
+                        pattern=(
+                            "leak"
+                            if scenario_name in ["memory_leak", "distributed_memory_leak"]
+                            else "spike"
+                        ),
                         process_concentration=concentration,
                         severity_band=severity_band,
                         has_root_cause_process=bool(
