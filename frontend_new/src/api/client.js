@@ -82,8 +82,9 @@ export const optimizerApi = {
     suspend: (pid, dryRun = false) => api.post('/process/suspend', { pid, dry_run: dryRun }),
     resume: (pid, dryRun = false) => api.post('/process/resume', { pid, dry_run: dryRun }),
   },
-  executeTweak: (tweakName, { dryRun = false } = {}) => 
-    api.post('/tweak/execute', { tweak_name: tweakName, dry_run: dryRun }),
+  executeTweak: (tweakName, { dryRun = false, confirmHighRisk = false } = {}) => 
+    api.post('/tweak/execute', { tweak_name: tweakName, dry_run: dryRun, confirm_high_risk: confirmHighRisk }),
+  suggestTweak: () => api.get('/tweak/suggest'),
   revertAction: (actionId) => api.post('/action/revert', { action_id: actionId }),
   safeBoost: (payload) => wrapRequest(() => api.post('/optimize/boost', payload)),
   safeCleanup: (payload) => wrapRequest(() => api.post('/optimize/cleanup', payload)),
