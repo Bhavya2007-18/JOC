@@ -38,7 +38,11 @@ class FixEngine:
         result: dict,
         parameters: dict,
     ) -> ActionRecord:
-        status = "failed" if "error" in result else "success"
+        result_status = str(result.get("status", "")).lower() if isinstance(result, dict) else ""
+        if result_status in {"failed", "error", "blocked"}:
+            status = "failed"
+        else:
+            status = "success"
         return ActionRecord(
             action_id=str(uuid.uuid4()),
             action_type=action_type,
@@ -131,21 +135,38 @@ class FixEngine:
         response["action_id"] = record.action_id
         return response
 
-    def execute_tweak(self, tweak_name: str) -> dict:
+    def execute_tweak(
+        self,
+        tweak_name: str,
+        dry_run: bool = None,
+        confirm_high_risk: bool = False,
+    ) -> dict:
         from intelligence.tweaks.executor import execute_tweak
+        from intelligence.tweaks.registry import get_tweak
 
-        result = execute_tweak(tweak_name, dry_run=DRY_RUN)
+        result = execute_tweak(
+            tweak_name,
+            dry_run=dry_run,
+            confirm_high_risk=confirm_high_risk,
+        )
+        tweak = get_tweak(tweak_name)
+        is_preview = bool(result.get("simulated", dry_run))
+        is_reversible = bool(getattr(tweak, "reversible", False)) and not is_preview
         record = self._build_action_record(
             action_type=ActionType.SYSTEM_TWEAK,
             target=tweak_name,
-            reversible=True,
+            reversible=is_reversible,
             result=result,
-            parameters={},
+            parameters={
+                "requested_dry_run": dry_run,
+                "confirm_high_risk": confirm_high_risk,
+            },
         )
         self.store.add_action(record)
-        response = dict(result)
-        response["action_id"] = record.action_id
-        return response
+        return {
+            "action_id": record.action_id,
+            "result": result
+        }
 
     def revert_action(self, action_id: str) -> dict:
         from intelligence.tweaks.executor import revert_tweak
@@ -158,7 +179,14 @@ class FixEngine:
             return {"error": f"Action is not reversible: {action_id}"}
 
         if action.action_type == ActionType.SYSTEM_TWEAK:
-            result = revert_tweak(action.target)
+            result = revert_tweak(
+                action.target,
+                dry_run=False,
+                revert_payload={
+                    "original_result": action.result,
+                    "original_parameters": action.parameters,
+                },
+            )
             record = self._build_action_record(
                 action_type=ActionType.SYSTEM_TWEAK,
                 target=action.target,

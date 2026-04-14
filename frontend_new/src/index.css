@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@400..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-bg: #080B12;
+  --color-cyber-cyan: #00E5FF;
+  --color-cyber-amber: #FFB300;
+  --color-cyber-danger: #FF3D57;
+  --color-slate-950: #05070a;
+  --color-slate-900: #080B12;
+}
+
+:root {
+  --bg-primary: #080B12;
+  --bg-secondary: #0A0E17;
+  --bg-panel: rgba(8, 11, 18, 0.9);
+  
+  /* Cyber Terminal Glows */
+  --shadow-nm-flat: 0 0 20px rgba(0, 229, 255, 0.082);
+  --shadow-nm-inset: inset 0 0 15px rgba(0, 229, 255, 0.03);
+  
+  /* Accent Colors */
+  --color-accent-blue: #00E5FF;
+  --color-accent-cyan: #00E5FF;
+  --color-accent-warning: #FFB300;
+  --color-accent-danger: #FF3D57;
+  --color-accent-emerald: #00FF94;
+  
+  /* Border Definition */
+  --border-cyber: 1px solid rgba(0, 229, 255, 0.15);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: #B0B9C8;
+  font-family: 'Space Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.02em;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Syne', sans-serif;
+  letter-spacing: -0.01em;
+  color: #FFFFFF;
+}
+
+/* Redefined Utilities for Cyberpunk Aesthetic */
+.nm-flat {
+  background: rgba(13, 17, 26, 0.6);
+  border: var(--border-cyber);
+  box-shadow: var(--shadow-nm-flat);
+}
+
+.nm-inset {
+  background: rgba(5, 7, 12, 0.4);
+  border: 1px solid rgba(0, 229, 255, 0.1);
+  box-shadow: var(--shadow-nm-inset);
+}
+
+.glass-card {
+  background: rgba(8, 11, 18, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--border-cyber);
+}
+
+/* Mode Identity Filters */
+.mode-chill {
+  filter: saturate(0.7) contrast(0.95);
+  transition: filter 0.8s ease;
+}
+
+.mode-smart {
+  filter: saturate(1) contrast(1);
+  transition: filter 0.8s ease;
+}
+
+.mode-beast {
+  filter: saturate(1.3) contrast(1.1) brightness(1.1);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+  animation: micro-flicker 0.2s infinite alternate ease-in-out;
+}
+
+@keyframes micro-flicker {
+  0% { opacity: 0.99; }
+  100% { opacity: 1; filter: saturate(1.4) brightness(1.2); }
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.2);
+  border-radius: 10px;
+}

@@ -9,9 +9,10 @@ Modes:
     BEAST  – Maximum performance / uncaged
 """
 
+import json
 import subprocess
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import psutil
 
@@ -25,6 +26,7 @@ from .process_manager import (
     _is_protected_process,
     change_process_priority_safe,
 )
+from storage.db import get_setting, set_setting
 
 logger = get_logger("optimizer.power_mode")
 _action_store = ActionStore()
@@ -58,8 +60,8 @@ _MAX_AFFECTED_PROCESSES = {
     "beast": 15,
 }
 
-# Current active mode (in-memory state)
-_current_mode: str = "smart"
+# Current active mode (initialized from DB or default)
+_current_mode: str = get_setting("system_mode", "smart")
 
 
 def get_current_mode() -> str:
@@ -199,19 +201,56 @@ def _get_mode_description(mode: str) -> Dict[str, str]:
     }
     return descriptions.get(mode, descriptions["smart"])
 
+def _record_thermal_guard_event(
+    thermal_data: Dict[str, Any],
+    mode_before: str,
+    mode_after: str,
+    reason: str,
+) -> str:
+    event_payload = {
+        "event": "THERMAL_GUARD_TRIGGERED",
+        "temp": thermal_data.get("temperature"),
+        "state": thermal_data.get("state"),
+        "velocity": thermal_data.get("velocity"),
+        "score": thermal_data.get("score"),
+        "mode_before": mode_before,
+        "mode_after": mode_after,
+        "reason": reason,
+        "timestamp": time.time(),
+    }
+    action_id = f"thermal-guard-{int(time.time() * 1000)}"
+    record = ActionRecord(
+        action_id=action_id,
+        action_type=ActionType.SYSTEM_TWEAK,
+        target="thermal_guard",
+        timestamp=time.time(),
+        status="completed",
+        reversible=False,
+        result=event_payload,
+        parameters={"event_type": "THERMAL_GUARD_TRIGGERED"},
+    )
+    _action_store.add_action(record)
+    logger.warning("THERMAL_GUARD_TRIGGERED %s", json.dumps(event_payload))
+    return action_id
 
-def apply_system_mode(mode: str) -> Dict[str, Any]:
+
+def apply_system_mode(
+    mode: str,
+    force_live: bool = False,
+    thermal_data: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
     """Apply a system operating mode.
 
     Args:
         mode: One of 'chill', 'smart', 'beast'
+        force_live: If True, bypasses the global DRY_RUN flag for this action.
 
     Returns:
         Result dict with power plan status, affected processes,
         system metrics, and mode metadata.
     """
     global _current_mode
-    effective_dry_run = bool(DRY_RUN)
+    effective_dry_run = bool(DRY_RUN) and not force_live
     mode = mode.lower().strip()
 
     if mode not in _POWER_PLANS:
@@ -219,6 +258,20 @@ def apply_system_mode(mode: str) -> Dict[str, Any]:
             "success": False,
             "message": f"Invalid mode: {mode}. Must be chill, smart, or beast.",
         }
+
+    guard_action_id = None
+    guard_downgraded = False
+    requested_mode = mode
+    if thermal_data and thermal_data.get("is_critical") and mode == "beast":
+        # Hard safety downgrade: critical thermals cannot run BEAST.
+        mode = "smart"
+        guard_downgraded = True
+        guard_action_id = _record_thermal_guard_event(
+            thermal_data=thermal_data,
+            mode_before=requested_mode,
+            mode_after=mode,
+            reason="critical_thermal_state",
+        )
 
     # Capture before-metrics
     cpu_before = get_cpu_stats()
@@ -230,9 +283,10 @@ def apply_system_mode(mode: str) -> Dict[str, Any]:
     # 2. Adjust process priorities
     affected_processes = _adjust_process_priorities(mode, dry_run=effective_dry_run)
 
-    # 3. Update internal state
+    # 3. Update internal state and persistence
     previous_mode = _current_mode
     _current_mode = mode
+    set_setting("system_mode", mode)
 
     # 4. Capture after-metrics
     cpu_after = get_cpu_stats()
@@ -244,7 +298,9 @@ def apply_system_mode(mode: str) -> Dict[str, Any]:
         "success": power_result.get("success", False),
         "dry_run": effective_dry_run,
         "mode": mode,
+        "requested_mode": requested_mode,
         "previous_mode": previous_mode,
+        "thermal_guard_applied": guard_downgraded,
         "mode_info": mode_info,
         "power_plan": power_result,
         "affected_processes": len(affected_processes),
@@ -257,12 +313,23 @@ def apply_system_mode(mode: str) -> Dict[str, Any]:
         },
         "message": (
             f"{'[DRY RUN] ' if effective_dry_run else ''}"
+            f"{'[THERMAL_GUARD] ' if guard_downgraded else ''}"
             f"Mode switched: {previous_mode.upper()} -> {mode.upper()}. "
             f"Power plan: {power_result.get('plan', 'N/A')}. "
             f"{len(affected_processes)} processes adjusted."
         ),
         "timestamp": time.time(),
     }
+    if thermal_data:
+        result["thermal"] = {
+            "temperature": thermal_data.get("temperature"),
+            "state": thermal_data.get("state"),
+            "velocity": thermal_data.get("velocity"),
+            "score": thermal_data.get("score"),
+            "is_critical": thermal_data.get("is_critical"),
+        }
+    if guard_action_id:
+        result["thermal_guard_action_id"] = guard_action_id
 
     # Log the action
     action_id = f"mode-{mode}-{int(time.time() * 1000)}"

@@ -30,18 +30,37 @@ def init_db():
     """)
 
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS timeline_events (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            timestamp REAL,
-            event_type TEXT,
-            severity TEXT,
-            message TEXT,
-            metadata TEXT
+        CREATE TABLE IF NOT EXISTS settings (
+            key TEXT PRIMARY KEY,
+            value TEXT
         )
     """)
 
     conn.commit()
     conn.close()
+
+
+def set_setting(key: str, value: str):
+    """Save a setting value to the database."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO settings (key, value)
+        VALUES (?, ?)
+        ON CONFLICT(key) DO UPDATE SET value=excluded.value
+    """, (key, value))
+    conn.commit()
+    conn.close()
+
+
+def get_setting(key: str, default: str = None) -> str:
+    """Retrieve a setting value from the database."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT value FROM settings WHERE key = ?", (key,))
+    row = cursor.fetchone()
+    conn.close()
+    return row["value"] if row else default
 
 
 def save_snapshot(snapshot):

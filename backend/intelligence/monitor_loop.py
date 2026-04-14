@@ -12,9 +12,11 @@ from intelligence.threat_engine import ThreatEngine
 from intelligence.causal_engine import CausalEngine
 from intelligence.predictive_engine import PredictiveEngine
 from intelligence.xai_engine import XAIEngine
+from intelligence.thermal_engine import ThermalEngine
 
 # Phase 3 Autonomy Layer
 from autonomy.orchestrator import AutonomyOrchestrator
+from services.optimizer.power_mode import get_current_mode, apply_system_mode
 
 from state.system_state import get_state
 import asyncio
@@ -34,6 +36,7 @@ class MonitorLoop:
         self._stop_event = threading.Event()
         self.latest_snapshot = None
         self.latest_analysis = None
+        self._iteration_count = 0
         
         # Instantiate Intelligence Layer
         self.baseline_engine = BaselineEngine(window_size=60)
@@ -41,6 +44,7 @@ class MonitorLoop:
         self.causal_engine = CausalEngine()
         self.predictive_engine = PredictiveEngine()
         self.xai_engine = XAIEngine()
+        self.thermal_engine = ThermalEngine()
         
         # Instantiate Autonomy Layer
         self.autonomy_orchestrator = AutonomyOrchestrator()
@@ -132,6 +136,24 @@ class MonitorLoop:
                 explanation = self.xai_engine.generate(
                     cpu, ram, baseline_data, threat_data, causal_data, pred_data
                 )
+
+                # Stage 6: Thermal Intelligence
+                thermal_data = self.thermal_engine.update(cpu_usage=cpu, timestamp=snapshot.timestamp)
+                if thermal_data.get("velocity") == "spiking":
+                    # Hook thermal spikes into causal graph.
+                    self.causal_engine.emit_event(
+                        event_type="THERMAL",
+                        node_id="THERMAL_SPIKE",
+                        data={
+                            "temperature": thermal_data.get("temperature"),
+                            "delta_temp": thermal_data.get("delta_temp"),
+                            "state": thermal_data.get("state"),
+                            "score": thermal_data.get("score"),
+                        },
+                        link_to=["CPU_SPIKE", "PROCESS_ACTIVITY"],
+                    )
+                    # Refresh causal root-cause after thermal event enrichment.
+                    causal_data = self.causal_engine.get_root_cause()
                 
                 # Compile Unified Intelligence Object
                 self.latest_intelligence = {
@@ -139,12 +161,20 @@ class MonitorLoop:
                     "prediction": pred_data,
                     "explanation": explanation,
                     "baseline": baseline_data,
-                    "causal_graph": causal_data
+                    "causal_graph": causal_data,
+                    "thermal": thermal_data,
                 }
                 
                 # Phase 3: Autonomy Loop
                 autonomy_result = self.autonomy_orchestrator.tick(self.latest_intelligence)
                 self.latest_autonomy_state = autonomy_result
+                
+                # Periodic System Mode Enforcement (every 10 ticks / approx 50s)
+                self._iteration_count += 1
+                if self._iteration_count % 10 == 0:
+                    current_mode = get_current_mode()
+                    logger.info(f"Enforcing system mode policy: {current_mode.upper()}")
+                    apply_system_mode(current_mode, force_live=True, thermal_data=thermal_data)
                 
                 # Broadcast Threat Score to SystemState directly
                 try:

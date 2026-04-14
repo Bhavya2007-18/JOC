@@ -8,6 +8,7 @@ from .learning_engine import LearningEngine
 from .memory_engine import MemoryEngine
 from .preemptive_engine import PreemptiveEngine
 from .audit_log import AuditLogger
+from services.optimizer.power_mode import get_current_mode
 
 class AutonomyOrchestrator:
     def __init__(self):
@@ -43,7 +44,8 @@ class AutonomyOrchestrator:
         matched_pattern = self.memory_engine.lookup(threat_data, causal_data, pred_data)
         
         # STEP 2: Preemptive Check
-        preemptive_signal = self.preemptive_engine.check(pred_data, threat_data)
+        current_mode = get_current_mode()
+        preemptive_signal = self.preemptive_engine.check(pred_data, threat_data, system_mode=current_mode)
         
         # Pull latest weights from LearningEngine
         current_weights = self.learning_engine.get_weights()

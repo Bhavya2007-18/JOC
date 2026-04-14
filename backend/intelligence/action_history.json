@@ -794,5 +794,737 @@
       "mode": "beast",
       "previous_mode": "smart"
     }
+  },
+  {
+    "action_id": "3969e519-7206-479a-92ac-7f5e2dcc7d70",
+    "action_type": "system_tweak",
+    "target": "gaming_boost",
+    "timestamp": 1776119249.1085942,
+    "status": "success",
+    "reversible": true,
+    "result": {
+      "mode": "execute",
+      "tweak_id": "gaming_boost",
+      "status": "success",
+      "dry_run": false,
+      "summary": "Combat Mode active. Boosted brave.exe. Optimized 46 background vectors.",
+      "message": "",
+      "action_id": null,
+      "processes_killed": [
+        {
+          "pid": 14352,
+          "name": "SearchHost.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 42.8
+        },
+        {
+          "pid": 16016,
+          "name": "OneDrive.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 76.0
+        }
+      ],
+      "processes_lowered": [
+        {
+          "pid": 27032,
+          "name": "Antigravity.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 847.2
+        },
+        {
+          "pid": 22524,
+          "name": "brave.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 531.7
+        },
+        {
+          "pid": 2116,
+          "name": "brave.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 463.6
+        },
+        {
+          "pid": 8084,
+          "name": "Antigravity.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 424.8
+        },
+        {
+          "pid": 21560,
+          "name": "brave.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 363.9
+        },
+        {
+          "pid": 21284,
+          "name": "brave.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 358.3
+        },
+        {
+          "pid": 14560,
+          "name": "language_server_windows_x64.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 328.2
+        },
+        {
+          "pid": 27740,
+          "name": "Antigravity.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 298.6
+        },
+        {
+          "pid": 21044,
+          "name": "brave.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 269.1
+        },
+        {
+          "pid": 11856,
+          "name": "Antigravity.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 243.2
+        }
+      ],
+      "foreground_boosted": {
+        "pid": 21776,
+        "name": "brave.exe",
+        "cpu_percent": 0.0,
+        "memory_mb": 891.6
+      },
+      "power_plan": "High Performance",
+      "details": [
+        "Allocated HIGH priority to 'brave.exe'",
+        "Throttled 46 background tasks to starvation levels",
+        "Purged 2 non-critical performance bottlenecks",
+        "Power State: High Performance"
+      ]
+    },
+    "parameters": {
+      "requested_dry_run": false
+    }
+  },
+  {
+    "action_id": "04b36021-6d05-4a7f-94c4-9210c5d3bd02",
+    "action_type": "system_tweak",
+    "target": "gaming_boost",
+    "timestamp": 1776173833.8982928,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "mode": "preview",
+      "tweak": "gaming_boost",
+      "status": "success",
+      "simulated": true,
+      "dry_run": true,
+      "summary": "Combat Mode active. Boosted brave.exe. Optimized 24 background vectors.",
+      "message": "",
+      "effects": {
+        "targets": [
+          {
+            "pid": 18316,
+            "name": "SearchIndexer.exe",
+            "cpu_percent": 0.0,
+            "memory_mb": 24.7
+          }
+        ],
+        "power_plan": "Preview: Ultimate Performance",
+        "memory_freed": null,
+        "details": [
+          "Allocated HIGH priority to 'brave.exe'",
+          "Boost target selection: foreground_window",
+          "Throttled 24 background tasks to starvation levels",
+          "Purged 1 non-critical performance bottlenecks",
+          "Power State: Preview: Ultimate Performance"
+        ],
+        "raw": {
+          "processes_killed": [
+            {
+              "pid": 18316,
+              "name": "SearchIndexer.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 24.7
+            }
+          ],
+          "processes_lowered": [
+            {
+              "pid": 1296,
+              "name": "Trae.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 180.7
+            },
+            {
+              "pid": 1788,
+              "name": "Trae.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 155.6
+            },
+            {
+              "pid": 2032,
+              "name": "msedgewebview2.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.5
+            },
+            {
+              "pid": 2576,
+              "name": "conhost.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 3.9
+            },
+            {
+              "pid": 2604,
+              "name": "language_server_windows_x64.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 122.5
+            },
+            {
+              "pid": 2608,
+              "name": "Trae.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 284.1
+            },
+            {
+              "pid": 2884,
+              "name": "msedgewebview2.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 5.0
+            },
+            {
+              "pid": 3284,
+              "name": "Antigravity.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 22.3
+            },
+            {
+              "pid": 3308,
+              "name": "Antigravity.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 41.2
+            },
+            {
+              "pid": 3352,
+              "name": "LockApp.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 35.3
+            }
+          ],
+          "foreground_boosted": {
+            "pid": 22956,
+            "name": "brave.exe",
+            "cpu_percent": 0.0,
+            "memory_mb": 207.3
+          },
+          "boosted_selection": "foreground_window",
+          "priority_snapshot": {},
+          "power_plan": "Preview: Ultimate Performance",
+          "details": [
+            "Allocated HIGH priority to 'brave.exe'",
+            "Boost target selection: foreground_window",
+            "Throttled 24 background tasks to starvation levels",
+            "Purged 1 non-critical performance bottlenecks",
+            "Power State: Preview: Ultimate Performance"
+          ]
+        }
+      },
+      "meta": {
+        "duration_ms": 7,
+        "admin_required": false,
+        "admin_used": false,
+        "guard": {
+          "blocked": false,
+          "warnings": [],
+          "reasons": [],
+          "admin_required": false,
+          "admin_used": false
+        },
+        "request_id": "3966dae3-c6f8-44b7-ad01-08796e5b0b2b"
+      },
+      "processes_killed": [
+        {
+          "pid": 18316,
+          "name": "SearchIndexer.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 24.7
+        }
+      ],
+      "processes_lowered": [
+        {
+          "pid": 1296,
+          "name": "Trae.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 180.7
+        },
+        {
+          "pid": 1788,
+          "name": "Trae.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 155.6
+        },
+        {
+          "pid": 2032,
+          "name": "msedgewebview2.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.5
+        },
+        {
+          "pid": 2576,
+          "name": "conhost.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 3.9
+        },
+        {
+          "pid": 2604,
+          "name": "language_server_windows_x64.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 122.5
+        },
+        {
+          "pid": 2608,
+          "name": "Trae.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 284.1
+        },
+        {
+          "pid": 2884,
+          "name": "msedgewebview2.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 5.0
+        },
+        {
+          "pid": 3284,
+          "name": "Antigravity.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 22.3
+        },
+        {
+          "pid": 3308,
+          "name": "Antigravity.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 41.2
+        },
+        {
+          "pid": 3352,
+          "name": "LockApp.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 35.3
+        }
+      ],
+      "foreground_boosted": {
+        "pid": 22956,
+        "name": "brave.exe",
+        "cpu_percent": 0.0,
+        "memory_mb": 207.3
+      },
+      "boosted_selection": "foreground_window",
+      "priority_snapshot": {},
+      "power_plan": "Preview: Ultimate Performance",
+      "details": [
+        "Allocated HIGH priority to 'brave.exe'",
+        "Boost target selection: foreground_window",
+        "Throttled 24 background tasks to starvation levels",
+        "Purged 1 non-critical performance bottlenecks",
+        "Power State: Preview: Ultimate Performance"
+      ]
+    },
+    "parameters": {
+      "requested_dry_run": true,
+      "confirm_high_risk": true
+    }
+  },
+  {
+    "action_id": "mode-beast-1776174167386",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1776174167.3865745,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "beast",
+      "previous_mode": "smart",
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "DRY RUN: Would set power plan to High Performance"
+      },
+      "affected_processes": 8,
+      "processes": [
+        {
+          "pid": 16616,
+          "name": "brave.exe",
+          "cpu_percent": 6.5,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 26712,
+          "name": "Trae.exe",
+          "cpu_percent": 6.1,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 20700,
+          "name": "Trae.exe",
+          "cpu_percent": 5.4,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 31792,
+          "name": "brave.exe",
+          "cpu_percent": 4.5,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 37172,
+          "name": "python.exe",
+          "cpu_percent": 4.2,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 19980,
+          "name": "PredatorSense.exe",
+          "cpu_percent": 3.7,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 17180,
+          "name": "PredatorSense.exe",
+          "cpu_percent": 2.4,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 35300,
+          "name": "brave.exe",
+          "cpu_percent": 1.8,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        }
+      ],
+      "metrics": {
+        "cpu_before": 29.5,
+        "cpu_after": 24.6,
+        "memory_before": 93.9,
+        "memory_after": 94.2
+      },
+      "message": "[DRY RUN] Mode switched: SMART -> BEAST. Power plan: High Performance. 8 processes adjusted.",
+      "timestamp": 1776174167.3865683,
+      "action_id": "mode-beast-1776174167386"
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "smart"
+    }
+  },
+  {
+    "action_id": "mode-smart-1776174365204",
+    "action_type": "system_tweak",
+    "target": "system_mode_smart",
+    "timestamp": 1776174365.2047396,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "smart",
+      "previous_mode": "beast",
+      "mode_info": {
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "DRY RUN: Would set power plan to Balanced"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 44.6,
+        "cpu_after": 44.5,
+        "memory_before": 73.9,
+        "memory_after": 75.7
+      },
+      "message": "[DRY RUN] Mode switched: BEAST -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776174365.2047315
+    },
+    "parameters": {
+      "mode": "smart",
+      "previous_mode": "beast"
+    }
+  },
+  {
+    "action_id": "mode-beast-1776175621376",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1776175621.3765645,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": false,
+      "mode": "beast",
+      "previous_mode": "beast",
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": false,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "Power plan set to High Performance"
+      },
+      "affected_processes": 5,
+      "processes": [
+        {
+          "pid": 31792,
+          "name": "brave.exe",
+          "cpu_percent": 5.8,
+          "action": "Priority set to 32768",
+          "success": true,
+          "simulated": false
+        },
+        {
+          "pid": 16616,
+          "name": "brave.exe",
+          "cpu_percent": 4.6,
+          "action": "Priority set to 32768",
+          "success": true,
+          "simulated": false
+        },
+        {
+          "pid": 23740,
+          "name": "python.exe",
+          "cpu_percent": 3.9,
+          "action": "Priority set to 32768",
+          "success": true,
+          "simulated": false
+        },
+        {
+          "pid": 22956,
+          "name": "brave.exe",
+          "cpu_percent": 1.6,
+          "action": "Priority set to 32768",
+          "success": true,
+          "simulated": false
+        },
+        {
+          "pid": 22040,
+          "name": "Antigravity.exe",
+          "cpu_percent": 1.0,
+          "action": "Priority set to 32768",
+          "success": true,
+          "simulated": false
+        }
+      ],
+      "metrics": {
+        "cpu_before": 16.8,
+        "cpu_after": 20.4,
+        "memory_before": 79.0,
+        "memory_after": 79.7
+      },
+      "message": "Mode switched: BEAST -> BEAST. Power plan: High Performance. 5 processes adjusted.",
+      "timestamp": 1776175621.3765597,
+      "action_id": "mode-beast-1776175621376"
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "beast"
+    }
+  },
+  {
+    "action_id": "mode-smart-1776175638098",
+    "action_type": "system_tweak",
+    "target": "system_mode_smart",
+    "timestamp": 1776175638.098489,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": false,
+      "mode": "smart",
+      "previous_mode": "beast",
+      "mode_info": {
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": false,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "Power plan set to Balanced"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 21.6,
+        "cpu_after": 20.9,
+        "memory_before": 79.7,
+        "memory_after": 80.8
+      },
+      "message": "Mode switched: BEAST -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776175638.0984814,
+      "action_id": "mode-smart-1776175638098"
+    },
+    "parameters": {
+      "mode": "smart",
+      "previous_mode": "beast"
+    }
+  },
+  {
+    "action_id": "mode-beast-1776175647083",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1776175647.0835931,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": false,
+      "mode": "beast",
+      "previous_mode": "smart",
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": false,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "Power plan set to High Performance"
+      },
+      "affected_processes": 2,
+      "processes": [
+        {
+          "pid": 16616,
+          "name": "brave.exe",
+          "cpu_percent": 6.1,
+          "action": "Priority set to 32768",
+          "success": true,
+          "simulated": false
+        },
+        {
+          "pid": 35300,
+          "name": "brave.exe",
+          "cpu_percent": 1.0,
+          "action": "Priority set to 32768",
+          "success": true,
+          "simulated": false
+        }
+      ],
+      "metrics": {
+        "cpu_before": 16.9,
+        "cpu_after": 9.6,
+        "memory_before": 80.5,
+        "memory_after": 81.2
+      },
+      "message": "Mode switched: SMART -> BEAST. Power plan: High Performance. 2 processes adjusted.",
+      "timestamp": 1776175647.0835881
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "smart"
+    }
+  },
+  {
+    "action_id": "thermal-guard-1776177112180",
+    "action_type": "system_tweak",
+    "target": "thermal_guard",
+    "timestamp": 1776177112.180403,
+    "status": "completed",
+    "reversible": false,
+    "result": {
+      "event": "THERMAL_GUARD_TRIGGERED",
+      "temp": 91.2,
+      "state": "CRITICAL",
+      "velocity": "rising",
+      "score": 94.2,
+      "mode_before": "beast",
+      "mode_after": "smart",
+      "reason": "critical_thermal_state",
+      "timestamp": 1776177112.1803994
+    },
+    "parameters": {
+      "event_type": "THERMAL_GUARD_TRIGGERED"
+    }
+  },
+  {
+    "action_id": "mode-smart-1776177113416",
+    "action_type": "system_tweak",
+    "target": "system_mode_smart",
+    "timestamp": 1776177113.4164011,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "smart",
+      "requested_mode": "beast",
+      "previous_mode": "beast",
+      "thermal_guard_applied": true,
+      "mode_info": {
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "DRY RUN: Would set power plan to Balanced"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 18.3,
+        "cpu_after": 7.0,
+        "memory_before": 89.6,
+        "memory_after": 89.6
+      },
+      "message": "[DRY RUN] [THERMAL_GUARD] Mode switched: BEAST -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776177113.4163945,
+      "thermal": {
+        "temperature": 91.2,
+        "state": "CRITICAL",
+        "velocity": "rising",
+        "score": 94.2,
+        "is_critical": true
+      },
+      "thermal_guard_action_id": "thermal-guard-1776177112180"
+    },
+    "parameters": {
+      "mode": "smart",
+      "previous_mode": "beast"
+    }
   }
 ]

@@ -80,6 +80,24 @@ class CausalEngine:
         # Optional: Prune old edges to allow graph to decay dynamically over long runtimes
         self._decay_graph()
 
+    def emit_event(
+        self,
+        event_type: str,
+        node_id: str,
+        data: Optional[Dict[str, Any]] = None,
+        link_to: Optional[List[str]] = None,
+    ) -> None:
+        """
+        Public hook for non-core pipeline events (e.g., thermal spikes).
+        Allows external engines to contribute causal nodes and optional
+        directed links into the graph.
+        """
+        now = time.monotonic()
+        payload = data or {}
+        self._record_event(now, event_type, node_id, payload)
+        for target in (link_to or []):
+            self._add_or_update_edge(node_id, target, 0.6)
+
     def _record_event(self, timestamp: float, event_type: str, node_id: str, data: Dict[str, Any]) -> None:
         """Appends a timestamped event to the rolling log."""
         self.event_log.append({
