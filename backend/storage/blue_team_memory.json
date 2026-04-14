@@ -9,17 +9,17 @@
       "attack_type": "cpu_spike",
       "best_response": "Suggest cleanup to free memory",
       "best_score": 0,
-      "encounter_count": 5
+      "encounter_count": 6
     }
   },
   "action_success_rates": {
     "Suggest cleanup to free memory": 0.0
   },
   "action_attempts": {
-    "Suggest cleanup to free memory": 2
+    "Suggest cleanup to free memory": 3
   },
   "total_detections": 0,
-  "total_misses": 5,
+  "total_misses": 6,
   "detection_latencies": [],
   "avg_detection_latency": 0.0,
   "history": [
@@ -72,6 +72,16 @@
       "fingerprint": "fp_empty",
       "verdict": "failed",
       "timestamp": 1775938172.6895466
+    },
+    {
+      "simulation_type": "cpu_spike",
+      "blue_score": 0,
+      "detected": false,
+      "detection_latency": 49.385,
+      "response_time": 49.385,
+      "fingerprint": "fp_empty",
+      "verdict": "failed",
+      "timestamp": 1776100905.9495492
     }
   ]
 }

@@ -3,21 +3,21 @@
 import unittest
 from unittest.mock import patch
 
-from backend.security.sec_models import (
+from security.sec_models import (
     ProcessInfo,
     Recommendation,
     RiskLevel,
     ThreatItem,
     ThreatSeverity,
 )
-from backend.security.security_engine import analyze_security
+from security.security_engine import analyze_security
 
 
 class TestSecurityEngine(unittest.TestCase):
-    @patch("backend.security.security_engine.generate_recommendations")
-    @patch("backend.security.security_engine.calculate_risk")
-    @patch("backend.security.security_engine.detect_threats")
-    @patch("backend.security.security_engine.get_processes")
+    @patch("security.security_engine.generate_recommendations")
+    @patch("security.security_engine.calculate_risk")
+    @patch("security.security_engine.detect_threats")
+    @patch("security.security_engine.get_processes")
     def test_analyze_security_pipeline_and_output(
         self,
         mock_get_processes,
@@ -101,10 +101,10 @@ class TestSecurityEngine(unittest.TestCase):
             ],
         )
 
-    @patch("backend.security.security_engine.generate_recommendations")
-    @patch("backend.security.security_engine.calculate_risk")
-    @patch("backend.security.security_engine.detect_threats")
-    @patch("backend.security.security_engine.get_processes")
+    @patch("security.security_engine.generate_recommendations")
+    @patch("security.security_engine.calculate_risk")
+    @patch("security.security_engine.detect_threats")
+    @patch("security.security_engine.get_processes")
     def test_analyze_security_empty_results(
         self,
         mock_get_processes,
@@ -129,10 +129,10 @@ class TestSecurityEngine(unittest.TestCase):
             },
         )
 
-    @patch("backend.security.security_engine.generate_recommendations")
-    @patch("backend.security.security_engine.calculate_risk")
-    @patch("backend.security.security_engine.detect_threats")
-    @patch("backend.security.security_engine.get_processes")
+    @patch("security.security_engine.generate_recommendations")
+    @patch("security.security_engine.calculate_risk")
+    @patch("security.security_engine.detect_threats")
+    @patch("security.security_engine.get_processes")
     def test_analyze_security_serializes_moderate_level_and_medium_urgency(
         self,
         mock_get_processes,
