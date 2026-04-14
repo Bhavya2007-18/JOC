@@ -156,6 +156,8 @@ def analyze():
         save_snapshot(snapshot)
         analysis = intelligence_engine.analyze(snapshot)
 
+    result = analysis
+
     issues = [_serialize(issue) for issue in analysis.issues]
     changes = _serialize(analysis.changes_detected)
 
@@ -197,67 +199,81 @@ def analyze():
             key=lambda x: ["NORMAL", "HIGH", "CRITICAL"].index(x),
         )
 
-    best_action = {}
-    for issue in issues:
-        if isinstance(issue, dict) and isinstance(issue.get("best_action"), dict):
-            best_action = _serialize(issue.get("best_action"))
-            break
+    fallback_action = {}
+    result_issues = getattr(result, "issues", None)
+    if isinstance(result_issues, list) and result_issues:
+        first_issue_action = getattr(result_issues[0], "best_action", None)
+        if isinstance(first_issue_action, dict):
+            fallback_action = _serialize(first_issue_action)
 
-    if not best_action:
-        suggested_actions = getattr(analysis, "suggested_actions", None)
+    if not fallback_action:
+        suggested_actions = getattr(result, "suggested_actions", None)
         if isinstance(suggested_actions, list) and suggested_actions:
-            best_action = _serialize(suggested_actions[0])
+            fallback_action = _serialize(suggested_actions[0])
 
-    scenario = "general"
+    if isinstance(fallback_action, dict) and fallback_action:
+        fallback_action.setdefault("source", "engine")
 
-    if any(isinstance(i, dict) and i.get("category") == "cpu" for i in issues):
-        scenario = "cpu_spike"
-    elif any(isinstance(i, dict) and i.get("category") == "memory" for i in issues):
-        scenario = "memory_stress"
-    elif any(isinstance(i, dict) and i.get("id") == "HIGH_PROCESS_COUNT" for i in issues):
-        scenario = "process_overload"
-    elif any(isinstance(i, dict) and i.get("category") == "system" for i in issues):
-        scenario = "system_pressure"
-
-    optimizer = RuntimeOptimizer(memory)
     cpu_percent = float(getattr(snapshot, "cpu_percent", 0) or 0)
     memory_percent = float(getattr(snapshot, "memory_percent", 0) or 0)
 
-    processes = [
-        {"cpu_percent": float(getattr(p, "cpu_percent", 0) or 0)}
-        for p in getattr(snapshot, "top_processes", [])
-    ]
-    top_cpu = max((p["cpu_percent"] for p in processes), default=0.0)
-    total_cpu = max(cpu_percent, 1.0)
-    concentration = "single" if (top_cpu / total_cpu) >= 0.6 else "distributed"
+    top_processes = getattr(snapshot, "top_processes", [])
+    max_process_memory = max(
+        (float(getattr(p, "memory_percent", 0) or 0) for p in top_processes),
+        default=0.0,
+    )
+    total_memory = max(memory_percent, 1.0)
+    memory_is_distributed = max_process_memory < 0.3 * total_memory
 
-    if cpu_percent >= 90 or memory_percent >= 90:
+    scenario = "cpu_spike"
+    if any(isinstance(i, dict) and i.get("category") == "memory" for i in issues) or memory_percent > cpu_percent:
+        scenario = "distributed_memory_leak" if memory_is_distributed else "memory_leak"
+
+    if scenario == "distributed_memory_leak":
+        if max_process_memory < 0.3 * total_memory:
+            concentration = "distributed"
+        else:
+            concentration = "single"
+    else:
+        top_cpu = max(
+            (float(getattr(p, "cpu_percent", 0) or 0) for p in top_processes),
+            default=0.0,
+        )
+        total_cpu = max(cpu_percent, 1.0)
+        concentration = "single" if (top_cpu / total_cpu) >= 0.6 else "distributed"
+
+    if cpu_percent >= 90:
         severity = "critical"
-    elif cpu_percent >= 75 or memory_percent >= 75:
+    elif cpu_percent >= 75:
         severity = "high"
     else:
         severity = "moderate"
 
     has_root = False
-    if isinstance(best_action, dict):
+    if isinstance(fallback_action, dict):
         has_root = bool(
-            best_action.get("pid")
-            or best_action.get("parameters", {}).get("pid")
+            fallback_action.get("pid")
+            or fallback_action.get("parameters", {}).get("pid")
         )
 
     traits = ScenarioTraits(
         resource_type="memory" if memory_percent > cpu_percent else "cpu",
-        pattern="spike",
+        pattern="leak" if scenario in ["memory_leak", "distributed_memory_leak"] else "spike",
         process_concentration=concentration,
         severity_band=severity,
         has_root_cause_process=has_root,
     )
 
-    best_action = optimizer.get_boosted_action(
+    optimizer = RuntimeOptimizer(memory)
+    boosted_action = optimizer.get_boosted_action(
         scenario=scenario,
         traits=traits,
-        fallback_action=best_action,
+        fallback_action=fallback_action,
     )
+    best_action = boosted_action if isinstance(boosted_action, dict) else {}
+
+    if best_action and "source" not in best_action:
+        best_action["source"] = "engine"
 
     raw_confidence = getattr(analysis, "confidence", None)
     if isinstance(raw_confidence, (int, float)):
@@ -277,6 +293,9 @@ def analyze():
         boosted_conf = best_action.get("confidence")
         if isinstance(boosted_conf, (int, float)):
             confidence = max(0.0, min(1.0, float(boosted_conf)))
+
+    if best_action and "confidence" not in best_action:
+        best_action["confidence"] = float(confidence)
 
     return {
         "summary": {
