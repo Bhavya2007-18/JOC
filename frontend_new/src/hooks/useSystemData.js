@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { systemApi, intelligenceApi } from '../api/client';
+import useSystemStore from '../store/useSystemStore';
 
 export function useSystemData(pollingInterval = 2000) {
   const [stats, setStats] = useState(null);
@@ -13,6 +14,7 @@ export function useSystemData(pollingInterval = 2000) {
   const [forecast, setForecast] = useState(null);
   const [causalGraph, setCausalGraph] = useState(null);
   const previousCpuByPid = useRef({});
+  const setStoreState = useSystemStore((state) => state.setState);
 
   const addEvent = useCallback((message, type = 'info') => {
     const newEvent = {
@@ -83,6 +85,19 @@ export function useSystemData(pollingInterval = 2000) {
       } catch (err) {}
 
       try {
+        const [thermalRes, thermalPredictionRes] = await Promise.all([
+          systemApi.getThermalState(),
+          systemApi.getThermalPrediction(),
+        ]);
+        setStoreState({
+          thermal: thermalRes?.data || null,
+          thermalPrediction: thermalPredictionRes?.data || null,
+        });
+      } catch (err) {
+        // Keep stale thermal state if fallback fetch fails.
+      }
+
+      try {
         const cgRes = await intelligenceApi.getCausalGraph();
         if (cgRes.data) {
            setCausalGraph(cgRes.data);
@@ -96,7 +111,7 @@ export function useSystemData(pollingInterval = 2000) {
       setError(err.message);
       // Don't set loading to false here to show stale data while retrying
     }
-  }, [addEvent]);
+  }, [addEvent, setStoreState]);
 
   useEffect(() => {
     let isMounted = true;

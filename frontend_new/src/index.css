@@ -81,9 +81,33 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   animation: micro-flicker 0.2s infinite alternate ease-in-out;
 }
 
+.thermal-cool {
+  background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.14), transparent 50%);
+}
+
+.thermal-warm {
+  background: radial-gradient(circle at 20% 20%, rgba(168, 85, 247, 0.16), transparent 55%);
+}
+
+.thermal-hot {
+  background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 60%);
+}
+
+.thermal-critical {
+  background: radial-gradient(circle at 20% 20%, rgba(239, 68, 68, 0.22), transparent 65%);
+}
+
 @keyframes micro-flicker {
   0% { opacity: 0.99; }
   100% { opacity: 1; filter: saturate(1.4) brightness(1.2); }
+}
+
+@keyframes joc-thermal-shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-0.5px, 0.5px); }
+  50% { transform: translate(0.5px, -0.5px); }
+  75% { transform: translate(-0.5px, -0.5px); }
+  100% { transform: translate(0.5px, 0.5px); }
 }
 
 .scrollbar-thin::-webkit-scrollbar {

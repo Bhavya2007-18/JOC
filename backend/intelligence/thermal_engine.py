@@ -16,6 +16,7 @@ from dataclasses import asdict, dataclass
 from threading import Lock
 from typing import Deque, Dict, List, Optional
 
+from intelligence.thermal_adapters import ThermalAdapterManager
 
 @dataclass(frozen=True)
 class ThermalReading:
@@ -28,6 +29,9 @@ class ThermalReading:
     score: float
     is_critical: bool
     delta_temp: float
+    gpu_temperature: Optional[float]
+    source: str
+    confidence: str
 
 
 class ThermalEngine:
@@ -61,6 +65,7 @@ class ThermalEngine:
         self._smoothed_temp: Optional[float] = None
         self._state: str = "COOL"
         self._history: Deque[ThermalReading] = deque(maxlen=10)
+        self._adapter_manager = ThermalAdapterManager.get_instance()
 
     @staticmethod
     def _clamp(value: float, lo: float, hi: float) -> float:
@@ -148,7 +153,8 @@ class ThermalEngine:
         """
         with self._lock:
             cpu = self._clamp(float(cpu_usage), 0.0, 100.0)
-            temperature = self._estimate_temperature(cpu)
+            cpu_temp, gpu_temp, source, confidence = self._adapter_manager.get_best_temp(cpu)
+            temperature = round(float(cpu_temp), 2)
             smoothed = self._apply_ema(temperature)
 
             if self._previous_temp is None:
@@ -172,20 +178,35 @@ class ThermalEngine:
                 score=score,
                 is_critical=is_critical,
                 delta_temp=delta_temp,
+                gpu_temperature=gpu_temp,
+                source=source,
+                confidence=confidence,
             )
             self._history.append(reading)
 
-            return {
+            result = {
                 "temperature": reading.smoothed_temperature,
-                "raw_temperature": reading.temperature,
+                "gpu_temperature": reading.gpu_temperature,
                 "state": reading.state,
                 "velocity": reading.velocity,
                 "score": reading.score,
                 "is_critical": reading.is_critical,
+                "source": reading.source,
+                "confidence": reading.confidence,
                 "delta_temp": reading.delta_temp,
                 "history_size": len(self._history),
                 "history": [asdict(item) for item in self._history],
             }
+
+            if velocity == "spiking":
+                result["thermal_velocity_spike"] = {
+                    "event": "THERMAL_VELOCITY_SPIKE",
+                    "delta": delta_temp,
+                    "temperature": smoothed,
+                    "timestamp": timestamp,
+                }
+
+            return result
 
     def latest(self) -> Optional[Dict[str, object]]:
         with self._lock:
@@ -196,4 +217,3 @@ class ThermalEngine:
     def history(self) -> List[Dict[str, object]]:
         with self._lock:
             return [asdict(item) for item in self._history]
-

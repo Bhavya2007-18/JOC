@@ -8,14 +8,36 @@ import { Storage } from './pages/Storage';
 import { Tweaks } from './pages/Tweaks';
 import { History } from './pages/History';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { systemApi } from './api/client';
+import useSystemStore from './store/useSystemStore';
 
 function App() {
+  const setStoreState = useSystemStore((state) => state.setState);
+
   useEffect(() => {
     connectWebSocket();
     return () => {
       disconnectWebSocket();
     };
   }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    Promise.allSettled([
+      systemApi.getThermalState(),
+      systemApi.getThermalPrediction(),
+    ]).then((results) => {
+      if (!mounted) return;
+      const thermal =
+        results[0].status === 'fulfilled' ? results[0].value?.data || null : null;
+      const thermalPrediction =
+        results[1].status === 'fulfilled' ? results[1].value?.data || null : null;
+      setStoreState({ thermal, thermalPrediction });
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [setStoreState]);
 
   return (
     <Router>
@@ -35,4 +57,3 @@ function App() {
 }
 
 export default App;
-

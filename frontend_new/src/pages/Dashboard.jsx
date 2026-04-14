@@ -19,37 +19,40 @@ import { EventStream } from '../components/EventStream';
 import { useSystemData } from '../hooks/useSystemData';
 import { systemApi, optimizerApi } from '../api/client';
 import { useSystemMode } from '../context/SystemModeContext';
+import useSystemStore from '../store/useSystemStore';
 import { AnimatePresence, motion as Motion } from 'framer-motion'; // Consistent alias
 import {
   Activity,
   HardDrive,
   Zap,
-  Clock,
   AlertTriangle,
-  ArrowRight,
   Cpu,
   Monitor,
   ShieldCheck,
   BrainCircuit,
-  Settings2,
   Trash2,
-  Loader2,
   CheckCircle2,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { cn } from '../utils/cn';
 import { StatCardBg } from '../components/StatCardBg';
-import { ModeCardBg } from '../components/ModeCardBg';
 import { ProtocolBg } from '../components/ProtocolBg';
+import { ThermalPanel } from '../components/thermal-panel';
+import { ThermalPrediction } from '../components/thermal-prediction';
+import { ModeControl } from '../components/mode-control';
+import { LogsPanel } from '../components/logs-panel';
 
 export function Dashboard() {
-  const { stats, processes, anomalies, decisions, health, loading, error, events, forecast, addEvent } = useSystemData(3000);
+  const { stats, processes, anomalies, decisions, health, loading, error, events: historyEvents, forecast, addEvent } = useSystemData(3000);
   const { systemMode, setSystemMode } = useSystemMode();
+  const thermal = useSystemStore((state) => state.thermal);
+  const thermalPrediction = useSystemStore((state) => state.thermalPrediction);
+  const wsEvents = useSystemStore((state) => state.events);
   const [chartData, setChartData] = useState([]);
   const [modeLoading, setModeLoading] = useState(false);
   const [boostLoading, setBoostLoading] = useState(false);
   const [flushLoading, setFlushLoading] = useState(false);
   const [protocolStatus, setProtocolStatus] = useState(null);
+  const mergedEvents = wsEvents?.length ? wsEvents : historyEvents;
 
   useEffect(() => {
     if (!stats) return;
@@ -96,12 +99,6 @@ export function Dashboard() {
       color: 'text-cyan-400',
       chartData: [] 
     },
-  ];
-
-  const modes = [
-    { id: 'chill', label: 'Chill', icon: Clock, color: 'text-blue-400', desc: 'Power saving' },
-    { id: 'smart', label: 'Smart', icon: BrainCircuit, color: 'text-purple-400', desc: 'Balanced' },
-    { id: 'beast', label: 'Beast', icon: Zap, color: 'text-amber-400', desc: 'Max performance' },
   ];
 
   useEffect(() => {
@@ -253,6 +250,11 @@ export function Dashboard() {
         })}
       </div>
 
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <ThermalPanel thermal={thermal} />
+        <ThermalPrediction prediction={thermalPrediction} />
+      </div>
+
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-10">
           <Card title="Telemetric Analysis" description="Live system resource overhead" icon={Activity}>
@@ -332,29 +334,14 @@ export function Dashboard() {
         </div>
 
         <div className="space-y-10">
-          <Card title="System Mode" icon={Settings2}>
-            <div className="grid gap-4 mt-6">
-              {modes.map((mode) => (
-                <Motion.button
-                  key={mode.id}
-                  onClick={() => handleModeChange(mode.id)}
-                  className={cn(
-                    'flex items-center gap-5 p-5 rounded-2xl border transition-all relative overflow-hidden',
-                    systemMode === mode.id ? 'bg-slate-900 border-cyan-500/30' : 'bg-slate-900 border-transparent hover:border-slate-700'
-                  )}
-                >
-                  <ModeCardBg type={mode.id} />
-                  <div className={cn('p-3 rounded-xl', systemMode === mode.id ? 'text-accent-blue' : 'text-slate-500')}>
-                    <mode.icon size={24} />
-                  </div>
-                  <div className="text-left z-10">
-                    <span className="block font-black uppercase text-sm">{mode.label}</span>
-                    <span className="text-[10px] text-slate-500 uppercase">{mode.desc}</span>
-                  </div>
-                </Motion.button>
-              ))}
-            </div>
-          </Card>
+          <ModeControl
+            systemMode={systemMode}
+            thermal={thermal}
+            thermalPrediction={thermalPrediction}
+            modeLoading={modeLoading}
+            onModeChange={handleModeChange}
+            onStatus={setProtocolStatus}
+          />
 
           <Card title="Direct Protocols" icon={Zap}>
             <div className="grid grid-cols-2 gap-5 mt-6">
@@ -371,7 +358,8 @@ export function Dashboard() {
             </div>
           </Card>
 
-          <EventStream events={events} />
+          <LogsPanel events={mergedEvents} />
+          <EventStream events={mergedEvents} />
         </div>
       </div>
     </div>

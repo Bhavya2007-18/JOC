@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { systemApi } from '../api/client';
 import { useSystemData } from '../hooks/useSystemData';
+import useSystemStore from '../store/useSystemStore';
 
 const SystemModeContext = createContext();
 
@@ -9,6 +10,8 @@ export function SystemModeProvider({ children }) {
   const [visualIntensity, setVisualIntensity] = useState(0.5);
   const [targetIntensity, setTargetIntensity] = useState(0.5);
   const { stats } = useSystemData(3000);
+  const thermal = useSystemStore((state) => state.thermal);
+  const thermalPrediction = useSystemStore((state) => state.thermalPrediction);
 
   // Sync with backend on mount
   useEffect(() => {
@@ -28,6 +31,7 @@ export function SystemModeProvider({ children }) {
       setSystemModeState(mode);
     } catch (err) {
       console.error('Failed to update system mode:', err);
+      throw err;
     }
   }, []);
 
@@ -66,8 +70,10 @@ export function SystemModeProvider({ children }) {
     telemetry: {
       cpu: stats?.cpu?.usage_percent || 0,
       memory: stats?.memory?.percent || 0,
+      thermalState: thermal?.state || 'COOL',
+      thermalRisk: thermalPrediction?.risk || 'SAFE',
     }
-  }), [systemMode, setSystemMode, visualIntensity, stats]);
+  }), [systemMode, setSystemMode, visualIntensity, stats, thermal, thermalPrediction]);
 
   return (
     <SystemModeContext.Provider value={value}>

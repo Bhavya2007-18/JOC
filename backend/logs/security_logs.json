@@ -1,78 +1,5 @@
 [
   {
-    "timestamp": "2026-04-14T08:03:21.333366+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "19856_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 19856) is not recognized.",
-          "pid": 19856,
-          "process_name": "PredatorSense.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 19856,
-          "process_name": "PredatorSense.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T08:04:02.481297+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
-    "timestamp": "2026-04-14T08:04:43.634311+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
-    "timestamp": "2026-04-14T08:05:24.489403+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
-    "timestamp": "2026-04-14T08:06:06.575813+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
-    "timestamp": "2026-04-14T08:06:48.756615+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
     "timestamp": "2026-04-14T08:07:30.883151+00:00",
     "data": {
       "risk_score": 0,
@@ -2471,6 +2398,446 @@
           "urgency": "medium",
           "pid": 22040,
           "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:34:13.203797+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "22040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 22040) is not recognized.",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "20120_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 20120) is not recognized.",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "8416_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 8416) is not recognized.",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "18416_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Trae.exe is mostly idle with low CPU but high RAM usage (340.2 MB).",
+          "pid": 18416,
+          "process_name": "Trae.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 18416,
+          "process_name": "Trae.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T18:09:41.174851+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "18108_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 18108) is not recognized.",
+          "pid": 18108,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "8416_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 8416) is not recognized.",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "16952_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process NVDisplay.Container.exe (PID 16952) is not recognized.",
+          "pid": 16952,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "id": "8228_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO_svc.exe (PID 8228) is not recognized.",
+          "pid": 8228,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "id": "23340_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Trae.exe is mostly idle with low CPU but high RAM usage (586.9 MB).",
+          "pid": 23340,
+          "process_name": "Trae.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18108,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16952,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8228,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 23340,
+          "process_name": "Trae.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T18:10:36.049215+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "23340_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 23340) is not recognized.",
+          "pid": 23340,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "3764_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO2_svc.exe (PID 3764) is not recognized.",
+          "pid": 3764,
+          "process_name": "AICO2_svc.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 23340,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 3764,
+          "process_name": "AICO2_svc.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T18:11:31.522949+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "23124_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 23124) is not recognized.",
+          "pid": 23124,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "7332_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process QuickPanelOSD.exe (PID 7332) is not recognized.",
+          "pid": 7332,
+          "process_name": "QuickPanelOSD.exe"
+        },
+        {
+          "id": "10308_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process KillerNetworkService.exe (PID 10308) is not recognized.",
+          "pid": 10308,
+          "process_name": "KillerNetworkService.exe"
+        },
+        {
+          "id": "33332_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Trae.exe is mostly idle with low CPU but high RAM usage (460.9 MB).",
+          "pid": 33332,
+          "process_name": "Trae.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 23124,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 7332,
+          "process_name": "QuickPanelOSD.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 10308,
+          "process_name": "KillerNetworkService.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 33332,
+          "process_name": "Trae.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T18:12:22.841293+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "13948_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process VALORANT-Win64-Shipping.exe flagged as suspicious (CPU: 384.0%, RAM: 1802.0 MB).",
+          "pid": 13948,
+          "process_name": "VALORANT-Win64-Shipping.exe"
+        },
+        {
+          "id": "13948_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process VALORANT-Win64-Shipping.exe detected (PID 13948).",
+          "pid": 13948,
+          "process_name": "VALORANT-Win64-Shipping.exe"
+        },
+        {
+          "id": "33332_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Trae.exe is mostly idle with low CPU but high RAM usage (455.6 MB).",
+          "pid": 33332,
+          "process_name": "Trae.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 13948,
+          "process_name": "VALORANT-Win64-Shipping.exe"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 13948,
+          "process_name": "VALORANT-Win64-Shipping.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 33332,
+          "process_name": "Trae.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T18:13:20.403542+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "13948_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process VALORANT-Win64-Shipping.exe flagged as suspicious (CPU: 84.5%, RAM: 1830.3 MB).",
+          "pid": 13948,
+          "process_name": "VALORANT-Win64-Shipping.exe"
+        },
+        {
+          "id": "13948_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process VALORANT-Win64-Shipping.exe detected (PID 13948).",
+          "pid": 13948,
+          "process_name": "VALORANT-Win64-Shipping.exe"
+        },
+        {
+          "id": "15516_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 15516) is not recognized.",
+          "pid": 15516,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "33332_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Trae.exe is mostly idle with low CPU but high RAM usage (460.5 MB).",
+          "pid": 33332,
+          "process_name": "Trae.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 13948,
+          "process_name": "VALORANT-Win64-Shipping.exe"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 13948,
+          "process_name": "VALORANT-Win64-Shipping.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 15516,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 33332,
+          "process_name": "Trae.exe"
         }
       ]
     }

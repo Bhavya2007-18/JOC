@@ -28,8 +28,19 @@ export function DynamicBackground() {
     };
   }, []);
 
+  const thermalState = String(telemetry?.thermalState || 'COOL').toUpperCase();
+  const predictedRisk = String(telemetry?.thermalRisk || 'SAFE').toUpperCase();
+  const stateClass =
+    thermalState === 'CRITICAL'
+      ? 'thermal-critical'
+      : thermalState === 'HOT'
+        ? 'thermal-hot'
+        : thermalState === 'WARM'
+          ? 'thermal-warm'
+          : 'thermal-cool';
+
   return (
-    <div className={`fixed inset-0 pointer-events-none overflow-hidden -z-10 bg-[#0a0a0c] mode-${systemMode}`}>
+    <div className={`fixed inset-0 pointer-events-none overflow-hidden -z-10 bg-[#0a0a0c] mode-${systemMode} ${stateClass}`}>
       {/* Layer 1: Multi-Depth Animated Mesh Blobs */}
       <div className="absolute inset-0">
         <BlobsGroup 
@@ -54,6 +65,8 @@ export function DynamicBackground() {
 
       {/* Layer 4: Thermal Bloom (Heat Leakage) */}
       <ThermalBloom cpu={telemetry.cpu} />
+      <PredictionAura risk={predictedRisk} />
+      {thermalState === 'CRITICAL' && <CriticalShake />}
     </div>
   );
 }
@@ -221,6 +234,26 @@ function ThermalBloom({ cpu }) {
         boxShadow: `inset 0 0 ${150 * bloomIntensity}px rgba(239, 68, 68, 0.4)`,
         border: `${bloomIntensity * 2}px solid rgba(239, 68, 68, 0.2)`,
         filter: `blur(${bloomIntensity * 10}px)`
+      }}
+    />
+  );
+}
+
+function PredictionAura({ risk }) {
+  if (risk !== 'HIGH' && risk !== 'CRITICAL') return null;
+  const className =
+    risk === 'CRITICAL'
+      ? 'animate-pulse opacity-70 shadow-[inset_0_0_180px_rgba(255,61,87,0.45)]'
+      : 'opacity-45 shadow-[inset_0_0_120px_rgba(255,179,0,0.28)]';
+  return <div className={`absolute inset-0 pointer-events-none transition-all duration-500 ${className}`} />;
+}
+
+function CriticalShake() {
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        animation: 'joc-thermal-shake 500ms linear infinite',
       }}
     />
   );
