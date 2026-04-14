@@ -275,6 +275,69 @@ def analyze():
     if best_action and "source" not in best_action:
         best_action["source"] = "engine"
 
+    multi_actions = []
+
+    for issue in result.issues:
+        try:
+            fallback_action = getattr(issue, "best_action", None)
+
+            if not isinstance(fallback_action, dict):
+                continue
+
+            category = getattr(issue, "category", "system")
+            category_value = getattr(category, "value", category)
+            issue_id = getattr(issue, "id", "")
+
+            if category_value == "memory":
+                scenario_name = "memory_leak"
+            elif category_value == "cpu":
+                scenario_name = "cpu_spike"
+            elif issue_id == "STARTUP_LOAD":
+                scenario_name = "startup_load"
+            elif issue_id in ["HIGH_SERVICE_COUNT", "HEAVY_SERVICES"]:
+                scenario_name = "service_overload"
+            elif issue_id == "HIGH_PROCESS_COUNT":
+                scenario_name = "process_overload"
+            else:
+                scenario_name = "system_misc"
+
+            traits_local = ScenarioTraits(
+                resource_type="memory" if memory_percent > cpu_percent else "cpu",
+                pattern="leak" if scenario_name == "memory_leak" else "spike",
+                process_concentration=concentration,
+                severity_band=severity,
+                has_root_cause_process=bool(
+                    fallback_action.get("pid")
+                    or fallback_action.get("parameters", {}).get("pid")
+                ),
+            )
+
+            optimizer_issue = RuntimeOptimizer(memory)
+            action = optimizer_issue.get_boosted_action(
+                scenario=scenario_name,
+                traits=traits_local,
+                fallback_action=fallback_action,
+            )
+            if not isinstance(action, dict):
+                action = fallback_action
+
+            action_type = action.get("action_type")
+            if not action_type:
+                continue
+
+            multi_actions.append({
+                "issue_id": getattr(issue, "id", "unknown"),
+                "category": str(getattr(issue, "category", "")),
+                "action_type": action_type,
+                "target": action.get("target"),
+                "parameters": action.get("parameters", {}),
+                "confidence": action.get("confidence", 0.5),
+                "source": action.get("source", "per_issue_engine")
+            })
+
+        except Exception:
+            continue
+
     raw_confidence = getattr(analysis, "confidence", None)
     if isinstance(raw_confidence, (int, float)):
         confidence = max(0.0, min(1.0, float(raw_confidence)))
@@ -297,6 +360,171 @@ def analyze():
     if best_action and "confidence" not in best_action:
         best_action["confidence"] = float(confidence)
 
+    if isinstance(best_action, dict) and best_action.get("action_type"):
+        try:
+            action_type = best_action.get("action_type")
+
+            # Estimate impact (simple heuristic for now)
+            estimated_improvement = 0.0
+
+            if action_type == "kill_process":
+                estimated_improvement = float(memory_percent or 0.0) * 0.1
+            elif action_type == "system_tweak":
+                estimated_improvement = float(cpu_percent or 0.0) * 0.05
+
+            impact_score = float(estimated_improvement) * 0.7
+
+            # Update memory using SAME scenario + traits already computed
+            memory.update(
+                scenario,
+                traits,
+                action_type,
+                impact_score,
+            )
+
+        except Exception:
+            # Never break API due to learning failure
+            pass
+
+    for issue in result.issues:
+        try:
+            if not issue.best_action:
+                continue
+
+            action = issue.best_action
+            action_type = action.get("action_type")
+
+            if not action_type:
+                continue
+
+            # Detect scenario based on issue category
+            category = getattr(issue, "category", "system")
+            category_value = getattr(category, "value", category)
+
+            if category_value == "memory":
+                scenario_name = "memory_leak"
+            elif category_value == "cpu":
+                scenario_name = "cpu_spike"
+            else:
+                scenario_name = "system_load"
+
+            # Reuse same traits logic (copy from earlier traits block)
+            traits_local = ScenarioTraits(
+                resource_type=traits.resource_type,
+                pattern=traits.pattern,
+                process_concentration=traits.process_concentration,
+                severity_band=traits.severity_band,
+                has_root_cause_process=bool(
+                    action.get("pid")
+                    or action.get("parameters", {}).get("pid")
+                ),
+            )
+
+            # Estimate impact (simple heuristic)
+            est_improvement = 0.0
+
+            if action_type == "kill_process":
+                est_improvement = float(memory_percent or 0.0) * 0.1
+            elif action_type == "system_tweak":
+                est_improvement = float(cpu_percent or 0.0) * 0.05
+
+            impact_score = float(est_improvement) * 0.7
+
+            memory.update(
+                scenario_name,
+                traits_local,
+                action_type,
+                impact_score,
+            )
+
+        except Exception:
+            continue
+
+    insights_scenario = "memory_leak" if memory_percent > cpu_percent else "cpu_spike"
+
+    top_cpu_insight = max(
+        (float(getattr(p, "cpu_percent", 0) or 0) for p in top_processes),
+        default=0.0,
+    )
+    total_cpu_insight = max(cpu_percent, 1.0)
+    insights_concentration = "single" if (top_cpu_insight / total_cpu_insight) >= 0.6 else "distributed"
+
+    if cpu_percent >= 90:
+        insights_severity = "critical"
+    elif cpu_percent >= 75:
+        insights_severity = "high"
+    else:
+        insights_severity = "moderate"
+
+    insights_traits = ScenarioTraits(
+        resource_type="memory" if memory_percent > cpu_percent else "cpu",
+        pattern="leak" if memory_percent > cpu_percent else "spike",
+        process_concentration=insights_concentration,
+        severity_band=insights_severity,
+        has_root_cause_process=bool(
+            isinstance(best_action, dict) and best_action.get("pid")
+        ),
+    )
+
+    learned_action = memory.get_best_action(insights_scenario, insights_traits)
+    learned_action_type = None
+    if isinstance(learned_action, dict):
+        learned_action_type = learned_action.get("action_type")
+
+    avg_impact = None
+    scenario_index = getattr(memory, "scenario_index", {})
+    if isinstance(scenario_index, dict):
+        scenario_stats = scenario_index.get(insights_scenario, {})
+        if isinstance(scenario_stats, dict) and learned_action_type in scenario_stats:
+            action_stats = scenario_stats.get(learned_action_type, {})
+            if isinstance(action_stats, dict):
+                raw_avg_impact = action_stats.get("avg_impact")
+                if isinstance(raw_avg_impact, (int, float)):
+                    avg_impact = float(raw_avg_impact)
+
+    decision_source = best_action.get("source") if isinstance(best_action, dict) else None
+    if decision_source == "memory_override":
+        insights_explanation = "Memory override applied: learned action outperformed engine fallback."
+    elif decision_source == "engine+memory":
+        insights_explanation = "Engine action confirmed by learned memory and confidence boosted."
+    elif decision_source == "memory":
+        insights_explanation = "No engine fallback was available, so learned memory action was used."
+    else:
+        insights_explanation = "Engine decision used; no stronger learned override matched this state."
+
+    engine_action = fallback_action.get("action_type") if isinstance(fallback_action, dict) else None
+    final_action = best_action.get("action_type") if isinstance(best_action, dict) else None
+    override = decision_source == "memory_override"
+
+    engine_estimated = None
+    if isinstance(fallback_action, dict):
+        candidate_impact = fallback_action.get("estimated_impact")
+        if not isinstance(candidate_impact, (int, float)):
+            candidate_impact = fallback_action.get("avg_impact")
+        if isinstance(candidate_impact, (int, float)):
+            engine_estimated = float(candidate_impact)
+
+    learning_insights = {
+        "scenario_detected": insights_scenario,
+        "matched_traits": {
+            "resource_type": insights_traits.resource_type,
+            "pattern": insights_traits.pattern,
+            "process_concentration": insights_traits.process_concentration,
+            "severity_band": insights_traits.severity_band,
+        },
+        "learned_action": learned_action_type,
+        "avg_impact": avg_impact,
+        "decision_source": decision_source,
+        "explanation": insights_explanation,
+        "engine_action": engine_action,
+        "final_action": final_action,
+        "override": override,
+        "impact_comparison": {
+            "learned_avg": avg_impact,
+            "engine_estimated": engine_estimated,
+        },
+    }
+
     return {
         "summary": {
             "cpu_percent": float(getattr(snapshot, "cpu_percent", 0) or 0),
@@ -309,8 +537,10 @@ def analyze():
         "explanation": _serialize(explanation),
         "causal_chain": _serialize(causal),
         "best_action": _serialize(best_action),
+        "recommended_actions": multi_actions,
         "confidence": float(confidence),
         "risk_level": risk_level,
+        "learning_insights": learning_insights,
         "changes": changes,
         "is_admin": bool(is_admin()),
     }
