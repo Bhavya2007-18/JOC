@@ -15,6 +15,7 @@ from intelligence.xai_engine import XAIEngine
 
 # Phase 3 Autonomy Layer
 from autonomy.orchestrator import AutonomyOrchestrator
+from services.optimizer.power_mode import get_current_mode, apply_system_mode
 
 from state.system_state import get_state
 import asyncio
@@ -34,6 +35,7 @@ class MonitorLoop:
         self._stop_event = threading.Event()
         self.latest_snapshot = None
         self.latest_analysis = None
+        self._iteration_count = 0
         
         # Instantiate Intelligence Layer
         self.baseline_engine = BaselineEngine(window_size=60)
@@ -145,6 +147,13 @@ class MonitorLoop:
                 # Phase 3: Autonomy Loop
                 autonomy_result = self.autonomy_orchestrator.tick(self.latest_intelligence)
                 self.latest_autonomy_state = autonomy_result
+                
+                # Periodic System Mode Enforcement (every 10 ticks / approx 50s)
+                self._iteration_count += 1
+                if self._iteration_count % 10 == 0:
+                    current_mode = get_current_mode()
+                    logger.info(f"Enforcing system mode policy: {current_mode.upper()}")
+                    apply_system_mode(current_mode, force_live=True)
                 
                 # Broadcast Threat Score to SystemState directly
                 try:

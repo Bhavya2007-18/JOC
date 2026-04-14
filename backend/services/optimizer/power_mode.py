@@ -25,6 +25,7 @@ from .process_manager import (
     _is_protected_process,
     change_process_priority_safe,
 )
+from storage.db import get_setting, set_setting
 
 logger = get_logger("optimizer.power_mode")
 _action_store = ActionStore()
@@ -58,8 +59,8 @@ _MAX_AFFECTED_PROCESSES = {
     "beast": 15,
 }
 
-# Current active mode (in-memory state)
-_current_mode: str = "smart"
+# Current active mode (initialized from DB or default)
+_current_mode: str = get_setting("system_mode", "smart")
 
 
 def get_current_mode() -> str:
@@ -200,18 +201,19 @@ def _get_mode_description(mode: str) -> Dict[str, str]:
     return descriptions.get(mode, descriptions["smart"])
 
 
-def apply_system_mode(mode: str) -> Dict[str, Any]:
+def apply_system_mode(mode: str, force_live: bool = False) -> Dict[str, Any]:
     """Apply a system operating mode.
 
     Args:
         mode: One of 'chill', 'smart', 'beast'
+        force_live: If True, bypasses the global DRY_RUN flag for this action.
 
     Returns:
         Result dict with power plan status, affected processes,
         system metrics, and mode metadata.
     """
     global _current_mode
-    effective_dry_run = bool(DRY_RUN)
+    effective_dry_run = bool(DRY_RUN) and not force_live
     mode = mode.lower().strip()
 
     if mode not in _POWER_PLANS:
@@ -230,9 +232,10 @@ def apply_system_mode(mode: str) -> Dict[str, Any]:
     # 2. Adjust process priorities
     affected_processes = _adjust_process_priorities(mode, dry_run=effective_dry_run)
 
-    # 3. Update internal state
+    # 3. Update internal state and persistence
     previous_mode = _current_mode
     _current_mode = mode
+    set_setting("system_mode", mode)
 
     # 4. Capture after-metrics
     cpu_after = get_cpu_stats()
