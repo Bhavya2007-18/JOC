@@ -1,5 +1,6 @@
 import time
 import threading
+import json
 
 from intelligence.snapshot_provider import collect_snapshot
 from intelligence.engine import IntelligenceEngine
@@ -13,10 +14,12 @@ from intelligence.causal_engine import CausalEngine
 from intelligence.predictive_engine import PredictiveEngine
 from intelligence.xai_engine import XAIEngine
 from intelligence.thermal_engine import ThermalEngine
+from intelligence.thermal_predictor import ThermalPredictor
 
 # Phase 3 Autonomy Layer
 from autonomy.orchestrator import AutonomyOrchestrator
 from services.optimizer.power_mode import get_current_mode, apply_system_mode
+from services.optimizer.cleanup import run_cleanup
 
 from state.system_state import get_state
 import asyncio
@@ -45,6 +48,9 @@ class MonitorLoop:
         self.predictive_engine = PredictiveEngine()
         self.xai_engine = XAIEngine()
         self.thermal_engine = ThermalEngine()
+        self.thermal_predictor = ThermalPredictor()
+        self._last_thermal_mitigation_ts = 0.0
+        self._thermal_mitigation_cooldown_s = 20.0
         
         # Instantiate Autonomy Layer
         self.autonomy_orchestrator = AutonomyOrchestrator()
@@ -138,7 +144,11 @@ class MonitorLoop:
                 )
 
                 # Stage 6: Thermal Intelligence
-                thermal_data = self.thermal_engine.update(cpu_usage=cpu, timestamp=snapshot.timestamp)
+                thermal_data = self.thermal_engine.update(
+                    cpu_usage=cpu,
+                    timestamp=snapshot.timestamp,
+                )
+
                 if thermal_data.get("velocity") == "spiking":
                     # Hook thermal spikes into causal graph.
                     self.causal_engine.emit_event(
@@ -154,6 +164,42 @@ class MonitorLoop:
                     )
                     # Refresh causal root-cause after thermal event enrichment.
                     causal_data = self.causal_engine.get_root_cause()
+
+                # Stage 7: Predictive Thermal Intelligence
+                self.thermal_predictor.update(
+                    temp=float(thermal_data.get("temperature", 0.0)),
+                    timestamp=float(snapshot.timestamp),
+                )
+                thermal_prediction = self.thermal_predictor.predict()
+
+                prediction_risk = str(thermal_prediction.get("risk", "SAFE")).upper()
+                if prediction_risk in {"HIGH", "CRITICAL"}:
+                    event_payload = {
+                        "event": "THERMAL_PREDICTION_ALERT",
+                        "predicted_temp": thermal_prediction.get("predicted_temp"),
+                        "risk": prediction_risk,
+                        "time_to_critical": thermal_prediction.get("time_to_critical"),
+                    }
+                    logger.warning("THERMAL_PREDICTION_ALERT %s", json.dumps(event_payload))
+                    self.causal_engine.emit_event(
+                        event_type="THERMAL",
+                        node_id="THERMAL_RISK_FORECAST",
+                        data=event_payload,
+                        link_to=["CPU_SPIKE", "THERMAL_SPIKE"],
+                    )
+                    causal_data = self.causal_engine.get_root_cause()
+
+                # Lightweight pre-emptive mitigation controls.
+                now = time.time()
+                should_mitigate = prediction_risk in {"HIGH", "CRITICAL"}
+                mitigation_cooldown_passed = (
+                    now - self._last_thermal_mitigation_ts
+                ) >= self._thermal_mitigation_cooldown_s
+                mitigation_result = None
+                if should_mitigate and mitigation_cooldown_passed:
+                    # Safe pre-emptive action: dry-run cleanup + signal to defer heavy ops.
+                    mitigation_result = run_cleanup(dry_run=True)
+                    self._last_thermal_mitigation_ts = now
                 
                 # Compile Unified Intelligence Object
                 self.latest_intelligence = {
@@ -163,6 +209,11 @@ class MonitorLoop:
                     "baseline": baseline_data,
                     "causal_graph": causal_data,
                     "thermal": thermal_data,
+                    "thermal_prediction": thermal_prediction,
+                    "thermal_controls": {
+                        "delay_heavy_operations": should_mitigate,
+                        "preemptive_mitigation_applied": bool(mitigation_result),
+                    },
                 }
                 
                 # Phase 3: Autonomy Loop
@@ -173,6 +224,20 @@ class MonitorLoop:
                 self._iteration_count += 1
                 if self._iteration_count % 10 == 0:
                     current_mode = get_current_mode()
+                    predicted_risk = str(
+                        thermal_prediction.get("risk", "SAFE")
+                    ).upper()
+                    if predicted_risk == "CRITICAL" and current_mode == "beast":
+                        logger.warning(
+                            "Preemptive thermal guard: blocking BEAST due to CRITICAL forecast"
+                        )
+                        current_mode = "smart"
+                    elif predicted_risk == "HIGH" and current_mode == "beast":
+                        logger.info(
+                            "Preemptive thermal mitigation: reducing BEAST to SMART on HIGH forecast"
+                        )
+                        current_mode = "smart"
+
                     logger.info(f"Enforcing system mode policy: {current_mode.upper()}")
                     apply_system_mode(current_mode, force_live=True, thermal_data=thermal_data)
                 

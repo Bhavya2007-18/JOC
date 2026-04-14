@@ -63,6 +63,23 @@ _MAX_AFFECTED_PROCESSES = {
 # Current active mode (initialized from DB or default)
 _current_mode: str = get_setting("system_mode", "smart")
 
+# ------------------------------------------------------------------
+# Thermal Cooldown Lock — prevents rapid re-escalation after events
+# ------------------------------------------------------------------
+_THERMAL_COOLDOWN_SECONDS: float = 30.0
+_thermal_cooldown_until: Optional[float] = None
+
+
+def _is_thermal_cooldown_active(current_time: float) -> bool:
+    if _thermal_cooldown_until is None:
+        return False
+    return current_time < _thermal_cooldown_until
+
+
+def _enter_thermal_cooldown(cooldown_seconds: float = _THERMAL_COOLDOWN_SECONDS) -> None:
+    global _thermal_cooldown_until
+    _thermal_cooldown_until = time.time() + cooldown_seconds
+
 
 def get_current_mode() -> str:
     """Return the currently active system mode."""
@@ -262,16 +279,54 @@ def apply_system_mode(
     guard_action_id = None
     guard_downgraded = False
     requested_mode = mode
-    if thermal_data and thermal_data.get("is_critical") and mode == "beast":
-        # Hard safety downgrade: critical thermals cannot run BEAST.
-        mode = "smart"
-        guard_downgraded = True
-        guard_action_id = _record_thermal_guard_event(
-            thermal_data=thermal_data,
-            mode_before=requested_mode,
-            mode_after=mode,
-            reason="critical_thermal_state",
-        )
+    current_time = time.time()
+
+    if thermal_data:
+        temp = thermal_data.get("temperature", 0)
+        velocity = thermal_data.get("velocity", "stable")
+        state = thermal_data.get("state", "COOL")
+        is_critical = thermal_data.get("is_critical", False)
+
+        if mode == "beast":
+            if _is_thermal_cooldown_active(current_time):
+                mode = "smart"
+                guard_downgraded = True
+                guard_action_id = _record_thermal_guard_event(
+                    thermal_data=thermal_data,
+                    mode_before=requested_mode,
+                    mode_after=mode,
+                    reason="thermal_cooldown_lock",
+                )
+                _enter_thermal_cooldown()
+            elif is_critical:
+                mode = "smart"
+                guard_downgraded = True
+                guard_action_id = _record_thermal_guard_event(
+                    thermal_data=thermal_data,
+                    mode_before=requested_mode,
+                    mode_after=mode,
+                    reason="critical_thermal_state",
+                )
+                _enter_thermal_cooldown()
+            elif state == "HOT" and velocity == "rising":
+                mode = "smart"
+                guard_downgraded = True
+                guard_action_id = _record_thermal_guard_event(
+                    thermal_data=thermal_data,
+                    mode_before=requested_mode,
+                    mode_after=mode,
+                    reason="hot_rising_thermal",
+                )
+                _enter_thermal_cooldown()
+        elif mode == "smart" and state == "HOT" and velocity == "rising":
+            mode = "chill"
+            guard_downgraded = True
+            guard_action_id = _record_thermal_guard_event(
+                thermal_data=thermal_data,
+                mode_before=requested_mode,
+                mode_after=mode,
+                reason="hot_rising_smart_to_chill",
+            )
 
     # Capture before-metrics
     cpu_before = get_cpu_stats()

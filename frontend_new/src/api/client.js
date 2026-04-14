@@ -57,6 +57,22 @@ getTimeline: (limit = 50) => api.get(`/system/timeline?limit=${limit}`),
 rollbackAction: (rollbackId) => api.post('/action/rollback_intercept', { rollback_id: rollbackId }),
 setMode: (mode) => api.post('/system/mode', { mode }),
 getMode: () => api.get('/system/mode'),
+getThermalState: async () => {
+  try {
+    return await api.get('/api/thermal/state');
+  } catch (_) {
+    const full = await api.get('/intelligence/full');
+    return { data: full.data?.thermal || null };
+  }
+},
+getThermalPrediction: async () => {
+  try {
+    return await api.get('/api/thermal/prediction');
+  } catch (_) {
+    const full = await api.get('/intelligence/full');
+    return { data: full.data?.thermal_prediction || null };
+  }
+},
 };
 
 export const intelligenceApi = {
