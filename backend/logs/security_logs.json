@@ -1,1108 +1,5 @@
 [
   {
-    "timestamp": "2026-04-14T07:19:41.213390+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:20:24.016295+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:21:07.558277+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:21:50.327822+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "14648_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process CrossDeviceService.exe (PID 14648) is not recognized.",
-          "pid": 14648,
-          "process_name": "CrossDeviceService.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 14648,
-          "process_name": "CrossDeviceService.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:22:32.559196+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:23:14.616737+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:23:56.617856+00:00",
-    "data": {
-      "risk_score": 30,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "25544_suspicious_process",
-          "category": "suspicious_process",
-          "severity": "high",
-          "title": "Suspicious Process Detected",
-          "description": "Process WinRAR.exe flagged as suspicious (CPU: 91.3%, RAM: 38.5 MB).",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "25544_background_suspicious",
-          "category": "background_suspicious",
-          "severity": "high",
-          "title": "Suspicious Background Activity",
-          "description": "Suspicious background process WinRAR.exe detected (PID 25544).",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "10308_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process KillerNetworkService.exe (PID 10308) is not recognized.",
-          "pid": 10308,
-          "process_name": "KillerNetworkService.exe"
-        },
-        {
-          "id": "17568_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 17568) is not recognized.",
-          "pid": 17568,
-          "process_name": "PredatorSense.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "suspicious_process",
-          "action": "Terminate process",
-          "explanation": "Process shows abnormal CPU/RAM usage",
-          "urgency": "high",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "background_suspicious",
-          "action": "Investigate background process",
-          "explanation": "Suspicious activity running in background",
-          "urgency": "high",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 10308,
-          "process_name": "KillerNetworkService.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 17568,
-          "process_name": "PredatorSense.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:24:38.262017+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:25:19.674072+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:26:01.450916+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:26:42.891603+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_suspicious_process",
-          "category": "suspicious_process",
-          "severity": "high",
-          "title": "Suspicious Process Detected",
-          "description": "Process WinRAR.exe flagged as suspicious (CPU: 93.3%, RAM: 40.6 MB).",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "25544_background_suspicious",
-          "category": "background_suspicious",
-          "severity": "high",
-          "title": "Suspicious Background Activity",
-          "description": "Suspicious background process WinRAR.exe detected (PID 25544).",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "suspicious_process",
-          "action": "Terminate process",
-          "explanation": "Process shows abnormal CPU/RAM usage",
-          "urgency": "high",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "background_suspicious",
-          "action": "Investigate background process",
-          "explanation": "Suspicious activity running in background",
-          "urgency": "high",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:27:24.209379+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:28:04.944501+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:28:45.469805+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:29:26.242268+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:30:07.183372+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "19692_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 19692) is not recognized.",
-          "pid": 19692,
-          "process_name": "PredatorSense.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 19692,
-          "process_name": "PredatorSense.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:30:48.481637+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_suspicious_process",
-          "category": "suspicious_process",
-          "severity": "high",
-          "title": "Suspicious Process Detected",
-          "description": "Process WinRAR.exe flagged as suspicious (CPU: 90.4%, RAM: 38.1 MB).",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "25544_background_suspicious",
-          "category": "background_suspicious",
-          "severity": "high",
-          "title": "Suspicious Background Activity",
-          "description": "Suspicious background process WinRAR.exe detected (PID 25544).",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "suspicious_process",
-          "action": "Terminate process",
-          "explanation": "Process shows abnormal CPU/RAM usage",
-          "urgency": "high",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "background_suspicious",
-          "action": "Investigate background process",
-          "explanation": "Suspicious activity running in background",
-          "urgency": "high",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:31:29.897229+00:00",
-    "data": {
-      "risk_score": 0,
-      "risk_level": "low",
-      "threats": [],
-      "recommendations": []
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:32:11.215040+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "13636_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process SDXHelper.exe (PID 13636) is not recognized.",
-          "pid": 13636,
-          "process_name": "SDXHelper.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 13636,
-          "process_name": "SDXHelper.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:32:52.641746+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:33:33.840783+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "19692_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 19692) is not recognized.",
-          "pid": 19692,
-          "process_name": "PredatorSense.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 19692,
-          "process_name": "PredatorSense.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:34:14.962644+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:34:56.139952+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "14920_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process QuickPanelOSD.exe (PID 14920) is not recognized.",
-          "pid": 14920,
-          "process_name": "QuickPanelOSD.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 14920,
-          "process_name": "QuickPanelOSD.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:35:37.334326+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:36:18.375401+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:36:59.442634+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:37:40.385843+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "8228_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process AICO_svc.exe (PID 8228) is not recognized.",
-          "pid": 8228,
-          "process_name": "AICO_svc.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 8228,
-          "process_name": "AICO_svc.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:38:21.397078+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:39:02.002961+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:39:42.934097+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_suspicious_process",
-          "category": "suspicious_process",
-          "severity": "high",
-          "title": "Suspicious Process Detected",
-          "description": "Process WinRAR.exe flagged as suspicious (CPU: 93.6%, RAM: 39.0 MB).",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "25544_background_suspicious",
-          "category": "background_suspicious",
-          "severity": "high",
-          "title": "Suspicious Background Activity",
-          "description": "Suspicious background process WinRAR.exe detected (PID 25544).",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "19856_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 19856) is not recognized.",
-          "pid": 19856,
-          "process_name": "PredatorSense.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "suspicious_process",
-          "action": "Terminate process",
-          "explanation": "Process shows abnormal CPU/RAM usage",
-          "urgency": "high",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "background_suspicious",
-          "action": "Investigate background process",
-          "explanation": "Suspicious activity running in background",
-          "urgency": "high",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 19856,
-          "process_name": "PredatorSense.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T07:40:23.833899+00:00",
-    "data": {
-      "risk_score": 10,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "19692_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 19692) is not recognized.",
-          "pid": 19692,
-          "process_name": "PredatorSense.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 19692,
-          "process_name": "PredatorSense.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T08:01:55.912839+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "12156_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process KAPS.exe (PID 12156) is not recognized.",
-          "pid": 12156,
-          "process_name": "KAPS.exe"
-        },
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 12156,
-          "process_name": "KAPS.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-14T08:02:39.944972+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "25544_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process WinRAR.exe (PID 25544) is not recognized.",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "id": "18832_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process fdm.exe (PID 18832) is not recognized.",
-          "pid": 18832,
-          "process_name": "fdm.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 25544,
-          "process_name": "WinRAR.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18832,
-          "process_name": "fdm.exe"
-        }
-      ]
-    }
-  },
-  {
     "timestamp": "2026-04-14T08:03:21.333366+00:00",
     "data": {
       "risk_score": 10,
@@ -2055,6 +952,1525 @@
           "urgency": "medium",
           "pid": 3796,
           "process_name": "Trae.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:07:01.377893+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 22040) is not recognized.",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "3764_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO2_svc.exe (PID 3764) is not recognized.",
+          "pid": 3764,
+          "process_name": "AICO2_svc.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 3764,
+          "process_name": "AICO2_svc.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:07:54.554716+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "19476_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 19476) is not recognized.",
+          "pid": 19476,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (649.3 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 19476,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:08:43.676026+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "29344_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 29344) is not recognized.",
+          "pid": 29344,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "2604_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 2604) is not recognized.",
+          "pid": 2604,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "id": "8416_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 8416) is not recognized.",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (586.8 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 29344,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 2604,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:09:30.951797+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "20080_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process wenativehost.exe (PID 20080) is not recognized.",
+          "pid": 20080,
+          "process_name": "wenativehost.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (591.1 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20080,
+          "process_name": "wenativehost.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:10:17.721365+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 22040) is not recognized.",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:11:04.878151+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "17084_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 17084) is not recognized.",
+          "pid": 17084,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (580.6 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 17084,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:11:52.131401+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "4060_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process NVDisplay.Container.exe (PID 4060) is not recognized.",
+          "pid": 4060,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (588.2 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 4060,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:12:39.550668+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (597.9 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:13:25.243700+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (610.3 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:14:10.393094+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 22040) is not recognized.",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "17084_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 17084) is not recognized.",
+          "pid": 17084,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 17084,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:14:55.852014+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "2604_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 2604) is not recognized.",
+          "pid": 2604,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (641.4 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 2604,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:15:41.085507+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (639.0 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:16:25.953683+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (641.6 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:17:11.337966+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (640.0 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:17:56.340542+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (642.9 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:18:41.143066+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (638.6 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:19:38.097048+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (646.5 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:20:32.975642+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (649.3 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:21:21.912461+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "8416_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 8416) is not recognized.",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "4060_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process NVDisplay.Container.exe (PID 4060) is not recognized.",
+          "pid": 4060,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (644.8 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 4060,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:22:10.964991+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 22040) is not recognized.",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "17084_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 17084) is not recognized.",
+          "pid": 17084,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 17084,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:23:02.221126+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "19476_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 19476) is not recognized.",
+          "pid": 19476,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "5348_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process unsecapp.exe (PID 5348) is not recognized.",
+          "pid": 5348,
+          "process_name": "unsecapp.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 19476,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 5348,
+          "process_name": "unsecapp.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:23:50.276826+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "8416_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 8416) is not recognized.",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (642.6 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:24:39.805125+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "8400_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AcerHardwareService.exe (PID 8400) is not recognized.",
+          "pid": 8400,
+          "process_name": "AcerHardwareService.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (642.5 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8400,
+          "process_name": "AcerHardwareService.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:25:28.052202+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "17180_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 17180) is not recognized.",
+          "pid": 17180,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (661.9 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 17180,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:26:18.233745+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "3764_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO2_svc.exe (PID 3764) is not recognized.",
+          "pid": 3764,
+          "process_name": "AICO2_svc.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (655.6 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 3764,
+          "process_name": "AICO2_svc.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:27:05.763727+00:00",
+    "data": {
+      "risk_score": 10,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "22040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 22040) is not recognized.",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:27:53.312199+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "2604_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 2604) is not recognized.",
+          "pid": 2604,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "id": "8228_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO_svc.exe (PID 8228) is not recognized.",
+          "pid": 8228,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (706.3 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 2604,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8228,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:28:46.764755+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "30276_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 30276) is not recognized.",
+          "pid": 30276,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "3764_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO2_svc.exe (PID 3764) is not recognized.",
+          "pid": 3764,
+          "process_name": "AICO2_svc.exe"
+        },
+        {
+          "id": "26836_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AQAUserPS.exe (PID 26836) is not recognized.",
+          "pid": 26836,
+          "process_name": "AQAUserPS.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (679.2 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 30276,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 3764,
+          "process_name": "AICO2_svc.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 26836,
+          "process_name": "AQAUserPS.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:29:40.366949+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "29744_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 29744) is not recognized.",
+          "pid": 29744,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "8416_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 8416) is not recognized.",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "8228_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO_svc.exe (PID 8228) is not recognized.",
+          "pid": 8228,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (575.5 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "20120_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Trae.exe is mostly idle with low CPU but high RAM usage (528.6 MB).",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 29744,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8228,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:30:33.330374+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "29744_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 29744) is not recognized.",
+          "pid": 29744,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (573.1 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "20120_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Trae.exe is mostly idle with low CPU but high RAM usage (482.4 MB).",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 29744,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:31:25.925289+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "20120_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 20120) is not recognized.",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "19476_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 19476) is not recognized.",
+          "pid": 19476,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (447.7 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 19476,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:32:21.801143+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "29744_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 29744) is not recognized.",
+          "pid": 29744,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "8416_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 8416) is not recognized.",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (352.2 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "18416_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Trae.exe is mostly idle with low CPU but high RAM usage (318.7 MB).",
+          "pid": 18416,
+          "process_name": "Trae.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 29744,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 8416,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 18416,
+          "process_name": "Trae.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-14T14:33:15.993715+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "20120_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Trae.exe (PID 20120) is not recognized.",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        },
+        {
+          "id": "22040_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (356.3 MB).",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20120,
+          "process_name": "Trae.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22040,
+          "process_name": "Antigravity.exe"
         }
       ]
     }
