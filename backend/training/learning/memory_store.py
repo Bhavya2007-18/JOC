@@ -112,6 +112,7 @@ class UnifiedMemoryStore:
                     )
 
     def save(self, filepath="memory.json"):
+        filepath = os.path.join(os.path.dirname(__file__), "memory.json")
         with open(filepath, "w") as f:
             json.dump(
                 {
@@ -122,6 +123,7 @@ class UnifiedMemoryStore:
             )
 
     def load(self, filepath="memory.json"):
+        filepath = os.path.join(os.path.dirname(__file__), "memory.json")
         if not os.path.exists(filepath):
             return
 
