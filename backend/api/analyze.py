@@ -208,20 +208,53 @@ def analyze():
         if isinstance(suggested_actions, list) and suggested_actions:
             best_action = _serialize(suggested_actions[0])
 
+    scenario = "general"
+
+    if any(isinstance(i, dict) and i.get("category") == "cpu" for i in issues):
+        scenario = "cpu_spike"
+    elif any(isinstance(i, dict) and i.get("category") == "memory" for i in issues):
+        scenario = "memory_stress"
+    elif any(isinstance(i, dict) and i.get("id") == "HIGH_PROCESS_COUNT" for i in issues):
+        scenario = "process_overload"
+    elif any(isinstance(i, dict) and i.get("category") == "system" for i in issues):
+        scenario = "system_pressure"
+
     optimizer = RuntimeOptimizer(memory)
     cpu_percent = float(getattr(snapshot, "cpu_percent", 0) or 0)
     memory_percent = float(getattr(snapshot, "memory_percent", 0) or 0)
 
+    processes = [
+        {"cpu_percent": float(getattr(p, "cpu_percent", 0) or 0)}
+        for p in getattr(snapshot, "top_processes", [])
+    ]
+    top_cpu = max((p["cpu_percent"] for p in processes), default=0.0)
+    total_cpu = max(cpu_percent, 1.0)
+    concentration = "single" if (top_cpu / total_cpu) >= 0.6 else "distributed"
+
+    if cpu_percent >= 90 or memory_percent >= 90:
+        severity = "critical"
+    elif cpu_percent >= 75 or memory_percent >= 75:
+        severity = "high"
+    else:
+        severity = "moderate"
+
+    has_root = False
+    if isinstance(best_action, dict):
+        has_root = bool(
+            best_action.get("pid")
+            or best_action.get("parameters", {}).get("pid")
+        )
+
     traits = ScenarioTraits(
         resource_type="memory" if memory_percent > cpu_percent else "cpu",
         pattern="spike",
-        process_concentration="single",
-        severity_band="high" if memory_percent > 80 else "moderate",
-        has_root_cause_process=True if best_action.get("pid") else False,
+        process_concentration=concentration,
+        severity_band=severity,
+        has_root_cause_process=has_root,
     )
 
     best_action = optimizer.get_boosted_action(
-        scenario="memory_stress" if memory_percent > cpu_percent else "cpu_spike",
+        scenario=scenario,
         traits=traits,
         fallback_action=best_action,
     )

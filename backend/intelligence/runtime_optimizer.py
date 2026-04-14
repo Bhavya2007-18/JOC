@@ -26,14 +26,16 @@ class RuntimeOptimizer:
             learned_action.setdefault("source", "memory")
             return learned_action
 
-        # Case 3: both exist.
+        # Case 3: both exist — merge but prioritize memory identity.
         if fallback_action.get("action_type") == learned_action.get("action_type"):
-            base_conf = fallback_action.get("confidence", 0.5)
-            if not isinstance(base_conf, (int, float)):
-                base_conf = 0.5
-            fallback_action["confidence"] = min(1.0, float(base_conf) + 0.2)
-            fallback_action["source"] = "engine+memory"
-            return fallback_action
+            merged = dict(fallback_action)
+            merged["confidence"] = min(
+                1.0,
+                float(fallback_action.get("confidence", 0.5)) + 0.2,
+            )
+            merged["source"] = "memory_confirmed"
+            merged["learned_action"] = learned_action.get("action_type")
+            return merged
 
         learned_action["source"] = "memory_override"
         return learned_action
