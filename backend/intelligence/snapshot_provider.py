@@ -29,8 +29,8 @@ def _safe_username(proc: psutil.Process) -> Optional[str]:
 
 def _safe_net_connections(proc: psutil.Process) -> int:
 	try:
-		return len(proc.connections(kind="all"))
-	except (psutil.AccessDenied, psutil.NoSuchProcess):
+		return len(proc.connections(kind="inet"))
+	except (psutil.AccessDenied, psutil.NoSuchProcess, psutil.ZombieProcess, OSError):
 		return 0
 
 
@@ -190,19 +190,47 @@ def collect_snapshot() -> SystemSnapshot:
 		print(f"[GPU] {gpu_percent:.1f}% | VRAM {gpu_memory_percent:.1f}%")
 
 	processes: List[ProcessInfo] = []
+	disk_process_entries: List[Dict[str, object]] = []
+	network_process_entries: List[Dict[str, object]] = []
 	for proc in process_handles:
 		try:
+			pid = int(proc.info["pid"])
+			name = proc.info.get("name") or "unknown"
+			connection_count = _safe_net_connections(proc)
+			network_process_entries.append(
+				{
+					"pid": pid,
+					"name": name,
+					"connections": connection_count,
+				}
+			)
+
+			read_bytes_raw, write_bytes_raw = _safe_io_counters(proc)
+			read_bytes = max(0, int(read_bytes_raw or 0))
+			write_bytes = max(0, int(write_bytes_raw or 0))
+			total_io = read_bytes + write_bytes
+
+			disk_process_entries.append(
+				{
+					"pid": pid,
+					"name": name,
+					"read_bytes": read_bytes,
+					"write_bytes": write_bytes,
+					"total_io": total_io,
+					"read_mb": read_bytes / _BYTES_PER_MB,
+					"write_mb": write_bytes / _BYTES_PER_MB,
+				}
+			)
+
 			memory_info = proc.info.get("memory_info")
 
 			if not memory_info:
 				continue
 
-			read_bytes, write_bytes = _safe_io_counters(proc)
-
 			processes.append(
 				ProcessInfo(
-					pid=proc.info["pid"],
-					name=proc.info["name"] or "unknown",
+					pid=pid,
+					name=name,
 					cpu_percent=proc.cpu_percent(interval=None),
 					memory_mb=_bytes_to_mb(getattr(memory_info, "rss", 0)),
 					memory_percent=float(proc.info.get("memory_percent") or 0.0),
@@ -212,18 +240,59 @@ def collect_snapshot() -> SystemSnapshot:
 					io_read_bytes=read_bytes,
 					io_write_bytes=write_bytes,
 					username=_safe_username(proc),
-					net_connections=_safe_net_connections(proc),
+					net_connections=connection_count,
 				)
 			)
 		except (psutil.AccessDenied, psutil.NoSuchProcess, psutil.ZombieProcess, KeyError):
 			continue
 
 	top_processes = sorted(processes, key=lambda process: process.memory_mb, reverse=True)[:5]
-	disk_heavy_processes = sorted(
-		processes,
-		key=lambda process: (process.io_read_bytes or 0) + (process.io_write_bytes or 0),
+	disk_process_entries.sort(key=lambda item: int(item.get("total_io", 0)), reverse=True)
+	top_disk_entries = disk_process_entries[:5]
+
+	processes_by_pid = {process.pid: process for process in processes}
+	disk_heavy_processes: List[ProcessInfo] = []
+	for entry in top_disk_entries:
+		entry_pid = int(entry["pid"])
+		process_obj = processes_by_pid.get(entry_pid)
+		if process_obj is None:
+			process_obj = ProcessInfo(
+				pid=entry_pid,
+				name=str(entry["name"]),
+				cpu_percent=0.0,
+				memory_mb=0.0,
+				memory_percent=0.0,
+				status="unknown",
+				create_time=0.0,
+				num_threads=0,
+				io_read_bytes=int(entry.get("read_bytes", 0) or 0),
+				io_write_bytes=int(entry.get("write_bytes", 0) or 0),
+			)
+		disk_heavy_processes.append(process_obj)
+
+	if os.getenv("JOC_DEBUG_DISK", "false").lower() == "true" and top_disk_entries:
+		top_entry = top_disk_entries[0]
+		print(
+			f"[DISK] Top process: {top_entry['name']} "
+			f"({float(top_entry['read_mb']):.1f}MB read)"
+		)
+
+	network_process_entries.sort(
+		key=lambda item: int(item.get("connections", 0)),
 		reverse=True,
-	)[:5]
+	)
+	network_heavy_processes = [
+		{
+			"pid": int(entry["pid"]),
+			"name": str(entry["name"]),
+			"connections": int(entry.get("connections", 0) or 0),
+		}
+		for entry in network_process_entries[:5]
+	]
+
+	if os.getenv("JOC_DEBUG_NET", "false").lower() == "true" and network_heavy_processes:
+		top_net = network_heavy_processes[0]
+		print(f"[NET] {top_net['name']} -> {top_net['connections']} connections")
 
 	current_time = time.time()
 	disk_counters = psutil.disk_io_counters()
@@ -292,4 +361,5 @@ def collect_snapshot() -> SystemSnapshot:
 		gpu_percent=gpu_percent,
 		gpu_memory_percent=gpu_memory_percent,
 		gpu_heavy_processes=gpu_heavy_processes,
+		network_heavy_processes=network_heavy_processes,
 	)
