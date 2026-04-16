@@ -1,4 +1,6 @@
+import json
 import threading
+from pathlib import Path
 
 from fastapi import APIRouter
 from pydantic import BaseModel
@@ -47,3 +49,21 @@ def get_security_monitor_status():
 @router.get("/security/monitor/health")
 def monitor_health():
     return get_health()
+
+
+@router.get("/security/logs")
+def get_security_logs(limit: int = 20):
+    log_file = Path(__file__).resolve().parent.parent / "logs" / "security_logs.json"
+    if not log_file.exists():
+        return []
+
+    try:
+        with log_file.open("r", encoding="utf-8") as file:
+            data = json.load(file)
+    except (json.JSONDecodeError, OSError):
+        return []
+
+    if not isinstance(data, list):
+        return []
+
+    return data[-limit:]

@@ -8,6 +8,7 @@ import { Storage } from './pages/Storage';
 import { Tweaks } from './pages/Tweaks';
 import { History } from './pages/History';
 import { ProtocolReport } from './pages/ProtocolReport';
+import { Security } from './pages/Security';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { systemApi } from './api/client';
 import useSystemStore from './store/useSystemStore';
@@ -51,6 +52,7 @@ function App() {
             <Route path="tweaks" element={<Tweaks />} />
             <Route path="history" element={<History />} />
             <Route path="report" element={<ProtocolReport />} />
+            <Route path="security" element={<Security />} />
           </Route>
         </Routes>
       </ErrorBoundary>

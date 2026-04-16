@@ -7,10 +7,11 @@ import {
   HardDrive,
   Settings2,
   History,
-  Terminal, // Added missing icon
+  Terminal,
+  Shield,
   Minus,
-  Square,
-  X
+  XOctagon,
+  XCircle
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { SystemModeProvider } from '../context/SystemModeContext';
@@ -23,6 +24,7 @@ const navigation = [
   { name: 'System', href: '/system', icon: Activity },
   { name: 'Storage', href: '/storage', icon: HardDrive },
   { name: 'Tweaks', href: '/tweaks', icon: Settings2 },
+  { name: 'Security', href: '/security', icon: Shield },
   { name: 'History', href: '/history', icon: History },
 ];
 
@@ -139,8 +141,8 @@ export function Layout() {
             </div>
             <div className="flex items-center gap-4">
               <Minus className="h-3 w-3 text-slate-600 hover:text-[#00E5FF] cursor-pointer transition-colors" />
-              <Square className="h-2.5 w-2.5 text-slate-600 hover:text-[#00E5FF] cursor-pointer transition-colors" />
-              <X className="h-3.5 w-3.5 text-slate-600 hover:text-[#FF3D57] cursor-pointer transition-colors" />
+              <XOctagon className="h-2.5 w-2.5 text-slate-600 hover:text-[#00E5FF] cursor-pointer transition-colors" />
+              <XCircle className="h-3.5 w-3.5 text-slate-600 hover:text-[#FF3D57] cursor-pointer transition-colors" />
             </div>
           </header>
 

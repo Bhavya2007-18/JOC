@@ -126,5 +126,14 @@ export const autonomyApi = {
   disable: () => api.post('/api/autonomy/disable'),
 };
 
+export const securityApi = {
+  startMonitor: () => api.post('/security/monitor/start'),
+  stopMonitor: () => api.post('/security/monitor/stop'),
+  setInterval: (interval) => api.post('/security/monitor/set-interval', { interval }),
+  getStatus: () => api.get('/security/monitor/status'),
+  getHealth: () => api.get('/security/monitor/health'),
+  getAlerts: (limit = 20) => api.get(`/security/alerts?limit=${limit}`),
+  getLogs: (limit = 20) => api.get(`/security/logs?limit=${limit}`),
+};
 
 export default api;
