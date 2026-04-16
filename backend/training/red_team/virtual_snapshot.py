@@ -44,6 +44,10 @@ class VirtualSnapshot:
         return []
 
     @property
+    def network_heavy_processes(self) -> List[dict]:
+        return []
+
+    @property
     def disk_heavy_processes(self) -> List[VirtualProcessInfo]:
         # Reuse top_processes for compatibility with disk-related engine branches.
         return list(self.top_processes)

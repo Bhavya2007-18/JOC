@@ -50,6 +50,7 @@ class SystemSnapshot:
 	gpu_percent: float = 0.0
 	gpu_memory_percent: float = 0.0
 	gpu_heavy_processes: List[Dict[str, object]] = field(default_factory=list)
+	network_heavy_processes: List[Dict[str, object]] = field(default_factory=list)
 
 
 class ActionType(Enum):
