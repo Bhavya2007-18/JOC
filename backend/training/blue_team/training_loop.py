@@ -1,11 +1,10 @@
-from training.red_team.scenarios.cpu_spike import generate_cpu_spike_scenario
-from training.red_team.scenarios.distributed_memory_leak import generate_distributed_memory_leak_scenario
-from training.red_team.scenarios.memory_leak import generate_memory_leak_scenario
-from intelligence.engine import IntelligenceEngine
 from training.red_team.virtual_snapshot import VirtualSnapshot, VirtualProcessInfo
-from training.learning.global_memory import memory
+from training.red_team.red_agent import RedAgent
+from training.blue_team.blue_agent import BlueAgent
+from training.blue_team.impact_scorer import score_impact
+from training.training_report import TrainingReport
 from training.taxonomy import ScenarioTraits
-
+from training.learning.global_memory import memory
 
 def apply_action(snapshot: VirtualSnapshot, action: dict) -> VirtualSnapshot:
     """
@@ -49,104 +48,107 @@ def apply_action(snapshot: VirtualSnapshot, action: dict) -> VirtualSnapshot:
             disk_percent=snapshot.disk_percent,
             process_count=snapshot.process_count,
             top_processes=new_processes,
+            network_percent=getattr(snapshot, "network_percent", 0.0),
+            thermal_percent=getattr(snapshot, "thermal_percent", 50.0)
+        )
+        
+    elif action_type == "clear_cache":
+        new_memory = max(0.0, snapshot.memory_percent - 10.0)
+        return VirtualSnapshot(
+            cpu_percent=snapshot.cpu_percent,
+            memory_percent=new_memory,
+            disk_percent=snapshot.disk_percent,
+            process_count=snapshot.process_count,
+            top_processes=list(snapshot.top_processes),
+            network_percent=getattr(snapshot, "network_percent", 0.0),
+            thermal_percent=getattr(snapshot, "thermal_percent", 50.0)
         )
 
     return snapshot
 
 
-def run_training_episode() -> list[dict]:
-    scenarios = [
-        ("cpu_spike", generate_cpu_spike_scenario()),
-        ("memory_leak", generate_memory_leak_scenario()),
-        ("distributed_memory_leak", generate_distributed_memory_leak_scenario()),
-    ]
-    engine = IntelligenceEngine()
+def extract_traits(snapshot: VirtualSnapshot, scenario_name: str, action: dict) -> ScenarioTraits:
+    concentration = "distributed"
+    if snapshot.top_processes:
+        if "distributed" in scenario_name:
+            concentration = "distributed"
+        else:
+            top_cpu = max(float(p.cpu_percent or 0.0) for p in snapshot.top_processes)
+            total_cpu = max(float(snapshot.cpu_percent or 0.0), 1.0)
+            if (top_cpu / total_cpu) >= 0.6:
+                concentration = "single"
 
-    results = []
+    if snapshot.cpu_percent >= 90:
+        severity_band = "critical"
+    elif snapshot.cpu_percent >= 75:
+        severity_band = "high"
+    else:
+        severity_band = "moderate"
+        
+    res_type = "cpu"
+    if "memory" in scenario_name:
+        res_type = "memory"
+    elif "disk" in scenario_name:
+        res_type = "disk"
+    elif "network" in scenario_name:
+        res_type = "network"
+    elif "thermal" in scenario_name:
+        res_type = "thermal"
 
-    for scenario_name, scenario in scenarios:
-        for idx, snapshot in enumerate(scenario):
-            result = engine.analyze(snapshot)
+    pattern = "spike"
+    if "leak" in scenario_name:
+        pattern = "leak"
+    if "burst" in scenario_name:
+        pattern = "burst"
 
-            best_action = None
-            if result.issues:
-                best_action = result.issues[0].best_action
+    has_root = bool(action and (action.get("pid") or action.get("parameters", {}).get("pid")))
+    
+    return ScenarioTraits(
+        resource_type=res_type,
+        pattern=pattern,
+        process_concentration=concentration,
+        severity_band=severity_band,
+        has_root_cause_process=has_root
+    )
 
-            cpu_before = snapshot.cpu_percent
-
-            new_snapshot = apply_action(snapshot, best_action or {})
-
-            cpu_after = new_snapshot.cpu_percent
-
-            improvement = cpu_before - cpu_after
-            memory_before = snapshot.memory_percent
-            memory_after = new_snapshot.memory_percent
-            memory_improvement = memory_before - memory_after
-
-            if scenario_name in ["memory_leak", "distributed_memory_leak"]:
-                impact_score = (improvement * 0.3) + (memory_improvement * 0.7)
+def run_training_battle(n_episodes: int = 100, strategy: str = "random") -> TrainingReport:
+    red = RedAgent(strategy=strategy)
+    blue = BlueAgent()
+    
+    all_results = []
+    
+    memory_before = memory.size()
+    
+    for ep in range(n_episodes):
+        try:
+            scenario_name, steps = red.pick_episode()
+        except ValueError:
+            break
+            
+        ep_results = []
+        
+        current_snapshot = steps[0]
+        
+        for step_idx, _ in enumerate(steps):
+            analysis = blue.observe(current_snapshot)
+            action = blue.decide(analysis)
+            new_snapshot = blue.act(current_snapshot, action)
+            
+            traits = extract_traits(current_snapshot, scenario_name, action)
+            impact = score_impact(current_snapshot, new_snapshot, traits.resource_type)
+            
+            if impact > 0.1:
+                ac_type = action.get("action_type")
+                if ac_type:
+                    blue.learn(scenario_name, traits, ac_type, impact)
             else:
-                impact_score = improvement * 0.7
+                red.record_failure(scenario_name)
+            
+            ep_results.append({"step": step_idx, "impact": impact, "action": action})
+            current_snapshot = new_snapshot
+        
+        all_results.append({"episode": ep, "scenario": scenario_name, "steps": ep_results})
+    
+    memory_after = memory.size()
+    return TrainingReport.from_results(all_results, memory_before, memory_after)
 
-            if best_action:
-                action_type = best_action.get("action_type")
-                if action_type:
-                    concentration = "distributed"
-                    if snapshot.top_processes:
-                        if scenario_name == "distributed_memory_leak":
-                            max_process_memory = max(
-                                float(p.memory_percent or 0.0)
-                                for p in snapshot.top_processes
-                            )
-                            total_memory = max(float(snapshot.memory_percent or 0.0), 1.0)
-                            if max_process_memory < 0.3 * total_memory:
-                                concentration = "distributed"
-                            else:
-                                concentration = "single"
-                        else:
-                            top_cpu = max(float(p.cpu_percent or 0.0) for p in snapshot.top_processes)
-                            total_cpu = max(float(snapshot.cpu_percent or 0.0), 1.0)
-                            if (top_cpu / total_cpu) >= 0.6:
-                                concentration = "single"
-
-                    if snapshot.cpu_percent >= 90:
-                        severity_band = "critical"
-                    elif snapshot.cpu_percent >= 75:
-                        severity_band = "high"
-                    else:
-                        severity_band = "moderate"
-
-                    traits = ScenarioTraits(
-                        resource_type=(
-                            "memory"
-                            if float(snapshot.memory_percent or 0.0) > float(snapshot.cpu_percent or 0.0)
-                            else "cpu"
-                        ),
-                        pattern=(
-                            "leak"
-                            if scenario_name in ["memory_leak", "distributed_memory_leak"]
-                            else "spike"
-                        ),
-                        process_concentration=concentration,
-                        severity_band=severity_band,
-                        has_root_cause_process=bool(
-                            best_action.get("pid")
-                            or best_action.get("parameters", {}).get("pid")
-                        ),
-                    )
-                    if impact_score <= 0.5:
-                        continue
-                    memory.update(scenario_name, traits, action_type, impact_score)
-
-            results.append(
-                {
-                    "step": idx,
-                    "cpu_before": cpu_before,
-                    "cpu_after": cpu_after,
-                    "improvement": improvement,
-                    "impact_score": impact_score,
-                    "action": best_action,
-                }
-            )
-
-    return results

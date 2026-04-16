@@ -6,52 +6,50 @@ from training.red_team.virtual_snapshot import VirtualProcessInfo, VirtualSnapsh
 from training.red_team.scenario_params import ScenarioParams
 
 
-def generate_cpu_spike_scenario(params: ScenarioParams = None) -> List[VirtualSnapshot]:
+def generate_network_burst_scenario(params: ScenarioParams = None) -> List[VirtualSnapshot]:
     if params is None:
-        params = ScenarioParams(intensity=0.9, duration_steps=10, concentration="single", ramp_style="gradual")
+        params = ScenarioParams(intensity=0.9, duration_steps=10, concentration="distributed", ramp_style="sudden")
         
     random.seed(params.seed)
     n_steps = params.duration_steps
-    peak_cpu = params.intensity * 100.0
+    peak_network = params.intensity * 100.0
     
     scenario: List[VirtualSnapshot] = []
 
     for idx in range(n_steps):
-        # Calculate overall CPU based on ramp_style
         if params.ramp_style == "sudden":
-            current_cpu = 20.0 if idx < n_steps // 4 else peak_cpu
+            current_network = 10.0 if idx < n_steps // 3 else peak_network
         elif params.ramp_style == "oscillating":
-            current_cpu = 20.0 + (peak_cpu - 20.0) * abs(math.sin(idx * math.pi / (n_steps / 4)))
+            current_network = 10.0 + (peak_network - 10.0) * abs(math.sin(idx * math.pi / (n_steps / 2)))
         else: # gradual
             progress = idx / max(1, n_steps - 1)
-            current_cpu = 20.0 + (peak_cpu - 20.0) * progress
+            current_network = 10.0 + (peak_network - 10.0) * progress
             
-        current_cpu = min(100.0, max(0.0, current_cpu))
+        current_network = min(100.0, max(0.0, current_network))
 
-        current_memory = 50.0 + (idx * 0.5)
-        current_disk = 30.0 + (idx * 0.5)
-
-        # Allocate CPU among top processes based on concentration
+        current_cpu = 15.0 + (current_network * 0.2) # Network implies some CPU usage
+        current_memory = 40.0 + (idx * 0.2)
+        
         if params.concentration == "distributed":
             chrome_cpu = current_cpu * 0.4
-            code_cpu = current_cpu * 0.35
+            torrent_cpu = current_cpu * 0.4
             system_cpu = current_cpu * 0.1
         else:
-            chrome_cpu = current_cpu * 0.8
-            code_cpu = current_cpu * 0.1
+            chrome_cpu = current_cpu * 0.1
+            torrent_cpu = current_cpu * 0.8
             system_cpu = current_cpu * 0.05
 
         processes = [
             VirtualProcessInfo(
-                name="chrome.exe" if params.concentration == "single" else "heavy_worker_1.exe",
+                name="chrome.exe" if params.concentration == "single" else "downloader_1.exe",
                 pid=1234,
                 cpu_percent=chrome_cpu,
                 memory_percent=25.0,
             ),
             VirtualProcessInfo(
-                name="code.exe" if params.concentration == "single" else "heavy_worker_2.exe",
+                name="qbittorrent.exe" if params.concentration == "single" else "downloader_2.exe",
                 pid=2345,
-                cpu_percent=code_cpu,
+                cpu_percent=torrent_cpu,
                 memory_percent=12.0,
             ),
             VirtualProcessInfo(
@@ -66,9 +64,10 @@ def generate_cpu_spike_scenario(params: ScenarioParams = None) -> List[VirtualSn
             VirtualSnapshot(
                 cpu_percent=current_cpu,
                 memory_percent=current_memory,
-                disk_percent=current_disk,
+                disk_percent=30.0 + (current_network * 0.1), # High net might mean disk writes
                 process_count=110 + idx,
                 top_processes=processes,
+                network_percent=current_network
             )
         )
 

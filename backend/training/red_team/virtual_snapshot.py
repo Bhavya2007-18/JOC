@@ -38,6 +38,8 @@ class VirtualSnapshot:
     top_processes: List[VirtualProcessInfo]
     gpu_percent: float = 0.0
     gpu_memory_percent: float = 0.0
+    network_percent: float = 0.0
+    thermal_percent: float = 50.0  # Simulated temperature proxy (C)
 
     @property
     def gpu_heavy_processes(self) -> List[dict]:

@@ -6,52 +6,51 @@ from training.red_team.virtual_snapshot import VirtualProcessInfo, VirtualSnapsh
 from training.red_team.scenario_params import ScenarioParams
 
 
-def generate_cpu_spike_scenario(params: ScenarioParams = None) -> List[VirtualSnapshot]:
+def generate_disk_pressure_scenario(params: ScenarioParams = None) -> List[VirtualSnapshot]:
     if params is None:
         params = ScenarioParams(intensity=0.9, duration_steps=10, concentration="single", ramp_style="gradual")
         
     random.seed(params.seed)
     n_steps = params.duration_steps
-    peak_cpu = params.intensity * 100.0
+    peak_disk = params.intensity * 100.0
     
     scenario: List[VirtualSnapshot] = []
 
     for idx in range(n_steps):
-        # Calculate overall CPU based on ramp_style
         if params.ramp_style == "sudden":
-            current_cpu = 20.0 if idx < n_steps // 4 else peak_cpu
+            current_disk = 30.0 if idx < n_steps // 3 else peak_disk
         elif params.ramp_style == "oscillating":
-            current_cpu = 20.0 + (peak_cpu - 20.0) * abs(math.sin(idx * math.pi / (n_steps / 4)))
+            progress = idx / max(1, n_steps - 1)
+            current_disk = 30.0 + (peak_disk - 30.0) * abs(math.sin(idx * math.pi / (n_steps / 2)))
         else: # gradual
             progress = idx / max(1, n_steps - 1)
-            current_cpu = 20.0 + (peak_cpu - 20.0) * progress
+            current_disk = 30.0 + (peak_disk - 30.0) * progress
             
-        current_cpu = min(100.0, max(0.0, current_cpu))
+        current_disk = min(100.0, max(0.0, current_disk))
 
-        current_memory = 50.0 + (idx * 0.5)
-        current_disk = 30.0 + (idx * 0.5)
-
-        # Allocate CPU among top processes based on concentration
+        current_cpu = 30.0 + (idx * 0.5)
+        current_memory = 45.0 + (idx * 0.5)
+        
         if params.concentration == "distributed":
-            chrome_cpu = current_cpu * 0.4
-            code_cpu = current_cpu * 0.35
-            system_cpu = current_cpu * 0.1
+            indexer_cpu = current_cpu * 0.3
+            backup_cpu = current_cpu * 0.3
+            system_cpu = current_cpu * 0.2
         else:
-            chrome_cpu = current_cpu * 0.8
-            code_cpu = current_cpu * 0.1
-            system_cpu = current_cpu * 0.05
+            indexer_cpu = current_cpu * 0.7
+            backup_cpu = current_cpu * 0.1
+            system_cpu = current_cpu * 0.1
 
         processes = [
             VirtualProcessInfo(
-                name="chrome.exe" if params.concentration == "single" else "heavy_worker_1.exe",
-                pid=1234,
-                cpu_percent=chrome_cpu,
-                memory_percent=25.0,
+                name="indexer.exe" if params.concentration == "single" else "db_writer_1.exe",
+                pid=9001,
+                cpu_percent=indexer_cpu,
+                memory_percent=15.0,
             ),
             VirtualProcessInfo(
-                name="code.exe" if params.concentration == "single" else "heavy_worker_2.exe",
-                pid=2345,
-                cpu_percent=code_cpu,
+                name="backup.exe" if params.concentration == "single" else "db_writer_2.exe",
+                pid=9002,
+                cpu_percent=backup_cpu,
                 memory_percent=12.0,
             ),
             VirtualProcessInfo(
@@ -67,7 +66,7 @@ def generate_cpu_spike_scenario(params: ScenarioParams = None) -> List[VirtualSn
                 cpu_percent=current_cpu,
                 memory_percent=current_memory,
                 disk_percent=current_disk,
-                process_count=110 + idx,
+                process_count=100 + idx,
                 top_processes=processes,
             )
         )

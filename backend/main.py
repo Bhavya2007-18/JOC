@@ -95,3 +95,6 @@ app.include_router(security_alerts_router)
 app.include_router(monitor_router)
 app.include_router(sentinel_router)
 app.include_router(autonomy_router)
+
+from api.training_routes import router as training_router
+app.include_router(training_router)

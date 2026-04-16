@@ -1,65 +1,84 @@
+import math
+import random
 from typing import List
 
 from training.red_team.virtual_snapshot import VirtualProcessInfo, VirtualSnapshot
+from training.red_team.scenario_params import ScenarioParams
 
 
-def generate_memory_leak_scenario() -> List[VirtualSnapshot]:
-    # 10 deterministic steps: moderate system -> sustained memory leak.
-    memory_series = [40.0, 45.0, 50.0, 56.0, 63.0, 70.0, 78.0, 85.0, 90.0, 95.0]
-    cpu_series = [24.0, 26.0, 28.0, 30.0, 31.0, 33.0, 34.0, 36.0, 37.0, 38.0]
-    disk_series = [31.0, 31.0, 32.0, 32.0, 32.0, 33.0, 33.0, 33.0, 34.0, 34.0]
-    process_count_series = [104, 106, 108, 111, 114, 117, 120, 123, 126, 129]
-
-    # One leaking process: moderate CPU, memory grows from 10% to 65%.
-    leaky_memory_series = [10.0, 12.0, 15.0, 19.0, 26.0, 35.0, 45.0, 54.0, 60.0, 65.0]
-    leaky_cpu_series = [9.0, 10.0, 10.0, 11.0, 12.0, 12.0, 13.0, 14.0, 14.0, 15.0]
-
-    # Other processes stay relatively stable to keep early steps non-dominant.
-    code_memory_series = [9.0, 9.0, 9.0, 9.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
-    code_cpu_series = [8.0, 8.0, 8.0, 9.0, 9.0, 9.0, 9.0, 10.0, 10.0, 10.0]
-
-    system_memory_series = [7.0, 7.0, 7.0, 7.0, 7.0, 8.0, 8.0, 8.0, 8.0, 8.0]
-    system_cpu_series = [4.0, 4.0, 5.0, 5.0, 5.0, 5.0, 5.0, 6.0, 6.0, 6.0]
-
-    helper_memory_series = [8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0]
-    helper_cpu_series = [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0]
-
+def generate_memory_leak_scenario(params: ScenarioParams = None) -> List[VirtualSnapshot]:
+    if params is None:
+        params = ScenarioParams(intensity=0.95, duration_steps=10, concentration="single", ramp_style="gradual")
+        
+    random.seed(params.seed)
+    n_steps = params.duration_steps
+    peak_memory = params.intensity * 100.0
+    
     scenario: List[VirtualSnapshot] = []
 
-    for idx in range(10):
+    for idx in range(n_steps):
+        # Memory leak typically grows over time
+        if params.ramp_style == "sudden":
+            current_memory = 40.0 if idx < n_steps // 2 else peak_memory
+        elif params.ramp_style == "oscillating":
+            # Leaks don't usually oscillate, but they could step up
+            progress = idx / max(1, n_steps - 1)
+            base_mem = 40.0 + (peak_memory - 40.0) * progress
+            current_memory = base_mem + 5.0 * math.sin(idx)
+        else: # gradual
+            # Leaks often accelerate
+            progress = idx / max(1, n_steps - 1)
+            current_memory = 40.0 + (peak_memory - 40.0) * (progress ** 1.5)
+            
+        current_memory = min(100.0, max(0.0, current_memory))
+
+        current_cpu = 24.0 + (idx * 0.5)
+        current_disk = 31.0 + (idx * 0.2)
+        
+        if params.concentration == "distributed":
+            leaky_app_mem = current_memory * 0.4
+            code_mem = current_memory * 0.3
+            system_mem = current_memory * 0.1
+            helper_mem = current_memory * 0.1
+        else:
+            leaky_app_mem = current_memory * 0.7
+            code_mem = current_memory * 0.1
+            system_mem = current_memory * 0.05
+            helper_mem = current_memory * 0.05
+
         processes = [
             VirtualProcessInfo(
-                name="leaky_app.exe",
+                name="leaky_app.exe" if params.concentration == "single" else "worker_node_1.exe",
                 pid=4321,
-                cpu_percent=leaky_cpu_series[idx],
-                memory_percent=leaky_memory_series[idx],
+                cpu_percent=10.0 + (idx * 0.5),
+                memory_percent=leaky_app_mem,
             ),
             VirtualProcessInfo(
-                name="code.exe",
+                name="code.exe" if params.concentration == "single" else "worker_node_2.exe",
                 pid=2345,
-                cpu_percent=code_cpu_series[idx],
-                memory_percent=code_memory_series[idx],
+                cpu_percent=9.0,
+                memory_percent=code_mem,
             ),
             VirtualProcessInfo(
                 name="system.exe",
                 pid=1,
-                cpu_percent=system_cpu_series[idx],
-                memory_percent=system_memory_series[idx],
+                cpu_percent=5.0,
+                memory_percent=system_mem,
             ),
             VirtualProcessInfo(
                 name="helper_service.exe",
                 pid=7890,
-                cpu_percent=helper_cpu_series[idx],
-                memory_percent=helper_memory_series[idx],
+                cpu_percent=3.0,
+                memory_percent=helper_mem,
             ),
         ]
 
         scenario.append(
             VirtualSnapshot(
-                cpu_percent=cpu_series[idx],
-                memory_percent=memory_series[idx],
-                disk_percent=disk_series[idx],
-                process_count=process_count_series[idx],
+                cpu_percent=current_cpu,
+                memory_percent=current_memory,
+                disk_percent=current_disk,
+                process_count=104 + idx * 2,
                 top_processes=processes,
             )
         )
