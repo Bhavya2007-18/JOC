@@ -165,14 +165,14 @@ export function Dashboard() {
       <Motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-black tracking-tighter text-white flex items-center gap-3 uppercase italic">
-              <div className="nm-flat p-3 rounded-2xl bg-slate-900">
+            <h1 className="text-4xl font-bold tracking-tight text-white flex items-center gap-3 uppercase">
+              <div className="p-3 rounded-2xl bg-zinc-900 border border-white/5">
                 <ShieldCheck className="h-10 w-10 text-accent-blue" />
               </div>
               Intelligence Center
             </h1>
           </div>
-          <div className="nm-flat p-4 rounded-3xl bg-slate-900 border border-slate-800">
+          <div className="p-4 rounded-3xl bg-zinc-900 border border-white/5">
             <SystemHealthScore score={health || 100} />
           </div>
         </div>
@@ -185,7 +185,7 @@ export function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className={cn(
-              'flex items-center gap-4 rounded-2xl px-6 py-4 text-xs font-black uppercase tracking-[0.15em] border',
+              'flex items-center gap-4 rounded-2xl px-6 py-4 text-xs font-bold uppercase tracking-widest border',
               protocolStatus.type === 'success' ? 'bg-emerald-950/20 text-emerald-400 border-emerald-900/30' : 'bg-red-950/20 text-red-400 border-red-900/30'
             )}
           >
@@ -215,15 +215,15 @@ export function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
-              className="relative overflow-hidden rounded-2xl bg-[#0A0D14]/80 border border-white/5 p-6 group cursor-pointer hover:border-cyan-500/30"
+              className="relative overflow-hidden rounded-2xl bg-[#0A0D14]/80 border border-white/5 p-6 group cursor-pointer hover:border-cyan-500/30 transition-all"
             >
               <StatCardBg type={stat.name} />
               <div className="relative z-10 flex flex-col items-center">
                 <div className="w-full flex justify-between items-start mb-4">
-                  <div className="p-2 rounded-lg bg-slate-900/50 border border-slate-800">
+                  <div className="p-2 rounded-lg bg-zinc-900/50 border border-white/5">
                     <stat.icon className={cn("h-4 w-4", stat.color)} />
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-slate-500 uppercase">{stat.name}</span>
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{stat.name}</span>
                 </div>
                 <div className="relative h-32 w-32 flex items-center justify-center">
                   <svg className="absolute inset-0 h-full w-full -rotate-90">
@@ -237,7 +237,7 @@ export function Dashboard() {
                       strokeLinecap="round"
                     />
                   </svg>
-                  <span className="text-4xl font-black text-white font-mono">{Math.round(value)}%</span>
+                  <span className="text-4xl font-bold text-white">{Math.round(value)}%</span>
                 </div>
                 <div className="w-full h-12 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
@@ -259,34 +259,32 @@ export function Dashboard() {
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-10">
-          <Card title="Telemetric Analysis" description="Live system resource overhead" icon={Activity}>
-            <div className="relative h-[400px] w-full mt-6 bg-[#080B12] rounded-xl p-6 border border-white/5 overflow-hidden">
-              <div className="absolute top-8 right-8 z-20 flex flex-col gap-2 bg-black/60 p-3 border border-slate-800 font-mono text-[10px]">
-                <div className="flex items-center gap-3"><div className="h-2 w-2 rounded-full bg-[#00E5FF]" />CPU_LOAD</div>
-                <div className="flex items-center gap-3"><div className="h-2 w-2 rounded-full bg-[#BF5FFF]" />MEM_ALLOC</div>
+          <Card title="Live Telemetry Analysis" description="System resource overhead audit" icon={Activity}>
+            <div className="relative h-[400px] w-full mt-6 bg-zinc-950/50 rounded-xl p-6 border border-white/5 overflow-hidden">
+              <div className="absolute top-8 right-8 z-20 flex flex-col gap-2 bg-black/60 p-3 border border-white/5 rounded-lg text-[10px] font-bold">
+                <div className="flex items-center gap-3 uppercase"><div className="h-2 w-2 rounded-full bg-[#00E5FF]" />CPU Load</div>
+                <div className="flex items-center gap-3 uppercase"><div className="h-2 w-2 rounded-full bg-[#BF5FFF]" />Memory Allocation</div>
               </div>
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="cyberCpu" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#00E5FF" stopOpacity={0.6} />
-                      <stop offset="50%" stopColor="#00E5FF" stopOpacity={0.2} />
+                      <stop offset="5%" stopColor="#00E5FF" stopOpacity={0.4} />
                       <stop offset="95%" stopColor="#00E5FF" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="cyberMem" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#BF5FFF" stopOpacity={0.6} />
-                      <stop offset="50%" stopColor="#BF5FFF" stopOpacity={0.2} />
+                      <stop offset="5%" stopColor="#BF5FFF" stopOpacity={0.4} />
                       <stop offset="95%" stopColor="#BF5FFF" stopOpacity={0} />
                     </linearGradient>
-                    <pattern id="dotGrid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.5" fill="#334155" opacity="0.5" /></pattern>
+                    <pattern id="dotGrid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.5" fill="#334155" opacity="0.3" /></pattern>
                   </defs>
                   <rect width="100%" height="100%" fill="url(#dotGrid)" />
                   <XAxis dataKey="time" hide />
                   <YAxis domain={[0, 100]} stroke="#475569" fontSize={10} axisLine={false} tickLine={false} />
                   <Tooltip content={({ active, payload }) => active && payload ? (
-                    <div className="bg-[#0D1117] border border-slate-700 p-4 font-mono text-[11px]">
-                      <p className="text-[#00E5FF]">CPU: {payload[0].value?.toFixed(1)}%</p>
-                      <p className="text-[#BF5FFF]">MEM: {payload[1].value?.toFixed(1)}%</p>
+                    <div className="bg-[#0D1117] border border-white/10 p-4 rounded-lg shadow-2xl text-[11px] font-bold">
+                      <p className="text-[#00E5FF] uppercase">CPU Load: {payload[0].value?.toFixed(1)}%</p>
+                      <p className="text-[#BF5FFF] uppercase font-bold mt-1">Memory: {payload[1].value?.toFixed(1)}%</p>
                     </div>
                   ) : null} />
                   <ReferenceLine y={80} stroke="#FFB300" strokeDasharray="4 4" />
@@ -315,14 +313,14 @@ export function Dashboard() {
                       <div className="relative z-10">
                         <div className="flex justify-between items-center mb-3">
                           <h4 className="font-bold text-white text-sm uppercase">{issue.title}</h4>
-                          <span className="font-mono text-[10px]" style={{ color: severityColor }}>CONFIDENCE: {Math.round(issue.confidence * 100)}%</span>
+                          <span className="text-[10px] font-bold" style={{ color: severityColor }}>Confidence Score: {Math.round(issue.confidence * 100)}%</span>
                         </div>
-                        <div className="bg-black/40 p-3 font-mono text-[11px] text-slate-400 border border-white/5">
-                          <span style={{ color: severityColor }}>&gt;</span> {issue.cause}
+                        <div className="bg-black/40 p-3 text-[11px] text-zinc-400 border border-white/5 rounded">
+                           {issue.cause}
                         </div>
                         {issue.best_action && (
-                          <button onClick={() => handleFix(issue)} className="mt-4 px-4 py-2 rounded-full text-[10px] font-black bg-white/5 border border-white/10 hover:bg-white/10 transition-all uppercase tracking-widest">
-                            Execute Fix →
+                          <button onClick={() => handleFix(issue)} className="mt-4 px-6 py-2 rounded-full text-[10px] font-bold bg-white/5 border border-white/10 hover:bg-white/10 transition-all uppercase tracking-widest">
+                            Execute Resolution →
                           </button>
                         )}
                       </div>
@@ -331,7 +329,7 @@ export function Dashboard() {
                 }) : (
                   <Motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-16 flex flex-col items-center border border-dashed border-white/10 rounded-2xl">
                     <div className="h-2 w-2 rounded-full bg-[#00E676] animate-ping mb-4" />
-                    <p className="text-[#00E676] font-mono text-xs uppercase tracking-widest">All Systems Nominal</p>
+                    <p className="text-[#00E676] font-bold text-xs uppercase tracking-widest">All Systems Nominal</p>
                   </Motion.div>
                 )}
               </AnimatePresence>
@@ -349,17 +347,17 @@ export function Dashboard() {
             onStatus={setProtocolStatus}
           />
 
-          <Card title="Direct Protocols" icon={Zap}>
+          <Card title="System Protocols" icon={Zap}>
             <div className="grid grid-cols-2 gap-5 mt-6">
-              <Button variant="outline" className="flex-col h-28 bg-slate-900 border-slate-800 hover:border-amber-500/50 relative overflow-hidden" onClick={handleSystemBoost}>
+              <Button variant="outline" className="flex-col h-28 bg-zinc-900 border-white/5 hover:border-amber-500/50 relative overflow-hidden transition-all" onClick={handleSystemBoost}>
                 <ProtocolBg type="boost" />
                 <Zap size={24} className="text-amber-500 mb-2" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Boost</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest">Performance Boost</span>
               </Button>
-              <Button variant="outline" className="flex-col h-28 bg-slate-900 border-slate-800 hover:border-emerald-500/50 relative overflow-hidden" onClick={handleCacheFlush}>
+              <Button variant="outline" className="flex-col h-28 bg-zinc-900 border-white/5 hover:border-emerald-500/50 relative overflow-hidden transition-all" onClick={handleCacheFlush}>
                 <ProtocolBg type="flush" />
                 <Trash2 size={24} className="text-emerald-500 mb-2" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Flush</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest">Cache Cleanup</span>
               </Button>
             </div>
           </Card>
@@ -371,3 +369,4 @@ export function Dashboard() {
     </div>
   );
 }
+

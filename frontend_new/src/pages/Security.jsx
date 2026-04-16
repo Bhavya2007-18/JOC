@@ -98,6 +98,18 @@ export function Security() {
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  const safeFormatTime = (ts) => {
+    if (!ts) return "N/A";
+    let d;
+    if (typeof ts === 'number') {
+      d = new Date(ts < 10000000000 ? ts * 1000 : ts);
+    } else {
+      d = new Date(ts);
+    }
+    if (isNaN(d.getTime())) return "N/A";
+    return d.toLocaleTimeString([], { hour12: false });
+  };
+
   const riskTrendData = useMemo(() => {
     return logs.map((log, i) => ({
       value: log.data?.risk_score || 0,
@@ -128,16 +140,16 @@ export function Security() {
           </div>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter">Sentinel_Security_Hub</h1>
+              <h1 className="text-4xl font-bold text-white tracking-tight uppercase">Sentinel Security Hub</h1>
               <div className={cn(
-                "px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest animate-pulse",
+                "px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest animate-pulse",
                 health?.running ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-red-500/10 text-red-400 border border-red-500/20"
               )}>
-                {health?.running ? "Active_Protection" : "Offline_Standby"}
+                {health?.running ? "Active Protection" : "Offline Standby"}
               </div>
             </div>
-            <p className="mt-2 text-slate-500 font-mono text-xs uppercase tracking-[0.4em] italic opacity-70">
-              &gt;&gt; autonomous_threat_detection_and_security_orchestration
+            <p className="mt-2 text-slate-500 font-medium text-xs uppercase tracking-[0.2em] opacity-70">
+              Autonomous Threat Detection and Security Orchestration
             </p>
           </div>
         </div>
@@ -147,18 +159,18 @@ export function Security() {
             onClick={handleToggleMonitor}
             disabled={isUpdating}
             className={cn(
-              "nm-convex px-10 h-14 uppercase font-black italic tracking-widest transition-all",
+              "px-10 h-14 uppercase font-bold tracking-widest transition-all",
               health?.running 
-                ? "bg-red-500/10 text-red-500 border border-red-500/30 hover:bg-red-500/20" 
-                : "bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 hover:bg-emerald-500/20"
+                ? "bg-red-500/10 text-red-500 border border-red-500/30 hover:bg-red-500/20 shadow-lg shadow-red-500/5" 
+                : "bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 hover:bg-emerald-500/20 shadow-lg shadow-emerald-500/5"
             )}
           >
             {isUpdating ? (
               <RefreshCw className="h-5 w-5 animate-spin" />
             ) : health?.running ? (
-              <><Square className="mr-2 h-4 w-4 fill-current" /> Terminate_Protection</>
+              <><Square className="mr-2 h-4 w-4 fill-current" /> Terminate Protection</>
             ) : (
-              <><Activity className="mr-2 h-4 w-4 fill-current" /> Start_Monitoring_Loop</>
+              <><Activity className="mr-2 h-4 w-4 fill-current" /> Initialize Monitor</>
             )}
           </Button>
         </div>
@@ -169,45 +181,45 @@ export function Security() {
         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="md:col-span-1 group relative overflow-visible h-full flex flex-col justify-between" glowColor="cyan">
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">System_Uptime</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">System Uptime</span>
               <Clock className="h-5 w-5 text-slate-700 group-hover:text-white transition-colors" />
             </div>
             <div>
-              <div className="text-4xl font-black text-white font-mono italic tracking-tighter mb-1">
+              <div className="text-4xl font-bold text-white tracking-tight mb-1">
                 {health?.uptime_seconds ? formatUptime(health.uptime_seconds) : "00:00:00"}
               </div>
-              <div className="text-[10px] text-slate-600 font-mono uppercase tracking-widest">
-                SESSION_ROOT: AUTH_MOD_JOC
+              <div className="text-[10px] text-slate-500 font-medium uppercase tracking-widest">
+                Session Root: Auth Module
               </div>
             </div>
             <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-              <span className="text-[9px] text-slate-600 uppercase font-bold">Status</span>
-              <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest italic">Stable</span>
+              <span className="text-[9px] text-zinc-500 uppercase font-bold">Status</span>
+              <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">Stable</span>
             </div>
           </Card>
 
           <Card className="md:col-span-1 group relative overflow-visible h-full flex flex-col justify-between" glowColor="cyan">
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Telemetry_Scans</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Telemetry Scans</span>
               <PulseIcon className="h-5 w-5 text-slate-700 group-hover:text-[#00E5FF] transition-colors" />
             </div>
             <div>
-              <div className="text-4xl font-black text-[#00E5FF] font-mono italic tracking-tighter mb-1">
+              <div className="text-4xl font-bold text-[#00E5FF] tracking-tight mb-1">
                 {health?.scan_count?.toLocaleString() || 0}
               </div>
-              <div className="text-[10px] text-slate-600 font-mono uppercase tracking-widest">
-                AVG_RATE: {spm} SCANS/MIN
+              <div className="text-[10px] text-slate-500 font-medium uppercase tracking-widest">
+                Average Rate: {spm} Scans/Min
               </div>
             </div>
             <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-              <span className="text-[9px] text-slate-600 uppercase font-bold">Skipped</span>
-              <span className="text-[10px] text-slate-400 font-bold font-mono">[{health?.skipped_scans || 0}]</span>
+              <span className="text-[9px] text-zinc-500 uppercase font-bold">Skipped</span>
+              <span className="text-[10px] text-slate-400 font-bold">[{health?.skipped_scans || 0}]</span>
             </div>
           </Card>
 
           <Card className="md:col-span-1 group relative overflow-visible h-full flex flex-col justify-between" glowColor={ (health?.last_risk_score || 0) > 40 ? "red" : "amber" }>
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Risk_Factor</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Risk Factor</span>
               <ShieldAlert className={cn(
                 "h-5 w-5 transition-colors",
                 (health?.last_risk_score || 0) > 40 ? "text-red-500" : "text-slate-700 group-hover:text-white"
@@ -228,7 +240,7 @@ export function Security() {
                    </AreaChart>
                  </ResponsiveContainer>
                </div>
-               <div className="relative z-10 text-3xl font-black font-mono italic tracking-tighter text-white">
+               <div className="relative z-10 text-3xl font-bold tracking-tight text-white">
                  {health?.last_risk_score || 0}%
                </div>
             </div>
@@ -252,8 +264,8 @@ export function Security() {
                       <Settings className="h-6 w-6 text-accent-blue" />
                    </div>
                    <div className="min-w-0">
-                      <h3 className="text-xl font-black text-white uppercase italic tracking-widest">Scanning_Frequency_Control</h3>
-                      <p className="text-[10px] text-slate-500 font-mono uppercase tracking-widest mt-1">
+                      <h3 className="text-xl font-bold text-white uppercase tracking-widest">Scanning Frequency Control</h3>
+                      <p className="text-[10px] text-slate-500 font-medium uppercase tracking-widest mt-1">
                         Real-time security telemetry synchronization interval adjustment.
                       </p>
                    </div>
@@ -261,8 +273,8 @@ export function Security() {
 
                 <div className="flex-1 xl:max-w-md w-full p-6 bg-white/5 rounded-2xl border border-white/5">
                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Frequency_Vector</span>
-                      <span className="text-xl font-black text-accent-blue font-mono">{intervalValue} SEC</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Frequency Vector</span>
+                      <span className="text-xl font-bold text-accent-blue">{intervalValue} SEC</span>
                    </div>
                    <input
                       type="range"
@@ -272,9 +284,9 @@ export function Security() {
                       onChange={(e) => handleIntervalChange(parseInt(e.target.value))}
                       className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-accent-blue"
                    />
-                   <div className="flex justify-between text-[8px] text-slate-600 font-bold uppercase tracking-[0.2em] mt-2">
-                      <span>AGGRESSIVE (1S)</span>
-                      <span>NOMINAL (60S)</span>
+                   <div className="flex justify-between text-[8px] text-zinc-500 font-bold uppercase tracking-[0.2em] mt-2">
+                      <span>Aggressive (1s)</span>
+                      <span>Nominal (60s)</span>
                    </div>
                 </div>
              </div>
@@ -285,12 +297,12 @@ export function Security() {
         <div className="lg:col-span-1">
           <Card className="h-full group overflow-hidden" glowColor="red">
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
-              <h3 className="text-sm font-black text-white uppercase italic tracking-widest flex items-center gap-3">
+              <h3 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-3">
                 <ShieldAlert className="h-4 w-4 text-red-500" /> Threats
               </h3>
               <div className="flex items-center gap-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
-                <span className="text-[10px] text-red-500 font-black tracking-widest uppercase">Live</span>
+                <span className="text-[10px] text-red-500 font-bold tracking-widest uppercase">Live</span>
               </div>
             </div>
             
@@ -306,21 +318,21 @@ export function Security() {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className={cn(
-                          "text-[8px] font-black uppercase px-2 py-0.5 rounded",
-                          alert.severity === 'critical' ? 'bg-red-500 text-white' : 'bg-amber-500 text-black'
+                          "text-[8px] font-bold uppercase px-2 py-0.5 rounded",
+                          alert.severity === 'critical' ? 'bg-red-500 text-white' : 'bg-amber-500 text-slate-900'
                         )}>
                           {alert.severity}
                         </span>
-                        <span className="text-[8px] font-mono text-slate-500">{new Date(alert.timestamp * 1000).toLocaleTimeString([], { hour12: false })}</span>
+                        <span className="text-[8px] font-medium text-slate-500">{safeFormatTime(alert.timestamp)}</span>
                       </div>
                       <h4 className="text-[11px] font-bold text-slate-200 group-hover:text-white transition-colors uppercase truncate">{alert.title}</h4>
-                      <p className="text-[9px] text-slate-500 font-mono mt-1 line-clamp-2 italic">{alert.message || alert.description}</p>
+                      <p className="text-[9px] text-slate-500 font-medium mt-1 line-clamp-2">{alert.message || alert.description}</p>
                     </motion.div>
                   ))
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full text-slate-700 opacity-30 py-10">
                     <Lock className="h-10 w-10 mb-4" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em]">No Threats Detected</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em]">No Threats Detected</span>
                   </div>
                 )}
               </AnimatePresence>
@@ -332,7 +344,7 @@ export function Security() {
         <div className="lg:col-span-1">
           <Card className="h-full group overflow-hidden" glowColor="cyan">
              <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
-                <h3 className="text-sm font-black text-white uppercase italic tracking-widest flex items-center gap-3">
+                <h3 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-3">
                   <History className="h-4 w-4 text-accent-blue" /> History
                 </h3>
              </div>
@@ -349,27 +361,45 @@ export function Security() {
                      >
                        <div className="flex items-center justify-between mb-2">
                           <div className={cn(
-                            "text-[8px] font-black uppercase px-2 py-0.5 rounded",
+                            "text-[8px] font-bold uppercase px-2 py-0.5 rounded",
                             (log.data?.risk_score || 0) > 40 ? "bg-red-500/20 text-red-500" : "bg-emerald-500/20 text-emerald-400"
                           )}>
-                            RISK: {log.data?.risk_score || 0}%
+                            Risk: {log.data?.risk_score || 0}%
                           </div>
-                          <span className="text-[8px] font-mono text-slate-500">
-                            {new Date(log.timestamp).toLocaleTimeString([], { hour12: false })}
+                          <span className="text-[8px] font-medium text-slate-500">
+                            {safeFormatTime(log.timestamp)}
                           </span>
                        </div>
-                       <div className="flex items-center justify-between">
-                         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">{log.data?.risk_level || 'STABLE'}</span>
-                         <span className="text-[10px] text-slate-500 font-mono flex items-center gap-1">
-                           <Database className="h-2.5 w-2.5" /> {log.data?.threats?.length || 0}
-                         </span>
+                       <div className="space-y-1">
+                         <div className="flex items-center justify-between">
+                           <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{log.data?.risk_level || 'Stable'}</span>
+                           <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                             <Database className="h-2.5 w-2.5" /> {log.data?.threats?.length || 0}
+                           </span>
+                         </div>
+                         {log.data?.threats?.length > 0 && (
+                           <div className="mt-2 pt-2 border-t border-white/5">
+                             <div className="flex flex-wrap gap-1">
+                               {log.data.threats.slice(0, 2).map((t, idx) => (
+                                 <div key={idx} className="text-[8px] text-slate-500 bg-white/5 px-1.5 py-0.5 rounded border border-white/5 truncate max-w-full">
+                                   {t.title || t.category}
+                                 </div>
+                               ))}
+                               {log.data.threats.length > 2 && (
+                                 <div className="text-[8px] text-slate-600 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">
+                                   +{log.data.threats.length - 2} more
+                                 </div>
+                               )}
+                             </div>
+                           </div>
+                         )}
                        </div>
                      </motion.div>
                    ))
                  ) : (
                    <div className="flex flex-col items-center justify-center h-full text-slate-700 opacity-30 py-10">
                      <Terminal className="h-10 w-10 mb-4" />
-                     <span className="text-[10px] font-black uppercase tracking-[0.3em]">Audit Log Initializing...</span>
+                     <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Audit Log Initializing...</span>
                    </div>
                  )}
                </AnimatePresence>
@@ -381,18 +411,18 @@ export function Security() {
       {/* Advanced Diagnostics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
          {[
-           { label: "Shield_Status", val: "ACTIVE", icon: Lock, color: "text-emerald-400", glow: "cyan" },
-           { label: "Neural_Monitoring", val: "NOMINAL", icon: Target, color: "text-accent-blue", glow: "cyan" },
-           { label: "Packet_Orchestrator", val: "0.2ms", icon: Terminal, color: "text-slate-400", glow: "purple" },
-           { label: "Threat_Vectors", val: "TRACKING", icon: ShieldAlert, color: "text-amber-400", glow: "amber" }
+           { label: "Shield Status", val: "Active", icon: Lock, color: "text-emerald-400", glow: "cyan" },
+           { label: "Neural Monitoring", val: "Nominal", icon: Target, color: "text-accent-blue", glow: "cyan" },
+           { label: "Packet Orchestrator", val: "0.2ms", icon: Terminal, color: "text-slate-400", glow: "purple" },
+           { label: "Threat Vectors", val: "Tracking", icon: ShieldAlert, color: "text-amber-400", glow: "amber" }
          ].map((stat, i) => (
            <Card key={i} glowColor={stat.glow} className="group cursor-pointer">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block mb-1">{stat.label}</span>
-                  <span className={cn("text-xs font-black uppercase tracking-[0.2em] italic", stat.color)}>{stat.val}</span>
+                  <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest block mb-1">{stat.label}</span>
+                  <span className={cn("text-xs font-bold uppercase tracking-[0.1em]", stat.color)}>{stat.val}</span>
                 </div>
-                <stat.icon className="h-5 w-5 text-slate-700 group-hover:text-accent-blue transition-colors" />
+                <stat.icon className="h-5 w-5 text-zinc-700 group-hover:text-accent-blue transition-colors" />
               </div>
            </Card>
          ))}
@@ -400,5 +430,6 @@ export function Security() {
     </div>
   );
 }
+
 
 

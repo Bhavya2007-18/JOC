@@ -89,7 +89,7 @@ function ModeControlComponent({
       </div>
 
       <label className="mt-4 flex items-center justify-between rounded-xl border border-red-500/20 bg-red-950/20 px-3 py-2 text-xs text-red-200">
-        <span className="uppercase tracking-wider">Force Override (Unsafe)</span>
+        <span className="uppercase tracking-widest font-bold">Manual Overload Protection</span>
         <input
           type="checkbox"
           checked={forceOverride}
@@ -107,8 +107,9 @@ function ModeControlComponent({
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
           >
             <div className="w-full max-w-md rounded-2xl border border-red-500/30 bg-[#0B0E16] p-6">
-              <h3 className="text-lg font-black text-white">Unsafe Override</h3>
-              <p className="mt-2 text-sm text-slate-300">System may overheat. Proceed?</p>
+              <h3 className="text-lg font-bold text-white uppercase tracking-tight">Manual Activation Override</h3>
+              <p className="mt-2 text-sm text-slate-300">System risk detected. Bypassing safety constraints may lead to thermal degradation. Continue?</p>
+
               <div className="mt-5 flex justify-end gap-3">
                 <Button variant="secondary" onClick={() => setConfirmOpen(false)}>Cancel</Button>
                 <Button onClick={confirmOverride} className="bg-red-600 text-white">Proceed</Button>

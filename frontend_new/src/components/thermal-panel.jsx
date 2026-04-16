@@ -45,12 +45,12 @@ function ThermalPanelComponent({ thermal }) {
     >
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">CPU Temp</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">CPU Temp</p>
           <Motion.p
             key={cpuTemp}
             initial={{ opacity: 0.5, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-2 text-4xl font-black text-white"
+            className="mt-2 text-4xl font-bold text-white tracking-tight"
           >
             {cpuTemp.toFixed(1)}<span className="text-xl text-slate-400">°C</span>
           </Motion.p>
@@ -58,12 +58,12 @@ function ThermalPanelComponent({ thermal }) {
 
         {showGpu && (
           <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">GPU Temp</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">GPU Temp</p>
             <Motion.p
               key={gpuTemp}
               initial={{ opacity: 0.5, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-2 text-4xl font-black text-white"
+              className="mt-2 text-4xl font-bold text-white tracking-tight"
             >
               {Number(gpuTemp).toFixed(1)}<span className="text-xl text-slate-400">°C</span>
             </Motion.p>
@@ -72,10 +72,10 @@ function ThermalPanelComponent({ thermal }) {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <span className={cn('rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-widest', STATE_TONES[state] || STATE_TONES.COOL)}>
+        <span className={cn('rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-widest', STATE_TONES[state] || STATE_TONES.COOL)}>
           {state}
         </span>
-        <span className={cn('inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-widest', velocityMeta.className, velocity === 'spiking' ? 'animate-pulse' : '')}>
+        <span className={cn('inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest', velocityMeta.className, velocity === 'spiking' ? 'animate-pulse' : '')}>
           <VelocityIcon className="h-3.5 w-3.5" />
           {velocityMeta.label}
         </span>
@@ -84,9 +84,10 @@ function ThermalPanelComponent({ thermal }) {
             title="Estimated temperature based on system load"
             className="rounded-full border border-slate-700 bg-slate-800/60 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-300"
           >
-            Synthetic Mode
+            Mechanical Estimate
           </span>
         )}
+
       </div>
     </Card>
   );
