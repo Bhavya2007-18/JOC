@@ -10,6 +10,22 @@ const TRACKED_EVENTS = new Set([
   'THERMAL_SOURCE_SWITCH',
 ]);
 
+function extractEventName(event) {
+  const raw =
+    event?.payload?.event ||
+    event?.payload?.event_type ||
+    event?.payload?.type ||
+    event?.event_type ||
+    event?.type ||
+    event?.message ||
+    '';
+  const upper = String(raw).toUpperCase();
+  for (const name of TRACKED_EVENTS) {
+    if (upper.includes(name)) return name;
+  }
+  return null;
+}
+
 function formatEventName(name) {
   return name.split('_').map(word => 
     word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()

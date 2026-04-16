@@ -316,17 +316,20 @@ export function Security() {
                       animate={{ opacity: 1, scale: 1 }}
                       className="mb-4 p-4 rounded-lg bg-white/5 border border-white/5 hover:border-red-500/30 transition-all cursor-crosshair group relative"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className={cn(
-                          "text-[8px] font-bold uppercase px-2 py-0.5 rounded",
-                          alert.severity === 'critical' ? 'bg-red-500 text-white' : 'bg-amber-500 text-slate-900'
-                        )}>
-                          {alert.severity}
-                        </span>
-                        <span className="text-[8px] font-medium text-slate-500">{safeFormatTime(alert.timestamp)}</span>
-                      </div>
-                      <h4 className="text-[11px] font-bold text-slate-200 group-hover:text-white transition-colors uppercase truncate">{alert.title}</h4>
-                      <p className="text-[9px] text-slate-500 font-medium mt-1 line-clamp-2">{alert.message || alert.description}</p>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={cn(
+                            "text-[8px] font-bold uppercase px-2 py-0.5 rounded",
+                            (alert.severity || 'medium') === 'critical' ? 'bg-red-500 text-white' : 'bg-amber-500 text-slate-900'
+                          )}>
+                            {alert.severity || 'Medium'}
+                          </span>
+                          <span className="text-[8px] font-medium text-slate-500">{safeFormatTime(alert.timestamp)}</span>
+                        </div>
+                        <h4 className="text-[11px] font-bold text-slate-200 group-hover:text-white transition-colors uppercase truncate">
+                          {alert.title || "Generic System Alert"}
+                        </h4>
+                        <p className="text-[9px] text-slate-500 font-medium mt-1 line-clamp-2">{alert.message || alert.description}</p>
+
                     </motion.div>
                   ))
                 ) : (
