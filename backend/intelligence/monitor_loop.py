@@ -1,9 +1,13 @@
 import time
 import threading
 import json
+from collections import deque
+from typing import Any, Dict, Optional
 
 from intelligence.snapshot_provider import collect_snapshot
+from intelligence.action_engine import ActionEngine
 from intelligence.engine import IntelligenceEngine
+from intelligence.config import AUTOPILOT_MODE
 from storage.db import save_snapshot
 from utils.logger import get_logger
 
@@ -25,6 +29,8 @@ from intelligence.sensors.etw_adapter import ETWAdapter
 from autonomy.orchestrator import AutonomyOrchestrator
 from services.optimizer.power_mode import get_current_mode, apply_system_mode
 from services.optimizer.cleanup import run_cleanup
+from training.learning.global_memory import memory as global_memory_store
+from training.taxonomy import ScenarioTraits
 
 from state.system_state import get_state
 import asyncio
@@ -34,9 +40,22 @@ logger = get_logger("monitor")
 class MonitorLoop:
     _instance = None
 
-    def __init__(self, interval: int = 15):
+    def __init__(
+        self,
+        interval: int = 15,
+        engine: Optional[IntelligenceEngine] = None,
+        action_engine: Optional[ActionEngine] = None,
+        memory_store: Optional[Any] = None,
+    ):
         self.interval = interval
-        self.engine = IntelligenceEngine()
+        self.engine = engine or IntelligenceEngine()
+        self.action_engine = action_engine or ActionEngine()
+        self.memory_store = memory_store or global_memory_store
+        self.verify_delay_seconds = 2.5
+        self.confidence_threshold = 0.6
+        self.action_cooldown_seconds = 30.0
+        self._action_last_executed: dict[str, float] = {}
+        self._recent_action_success = deque(maxlen=3)
         self._thread = None
         self._running = False
         self._lock = threading.Lock()
@@ -89,7 +108,7 @@ class MonitorLoop:
 
             self._running = True
             self._stop_event.clear()
-            self._thread = threading.Thread(target=self._run_loop, daemon=True)
+            self._thread = threading.Thread(target=self.run_forever, daemon=True)
             self._thread.start()
 
     def stop(self):
@@ -112,7 +131,267 @@ class MonitorLoop:
             logger.error(f"[MonitorLoop Nudge Error] {e}")
 
     def run(self):
-        self._run_loop()
+        self.run_forever()
+
+    def _build_decision_from_issue(self, issue) -> Optional[Dict[str, Any]]:
+        best_action = getattr(issue, "best_action", None)
+        if not isinstance(best_action, dict):
+            return None
+
+        action_name = best_action.get("action") or best_action.get("action_type")
+        if not action_name:
+            return None
+
+        parameters = best_action.get("parameters", {}) or {}
+        pid = best_action.get("pid") or parameters.get("pid")
+        confidence = best_action.get("confidence", getattr(issue, "confidence", 0.0))
+
+        try:
+            confidence_value = float(confidence or 0.0)
+        except (TypeError, ValueError):
+            confidence_value = 0.0
+
+        decision = {
+            "action": str(action_name),
+            "target": best_action.get("target"),
+            "confidence": confidence_value,
+        }
+        if pid is not None:
+            decision["pid"] = pid
+        return decision
+
+    def _action_key(self, decision: Dict[str, Any]) -> str:
+        return "|".join(
+            [
+                str(decision.get("action", "")),
+                str(decision.get("target", "")),
+                str(decision.get("pid", "")),
+            ]
+        )
+
+    def _compute_impact(self, before, after, issue) -> float:
+        category = str(getattr(issue, "category", "system")).lower()
+
+        if category == "cpu":
+            return float(before.cpu_percent or 0.0) - float(after.cpu_percent or 0.0)
+        if category == "memory":
+            return float(before.memory_percent or 0.0) - float(after.memory_percent or 0.0)
+        if category == "disk":
+            return float(before.disk_percent or 0.0) - float(after.disk_percent or 0.0)
+        if category == "gpu":
+            return float(getattr(before, "gpu_percent", 0.0) or 0.0) - float(
+                getattr(after, "gpu_percent", 0.0) or 0.0
+            )
+        if category == "network":
+            before_net = float(before.net_bytes_sent_per_sec or 0.0) + float(before.net_bytes_recv_per_sec or 0.0)
+            after_net = float(after.net_bytes_sent_per_sec or 0.0) + float(after.net_bytes_recv_per_sec or 0.0)
+            return before_net - after_net
+
+        cpu_impact = float(before.cpu_percent or 0.0) - float(after.cpu_percent or 0.0)
+        memory_impact = float(before.memory_percent or 0.0) - float(after.memory_percent or 0.0)
+        disk_impact = float(before.disk_percent or 0.0) - float(after.disk_percent or 0.0)
+        return (cpu_impact + memory_impact + disk_impact) / 3.0
+
+    def _record_learning_feedback(self, issue, action: Dict[str, Any], impact: float, success: bool, snapshot) -> None:
+        scenario = str(getattr(issue, "category", "system")).lower()
+
+        if hasattr(self.memory_store, "record_result"):
+            self.memory_store.record_result(
+                scenario=scenario,
+                action=action,
+                impact=impact,
+                success=success,
+            )
+            return
+
+        if not hasattr(self.memory_store, "update"):
+            return
+
+        action_name = str(action.get("action") or action.get("action_type") or "")
+        if not action_name:
+            return
+
+        resource_type = scenario if scenario in {"cpu", "memory", "disk", "network", "gpu"} else "cpu"
+        affected_count = len(getattr(issue, "affected_processes", []) or [])
+        process_concentration = "single" if affected_count <= 1 else "distributed"
+        severity_obj = getattr(issue, "severity", "moderate")
+        severity_band = str(getattr(severity_obj, "value", severity_obj)).lower() or "moderate"
+
+        has_root = bool(action.get("pid") or (action.get("parameters", {}) or {}).get("pid"))
+
+        traits = ScenarioTraits(
+            resource_type=resource_type,
+            pattern="spike",
+            process_concentration=process_concentration,
+            severity_band=severity_band,
+            has_root_cause_process=has_root,
+        )
+        self.memory_store.update(scenario, traits, action_name, float(impact))
+
+        if hasattr(self.memory_store, "save"):
+            try:
+                self.memory_store.save()
+            except Exception:
+                pass
+
+    def run_once(self) -> Dict[str, Any]:
+        snapshot = collect_snapshot()
+        self.latest_snapshot = snapshot
+        print(f"[LOOP] CPU={float(snapshot.cpu_percent):.1f}% MEM={float(snapshot.memory_percent):.1f}%")
+
+        report = self.engine.analyze(snapshot)
+        self.latest_analysis = report
+
+        issue = report.issues[0] if getattr(report, "issues", []) else None
+        if issue is None:
+            result_payload = {
+                "status": "no_issue",
+                "snapshot": {
+                    "cpu_percent": float(snapshot.cpu_percent or 0.0),
+                    "memory_percent": float(snapshot.memory_percent or 0.0),
+                },
+            }
+            self.latest_autonomy_state = result_payload
+            self.latest_intelligence.update(
+                {
+                    "threat": {"threat_score": max(float(snapshot.cpu_percent or 0.0), float(snapshot.memory_percent or 0.0))},
+                    "prediction": {},
+                    "explanation": {"summary": "No actionable issue detected"},
+                    "causal_graph": {},
+                }
+            )
+            save_snapshot(snapshot)
+            return result_payload
+
+        print(f"[ISSUE] {str(issue.category)} detected")
+
+        decision = self._build_decision_from_issue(issue)
+        if decision is None:
+            payload = {
+                "status": "skipped",
+                "reason": "no_best_action",
+                "issue": str(issue.category),
+            }
+            self.latest_autonomy_state = payload
+            save_snapshot(snapshot)
+            return payload
+
+        confidence = float(decision.get("confidence", 0.0) or 0.0)
+        if confidence <= self.confidence_threshold:
+            payload = {
+                "status": "skipped",
+                "reason": "low_confidence",
+                "issue": str(issue.category),
+                "decision": decision,
+            }
+            self.latest_autonomy_state = payload
+            save_snapshot(snapshot)
+            return payload
+
+        if len(self._recent_action_success) == 3 and all(not ok for ok in self._recent_action_success):
+            payload = {
+                "status": "skipped",
+                "reason": "oscillation_guard",
+                "issue": str(issue.category),
+                "decision": decision,
+            }
+            self.latest_autonomy_state = payload
+            save_snapshot(snapshot)
+            return payload
+
+        action_key = self._action_key(decision)
+        now = time.time()
+        last_executed = self._action_last_executed.get(action_key)
+        if last_executed is not None and (now - last_executed) < self.action_cooldown_seconds:
+            payload = {
+                "status": "skipped",
+                "reason": "action_cooldown",
+                "issue": str(issue.category),
+                "decision": decision,
+            }
+            self.latest_autonomy_state = payload
+            save_snapshot(snapshot)
+            return payload
+
+        mode = str(AUTOPILOT_MODE).strip().lower()
+        action_label = f"{decision.get('action')} {decision.get('target')}"
+
+        if mode == "passive":
+            print(f"[ACTION] suggested {action_label}")
+            payload = {
+                "status": "skipped",
+                "reason": "autopilot_passive",
+                "issue": str(issue.category),
+                "decision": decision,
+            }
+            self.latest_autonomy_state = payload
+            save_snapshot(snapshot)
+            return payload
+
+        if mode == "assist":
+            print(f"[ACTION] suggest {action_label}")
+            payload = {
+                "status": "suggested",
+                "reason": "autopilot_assist",
+                "issue": str(issue.category),
+                "decision": decision,
+            }
+            self.latest_autonomy_state = payload
+            save_snapshot(snapshot)
+            return payload
+
+        print(f"[ACTION] {action_label}")
+        result = self.action_engine.execute(decision)
+        self._action_last_executed[action_key] = now
+
+        verified_snapshot = snapshot
+        impact = 0.0
+        success = False
+        if str(result.get("status", "")).lower() in {"executed", "simulated"}:
+            time.sleep(self.verify_delay_seconds)
+            verified_snapshot = collect_snapshot()
+            self.latest_snapshot = verified_snapshot
+            impact = self._compute_impact(snapshot, verified_snapshot, issue)
+            success = impact > 0
+            self._record_learning_feedback(issue, decision, impact, success, snapshot)
+
+        self._recent_action_success.append(success)
+        print(f"[RESULT] impact={impact:+.2f}%")
+
+        self.latest_intelligence.update(
+            {
+                "threat": {
+                    "threat_score": max(
+                        float(verified_snapshot.cpu_percent or 0.0),
+                        float(verified_snapshot.memory_percent or 0.0),
+                    )
+                },
+                "prediction": {},
+                "explanation": {"summary": f"Executed {decision.get('action')}"},
+                "causal_graph": {"root_cause": getattr(issue, "cause", None)},
+            }
+        )
+
+        payload = {
+            "status": result.get("status", "failed"),
+            "issue": str(issue.category),
+            "decision": decision,
+            "result": result,
+            "impact": impact,
+            "success": success,
+        }
+        self.latest_autonomy_state = payload
+        save_snapshot(verified_snapshot)
+        return payload
+
+    def run_forever(self):
+        while not self._stop_event.is_set():
+            try:
+                self.run_once()
+            except Exception as e:
+                logger.error(f"[MonitorLoop run_forever Error] {e}")
+
+            self._stop_event.wait(self.interval)
 
     def _run_loop(self):
         while not self._stop_event.is_set():
