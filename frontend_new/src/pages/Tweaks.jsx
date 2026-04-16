@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../utils/cn';
+import { TweakExecutionAnimation } from '../components/TweakExecutionAnimation';
 
 export function Tweaks() {
   const [executing, setExecuting] = useState({});
@@ -33,6 +34,7 @@ export function Tweaks() {
   const [suggestion, setSuggestion] = useState(null);
   const [lastActionId, setLastActionId] = useState(null);
   const [reverting, setReverting] = useState(false);
+  const [animatingTweak, setAnimatingTweak] = useState(null);
 
   const tweaks = [
     { 
@@ -166,7 +168,20 @@ export function Tweaks() {
     setStatus(null);
     setPreview(null);
     try {
-      const response = await optimizerApi.executeTweak(tweak.id, { dryRun: false, confirmHighRisk });
+      // Trigger cinematic animation
+      setAnimatingTweak(tweak.id);
+      
+      // Minimum duration for the animation sequence
+      const animationPromise = new Promise(resolve => setTimeout(resolve, 2500));
+      
+      // Concurrent API execution
+      const executionPromise = optimizerApi.executeTweak(tweak.id, { dryRun: false, confirmHighRisk });
+      
+      const [response] = await Promise.all([executionPromise, animationPromise]);
+      
+      // End animation
+      setAnimatingTweak(null);
+
       const data = response.data;
       const res = resolveResult(data);
       
@@ -212,6 +227,7 @@ export function Tweaks() {
       console.error(err);
     } finally {
       setExecuting(prev => ({ ...prev, [tweak.id]: false }));
+      setAnimatingTweak(null);
     }
   };
 
@@ -315,6 +331,16 @@ export function Tweaks() {
           <p className="text-lg">{status.message}</p>
         </Motion.div>
       )}
+
+      {/* Cinematic Execution Overlay */}
+      <AnimatePresence>
+        {animatingTweak && (
+          <TweakExecutionAnimation 
+            tweakId={animatingTweak} 
+            isOpen={!!animatingTweak} 
+          />
+        )}
+      </AnimatePresence>
 
       {/* Preview Modal */}
       <AnimatePresence>
