@@ -114,9 +114,11 @@ def collect_snapshot() -> SystemSnapshot:
 	processes: List[ProcessInfo] = []
 	for proc in process_handles:
 		try:
-			memory_info = proc.info["memory_info"]
-			if memory_info is None:
+			memory_info = proc.info.get("memory_info")
+
+			if not memory_info:
 				continue
+
 			read_bytes, write_bytes = _safe_io_counters(proc)
 
 			processes.append(
@@ -124,8 +126,8 @@ def collect_snapshot() -> SystemSnapshot:
 					pid=proc.info["pid"],
 					name=proc.info["name"] or "unknown",
 					cpu_percent=proc.cpu_percent(interval=None),
-					memory_mb=_bytes_to_mb(memory_info.rss),
-					memory_percent=float(proc.info["memory_percent"] or 0.0),
+					memory_mb=_bytes_to_mb(getattr(memory_info, "rss", 0)),
+					memory_percent=float(proc.info.get("memory_percent") or 0.0),
 					status=proc.info["status"] or "unknown",
 					create_time=float(proc.info["create_time"] or 0.0),
 					num_threads=int(proc.info["num_threads"] or 0),
@@ -135,7 +137,7 @@ def collect_snapshot() -> SystemSnapshot:
 					net_connections=_safe_net_connections(proc),
 				)
 			)
-		except (psutil.AccessDenied, psutil.NoSuchProcess, psutil.ZombieProcess):
+		except (psutil.AccessDenied, psutil.NoSuchProcess, psutil.ZombieProcess, KeyError):
 			continue
 
 	top_processes = sorted(processes, key=lambda process: process.memory_mb, reverse=True)[:5]

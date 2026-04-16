@@ -73,9 +73,15 @@ class RuntimeOptimizer:
             fallback_confidence = 1.0
 
         # Case 3: both exist and actions differ.
-        should_override = learned_type != fallback_type
+        should_override = False
 
-        # Force override when engine confidence is low.
+        if learned_type != fallback_type:
+            should_override = True
+
+        if isinstance(learned_avg_impact, (int, float)) and isinstance(fallback_avg_impact, (int, float)):
+            if learned_avg_impact > fallback_avg_impact:
+                should_override = True
+
         if float(fallback_confidence) < 0.7:
             should_override = True
 

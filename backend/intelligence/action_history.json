@@ -1528,10 +1528,10 @@
     }
   },
   {
-    "action_id": "mode-smart-1776333257844",
+    "action_id": "mode-smart-1776180517568",
     "action_type": "system_tweak",
     "target": "system_mode_smart",
-    "timestamp": 1776333257.8444118,
+    "timestamp": 1776180517.568741,
     "status": "completed",
     "reversible": true,
     "result": {
@@ -1557,21 +1557,21 @@
       "affected_processes": 0,
       "processes": [],
       "metrics": {
-        "cpu_before": 0.3,
-        "cpu_after": 1.5,
-        "memory_before": 84.4,
-        "memory_after": 84.4
+        "cpu_before": 21.4,
+        "cpu_after": 13.7,
+        "memory_before": 75.7,
+        "memory_after": 75.9
       },
       "message": "Mode switched: SMART -> SMART. Power plan: Balanced. 0 processes adjusted.",
-      "timestamp": 1776333257.8444033,
+      "timestamp": 1776180517.568741,
       "thermal": {
-        "temperature": 41.61,
+        "temperature": 49.65,
         "state": "COOL",
         "velocity": "stable",
-        "score": 2.61,
+        "score": 14.9,
         "is_critical": false
       },
-      "action_id": "mode-smart-1776333257844"
+      "action_id": "mode-smart-1776180517568"
     },
     "parameters": {
       "mode": "smart",
@@ -1579,105 +1579,10 @@
     }
   },
   {
-    "action_id": "mode-chill-1776333520049",
-    "action_type": "system_tweak",
-    "target": "system_mode_chill",
-    "timestamp": 1776333520.0493522,
-    "status": "completed",
-    "reversible": true,
-    "result": {
-      "success": true,
-      "dry_run": false,
-      "mode": "chill",
-      "requested_mode": "chill",
-      "previous_mode": "smart",
-      "thermal_guard_applied": false,
-      "mode_info": {
-        "label": "CHILL",
-        "subtitle": "Power Saving",
-        "description": "Reduced CPU frequency, limited background processes, battery saving, low thermals.",
-        "icon": "\ud83d\udca4"
-      },
-      "power_plan": {
-        "success": true,
-        "simulated": false,
-        "plan": "Power Saver",
-        "guid": "a1841308-3541-4fab-bc81-f71556f20b4a",
-        "message": "Power plan set to Power Saver"
-      },
-      "affected_processes": 0,
-      "processes": [],
-      "metrics": {
-        "cpu_before": 25.2,
-        "cpu_after": 20.5,
-        "memory_before": 89.4,
-        "memory_after": 89.5
-      },
-      "message": "Mode switched: SMART -> CHILL. Power plan: Power Saver. 0 processes adjusted.",
-      "timestamp": 1776333520.0493386,
-      "action_id": "mode-chill-1776333520049"
-    },
-    "parameters": {
-      "mode": "chill",
-      "previous_mode": "smart"
-    }
-  },
-  {
-    "action_id": "mode-chill-1776341344258",
-    "action_type": "system_tweak",
-    "target": "system_mode_chill",
-    "timestamp": 1776341344.2585664,
-    "status": "completed",
-    "reversible": true,
-    "result": {
-      "success": true,
-      "dry_run": false,
-      "mode": "chill",
-      "requested_mode": "chill",
-      "previous_mode": "chill",
-      "thermal_guard_applied": false,
-      "mode_info": {
-        "label": "CHILL",
-        "subtitle": "Power Saving",
-        "description": "Reduced CPU frequency, limited background processes, battery saving, low thermals.",
-        "icon": "\ud83d\udca4"
-      },
-      "power_plan": {
-        "success": true,
-        "simulated": false,
-        "plan": "Power Saver",
-        "guid": "a1841308-3541-4fab-bc81-f71556f20b4a",
-        "message": "Power plan set to Power Saver"
-      },
-      "affected_processes": 0,
-      "processes": [],
-      "metrics": {
-        "cpu_before": 13.2,
-        "cpu_after": 23.9,
-        "memory_before": 76.1,
-        "memory_after": 77.0
-      },
-      "message": "Mode switched: CHILL -> CHILL. Power plan: Power Saver. 0 processes adjusted.",
-      "timestamp": 1776341344.2585459,
-      "thermal": {
-        "temperature": 44.4,
-        "state": "COOL",
-        "velocity": "stable",
-        "score": 6.62,
-        "is_critical": false
-      },
-      "action_id": "mode-chill-1776341344258"
-    },
-    "parameters": {
-      "mode": "chill",
-      "previous_mode": "chill"
-    }
-  },
-  {
-    "action_id": "mode-smart-1776342317016",
+    "action_id": "mode-smart-1776181170959",
     "action_type": "system_tweak",
     "target": "system_mode_smart",
-    "timestamp": 1776342317.0167944,
+    "timestamp": 1776181170.9594913,
     "status": "completed",
     "reversible": true,
     "result": {
@@ -1685,7 +1590,209 @@
       "dry_run": false,
       "mode": "smart",
       "requested_mode": "smart",
-      "previous_mode": "chill",
+      "previous_mode": "smart",
+      "thermal_guard_applied": false,
+      "mode_info": {
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": false,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "Power plan set to Balanced"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 11.2,
+        "cpu_after": 26.7,
+        "memory_before": 73.0,
+        "memory_after": 72.9
+      },
+      "message": "Mode switched: SMART -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776181170.9594913,
+      "thermal": {
+        "temperature": 50.85,
+        "state": "COOL",
+        "velocity": "stable",
+        "score": 16.84,
+        "is_critical": false
+      }
+    },
+    "parameters": {
+      "mode": "smart",
+      "previous_mode": "smart"
+    }
+  },
+  {
+    "action_id": "mode-smart-1776181918439",
+    "action_type": "system_tweak",
+    "target": "system_mode_smart",
+    "timestamp": 1776181918.4391742,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": false,
+      "mode": "smart",
+      "requested_mode": "smart",
+      "previous_mode": "smart",
+      "thermal_guard_applied": false,
+      "mode_info": {
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": false,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "Power plan set to Balanced"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 21.6,
+        "cpu_after": 22.6,
+        "memory_before": 74.4,
+        "memory_after": 74.3
+      },
+      "message": "Mode switched: SMART -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776181918.4391742,
+      "thermal": {
+        "temperature": 48.96,
+        "state": "COOL",
+        "velocity": "stable",
+        "score": 15.15,
+        "is_critical": false
+      },
+      "action_id": "mode-smart-1776181918439"
+    },
+    "parameters": {
+      "mode": "smart",
+      "previous_mode": "smart"
+    }
+  },
+  {
+    "action_id": "mode-smart-1776182616204",
+    "action_type": "system_tweak",
+    "target": "system_mode_smart",
+    "timestamp": 1776182616.2042375,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": false,
+      "mode": "smart",
+      "requested_mode": "smart",
+      "previous_mode": "smart",
+      "thermal_guard_applied": false,
+      "mode_info": {
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": false,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "Power plan set to Balanced"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 17.3,
+        "cpu_after": 16.7,
+        "memory_before": 73.1,
+        "memory_after": 73.0
+      },
+      "message": "Mode switched: SMART -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776182616.2042375,
+      "thermal": {
+        "temperature": 49.57,
+        "state": "COOL",
+        "velocity": "stable",
+        "score": 14.82,
+        "is_critical": false
+      },
+      "action_id": "mode-smart-1776182616204"
+    },
+    "parameters": {
+      "mode": "smart",
+      "previous_mode": "smart"
+    }
+  },
+  {
+    "action_id": "mode-smart-1776183176454",
+    "action_type": "system_tweak",
+    "target": "system_mode_smart",
+    "timestamp": 1776183176.4545228,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": false,
+      "mode": "smart",
+      "requested_mode": "smart",
+      "previous_mode": "smart",
+      "thermal_guard_applied": false,
+      "mode_info": {
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": false,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "Power plan set to Balanced"
+      },
+      "affected_processes": 0,
+      "processes": [],
+      "metrics": {
+        "cpu_before": 53.8,
+        "cpu_after": 46.2,
+        "memory_before": 74.4,
+        "memory_after": 75.4
+      },
+      "message": "Mode switched: SMART -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776183176.4545228,
+      "thermal": {
+        "temperature": 52.9,
+        "state": "COOL",
+        "velocity": "rising",
+        "score": 24.38,
+        "is_critical": false
+      }
+    },
+    "parameters": {
+      "mode": "smart",
+      "previous_mode": "smart"
+    }
+  },
+  {
+    "action_id": "mode-smart-1776184334243",
+    "action_type": "system_tweak",
+    "target": "system_mode_smart",
+    "timestamp": 1776184334.2436154,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": false,
+      "mode": "smart",
+      "requested_mode": "smart",
+      "previous_mode": "smart",
       "thermal_guard_applied": false,
       "mode_info": {
         "label": "SMART",
@@ -1704,24 +1811,30 @@
       "processes": [],
       "metrics": {
         "cpu_before": 25.8,
-        "cpu_after": 22.4,
-        "memory_before": 79.3,
-        "memory_after": 80.5
+        "cpu_after": 13.5,
+        "memory_before": 76.6,
+        "memory_after": 76.7
       },
-      "message": "Mode switched: CHILL -> SMART. Power plan: Balanced. 0 processes adjusted.",
-      "timestamp": 1776342317.0167894,
-      "action_id": "mode-smart-1776342317016"
+      "message": "Mode switched: SMART -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776184334.2436154,
+      "thermal": {
+        "temperature": 51.1,
+        "state": "COOL",
+        "velocity": "stable",
+        "score": 17.03,
+        "is_critical": false
+      }
     },
     "parameters": {
       "mode": "smart",
-      "previous_mode": "chill"
+      "previous_mode": "smart"
     }
   },
   {
-    "action_id": "mode-smart-1776343381174",
+    "action_id": "mode-smart-1776184972524",
     "action_type": "system_tweak",
     "target": "system_mode_smart",
-    "timestamp": 1776343381.1741087,
+    "timestamp": 1776184972.524346,
     "status": "completed",
     "reversible": true,
     "result": {
@@ -1747,21 +1860,20 @@
       "affected_processes": 0,
       "processes": [],
       "metrics": {
-        "cpu_before": 6.8,
-        "cpu_after": 11.2,
-        "memory_before": 83.5,
-        "memory_after": 83.5
+        "cpu_before": 29.5,
+        "cpu_after": 23.9,
+        "memory_before": 81.7,
+        "memory_after": 81.6
       },
       "message": "Mode switched: SMART -> SMART. Power plan: Balanced. 0 processes adjusted.",
-      "timestamp": 1776343381.174104,
+      "timestamp": 1776184972.524346,
       "thermal": {
-        "temperature": 42.03,
+        "temperature": 56.63,
         "state": "COOL",
         "velocity": "stable",
-        "score": 2.91,
+        "score": 24.42,
         "is_critical": false
-      },
-      "action_id": "mode-smart-1776343381174"
+      }
     },
     "parameters": {
       "mode": "smart",
@@ -1769,70 +1881,52 @@
     }
   },
   {
-    "action_id": "mode-beast-1776345754427",
+    "action_id": "mode-smart-1776185346234",
     "action_type": "system_tweak",
-    "target": "system_mode_beast",
-    "timestamp": 1776345754.4279606,
+    "target": "system_mode_smart",
+    "timestamp": 1776185346.2344487,
     "status": "completed",
     "reversible": true,
     "result": {
       "success": true,
-      "dry_run": false,
-      "mode": "beast",
-      "requested_mode": "beast",
+      "dry_run": true,
+      "mode": "smart",
+      "requested_mode": "smart",
       "previous_mode": "smart",
       "thermal_guard_applied": false,
       "mode_info": {
-        "label": "BEAST",
-        "subtitle": "Max Performance",
-        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
-        "icon": "\u26a1"
+        "label": "SMART",
+        "subtitle": "Balanced",
+        "description": "Dynamic performance adjustment, resource allocation on demand, speed and efficiency balance.",
+        "icon": "\ud83e\udde0"
       },
       "power_plan": {
         "success": true,
-        "simulated": false,
-        "plan": "High Performance",
-        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
-        "message": "Power plan set to High Performance"
+        "simulated": true,
+        "plan": "Balanced",
+        "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+        "message": "DRY RUN: Would set power plan to Balanced"
       },
-      "affected_processes": 3,
-      "processes": [
-        {
-          "pid": 30552,
-          "name": "brave.exe",
-          "cpu_percent": 5.2,
-          "action": "Priority set to 32768",
-          "success": true,
-          "simulated": false
-        },
-        {
-          "pid": 6428,
-          "name": "brave.exe",
-          "cpu_percent": 4.1,
-          "action": "Priority set to 32768",
-          "success": true,
-          "simulated": false
-        },
-        {
-          "pid": 24496,
-          "name": "python.exe",
-          "cpu_percent": 2.1,
-          "action": "Priority set to 32768",
-          "success": true,
-          "simulated": false
-        }
-      ],
+      "affected_processes": 0,
+      "processes": [],
       "metrics": {
-        "cpu_before": 13.1,
-        "cpu_after": 23.2,
-        "memory_before": 83.9,
-        "memory_after": 85.1
+        "cpu_before": 56.2,
+        "cpu_after": 29.3,
+        "memory_before": 84.8,
+        "memory_after": 84.9
       },
-      "message": "Mode switched: SMART -> BEAST. Power plan: High Performance. 3 processes adjusted.",
-      "timestamp": 1776345754.4279537
+      "message": "[DRY RUN] Mode switched: SMART -> SMART. Power plan: Balanced. 0 processes adjusted.",
+      "timestamp": 1776185346.2344487,
+      "thermal": {
+        "temperature": 52.63,
+        "state": "COOL",
+        "velocity": "stable",
+        "score": 19.15,
+        "is_critical": false
+      }
     },
     "parameters": {
-      "mode": "beast",
+      "mode": "smart",
       "previous_mode": "smart"
     }
   }

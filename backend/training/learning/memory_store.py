@@ -3,6 +3,9 @@ import os
 
 from training.taxonomy import ScenarioTraits
 
+BASE_DIR = os.path.dirname(__file__)
+MEMORY_PATH = os.path.join(BASE_DIR, "memory.json")
+
 
 class UnifiedMemoryStore:
     def __init__(self) -> None:
@@ -111,8 +114,8 @@ class UnifiedMemoryStore:
                         f"avg_impact={stats['avg_impact']:.2f}"
                     )
 
-    def save(self, filepath="memory.json"):
-        filepath = os.path.join(os.path.dirname(__file__), "memory.json")
+    def save(self, filepath=MEMORY_PATH):
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
         with open(filepath, "w") as f:
             json.dump(
                 {
@@ -122,8 +125,7 @@ class UnifiedMemoryStore:
                 f,
             )
 
-    def load(self, filepath="memory.json"):
-        filepath = os.path.join(os.path.dirname(__file__), "memory.json")
+    def load(self, filepath=MEMORY_PATH):
         if not os.path.exists(filepath):
             return
 

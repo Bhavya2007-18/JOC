@@ -79,8 +79,14 @@ def run_training_episode() -> list[dict]:
             cpu_after = new_snapshot.cpu_percent
 
             improvement = cpu_before - cpu_after
+            memory_before = snapshot.memory_percent
+            memory_after = new_snapshot.memory_percent
+            memory_improvement = memory_before - memory_after
 
-            impact_score = improvement * 0.7
+            if scenario_name in ["memory_leak", "distributed_memory_leak"]:
+                impact_score = (improvement * 0.3) + (memory_improvement * 0.7)
+            else:
+                impact_score = improvement * 0.7
 
             if best_action:
                 action_type = best_action.get("action_type")
@@ -128,6 +134,8 @@ def run_training_episode() -> list[dict]:
                             or best_action.get("parameters", {}).get("pid")
                         ),
                     )
+                    if impact_score <= 0.5:
+                        continue
                     memory.update(scenario_name, traits, action_type, impact_score)
 
             results.append(

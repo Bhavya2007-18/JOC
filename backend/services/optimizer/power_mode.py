@@ -61,7 +61,10 @@ _MAX_AFFECTED_PROCESSES = {
 }
 
 # Current active mode (initialized from DB or default)
-_current_mode: str = get_setting("system_mode", "smart")
+try:
+    _current_mode: str = get_setting("system_mode", "smart")
+except Exception:
+    _current_mode = "smart"
 
 # ------------------------------------------------------------------
 # Thermal Cooldown Lock — prevents rapid re-escalation after events
@@ -268,6 +271,8 @@ def apply_system_mode(
     """
     global _current_mode
     effective_dry_run = bool(DRY_RUN) and not force_live
+    if effective_dry_run:
+        logger.info("[DRY RUN ACTIVE] No real system changes will be applied.")
     mode = mode.lower().strip()
 
     if mode not in _POWER_PLANS:
@@ -341,7 +346,9 @@ def apply_system_mode(
     # 3. Update internal state and persistence
     previous_mode = _current_mode
     _current_mode = mode
-    set_setting("system_mode", mode)
+
+    if not effective_dry_run:
+        set_setting("system_mode", mode)
 
     # 4. Capture after-metrics
     cpu_after = get_cpu_stats()

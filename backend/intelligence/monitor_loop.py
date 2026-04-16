@@ -239,7 +239,7 @@ class MonitorLoop:
                         current_mode = "smart"
 
                     logger.info(f"Enforcing system mode policy: {current_mode.upper()}")
-                    apply_system_mode(current_mode, force_live=True, thermal_data=thermal_data)
+                    apply_system_mode(current_mode, force_live=False, thermal_data=thermal_data)
                 
                 # Broadcast Threat Score to SystemState directly
                 try:
