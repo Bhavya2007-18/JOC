@@ -40,8 +40,21 @@ class AutonomyOrchestrator:
         causal_data = intelligence.get("causal_graph", {})
         pred_data = intelligence.get("prediction", {})
         
-        # STEP 1: Memory Lookup
-        matched_pattern = self.memory_engine.lookup(threat_data, causal_data, pred_data)
+        # STEP 1: Memory Lookup (Static Rule-Based)
+        static_pattern = self.memory_engine.lookup(threat_data, causal_data, pred_data)
+        
+        # New: Cognitive Pattern (Phase 7/8 Learning Engine)
+        cognitive_data = intelligence.get("learning", {})
+        
+        # Bridge: Use cognitive data as primary matched_pattern if confidence is high
+        if cognitive_data.get("confidence", 0) > 0.6:
+            matched_pattern = {
+                "recommended_action": cognitive_data.get("recommended_response"),
+                "confidence": cognitive_data.get("confidence", 0.5),
+                "pattern_id": cognitive_data.get("pattern_id")
+            }
+        else:
+            matched_pattern = static_pattern
         
         # STEP 2: Preemptive Check
         current_mode = get_current_mode()

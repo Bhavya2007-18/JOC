@@ -2463,5 +2463,296 @@
       "mode": "beast",
       "previous_mode": "beast"
     }
+  },
+  {
+    "action_id": "mode-beast-1776370659366",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1776370659.3666873,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "beast",
+      "requested_mode": "beast",
+      "previous_mode": "beast",
+      "thermal_guard_applied": false,
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "DRY RUN: Would set power plan to High Performance"
+      },
+      "affected_processes": 3,
+      "processes": [
+        {
+          "pid": 22360,
+          "name": "python.exe",
+          "cpu_percent": 3.9,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 36004,
+          "name": "Antigravity.exe",
+          "cpu_percent": 1.6,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 13956,
+          "name": "Antigravity.exe",
+          "cpu_percent": 1.4,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        }
+      ],
+      "metrics": {
+        "cpu_before": 9.8,
+        "cpu_after": 13.8,
+        "memory_before": 85.1,
+        "memory_after": 85.1
+      },
+      "message": "[DRY RUN] Mode switched: BEAST -> BEAST. Power plan: High Performance. 3 processes adjusted.",
+      "timestamp": 1776370659.3666735,
+      "thermal": {
+        "temperature": 48.2,
+        "state": "COOL",
+        "velocity": "stable",
+        "score": 11.62,
+        "is_critical": false
+      },
+      "action_id": "mode-beast-1776370659366"
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "beast"
+    }
+  },
+  {
+    "action_id": "mode-beast-1776370930636",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1776370930.6360552,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "beast",
+      "requested_mode": "beast",
+      "previous_mode": "beast",
+      "thermal_guard_applied": false,
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "DRY RUN: Would set power plan to High Performance"
+      },
+      "affected_processes": 3,
+      "processes": [
+        {
+          "pid": 22360,
+          "name": "python.exe",
+          "cpu_percent": 3.4,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 36004,
+          "name": "Antigravity.exe",
+          "cpu_percent": 2.2,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 13956,
+          "name": "Antigravity.exe",
+          "cpu_percent": 1.7,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        }
+      ],
+      "metrics": {
+        "cpu_before": 10.4,
+        "cpu_after": 7.2,
+        "memory_before": 84.9,
+        "memory_after": 84.8
+      },
+      "message": "[DRY RUN] Mode switched: BEAST -> BEAST. Power plan: High Performance. 3 processes adjusted.",
+      "timestamp": 1776370930.636037,
+      "thermal": {
+        "temperature": 53.61,
+        "state": "COOL",
+        "velocity": "rising",
+        "score": 28.11,
+        "is_critical": false
+      },
+      "action_id": "mode-beast-1776370930636"
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "beast"
+    }
+  },
+  {
+    "action_id": "mode-beast-1776371180501",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1776371180.5012946,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "beast",
+      "requested_mode": "beast",
+      "previous_mode": "beast",
+      "thermal_guard_applied": false,
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "DRY RUN: Would set power plan to High Performance"
+      },
+      "affected_processes": 3,
+      "processes": [
+        {
+          "pid": 22360,
+          "name": "python.exe",
+          "cpu_percent": 4.0,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 36004,
+          "name": "Antigravity.exe",
+          "cpu_percent": 2.0,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 13956,
+          "name": "Antigravity.exe",
+          "cpu_percent": 1.8,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        }
+      ],
+      "metrics": {
+        "cpu_before": 25.6,
+        "cpu_after": 14.5,
+        "memory_before": 81.4,
+        "memory_after": 81.7
+      },
+      "message": "[DRY RUN] Mode switched: BEAST -> BEAST. Power plan: High Performance. 3 processes adjusted.",
+      "timestamp": 1776371180.5012844,
+      "thermal": {
+        "temperature": 47.58,
+        "state": "COOL",
+        "velocity": "stable",
+        "score": 11.82,
+        "is_critical": false
+      },
+      "action_id": "mode-beast-1776371180501"
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "beast"
+    }
+  },
+  {
+    "action_id": "mode-beast-1776371441520",
+    "action_type": "system_tweak",
+    "target": "system_mode_beast",
+    "timestamp": 1776371441.5202186,
+    "status": "completed",
+    "reversible": true,
+    "result": {
+      "success": true,
+      "dry_run": true,
+      "mode": "beast",
+      "requested_mode": "beast",
+      "previous_mode": "beast",
+      "thermal_guard_applied": false,
+      "mode_info": {
+        "label": "BEAST",
+        "subtitle": "Max Performance",
+        "description": "Maximum CPU/GPU push, no throttling limits, performance over power, increased thermal tolerance.",
+        "icon": "\u26a1"
+      },
+      "power_plan": {
+        "success": true,
+        "simulated": true,
+        "plan": "High Performance",
+        "guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+        "message": "DRY RUN: Would set power plan to High Performance"
+      },
+      "affected_processes": 3,
+      "processes": [
+        {
+          "pid": 22360,
+          "name": "python.exe",
+          "cpu_percent": 3.5,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 13956,
+          "name": "Antigravity.exe",
+          "cpu_percent": 2.2,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        },
+        {
+          "pid": 36004,
+          "name": "Antigravity.exe",
+          "cpu_percent": 1.3,
+          "action": "Would set priority to 32768",
+          "simulated": true
+        }
+      ],
+      "metrics": {
+        "cpu_before": 10.6,
+        "cpu_after": 6.8,
+        "memory_before": 81.6,
+        "memory_after": 81.7
+      },
+      "message": "[DRY RUN] Mode switched: BEAST -> BEAST. Power plan: High Performance. 3 processes adjusted.",
+      "timestamp": 1776371441.5202065,
+      "thermal": {
+        "temperature": 46.81,
+        "state": "COOL",
+        "velocity": "stable",
+        "score": 12.05,
+        "is_critical": false
+      }
+    },
+    "parameters": {
+      "mode": "beast",
+      "previous_mode": "beast"
+    }
   }
 ]

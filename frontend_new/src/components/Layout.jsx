@@ -9,6 +9,7 @@ import {
   History,
   Terminal,
   Shield,
+  BrainCircuit,
   Minus,
   XOctagon,
   XCircle
@@ -25,6 +26,7 @@ const navigation = [
   { name: 'Storage', href: '/storage', icon: HardDrive },
   { name: 'Tweaks', href: '/tweaks', icon: Settings2 },
   { name: 'Security', href: '/security', icon: Shield },
+  { name: 'Intelligence', href: '/intelligence', icon: BrainCircuit },
   { name: 'History', href: '/history', icon: History },
 ];
 

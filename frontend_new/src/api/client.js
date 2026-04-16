@@ -85,6 +85,9 @@ export const intelligenceApi = {
   safeDecisions: (windowMinutes = 60) => wrapRequest(() => api.get(`/intelligence/decisions?window_minutes=${windowMinutes}`)),
   getForecast: () => api.get('/intelligence/prediction'),
   getCausalGraph: () => api.get('/intelligence/causal-graph'),
+  getPattern: () => api.get('/intelligence/pattern'),
+  getLearning: () => api.get('/intelligence/learning'),
+  getETW: () => api.get('/intelligence/etw'),
 };
 
 export const optimizerApi = {

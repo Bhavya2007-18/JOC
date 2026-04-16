@@ -39,7 +39,9 @@ class DecisionEngine:
             
             memory_boost = 1.0
             if matched_pattern and matched_pattern.get("recommended_action") == action:
-                memory_boost = 1 + matched_pattern.get("confidence", 0.2)
+                # Stronger boost for high-confidence learning patterns
+                conf = matched_pattern.get("confidence", 0.2)
+                memory_boost = 1.0 + (conf * 1.5)  # Max boost of 2.5x
 
             threat_urgency = threat_score / 100.0
 
