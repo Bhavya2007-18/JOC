@@ -18,6 +18,10 @@ class AutonomyOrchestrator:
         self.feedback_engine = FeedbackEngine()
         self.learning_engine = LearningEngine()
         self.memory_engine = MemoryEngine()
+        # Phase 3: Persistent Learning
+        self.learning_engine.load()
+        self.memory_engine.load()
+        
         self.preemptive_engine = PreemptiveEngine()
         
         self.latest_output: Dict[str, Any] = {}
@@ -65,6 +69,22 @@ class AutonomyOrchestrator:
         self.decision_engine.update_weights(current_weights)
 
         # STEP 3: Decision
+        # Pass all detected issues to the decision engine for prioritization
+        issues = intelligence.get("issues", [])
+        
+        # Phase 4: Inject synthetic thermal issues when state is HOT/CRITICAL
+        thermal = intelligence.get("thermal", {})
+        if thermal.get("state") in ["HOT", "CRITICAL"]:
+            thermal_issue = {
+                "id": f"THERMAL_{thermal['state']}",
+                "category": "thermal",
+                "severity": "critical" if thermal["state"] == "CRITICAL" else "high",
+                "title": f"System thermal state: {thermal['state']}",
+                "evidence": {"temperature": thermal.get("temperature"), "score": thermal.get("score")},
+            }
+            issues.insert(0, thermal_issue)
+            intelligence["issues"] = issues
+            
         decision = self.decision_engine.decide(intelligence, matched_pattern, preemptive_signal)
 
         # STEP 4: Feedback (on prior action, using current state)
@@ -77,14 +97,25 @@ class AutonomyOrchestrator:
         if feedback:
             # STEP 5: Learning
             self.learning_engine.record_outcome(feedback["action"], feedback)
+            self.learning_engine.save()
             
             # STEP 6: Memory Update
             self.memory_engine.update_memory(feedback)
+            self.memory_engine.save()
 
         # STEP 7: Action Execution (if enabled)
         action_result = None
         if self.enabled and decision and decision.get("action") and decision.get("action") != "no_action":
-            action_result = self.action_engine.execute(decision)
+            from utils.execution_context import ExecutionContext
+            
+            # Create a dedicated context for this autonomous action
+            context = ExecutionContext.from_request(
+                dry_run=False, # Autonomy usually runs LIVE if enabled
+                mode="autonomy",
+                request_id=f"auto-{int(time.time())}"
+            )
+            
+            action_result = self.action_engine.execute(decision, context=context)
             
             # Register action with feedback engine
             if action_result and action_result.get("status") in ["executed", "simulated"]:

@@ -8,6 +8,8 @@ class DecisionEngine:
         "kill_process":      {"base_cost": 0.9, "base_score": 0.8, "safe": False},
         "clear_cache":       {"base_cost": 0.1, "base_score": 0.4, "safe": True},
         "rate_limit":        {"base_cost": 0.3, "base_score": 0.5, "safe": True},
+        "reduce_io":         {"base_cost": 0.2, "base_score": 0.5, "safe": True},
+        "suspend_process":   {"base_cost": 0.5, "base_score": 0.7, "safe": False},
         "no_action":         {"base_cost": 0.0, "base_score": 0.3, "safe": True},
         "preemptive_throttle":{"base_cost": 0.2, "base_score": 0.55,"safe": True},
     }
@@ -15,6 +17,17 @@ class DecisionEngine:
     def __init__(self):
         self.weights = {action: 1.0 for action in self.ACTION_CATALOG}
         self._oscillation_window = deque(maxlen=5)
+        
+        # Priority order for issue categories
+        self.CATEGORY_PRIORITY = {
+            "thermal": 100,
+            "security": 90,
+            "threat": 80,
+            "cpu": 70,
+            "memory": 60,
+            "disk": 50,
+            "system": 40,
+        }
 
     def update_weights(self, new_weights: Dict[str, float]):
         self.weights.update(new_weights)
@@ -25,12 +38,25 @@ class DecisionEngine:
         matched_pattern: Optional[Dict[str, Any]] = None, 
         preemptive_signal: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        
+        """
+        New prioritization-aware decision logic.
+        """
+        # Extract issues from intelligence payload
+        # Note: MonitorLoop will now be updated to pass these
+        issues = intelligence.get("issues", [])
         threat_score = intelligence.get("threat", {}).get("threat_score", 0)
-        root_cause = intelligence.get("causal_graph", {}).get("root_cause")
+        
+        # Rank issues if multiple exist
+        ranked_issues = self._rank_issues(issues, intelligence)
+        top_issue = ranked_issues[0] if ranked_issues else None
+        
+        # Use top issue category/root_cause for heuristics
+        category = top_issue.get("category", "system") if top_issue else "system"
+        root_cause = top_issue.get("evidence", {}).get("fix_action", {}).get("target") or intelligence.get("causal_graph", {}).get("root_cause")
+        pid = top_issue.get("evidence", {}).get("fix_action", {}).get("pid")
 
         # Evaluate heuristics for each action
-        heuristic_scores = self._evaluate_heuristics(threat_score, root_cause, preemptive_signal)
+        heuristic_scores = self._evaluate_heuristics(threat_score, category, root_cause, preemptive_signal)
 
         scores = {}
         for action, heuristics in heuristic_scores.items():
@@ -45,7 +71,12 @@ class DecisionEngine:
 
             threat_urgency = threat_score / 100.0
 
-            raw = heuristics * learned_weight * memory_boost * (1.0 + threat_urgency)
+            # Prioritization boost: if the best heuristic action matches the top_issue category needs
+            prio_boost = 1.0
+            if top_issue and top_issue.get("severity") in ["high", "critical"]:
+                prio_boost = 1.5
+
+            raw = heuristics * learned_weight * memory_boost * (1.0 + threat_urgency) * prio_boost
             adj = raw * (1.0 - base_cost)
             scores[action] = max(0.0, adj)
 
@@ -67,30 +98,59 @@ class DecisionEngine:
         return {
             "action": best_action,
             "target": target,
+            "pid": pid,
             "confidence": round(confidence, 3),
-            "reason": f"Heuristics evaluated. Learned weight for {best_action}: {self.weights.get(best_action, 1.0):.2f}",
+            "top_issue": top_issue.get("id") if top_issue else "none",
+            "reason": f"Heuristics evaluated for {category}. Ranked {len(ranked_issues)} issues.",
             "scores": {k: round(v, 3) for k, v in confidence_scores.items()}
         }
 
-    def _evaluate_heuristics(self, threat_score: int, root_cause: Optional[str], preemptive_signal: Optional[Dict[str, Any]]) -> Dict[str, float]:
+    def _rank_issues(self, issues: List[Dict[str, Any]], intelligence: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Ranks issues by category priority and severity."""
+        if not issues:
+            return []
+            
+        def get_score(issue):
+            cat = str(issue.get("category", "system")).lower()
+            cat_score = self.CATEGORY_PRIORITY.get(cat, 0)
+            
+            sev = str(issue.get("severity", "moderate")).lower()
+            sev_score = 0
+            if sev == "critical": sev_score = 1000
+            elif sev == "high": sev_score = 500
+            elif sev == "medium": sev_score = 100
+            
+            return cat_score + sev_score
+
+        return sorted(issues, key=get_score, reverse=True)
+
+    def _evaluate_heuristics(
+        self, 
+        threat_score: int, 
+        category: str, 
+        root_cause: Optional[str], 
+        preemptive_signal: Optional[Dict[str, Any]]
+    ) -> Dict[str, float]:
         scores = {k: 0.0 for k in self.ACTION_CATALOG}
         
         # Base fallback
         scores["no_action"] = 1.0 if threat_score < 25 else 0.1
 
-        if threat_score > 75 and root_cause:
-            scores["kill_process"] = 1.0
-            scores["throttle_process"] = 0.8
-        elif threat_score > 50 and root_cause:
+        # Category-specific heuristics
+        if category == "thermal":
             scores["throttle_process"] = 1.0
-            scores["rate_limit"] = 0.6
-        elif threat_score > 50 and not root_cause:
+            scores["clear_cache"] = 0.5
+        elif category == "cpu":
+            if threat_score > 75: scores["kill_process"] = 1.0
+            else: scores["throttle_process"] = 1.0
+        elif category == "memory":
             scores["clear_cache"] = 1.0
-        elif 25 <= threat_score <= 50:
-            scores["rate_limit"] = 0.8
-            if root_cause:
-                scores["throttle_process"] = 0.7
-
+            if threat_score > 70: scores["kill_process"] = 0.7
+        elif category == "disk":
+            scores["clear_cache"] = 1.0
+            scores["reduce_io"] = 0.8
+        
+        # Preemptive overrides
         if preemptive_signal:
             action = preemptive_signal.get("recommended_action")
             if action in scores:

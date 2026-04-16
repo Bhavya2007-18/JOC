@@ -8,6 +8,7 @@ from training.red_team.scenarios.distributed_memory_leak import generate_distrib
 from training.red_team.scenarios.disk_pressure import generate_disk_pressure_scenario
 from training.red_team.scenarios.network_burst import generate_network_burst_scenario
 from training.red_team.scenarios.thermal_spike import generate_thermal_spike_scenario
+from training.red_team.scenarios.stealth_spike import generate_stealth_spike_scenario
 
 VAULT: dict[str, callable] = {
     "cpu_spike": generate_cpu_spike_scenario,
@@ -16,6 +17,7 @@ VAULT: dict[str, callable] = {
     "disk_pressure": generate_disk_pressure_scenario,
     "network_burst": generate_network_burst_scenario,
     "thermal_spike": generate_thermal_spike_scenario,
+    "stealth_spike": generate_stealth_spike_scenario,
 }
 
 COMPOUND_VAULT = [

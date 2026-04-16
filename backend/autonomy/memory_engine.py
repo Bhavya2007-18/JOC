@@ -1,4 +1,7 @@
 import time
+import json
+import os
+import datetime
 from typing import Dict, Any, Optional, List
 
 class MemoryEngine:
@@ -10,11 +13,17 @@ class MemoryEngine:
         self.memory_bank: List[Dict[str, Any]] = []
         self.max_memory = 1000
 
+    def _time_bucket(self) -> str:
+        """Classify current hour into usage context."""
+        hour = datetime.datetime.now().hour
+        if 6 <= hour < 12: return "morning"
+        if 12 <= hour < 18: return "afternoon"
+        if 18 <= hour < 23: return "evening"
+        return "night"
+
     def update_memory(self, feedback: Dict[str, Any]) -> None:
-        """Stores the result of an action into memory if it was successful."""
-        # Only memorize successful outcomes for active reinforcement
-        if feedback.get("result") != "success":
-             return 
+        """Stores the result of an action into memory."""
+        result = feedback.get("result", "failure")
 
         entry = {
             "action": feedback.get("action"),
@@ -22,6 +31,8 @@ class MemoryEngine:
             "threat_before": feedback.get("threat_before", 0),
             "threat_after": feedback.get("threat_after", 0),
             "impact": feedback.get("impact_reduction", 0),
+            "result": result,
+            "time_bucket": self._time_bucket(),
             "timestamp": time.time()
         }
         
@@ -50,12 +61,22 @@ class MemoryEngine:
         highest_impact = 0.0
         
         # Search backwards (most recent first)
+        current_time_bucket = self._time_bucket()
         for mem in reversed(self.memory_bank):
             # Same target and similar threat tier (+/- 15 points)
             if abs(mem.get("threat_before", 0) - current_threat) <= 15:
-                 if mem.get("target") == root_cause and mem.get("impact", 0) > highest_impact:
-                     best_match = mem
-                     highest_impact = mem.get("impact", 0)
+                 if mem.get("target") == root_cause:
+                     # Check for negative reinforcement
+                     if mem.get("result") in ["failure", "over-correction"]:
+                         # We tried this recently on this target and it failed, avoid returning it as a match
+                         # (Ideally we'd track a "do not do" list, but for now we just skip the action match)
+                         continue
+                     
+                     if mem.get("impact", 0) > highest_impact:
+                         # Context bonus
+                         bonus = 10 if mem.get("time_bucket") == current_time_bucket else 0
+                         best_match = mem
+                         highest_impact = mem.get("impact", 0) + bonus
                      
         if best_match:
             return {
@@ -65,3 +86,17 @@ class MemoryEngine:
             }
             
         return None
+
+    def save(self, path: str = None) -> None:
+        if path is None:
+            path = os.path.join(os.path.dirname(__file__), "memory_bank.json")
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w") as f:
+            json.dump(self.memory_bank, f, indent=2)
+
+    def load(self, path: str = None) -> None:
+        if path is None:
+            path = os.path.join(os.path.dirname(__file__), "memory_bank.json")
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                self.memory_bank = json.load(f)

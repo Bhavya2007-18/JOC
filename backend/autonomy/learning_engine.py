@@ -1,4 +1,6 @@
 import time
+import json
+import os
 from typing import Dict, Any
 
 class LearningEngine:
@@ -17,7 +19,8 @@ class LearningEngine:
         
         _initial_actions = [
             "throttle_process", "kill_process", "clear_cache", 
-            "rate_limit", "no_action", "preemptive_throttle"
+            "rate_limit", "reduce_io", "suspend_process", 
+            "no_action", "preemptive_throttle"
         ]
         
         for act in _initial_actions:
@@ -93,3 +96,23 @@ class LearningEngine:
     def get_performance_summary(self) -> Dict[str, Any]:
         """Returns full internal state for API reporting."""
         return self._performance
+
+    def save(self, path: str = None) -> None:
+        if path is None:
+            path = os.path.join(os.path.dirname(__file__), "learning_state.json")
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w") as f:
+            json.dump(self._performance, f, indent=2)
+
+    def load(self, path: str = None) -> None:
+        if path is None:
+            path = os.path.join(os.path.dirname(__file__), "learning_state.json")
+        if not os.path.exists(path):
+            return
+        with open(path, "r") as f:
+            data = json.load(f)
+        for action, stats in data.items():
+            if action in self._performance:
+                self._performance[action].update(stats)
+            else:
+                self._performance[action] = stats

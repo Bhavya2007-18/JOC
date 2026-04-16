@@ -60,7 +60,6 @@ class MonitorLoop:
         self._running = False
         self._lock = threading.Lock()
         self._stop_event = threading.Event()
-        self._stop_event = threading.Event()
         self.latest_snapshot = None
         self.latest_analysis = None
         self._iteration_count = 0
@@ -133,463 +132,230 @@ class MonitorLoop:
     def run(self):
         self.run_forever()
 
-    def _build_decision_from_issue(self, issue) -> Optional[Dict[str, Any]]:
-        best_action = getattr(issue, "best_action", None)
-        if not isinstance(best_action, dict):
-            return None
-
-        action_name = best_action.get("action") or best_action.get("action_type")
-        if not action_name:
-            return None
-
-        parameters = best_action.get("parameters", {}) or {}
-        pid = best_action.get("pid") or parameters.get("pid")
-        confidence = best_action.get("confidence", getattr(issue, "confidence", 0.0))
-
-        try:
-            confidence_value = float(confidence or 0.0)
-        except (TypeError, ValueError):
-            confidence_value = 0.0
-
-        decision = {
-            "action": str(action_name),
-            "target": best_action.get("target"),
-            "confidence": confidence_value,
-        }
-        if pid is not None:
-            decision["pid"] = pid
-        return decision
-
-    def _action_key(self, decision: Dict[str, Any]) -> str:
-        return "|".join(
-            [
-                str(decision.get("action", "")),
-                str(decision.get("target", "")),
-                str(decision.get("pid", "")),
-            ]
-        )
-
-    def _compute_impact(self, before, after, issue) -> float:
-        category = str(getattr(issue, "category", "system")).lower()
-
-        if category == "cpu":
-            return float(before.cpu_percent or 0.0) - float(after.cpu_percent or 0.0)
-        if category == "memory":
-            return float(before.memory_percent or 0.0) - float(after.memory_percent or 0.0)
-        if category == "disk":
-            return float(before.disk_percent or 0.0) - float(after.disk_percent or 0.0)
-        if category == "gpu":
-            return float(getattr(before, "gpu_percent", 0.0) or 0.0) - float(
-                getattr(after, "gpu_percent", 0.0) or 0.0
-            )
-        if category == "network":
-            before_net = float(before.net_bytes_sent_per_sec or 0.0) + float(before.net_bytes_recv_per_sec or 0.0)
-            after_net = float(after.net_bytes_sent_per_sec or 0.0) + float(after.net_bytes_recv_per_sec or 0.0)
-            return before_net - after_net
-
-        cpu_impact = float(before.cpu_percent or 0.0) - float(after.cpu_percent or 0.0)
-        memory_impact = float(before.memory_percent or 0.0) - float(after.memory_percent or 0.0)
-        disk_impact = float(before.disk_percent or 0.0) - float(after.disk_percent or 0.0)
-        return (cpu_impact + memory_impact + disk_impact) / 3.0
-
-    def _record_learning_feedback(self, issue, action: Dict[str, Any], impact: float, success: bool, snapshot) -> None:
-        scenario = str(getattr(issue, "category", "system")).lower()
-
-        if hasattr(self.memory_store, "record_result"):
-            self.memory_store.record_result(
-                scenario=scenario,
-                action=action,
-                impact=impact,
-                success=success,
-            )
-            return
-
-        if not hasattr(self.memory_store, "update"):
-            return
-
-        action_name = str(action.get("action") or action.get("action_type") or "")
-        if not action_name:
-            return
-
-        resource_type = scenario if scenario in {"cpu", "memory", "disk", "network", "gpu"} else "cpu"
-        affected_count = len(getattr(issue, "affected_processes", []) or [])
-        process_concentration = "single" if affected_count <= 1 else "distributed"
-        severity_obj = getattr(issue, "severity", "moderate")
-        severity_band = str(getattr(severity_obj, "value", severity_obj)).lower() or "moderate"
-
-        has_root = bool(action.get("pid") or (action.get("parameters", {}) or {}).get("pid"))
-
-        traits = ScenarioTraits(
-            resource_type=resource_type,
-            pattern="spike",
-            process_concentration=process_concentration,
-            severity_band=severity_band,
-            has_root_cause_process=has_root,
-        )
-        self.memory_store.update(scenario, traits, action_name, float(impact))
-
-        if hasattr(self.memory_store, "save"):
-            try:
-                self.memory_store.save()
-            except Exception:
-                pass
-
     def run_once(self) -> Dict[str, Any]:
-        snapshot = collect_snapshot()
-        self.latest_snapshot = snapshot
-        print(f"[LOOP] CPU={float(snapshot.cpu_percent):.1f}% MEM={float(snapshot.memory_percent):.1f}%")
-
-        report = self.engine.analyze(snapshot)
-        self.latest_analysis = report
-
-        issue = report.issues[0] if getattr(report, "issues", []) else None
-        if issue is None:
-            result_payload = {
-                "status": "no_issue",
-                "snapshot": {
-                    "cpu_percent": float(snapshot.cpu_percent or 0.0),
-                    "memory_percent": float(snapshot.memory_percent or 0.0),
-                },
-            }
-            self.latest_autonomy_state = result_payload
-            self.latest_intelligence.update(
-                {
-                    "threat": {"threat_score": max(float(snapshot.cpu_percent or 0.0), float(snapshot.memory_percent or 0.0))},
-                    "prediction": {},
-                    "explanation": {"summary": "No actionable issue detected"},
-                    "causal_graph": {},
-                }
-            )
-            save_snapshot(snapshot)
-            return result_payload
-
-        print(f"[ISSUE] {str(issue.category)} detected")
-
-        decision = self._build_decision_from_issue(issue)
-        if decision is None:
-            payload = {
-                "status": "skipped",
-                "reason": "no_best_action",
-                "issue": str(issue.category),
-            }
-            self.latest_autonomy_state = payload
-            save_snapshot(snapshot)
-            return payload
-
-        confidence = float(decision.get("confidence", 0.0) or 0.0)
-        if confidence <= self.confidence_threshold:
-            payload = {
-                "status": "skipped",
-                "reason": "low_confidence",
-                "issue": str(issue.category),
-                "decision": decision,
-            }
-            self.latest_autonomy_state = payload
-            save_snapshot(snapshot)
-            return payload
-
-        if len(self._recent_action_success) == 3 and all(not ok for ok in self._recent_action_success):
-            payload = {
-                "status": "skipped",
-                "reason": "oscillation_guard",
-                "issue": str(issue.category),
-                "decision": decision,
-            }
-            self.latest_autonomy_state = payload
-            save_snapshot(snapshot)
-            return payload
-
-        action_key = self._action_key(decision)
-        now = time.time()
-        last_executed = self._action_last_executed.get(action_key)
-        if last_executed is not None and (now - last_executed) < self.action_cooldown_seconds:
-            payload = {
-                "status": "skipped",
-                "reason": "action_cooldown",
-                "issue": str(issue.category),
-                "decision": decision,
-            }
-            self.latest_autonomy_state = payload
-            save_snapshot(snapshot)
-            return payload
-
-        mode = str(AUTOPILOT_MODE).strip().lower()
-        action_label = f"{decision.get('action')} {decision.get('target')}"
-
-        if mode == "passive":
-            print(f"[ACTION] suggested {action_label}")
-            payload = {
-                "status": "skipped",
-                "reason": "autopilot_passive",
-                "issue": str(issue.category),
-                "decision": decision,
-            }
-            self.latest_autonomy_state = payload
-            save_snapshot(snapshot)
-            return payload
-
-        if mode == "assist":
-            print(f"[ACTION] suggest {action_label}")
-            payload = {
-                "status": "suggested",
-                "reason": "autopilot_assist",
-                "issue": str(issue.category),
-                "decision": decision,
-            }
-            self.latest_autonomy_state = payload
-            save_snapshot(snapshot)
-            return payload
-
-        print(f"[ACTION] {action_label}")
-        result = self.action_engine.execute(decision)
-        self._action_last_executed[action_key] = now
-
-        verified_snapshot = snapshot
-        impact = 0.0
-        success = False
-        if str(result.get("status", "")).lower() in {"executed", "simulated"}:
-            time.sleep(self.verify_delay_seconds)
-            verified_snapshot = collect_snapshot()
-            self.latest_snapshot = verified_snapshot
-            impact = self._compute_impact(snapshot, verified_snapshot, issue)
-            success = impact > 0
-            self._record_learning_feedback(issue, decision, impact, success, snapshot)
-
-        self._recent_action_success.append(success)
-        print(f"[RESULT] impact={impact:+.2f}%")
-
-        self.latest_intelligence.update(
-            {
-                "threat": {
-                    "threat_score": max(
-                        float(verified_snapshot.cpu_percent or 0.0),
-                        float(verified_snapshot.memory_percent or 0.0),
-                    )
-                },
-                "prediction": {},
-                "explanation": {"summary": f"Executed {decision.get('action')}"},
-                "causal_graph": {"root_cause": getattr(issue, "cause", None)},
-            }
-        )
-
-        payload = {
-            "status": result.get("status", "failed"),
-            "issue": str(issue.category),
-            "decision": decision,
-            "result": result,
-            "impact": impact,
-            "success": success,
-        }
-        self.latest_autonomy_state = payload
-        save_snapshot(verified_snapshot)
-        return payload
+        """Single tick for testing or immediate execution."""
+        return self._execute_tick()
 
     def run_forever(self):
         while not self._stop_event.is_set():
             try:
-                self.run_once()
-            except Exception as e:
-                logger.error(f"[MonitorLoop run_forever Error] {e}")
-
-            self._stop_event.wait(self.interval)
-
-    def _run_loop(self):
-        while not self._stop_event.is_set():
-            try:
-                logger.info("Loop running")
-
-                snapshot = collect_snapshot()
-                self.latest_snapshot = snapshot
-
-                # Stage 0: Process Data Extraction
-                cpu = snapshot.cpu_percent
-                ram = snapshot.memory_percent
-                processes = [
-                    {"name": p.name, "pid": p.pid, "cpu_percent": p.cpu_percent, "memory_percent": p.memory_percent} 
-                    for p in snapshot.top_processes
-                ]
-                
-                # Execute original analysis logic for diagnostic issues
-                analysis = self.engine.analyze(snapshot)
-                self.latest_analysis = analysis
-
-                # --- Phase 2 Intelligence Pipeline ---
-                
-                # Stage 1: Baseline
-                baseline_data = self.baseline_engine.analyze(cpu, ram)
-                cpu_z = baseline_data.get("cpu_z_score")
-                ram_z = baseline_data.get("ram_z_score")
-                
-                # Stage 2: Threat
-                threat_data = self.threat_engine.compute(cpu, ram, cpu_z, ram_z)
-                
-                # Stage 3: Causal
-                self.causal_engine.ingest_snapshot(cpu, ram, processes, cpu_z, ram_z)
-                causal_data = self.causal_engine.get_root_cause()
-                
-                # Stage 4: Prediction
-                self.predictive_engine.observe(cpu, ram, snapshot.timestamp)
-                pred_data = self.predictive_engine.forecast()
-                
-                # Stage 5: XAI Narrative Generation
-                explanation = self.xai_engine.generate(
-                    cpu, ram, baseline_data, threat_data, causal_data, pred_data
-                )
-
-                # Stage 6: Thermal Intelligence
-                thermal_data = self.thermal_engine.update(
-                    cpu_usage=cpu,
-                    timestamp=snapshot.timestamp,
-                )
-
-                if thermal_data.get("velocity") == "spiking":
-                    # Hook thermal spikes into causal graph.
-                    self.causal_engine.emit_event(
-                        event_type="THERMAL",
-                        node_id="THERMAL_SPIKE",
-                        data={
-                            "temperature": thermal_data.get("temperature"),
-                            "delta_temp": thermal_data.get("delta_temp"),
-                            "state": thermal_data.get("state"),
-                            "score": thermal_data.get("score"),
-                        },
-                        link_to=["CPU_SPIKE", "PROCESS_ACTIVITY"],
-                    )
-                    # Refresh causal root-cause after thermal event enrichment.
-                    causal_data = self.causal_engine.get_root_cause()
-
-                # Stage 7: Predictive Thermal Intelligence
-                self.thermal_predictor.update(
-                    temp=float(thermal_data.get("temperature", 0.0)),
-                    timestamp=float(snapshot.timestamp),
-                )
-                thermal_prediction = self.thermal_predictor.predict()
-
-                prediction_risk = str(thermal_prediction.get("risk", "SAFE")).upper()
-                if prediction_risk in {"HIGH", "CRITICAL"}:
-                    event_payload = {
-                        "event": "THERMAL_PREDICTION_ALERT",
-                        "predicted_temp": thermal_prediction.get("predicted_temp"),
-                        "risk": prediction_risk,
-                        "time_to_critical": thermal_prediction.get("time_to_critical"),
-                    }
-                    logger.warning("THERMAL_PREDICTION_ALERT %s", json.dumps(event_payload))
-                    self.causal_engine.emit_event(
-                        event_type="THERMAL",
-                        node_id="THERMAL_RISK_FORECAST",
-                        data=event_payload,
-                        link_to=["CPU_SPIKE", "THERMAL_SPIKE"],
-                    )
-                    causal_data = self.causal_engine.get_root_cause()
-
-                # Lightweight pre-emptive mitigation controls.
-                now = time.time()
-                should_mitigate = prediction_risk in {"HIGH", "CRITICAL"}
-                mitigation_cooldown_passed = (
-                    now - self._last_thermal_mitigation_ts
-                ) >= self._thermal_mitigation_cooldown_s
-                mitigation_result = None
-                if should_mitigate and mitigation_cooldown_passed:
-                    # Safe pre-emptive action: dry-run cleanup + signal to defer heavy ops.
-                    mitigation_result = run_cleanup(dry_run=True)
-                    self._last_thermal_mitigation_ts = now
-                
-                # Stage 8: Pattern Intelligence (Phase 7)
-                pattern = {"pattern_type": "stable", "confidence": 0.0}
-                learning_data = {}
-                try:
-                    pattern = self.abstraction_engine.classify(
-                        cpu=cpu,
-                        ram=ram,
-                        baseline_data=baseline_data,
-                        pred_data=pred_data
-                    )
-                    learning_data = self.cross_scenario_engine.update(
-                        pattern=pattern,
-                        current_threat_score=threat_data.get("threat_score", 0.0)
-                    )
-                    logger.debug(
-                        f"[Pattern] type={pattern['pattern_type']} resource={pattern['resource']} "
-                        f"confidence={pattern['confidence']:.2f} rec={learning_data.get('recommended_response')}"
-                    )
-                except Exception as e:
-                    logger.error(f"[Stage 8 Pattern Error] {e}")
-
-                # Stage 9: ETW Deep Telemetry (Phase 7)
-                etw_events = []
-                try:
-                    etw_events = self.etw_adapter.poll()
-                    # Auto-link high-activity ETW process events into causal graph
-                    for evt in etw_events:
-                        if evt["type"] == "process_start":
-                            self.causal_engine.emit_event(
-                                event_type="PROCESS_EVENT",
-                                node_id=evt["name"],
-                                data={"pid": evt["pid"], "etw_source": True, "timestamp": evt["timestamp"]},
-                                link_to=["CPU_SPIKE", "RAM_SPIKE"]
-                            )
-                except Exception as e:
-                    logger.error(f"[Stage 9 ETW Error] {e}")
-
-                # Compile Unified Intelligence Object
-                self.latest_intelligence = {
-                    "threat": threat_data,
-                    "prediction": pred_data,
-                    "explanation": explanation,
-                    "baseline": baseline_data,
-                    "causal_graph": causal_data,
-                    "thermal": thermal_data,
-                    "thermal_prediction": thermal_prediction,
-                    "thermal_controls": {
-                        "delay_heavy_operations": should_mitigate,
-                        "preemptive_mitigation_applied": bool(mitigation_result),
-                    },
-                    "pattern": pattern,
-                    "learning": learning_data,
-                    "etw_events": etw_events,
-                    "etw_event_count": len(etw_events),
-                }
-                
-                # Phase 3: Autonomy Loop
-                autonomy_result = self.autonomy_orchestrator.tick(self.latest_intelligence)
-                self.latest_autonomy_state = autonomy_result
-                
-                # Periodic System Mode Enforcement (every 10 ticks / approx 50s)
-                self._iteration_count += 1
-                if self._iteration_count % 10 == 0:
-                    current_mode = get_current_mode()
-                    predicted_risk = str(
-                        thermal_prediction.get("risk", "SAFE")
-                    ).upper()
-                    if predicted_risk == "CRITICAL" and current_mode == "beast":
-                        logger.warning(
-                            "Preemptive thermal guard: blocking BEAST due to CRITICAL forecast"
-                        )
-                        current_mode = "smart"
-                    elif predicted_risk == "HIGH" and current_mode == "beast":
-                        logger.info(
-                            "Preemptive thermal mitigation: reducing BEAST to SMART on HIGH forecast"
-                        )
-                        current_mode = "smart"
-
-                    logger.info(f"Enforcing system mode policy: {current_mode.upper()}")
-                    apply_system_mode(current_mode, force_live=False, thermal_data=thermal_data)
-                
-                # Broadcast Threat Score to SystemState directly
-                try:
-                    # Async task wrapper since monitor is running loop in separate thread
-                    loop = asyncio.get_event_loop()
-                    if loop.is_running():
-                         asyncio.run_coroutine_threadsafe(
-                             get_state().update({"threat_level": threat_data["threat_score"]}),
-                             loop
-                         )
-                except RuntimeError:
-                    # No loop, ignore
-                    pass
-
-                save_snapshot(snapshot)
+                self._execute_tick()
             except Exception as e:
                 logger.error(f"[MonitorLoop Error] {e}")
-
             self._stop_event.wait(self.interval)
+
+    def _execute_tick(self) -> Dict[str, Any]:
+        logger.info("Tick executing")
+        try:
+            snapshot = collect_snapshot()
+            self.latest_snapshot = snapshot
+
+            # Stage 0: Process Data Extraction
+            cpu = snapshot.cpu_percent
+            ram = snapshot.memory_percent
+            processes = [
+                {"name": p.name, "pid": p.pid, "cpu_percent": p.cpu_percent, "memory_percent": p.memory_percent} 
+                for p in snapshot.top_processes
+            ]
+            
+            # Execute original analysis logic for diagnostic issues
+            analysis = self.engine.analyze(snapshot)
+            self.latest_analysis = analysis
+
+            # --- Phase 2 Intelligence Pipeline ---
+            
+            # Stage 1: Baseline
+            baseline_data = self.baseline_engine.analyze(cpu, ram)
+            cpu_z = baseline_data.get("cpu_z_score")
+            ram_z = baseline_data.get("ram_z_score")
+            
+            # Stage 2: Threat
+            threat_data = self.threat_engine.compute(cpu, ram, cpu_z, ram_z)
+            
+            # Stage 3: Causal
+            self.causal_engine.ingest_snapshot(cpu, ram, processes, cpu_z, ram_z)
+            causal_data = self.causal_engine.get_root_cause()
+            
+            # Stage 4: Prediction
+            self.predictive_engine.observe(cpu, ram, snapshot.timestamp)
+            pred_data = self.predictive_engine.forecast()
+            
+            # Stage 5: XAI Narrative Generation
+            explanation = self.xai_engine.generate(
+                cpu, ram, baseline_data, threat_data, causal_data, pred_data
+            )
+
+            # Stage 6: Thermal Intelligence
+            thermal_data = self.thermal_engine.update(
+                cpu_usage=cpu,
+                timestamp=snapshot.timestamp,
+            )
+
+            if thermal_data.get("velocity") == "spiking":
+                # Hook thermal spikes into causal graph.
+                self.causal_engine.emit_event(
+                    event_type="THERMAL",
+                    node_id="THERMAL_SPIKE",
+                    data={
+                        "temperature": thermal_data.get("temperature"),
+                        "delta_temp": thermal_data.get("delta_temp"),
+                        "state": thermal_data.get("state"),
+                        "score": thermal_data.get("score"),
+                    },
+                    link_to=["CPU_SPIKE", "PROCESS_ACTIVITY"],
+                )
+                # Refresh causal root-cause after thermal event enrichment.
+                causal_data = self.causal_engine.get_root_cause()
+
+            # Stage 7: Predictive Thermal Intelligence
+            self.thermal_predictor.update(
+                temp=float(thermal_data.get("temperature", 0.0)),
+                timestamp=float(snapshot.timestamp),
+            )
+            thermal_prediction = self.thermal_predictor.predict()
+
+            prediction_risk = str(thermal_prediction.get("risk", "SAFE")).upper()
+            if prediction_risk in {"HIGH", "CRITICAL"}:
+                event_payload = {
+                    "event": "THERMAL_PREDICTION_ALERT",
+                    "predicted_temp": thermal_prediction.get("predicted_temp"),
+                    "risk": prediction_risk,
+                    "time_to_critical": thermal_prediction.get("time_to_critical"),
+                }
+                logger.warning("THERMAL_PREDICTION_ALERT %s", json.dumps(event_payload))
+                self.causal_engine.emit_event(
+                    event_type="THERMAL",
+                    node_id="THERMAL_RISK_FORECAST",
+                    data=event_payload,
+                    link_to=["CPU_SPIKE", "THERMAL_SPIKE"],
+                )
+                causal_data = self.causal_engine.get_root_cause()
+
+            # Lightweight pre-emptive mitigation controls.
+            now = time.time()
+            should_mitigate = prediction_risk in {"HIGH", "CRITICAL"}
+            mitigation_cooldown_passed = (
+                now - self._last_thermal_mitigation_ts
+            ) >= self._thermal_mitigation_cooldown_s
+            mitigation_result = None
+            if should_mitigate and mitigation_cooldown_passed:
+                # Safe pre-emptive action: dry-run cleanup + signal to defer heavy ops.
+                mitigation_result = run_cleanup(dry_run=True)
+                self._last_thermal_mitigation_ts = now
+            
+            # Stage 8: Pattern Intelligence (Phase 7)
+            pattern = {"pattern_type": "stable", "confidence": 0.0}
+            learning_data = {}
+            try:
+                pattern = self.abstraction_engine.classify(
+                    cpu=cpu,
+                    ram=ram,
+                    baseline_data=baseline_data,
+                    pred_data=pred_data
+                )
+                learning_data = self.cross_scenario_engine.update(
+                    pattern=pattern,
+                    current_threat_score=threat_data.get("threat_score", 0.0)
+                )
+                logger.debug(
+                    f"[Pattern] type={pattern['pattern_type']} resource={pattern['resource']} "
+                    f"confidence={pattern['confidence']:.2f} rec={learning_data.get('recommended_response')}"
+                )
+            except Exception as e:
+                logger.error(f"[Stage 8 Pattern Error] {e}")
+
+            # Stage 9: ETW Deep Telemetry (Phase 7)
+            etw_events = []
+            try:
+                etw_events = self.etw_adapter.poll()
+                # Auto-link high-activity ETW process events into causal graph
+                for evt in etw_events:
+                    if evt["type"] == "process_start":
+                        self.causal_engine.emit_event(
+                            event_type="PROCESS_EVENT",
+                            node_id=evt["name"],
+                            data={"pid": evt["pid"], "etw_source": True, "timestamp": evt["timestamp"]},
+                            link_to=["CPU_SPIKE", "RAM_SPIKE"]
+                        )
+            except Exception as e:
+                logger.error(f"[Stage 9 ETW Error] {e}")
+
+            # Compile Unified Intelligence Object
+            # Convert issues to dicts for easier consumption if needed, 
+            # though DecisionEngine can handle objects too.
+            issue_dicts = []
+            for issue in getattr(analysis, "issues", []):
+                issue_dicts.append({
+                    "id": getattr(issue, "id", "unknown"),
+                    "category": getattr(issue, "category", "system"),
+                    "severity": str(getattr(issue, "severity", "moderate")).lower(),
+                    "title": getattr(issue, "title", ""),
+                    "evidence": getattr(issue, "evidence", {}),
+                })
+
+            self.latest_intelligence = {
+                "threat": threat_data,
+                "prediction": pred_data,
+                "explanation": explanation,
+                "baseline": baseline_data,
+                "causal_graph": causal_data,
+                "thermal": thermal_data,
+                "thermal_prediction": thermal_prediction,
+                "thermal_controls": {
+                    "delay_heavy_operations": should_mitigate,
+                    "preemptive_mitigation_applied": bool(mitigation_result),
+                },
+                "pattern": pattern,
+                "learning": learning_data,
+                "etw_events": etw_events,
+                "etw_event_count": len(etw_events),
+                "issues": issue_dicts,
+                "diagnostic_report": analysis,
+            }
+            
+            # Phase 3: Autonomy Loop
+            autonomy_result = self.autonomy_orchestrator.tick(self.latest_intelligence)
+            self.latest_autonomy_state = autonomy_result
+            
+            # Periodic System Mode Enforcement (every 10 ticks / approx 50s)
+            self._iteration_count += 1
+            if self._iteration_count % 10 == 0:
+                current_mode = get_current_mode()
+                predicted_risk = str(
+                    thermal_prediction.get("risk", "SAFE")
+                ).upper()
+                if predicted_risk == "CRITICAL" and current_mode == "beast":
+                    logger.warning(
+                        "Preemptive thermal guard: blocking BEAST due to CRITICAL forecast"
+                    )
+                    current_mode = "smart"
+                elif predicted_risk == "HIGH" and current_mode == "beast":
+                    logger.info(
+                        "Preemptive thermal mitigation: reducing BEAST to SMART on HIGH forecast"
+                    )
+                    current_mode = "smart"
+
+                logger.info(f"Enforcing system mode policy: {current_mode.upper()}")
+                
+                # Need ExecutionContext here
+                from utils.execution_context import ExecutionContext
+                ctx = ExecutionContext.from_request(dry_run=False, mode="thermal_policy")
+                apply_system_mode(current_mode, context=ctx, thermal_data=thermal_data)
+            
+            # Broadcast Threat Score to SystemState directly
+            try:
+                # Async task wrapper since monitor is running loop in separate thread
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                     asyncio.run_coroutine_threadsafe(
+                         get_state().update({"threat_level": threat_data["threat_score"]}),
+                         loop
+                     )
+            except RuntimeError:
+                # No loop, ignore
+                pass
+
+            return self.latest_intelligence
+        except Exception as e:
+            logger.error(f"[MonitorLoop Exception] {e}")
+            return self.latest_intelligence

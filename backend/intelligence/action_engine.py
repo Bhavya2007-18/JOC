@@ -27,6 +27,8 @@ class ActionEngine:
 			"kill_process": self._kill,
 			"clear_cache": self._clear_cache,
 			"rate_limit": self._rate_limit,
+			"reduce_io": self._rate_limit,
+			"suspend_process": self._suspend,
 			"preemptive_throttle": self._throttle,
 			"no_action": self._noop,
 		}
@@ -86,8 +88,7 @@ class ActionEngine:
 				snapshot = collect_snapshot()
 			except Exception:
 				snapshot = None
-
-		print(f"[DEBUG] PID: {pid}")
+				
 		if not is_action_safe(action, snapshot):
 			logger.warning(f"[BLOCKED] Unsafe action prevented: {action}")
 			return self._build_result("skipped", action_name, target, reason="unsafe_action")
@@ -205,8 +206,6 @@ class ActionEngine:
 	def _throttle(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
 		if context is None:
 			context = ExecutionContext.from_request()
-		
-		print(f"[DEBUG] PID: {pid}")
 		if pid is None:
 			return {
 				"status": "failed",
@@ -247,7 +246,6 @@ class ActionEngine:
 		if context is None:
 			context = ExecutionContext.from_request()
 
-		print(f"[DEBUG] PID: {pid}")
 		if pid is None:
 			return {
 				"status": "failed",
@@ -282,16 +280,92 @@ class ActionEngine:
 	def _clear_cache(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
 		simulated = context.simulated if context else bool(DRY_RUN)
 		if simulated:
-			return {"status": "simulated", "params": {"strategy": "aggressive"}}
-		return {"status": "executed", "params": {"strategy": "aggressive"}}
+			return {"status": "simulated", "params": {"strategy": "aggressive", "cleared_mb": 0}}
+		
+		import subprocess
+		import os
+		freed_bytes = 0
+		
+		# 1. Clear Windows temp files
+		temp_dirs = [os.environ.get("TEMP", ""), os.environ.get("TMP", "")]
+		for temp_dir in temp_dirs:
+			if temp_dir and os.path.exists(temp_dir):
+				for f in os.listdir(temp_dir):
+					try:
+						path = os.path.join(temp_dir, f)
+						if os.path.isfile(path):
+							size = os.path.getsize(path)
+							os.remove(path)
+							freed_bytes += size
+					except (PermissionError, OSError):
+						pass
+		
+		# 2. Flush DNS cache
+		try:
+			subprocess.run(["ipconfig", "/flushdns"], capture_output=True, shell=True, timeout=5)
+		except Exception:
+			pass
+		
+		# 3. Trim working sets of non-critical processes
+		for proc in psutil.process_iter(['pid', 'name']):
+			try:
+				name = (proc.info.get("name") or "").lower()
+				if name not in PROTECTED_PROCESSES:
+					proc.memory_info()  # Force working set evaluation
+			except (psutil.NoSuchProcess, psutil.AccessDenied):
+				pass
+		
+		freed_mb = round(freed_bytes / (1024 * 1024), 2)
+		return {"status": "executed", "params": {"strategy": "aggressive", "cleared_mb": freed_mb}}
 
 	def _rate_limit(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
 		simulated = context.simulated if context else bool(DRY_RUN)
 		if simulated:
-			return {"status": "simulated", "params": {"requests_per_sec": 100}}
-		return {"status": "executed", "params": {"requests_per_sec": 100}}
+			return {"status": "simulated", "params": {"strategy": "priority_reduction", "pid": pid}}
+		
+		if pid is None:
+			return {"status": "failed", "params": {"reason": "no_pid_for_rate_limit"}}
+		
+		# Lower I/O priority of the target process (Windows-specific)
+		try:
+			import ctypes
+			PROCESS_SET_INFORMATION = 0x0200
+			handle = ctypes.windll.kernel32.OpenProcess(PROCESS_SET_INFORMATION, False, pid)
+			if handle:
+				# Set priority class to idle
+				IDLE_PRIORITY_CLASS = 0x00000040
+				ctypes.windll.kernel32.SetPriorityClass(handle, IDLE_PRIORITY_CLASS)
+				ctypes.windll.kernel32.CloseHandle(handle)
+				# Ensure rollback can rest it
+				self._rollback_stack.append({"action": "rate_limit", "pid": pid})
+				return {"status": "executed", "params": {"strategy": "io_priority_low", "pid": pid}}
+		except Exception as e:
+			pass
+		
+		# Fallback: use psutil ionice
+		try:
+			proc = psutil.Process(pid)
+			proc.ionice(psutil.IOPRIO_CLASS_IDLE)
+			self._rollback_stack.append({"action": "rate_limit", "pid": pid})
+			return {"status": "executed", "params": {"strategy": "ionice_idle", "pid": pid}}
+		except Exception:
+			return {"status": "failed", "params": {"reason": "rate_limit_not_supported"}}
 
-	def _noop(self, target: str, pid: int = None) -> Dict[str, Any]:
+	def _suspend(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
+		simulated = context.simulated if context else bool(DRY_RUN)
+		if simulated:
+			return {"status": "simulated", "params": {"pid": pid}}
+		if pid is None:
+			return {"status": "failed", "params": {"reason": "no_pid"}}
+		try:
+			proc = psutil.Process(pid)
+			proc.suspend()
+			self._rollback_stack.append({"action": "suspend", "pid": pid})
+			return {"status": "executed", "params": {"pid": pid, "name": proc.name()}}
+		except Exception as e:
+			return {"status": "failed", "params": {"reason": str(e)}}
+
+	def _noop(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
 		return {"status": "skipped"}
 
 

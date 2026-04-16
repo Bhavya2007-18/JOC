@@ -423,6 +423,72 @@ class IntelligenceEngine:
 			disk_issue.clamp_confidence()
 			issues.append(disk_issue)
 
+		# Disk I/O Rate Detection
+		disk_read_rate = getattr(snapshot, "disk_read_bytes_per_sec", 0.0) or 0.0
+		disk_write_rate = getattr(snapshot, "disk_write_bytes_per_sec", 0.0) or 0.0
+		total_disk_rate = disk_read_rate + disk_write_rate
+		
+		if total_disk_rate > 200 * 1024 * 1024:
+			disk_io_issue = Issue(
+				id="DISK_IO_PRESSURE",
+				category="disk",
+				severity=Severity.MEDIUM,
+				title="Heavy Disk I/O Activity",
+				cause=f"Disk throughput at {total_disk_rate / 1024 / 1024:.0f} MB/s",
+				explanation="Sustained high disk I/O can severely impact overall system responsiveness.",
+				confidence=0.8,
+				affected_processes=[],
+				suggestion="Investigate processes writing large amounts of data",
+				evidence={"disk_read_rate_bps": disk_read_rate, "disk_write_rate_bps": disk_write_rate},
+				suggested_actions=[],
+			)
+			issues.append(disk_io_issue)
+
+		# GPU Issue Detection
+		gpu_percent = getattr(snapshot, "gpu_percent", 0.0) or 0.0
+		gpu_memory_percent = getattr(snapshot, "gpu_memory_percent", 0.0) or 0.0
+		
+		if gpu_percent > 90 or gpu_memory_percent > 90:
+			gpu_heavy = getattr(snapshot, "gpu_heavy_processes", []) or []
+			affected_gpu = [{"name": p.get("name", "unknown"), "pid": p.get("pid")} for p in gpu_heavy[:3]]
+			
+			gpu_issue = Issue(
+				id="HIGH_GPU_USAGE",
+				category="gpu",
+				severity=Severity.HIGH,
+				title="High GPU Usage",
+				cause=f"GPU at {gpu_percent:.0f}%, VRAM at {gpu_memory_percent:.0f}%",
+				explanation="GPU is under heavy load which may cause frame drops and system sluggishness.",
+				confidence=min(1.0, max(gpu_percent, gpu_memory_percent) / 100),
+				affected_processes=affected_gpu,
+				suggestion="Close GPU-intensive applications",
+				evidence={"gpu_percent": gpu_percent, "gpu_memory_percent": gpu_memory_percent},
+				suggested_actions=[],
+			)
+			issues.append(gpu_issue)
+
+		# Network anomaly detection
+		net_heavy = getattr(snapshot, "network_heavy_processes", []) or []
+		net_rate = (getattr(snapshot, "net_bytes_sent_per_sec", 0) or 0) + \
+				   (getattr(snapshot, "net_bytes_recv_per_sec", 0) or 0)
+		
+		suspicious_net = [p for p in net_heavy if p.get("connections", 0) > 50]
+		if suspicious_net or net_rate > 100 * 1024 * 1024:
+			network_issue = Issue(
+				id="NETWORK_ANOMALY",
+				category="network",
+				severity=Severity.MEDIUM,
+				title="Unusual Network Activity",
+				cause=f"High connection count or bandwidth: {net_rate / 1024 / 1024:.1f} MB/s",
+				explanation="A process may be performing excessive network operations.",
+				confidence=0.7,
+				affected_processes=[{"name": p["name"], "pid": p["pid"]} for p in suspicious_net[:3]],
+				suggestion="Investigate network-heavy processes",
+				evidence={"top_network_processes": net_heavy[:3], "total_rate_bps": net_rate},
+				suggested_actions=[],
+			)
+			issues.append(network_issue)
+
 		process_count_threshold = max(250, int(len(snapshot.top_processes) * 60))
 		if snapshot.process_count > process_count_threshold:
 			affected_background_processes = [

@@ -47,14 +47,29 @@ class RollbackManager:
         if rollback_id not in self.snapshots_db:
             return False
             
-        action = self.snapshots_db[rollback_id]
+        snapshot = self.snapshots_db[rollback_id]
+        action = snapshot["action_type"]
+        pid = snapshot.get("pid")
+        state = snapshot.get("state_data", {})
         
-        # Here we would reverse the action.
-        # Ex: If it was priority_down, we set it back to action["state_data"]["priority"]
-        # If it was suspend, we call proc.resume()
+        try:
+            if action in ["priority_down", "priority_up", "throttle_process"] and pid:
+                original_priority = state.get("priority")
+                if original_priority is not None:
+                    # Windows nice values are different, but psutil obfuscates it somewhat.
+                    proc = psutil.Process(pid)
+                    proc.nice(original_priority)
+                    return True
+                    
+            elif action == "suspend" and pid:
+                proc = psutil.Process(pid)
+                proc.resume()
+                return True
+                
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            return False
         
-        # Simulating successful rollback for now
-        return True
+        return False
 
 # Global instance
 rollback_manager = RollbackManager()

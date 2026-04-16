@@ -1,49 +1,62 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Body
+from typing import Dict, Any, Optional
+from autonomy.orchestrator import AutonomyOrchestrator
 from intelligence.monitor_loop import MonitorLoop
-from autonomy.audit_log import AuditLogger
+from utils.logger import get_logger
 
-router = APIRouter(prefix="/api/autonomy", tags=["autonomy"])
+logger = get_logger("api.autonomy")
+router = APIRouter(prefix="/autonomy", tags=["autonomy"])
 
-@router.get("/decision")
-def get_decision():
+@router.post("/toggle")
+def toggle_autonomy(enabled: bool = Body(..., embed=True)):
+    orchestrator = AutonomyOrchestrator() # In reality, we want the global instance
+    # MonitorLoop has the orchestrator instance
     monitor = MonitorLoop.get_instance()
-    if monitor and hasattr(monitor, 'latest_autonomy_state'):
-        state = monitor.latest_autonomy_state
-        return {
-            "enabled": state.get("enabled", False),
-            "decision": state.get("decision", {}),
-            "timestamp": state.get("timestamp")
-        }
-    return {"status": "unavailable"}
+    if not monitor:
+        raise HTTPException(status_code=500, detail="MonitorLoop not initialized")
+    
+    monitor.autonomy_orchestrator.set_enabled(enabled)
+    return {"success": True, "enabled": enabled}
 
-@router.get("/history")
-def get_history():
+@router.post("/force_action")
+def force_action(action_data: Dict[str, Any]):
+    """
+    Force a specific action to be executed by the autonomy engine immediately.
+    Example: {"action": "kill_process", "target": "notepad.exe", "pid": 1234}
+    """
     monitor = MonitorLoop.get_instance()
-    if monitor and hasattr(monitor, 'autonomy_orchestrator'):
-        # Fetch directly from the memory bank as proxy history
-        history = monitor.autonomy_orchestrator.memory_engine.memory_bank
-        return {"history": history}
-    return {"history": []}
+    if not monitor:
+        raise HTTPException(status_code=500, detail="MonitorLoop not initialized")
+        
+    result = monitor.autonomy_orchestrator.action_engine.execute(action_data)
+    return {"success": True, "result": result}
 
-@router.get("/audit/history")
-def get_audit_history():
-    """Phase 4: Deterministic Audit Query for Replay"""
-    logger = AuditLogger.get_instance()
-    return {"audit": logger.get_history(limit=500)}
-
-@router.post("/enable")
-def enable_autonomy():
+@router.post("/inject_intelligence")
+def inject_intelligence(payload: Dict[str, Any]):
+    """
+    Inject fake intelligence into the monitor loop for the next tick.
+    Useful for triggering specific autonomy behaviors in demos.
+    """
     monitor = MonitorLoop.get_instance()
-    if monitor and hasattr(monitor, 'autonomy_orchestrator'):
-        monitor.autonomy_orchestrator.set_enabled(True)
-        return {"status": "success", "enabled": True}
-    return {"status": "error", "message": "Autonomy orchestrator not found"}
+    if not monitor:
+        raise HTTPException(status_code=500, detail="MonitorLoop not initialized")
+        
+    # We override the latest_intelligence which will be picked up by the next autonomy tick
+    # if it's currently sleeping.
+    monitor.latest_intelligence.update(payload)
+    return {"success": True, "message": "Intelligence injected for next tick"}
 
-@router.post("/disable")
-def disable_autonomy():
+@router.post("/reset_learning")
+def reset_learning():
+    """
+    Resets the learning engine's weights and outcomes.
+    """
     monitor = MonitorLoop.get_instance()
-    if monitor and hasattr(monitor, 'autonomy_orchestrator'):
-        monitor.autonomy_orchestrator.set_enabled(False)
-        return {"status": "success", "enabled": False}
-    return {"status": "error", "message": "Autonomy orchestrator not found"}
+    if not monitor:
+        raise HTTPException(status_code=500, detail="MonitorLoop not initialized")
+        
+    monitor.autonomy_orchestrator.learning_engine.outcomes = {}
+    monitor.autonomy_orchestrator.learning_engine.weights = {
+        action: 1.0 for action in monitor.autonomy_orchestrator.decision_engine.ACTION_CATALOG
+    }
+    return {"success": True, "message": "Learning weights reset"}

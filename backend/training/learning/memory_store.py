@@ -134,9 +134,10 @@ class UnifiedMemoryStore:
 
         self.scenario_index = data.get("scenario_index", {})
 
+        import ast
         self.trait_index = {}
         for k, v in data.get("trait_index", {}).items():
-            key = eval(k)
+            key = ast.literal_eval(k)
             self.trait_index[key] = v
 
         if self.trait_index:
