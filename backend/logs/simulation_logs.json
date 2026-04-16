@@ -192,5 +192,135 @@
       "state": "IDLE",
       "note": "Engine returned to IDLE"
     }
+  },
+  {
+    "timestamp": 1776362009.250487,
+    "correlation_id": "94699559-a3a4-4716-84c0-b7b0b508c6b3",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776362008.844961,
+      "state": "INITIALIZING",
+      "note": "Initializing simulation run"
+    }
+  },
+  {
+    "timestamp": 1776362032.6076949,
+    "correlation_id": "94699559-a3a4-4716-84c0-b7b0b508c6b3",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776362032.3267424,
+      "state": "RUNNING_SIMULATION",
+      "note": "Running cpu_spike"
+    }
+  },
+  {
+    "timestamp": 1776362032.9928973,
+    "correlation_id": "94699559-a3a4-4716-84c0-b7b0b508c6b3",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776362032.7913945,
+      "state": "OBSERVING",
+      "note": "Observation window started"
+    }
+  },
+  {
+    "timestamp": 1776362069.5313873,
+    "correlation_id": "94699559-a3a4-4716-84c0-b7b0b508c6b3",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776362069.0995085,
+      "state": "FAILED",
+      "note": "Simulation failed: Simulation timeout exceeded"
+    }
+  },
+  {
+    "timestamp": 1776362069.926993,
+    "correlation_id": "94699559-a3a4-4716-84c0-b7b0b508c6b3",
+    "event": "report_persisted",
+    "payload": {
+      "simulation_id": "8a21a95d-c68a-4acd-8b57-a9cf66d8efcf",
+      "simulation_type": "cpu_spike",
+      "parameters": {
+        "intensity": 0.5,
+        "duration_seconds": 30
+      },
+      "timeline": {
+        "start": 1776362008.844737,
+        "anomaly_detected_at": null,
+        "decision_made_at": null,
+        "completed_at": 1776362069.595386,
+        "transitions": [
+          {
+            "timestamp": 1776362008.844961,
+            "state": "INITIALIZING",
+            "note": "Initializing simulation run"
+          },
+          {
+            "timestamp": 1776362032.3267424,
+            "state": "RUNNING_SIMULATION",
+            "note": "Running cpu_spike"
+          },
+          {
+            "timestamp": 1776362032.7913945,
+            "state": "OBSERVING",
+            "note": "Observation window started"
+          },
+          {
+            "timestamp": 1776362069.0995085,
+            "state": "FAILED",
+            "note": "Simulation failed: Simulation timeout exceeded"
+          }
+        ]
+      },
+      "metrics": {
+        "response_time": 60.750648975372314,
+        "detection_delay": 0.0
+      },
+      "evaluation": {
+        "detection_score": 0,
+        "decision_score": 0,
+        "time_score": 0,
+        "total_score": 0,
+        "false_negatives": 1,
+        "false_positives": 0,
+        "verdict": "failed"
+      },
+      "observations": [
+        {
+          "metadata": {
+            "type": "cpu_spike",
+            "simulation_id": "8a21a95d-c68a-4acd-8b57-a9cf66d8efcf",
+            "correlation_id": "94699559-a3a4-4716-84c0-b7b0b508c6b3",
+            "parameters": {
+              "intensity": 0.5,
+              "duration_seconds": 30
+            }
+          },
+          "result": {
+            "simulation": "cpu_spike",
+            "dry_run": true,
+            "threads": 1,
+            "duration": 5.0,
+            "throttle_seconds": 0.001
+          },
+          "timestamp": 1776362032.712984
+        }
+      ],
+      "logs_ref": "D:\\WORK AND STUDY\\projects\\JOC\\backend\\logs\\simulation_logs.json",
+      "state": "FAILED",
+      "correlation_id": "94699559-a3a4-4716-84c0-b7b0b508c6b3",
+      "feedback": null,
+      "attack_plan": null
+    }
+  },
+  {
+    "timestamp": 1776362070.1697488,
+    "correlation_id": "94699559-a3a4-4716-84c0-b7b0b508c6b3",
+    "event": "state_transition",
+    "payload": {
+      "timestamp": 1776362069.9668956,
+      "state": "IDLE",
+      "note": "Engine returned to IDLE"
+    }
   }
 ]
