@@ -10,11 +10,19 @@ from datetime import datetime, timezone
 def check_for_alert(result: dict) -> dict | None:
     """Build an alert payload from a security result when thresholds are met."""
     risk_score = int(result.get("risk_score", 0) or 0)
+    threats = result.get("threats", [])
+    
+    # Extract primary threat details if available
+    primary_threat = threats[0] if threats else None
+    title = primary_threat.get("title") if primary_threat else "High Registry Anomaly" if risk_score >= 70 else "Elevated Risk Detected"
+    message = primary_threat.get("description") if primary_threat else f"System risk score reached {risk_score}%."
 
     if risk_score >= 70:
         return {
             "type": "HIGH_RISK",
-            "message": "High risk detected on system",
+            "title": title,
+            "message": message,
+            "severity": "critical",
             "risk_score": risk_score,
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
@@ -22,7 +30,9 @@ def check_for_alert(result: dict) -> dict | None:
     if risk_score >= 40:
         return {
             "type": "MEDIUM_RISK",
-            "message": "Moderate risk detected on system",
+            "title": title,
+            "message": message,
+            "severity": "medium",
             "risk_score": risk_score,
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
