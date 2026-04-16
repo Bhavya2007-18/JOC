@@ -139,4 +139,11 @@ export const autonomyApi = {
   getLogs: (limit = 20) => api.get(`/security/logs?limit=${limit}`),
 };
 
+export const reportApi = {
+  getSessionReport: () => api.get('/report/'),
+  exportReport: () => {
+    window.open('http://localhost:8000/report/export', '_blank');
+  }
+};
+
 export default api;

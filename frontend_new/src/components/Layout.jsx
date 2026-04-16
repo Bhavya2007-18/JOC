@@ -10,6 +10,7 @@ import {
   Terminal,
   Shield,
   BrainCircuit,
+  FileText,
   Minus,
   XOctagon,
   XCircle
@@ -28,6 +29,7 @@ const navigation = [
   { name: 'Security', href: '/security', icon: Shield },
   { name: 'Intelligence', href: '/intelligence', icon: BrainCircuit },
   { name: 'History', href: '/history', icon: History },
+  { name: 'Report', href: '/session-report', icon: FileText },
 ];
 
 export function Layout() {

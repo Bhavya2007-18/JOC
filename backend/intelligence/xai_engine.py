@@ -49,14 +49,38 @@ class XAIEngine:
         
         # 5. RECOMMENDED ACTION Generation
         action = self._generate_action(threat_level, causal_data)
+
+        # 6. AUTONOMY CONTEXT (Phase 6)
+        autonomy_context = self._generate_autonomy_context()
         
         return {
             "summary": summary,
             "cause": cause,
             "impact": impact,
             "prediction": prediction,
-            "recommended_action": action
+            "recommended_action": action,
+            "autonomy_context": autonomy_context
         }
+
+    def _generate_autonomy_context(self) -> str:
+        from intelligence.decision_trace import DecisionTraceLog
+        recent = DecisionTraceLog.get_instance().get_recent(n=1)
+        if not recent:
+            return "No autonomous decisions logged in current window."
+            
+        trace = recent[0]
+        rec_eng = trace.get("engine_recommendation")
+        rec_mem = trace.get("memory_recommendation")
+        final = trace.get("final_decision")
+        reason = trace.get("override_reason")
+        
+        if reason == "static_only" or reason == "memory_match":
+            return f"Autonomy proceeded with base recommendation '{final}'."
+            
+        if "confidence" in reason:
+            return f"Static logic suggested '{rec_eng}', but cognitive memory overrode with '{rec_mem}' due to high historical confidence. Final action: '{final}'."
+            
+        return f"Autonomy Engine dynamically routed action to '{final}' (Reason: {reason})."
 
     def _generate_summary(
         self, 

@@ -10,6 +10,7 @@ import { History } from './pages/History';
 import { ProtocolReport } from './pages/ProtocolReport';
 import { Security } from './pages/Security';
 import { Cognition } from './pages/Cognition';
+import Report from './pages/Report';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { systemApi } from './api/client';
 import useSystemStore from './store/useSystemStore';
@@ -55,6 +56,7 @@ function App() {
             <Route path="report" element={<ProtocolReport />} />
             <Route path="security" element={<Security />} />
             <Route path="intelligence" element={<Cognition />} />
+            <Route path="session-report" element={<Report />} />
           </Route>
         </Routes>
       </ErrorBoundary>

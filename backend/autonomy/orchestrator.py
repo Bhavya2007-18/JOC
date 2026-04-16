@@ -112,6 +112,26 @@ class AutonomyOrchestrator:
             feedback=feedback
         )
         
+        # Phase 6A: Decision Trace
+        from intelligence.decision_trace import DecisionTrace, DecisionTraceLog
+        override_reason = "static_only"
+        if cognitive_data.get("confidence", 0) > 0.6:
+            override_reason = "confidence > 0.6"
+        elif matched_pattern.get("pattern_id"):
+            override_reason = "memory_match"
+            
+        trace = DecisionTrace(
+            timestamp=time.time(),
+            pattern_state=static_pattern.get("pattern_id", "unknown"),
+            engine_recommendation=static_pattern.get("recommended_action", "none"),
+            memory_recommendation=cognitive_data.get("recommended_response", "none"),
+            final_decision=decision.get("action", "none") if decision else "none",
+            override_reason=override_reason,
+            confidence=matched_pattern.get("confidence", 0.0),
+            action_type=decision.get("action", "none") if decision else "none"
+        )
+        DecisionTraceLog.get_instance().record(trace)
+        
         return self.latest_output
 
     def set_enabled(self, enabled: bool):

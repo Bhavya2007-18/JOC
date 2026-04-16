@@ -98,3 +98,9 @@ app.include_router(autonomy_router)
 
 from api.training_routes import router as training_router
 app.include_router(training_router)
+
+from api.trace_routes import router as trace_router
+app.include_router(trace_router)
+
+from api.report_routes import router as report_router
+app.include_router(report_router)
