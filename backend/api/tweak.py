@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from intelligence.fixer import FixEngine
 from intelligence.tweaks.decision_engine import TweakDecisionEngine
+from intelligence.monitor_loop import MonitorLoop
 
 router = APIRouter()
 engine = FixEngine()
@@ -14,11 +15,26 @@ class TweakExecuteRequest(BaseModel):
 
 @router.post("/tweak/execute")
 def execute_tweak(request: TweakExecuteRequest):
-    return engine.execute_tweak(
+    monitor = MonitorLoop.get_instance()
+    pre_threat = 0.0
+    pattern_id = None
+    if monitor:
+        latest = monitor.latest_intelligence
+        pre_threat = latest.get("threat", {}).get("threat_score", 0.0)
+        pattern_id = latest.get("learning", {}).get("pattern_id")
+
+    res = engine.execute_tweak(
         request.tweak_name,
         dry_run=request.dry_run,
         confirm_high_risk=request.confirm_high_risk,
     )
+    
+    if monitor and pattern_id and not request.dry_run:
+        monitor.cross_scenario_engine.record_tweak_executed(
+            request.tweak_name, pattern_id, pre_threat
+        )
+
+    return res
 
 @router.get("/tweak/suggest")
 def suggest_tweak():

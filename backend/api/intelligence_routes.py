@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException
 
 from models.intelligence_models import (
     AnomaliesResponse,
@@ -187,3 +187,25 @@ def get_full_intelligence():
     if monitor and hasattr(monitor, 'latest_intelligence'):
         return monitor.latest_intelligence
     return {"status": "loading_engines"}
+
+@router.get("/pattern")
+def get_pattern():
+    monitor = MonitorLoop.get_instance()
+    if not monitor: raise HTTPException(404, "Monitor not running")
+    return monitor.latest_intelligence.get("pattern", {})
+
+@router.get("/learning")
+def get_learning():
+    monitor = MonitorLoop.get_instance()
+    if not monitor: raise HTTPException(404, "Monitor not running")
+    return monitor.cross_scenario_engine.get_learning_summary()
+
+@router.get("/etw")
+def get_etw_events():
+    monitor = MonitorLoop.get_instance()
+    if not monitor: raise HTTPException(404, "Monitor not running")
+    return {
+        "events": monitor.latest_intelligence.get("etw_events", []),
+        "etw_active": monitor.etw_adapter._etw_active,
+        "etw_lib": monitor.etw_adapter._etw_lib or "psutil-fallback"
+    }

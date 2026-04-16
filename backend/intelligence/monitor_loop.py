@@ -16,6 +16,11 @@ from intelligence.xai_engine import XAIEngine
 from intelligence.thermal_engine import ThermalEngine
 from intelligence.thermal_predictor import ThermalPredictor
 
+# Phase 7 Pattern Cognition Layer
+from intelligence.patterns.abstraction_engine import AbstractionEngine
+from intelligence.learning.cross_scenario_engine import CrossScenarioEngine
+from intelligence.sensors.etw_adapter import ETWAdapter
+
 # Phase 3 Autonomy Layer
 from autonomy.orchestrator import AutonomyOrchestrator
 from services.optimizer.power_mode import get_current_mode, apply_system_mode
@@ -52,6 +57,11 @@ class MonitorLoop:
         self._last_thermal_mitigation_ts = 0.0
         self._thermal_mitigation_cooldown_s = 20.0
         
+        # Phase 7 Engines
+        self.abstraction_engine = AbstractionEngine()
+        self.cross_scenario_engine = CrossScenarioEngine()
+        self.etw_adapter = ETWAdapter()
+        
         # Instantiate Autonomy Layer
         self.autonomy_orchestrator = AutonomyOrchestrator()
         
@@ -59,7 +69,11 @@ class MonitorLoop:
             "threat": {},
             "prediction": {},
             "explanation": {},
-            "baseline": {}
+            "baseline": {},
+            "pattern": {"pattern_type": "stable", "confidence": 0.0},
+            "learning": {},
+            "etw_events": [],
+            "etw_event_count": 0
         }
         self.latest_autonomy_state = {}
         MonitorLoop._instance = self
@@ -201,6 +215,43 @@ class MonitorLoop:
                     mitigation_result = run_cleanup(dry_run=True)
                     self._last_thermal_mitigation_ts = now
                 
+                # Stage 8: Pattern Intelligence (Phase 7)
+                pattern = {"pattern_type": "stable", "confidence": 0.0}
+                learning_data = {}
+                try:
+                    pattern = self.abstraction_engine.classify(
+                        cpu=cpu,
+                        ram=ram,
+                        baseline_data=baseline_data,
+                        pred_data=pred_data
+                    )
+                    learning_data = self.cross_scenario_engine.update(
+                        pattern=pattern,
+                        current_threat_score=threat_data.get("threat_score", 0.0)
+                    )
+                    logger.debug(
+                        f"[Pattern] type={pattern['pattern_type']} resource={pattern['resource']} "
+                        f"confidence={pattern['confidence']:.2f} rec={learning_data.get('recommended_response')}"
+                    )
+                except Exception as e:
+                    logger.error(f"[Stage 8 Pattern Error] {e}")
+
+                # Stage 9: ETW Deep Telemetry (Phase 7)
+                etw_events = []
+                try:
+                    etw_events = self.etw_adapter.poll()
+                    # Auto-link high-activity ETW process events into causal graph
+                    for evt in etw_events:
+                        if evt["type"] == "process_start":
+                            self.causal_engine.emit_event(
+                                event_type="PROCESS_EVENT",
+                                node_id=evt["name"],
+                                data={"pid": evt["pid"], "etw_source": True, "timestamp": evt["timestamp"]},
+                                link_to=["CPU_SPIKE", "RAM_SPIKE"]
+                            )
+                except Exception as e:
+                    logger.error(f"[Stage 9 ETW Error] {e}")
+
                 # Compile Unified Intelligence Object
                 self.latest_intelligence = {
                     "threat": threat_data,
@@ -214,6 +265,10 @@ class MonitorLoop:
                         "delay_heavy_operations": should_mitigate,
                         "preemptive_mitigation_applied": bool(mitigation_result),
                     },
+                    "pattern": pattern,
+                    "learning": learning_data,
+                    "etw_events": etw_events,
+                    "etw_event_count": len(etw_events),
                 }
                 
                 # Phase 3: Autonomy Loop
