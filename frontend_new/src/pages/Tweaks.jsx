@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { optimizerApi, systemApi } from '../api/client';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
@@ -27,6 +28,7 @@ import { cn } from '../utils/cn';
 import { TweakExecutionAnimation } from '../components/TweakExecutionAnimation';
 
 export function Tweaks() {
+  const navigate = useNavigate();
   const [executing, setExecuting] = useState({});
   const [previewing, setPreviewing] = useState({});
   const [preview, setPreview] = useState(null);
@@ -181,9 +183,17 @@ export function Tweaks() {
       
       // End animation
       setAnimatingTweak(null);
-
+      
       const data = response.data;
       const res = resolveResult(data);
+      
+      // Store report data for the unique dashboard view
+      if (res.status === 'success' || res.status === 'partial') {
+        const reportData = { tweak: tweak.id, ...res, meta: res.meta || {} };
+        navigate('/report', { state: { data: reportData } });
+      }
+
+      const dataResult = response.data;
       
       if (res.status === 'failed' || res.status === 'error') {
         setStatus({ type: 'error', message: res.message || 'PROTOCOL_REJECTED: Target node denied deployment.' });

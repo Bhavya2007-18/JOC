@@ -11205,5 +11205,5836 @@
       "requested_dry_run": false,
       "confirm_high_risk": false
     }
+  },
+  {
+    "action_id": "11cdba90-0d0a-4971-81c3-0851a02bec81",
+    "action_type": "system_tweak",
+    "target": "clean_ram",
+    "timestamp": 1776355425.6008255,
+    "status": "success",
+    "reversible": false,
+    "result": {
+      "mode": "execute",
+      "tweak": "clean_ram",
+      "status": "partial",
+      "simulated": false,
+      "dry_run": false,
+      "summary": "Memory Flush complete. 1155.8 MB recovered.",
+      "message": "",
+      "effects": {
+        "targets": [
+          {
+            "pid": 1704,
+            "name": "dllhost.exe",
+            "memory_mb": 0.3
+          },
+          {
+            "pid": 1724,
+            "name": "msedgewebview2.exe",
+            "memory_mb": 4.7
+          },
+          {
+            "pid": 1760,
+            "name": "codex.exe",
+            "memory_mb": 14.8
+          },
+          {
+            "pid": 1784,
+            "name": "brave.exe",
+            "memory_mb": 5.8
+          },
+          {
+            "pid": 2036,
+            "name": "msedgewebview2.exe",
+            "memory_mb": 2.0
+          },
+          {
+            "pid": 2160,
+            "name": "backgroundtaskhost.exe",
+            "memory_mb": 0.0
+          },
+          {
+            "pid": 2456,
+            "name": "msedgewebview2.exe",
+            "memory_mb": 0.0
+          },
+          {
+            "pid": 3312,
+            "name": "rtkuwp.exe",
+            "memory_mb": 0.0
+          },
+          {
+            "pid": 3720,
+            "name": "antigravity.exe",
+            "memory_mb": 7.4
+          },
+          {
+            "pid": 3920,
+            "name": "trae.exe",
+            "memory_mb": 27.3
+          },
+          {
+            "pid": 5432,
+            "name": "sihost.exe",
+            "memory_mb": 20.9
+          },
+          {
+            "pid": 5832,
+            "name": "taskhostw.exe",
+            "memory_mb": 7.3
+          },
+          {
+            "pid": 5904,
+            "name": "brave.exe",
+            "memory_mb": 32.0
+          },
+          {
+            "pid": 6172,
+            "name": "onedrive.sync.service.exe",
+            "memory_mb": 33.6
+          },
+          {
+            "pid": 6232,
+            "name": "conhost.exe",
+            "memory_mb": 0.0
+          },
+          {
+            "pid": 6276,
+            "name": "powershell.exe",
+            "memory_mb": 3.1
+          },
+          {
+            "pid": 6428,
+            "name": "brave.exe",
+            "memory_mb": 345.2
+          },
+          {
+            "pid": 6980,
+            "name": "powershell.exe",
+            "memory_mb": 0.2
+          },
+          {
+            "pid": 7008,
+            "name": "trae.exe",
+            "memory_mb": 32.5
+          },
+          {
+            "pid": 7232,
+            "name": "predatorsense.exe",
+            "memory_mb": 9.8
+          }
+        ],
+        "power_plan": null,
+        "memory_freed": 1155.8,
+        "details": [
+          "Processed 164 memory vectors",
+          "RAM load reduced from 85.7% to 78.4%",
+          "System Cache Status: Skipped (Admin required)",
+          "Operation failures captured: 82"
+        ],
+        "raw": {
+          "memory_before_percent": 85.7,
+          "memory_after_percent": 78.4,
+          "freed_mb": 1155.8,
+          "processes_cleaned": [
+            {
+              "pid": 1704,
+              "name": "dllhost.exe",
+              "memory_mb": 0.3
+            },
+            {
+              "pid": 1724,
+              "name": "msedgewebview2.exe",
+              "memory_mb": 4.7
+            },
+            {
+              "pid": 1760,
+              "name": "codex.exe",
+              "memory_mb": 14.8
+            },
+            {
+              "pid": 1784,
+              "name": "brave.exe",
+              "memory_mb": 5.8
+            },
+            {
+              "pid": 2036,
+              "name": "msedgewebview2.exe",
+              "memory_mb": 2.0
+            },
+            {
+              "pid": 2160,
+              "name": "backgroundtaskhost.exe",
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 2456,
+              "name": "msedgewebview2.exe",
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 3312,
+              "name": "rtkuwp.exe",
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 3720,
+              "name": "antigravity.exe",
+              "memory_mb": 7.4
+            },
+            {
+              "pid": 3920,
+              "name": "trae.exe",
+              "memory_mb": 27.3
+            },
+            {
+              "pid": 5432,
+              "name": "sihost.exe",
+              "memory_mb": 20.9
+            },
+            {
+              "pid": 5832,
+              "name": "taskhostw.exe",
+              "memory_mb": 7.3
+            },
+            {
+              "pid": 5904,
+              "name": "brave.exe",
+              "memory_mb": 32.0
+            },
+            {
+              "pid": 6172,
+              "name": "onedrive.sync.service.exe",
+              "memory_mb": 33.6
+            },
+            {
+              "pid": 6232,
+              "name": "conhost.exe",
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 6276,
+              "name": "powershell.exe",
+              "memory_mb": 3.1
+            },
+            {
+              "pid": 6428,
+              "name": "brave.exe",
+              "memory_mb": 345.2
+            },
+            {
+              "pid": 6980,
+              "name": "powershell.exe",
+              "memory_mb": 0.2
+            },
+            {
+              "pid": 7008,
+              "name": "trae.exe",
+              "memory_mb": 32.5
+            },
+            {
+              "pid": 7232,
+              "name": "predatorsense.exe",
+              "memory_mb": 9.8
+            }
+          ],
+          "estimated": false,
+          "failed_count": 82,
+          "details": [
+            "Processed 164 memory vectors",
+            "RAM load reduced from 85.7% to 78.4%",
+            "System Cache Status: Skipped (Admin required)",
+            "Operation failures captured: 82"
+          ]
+        }
+      },
+      "meta": {
+        "duration_ms": 6085,
+        "admin_required": true,
+        "admin_used": false,
+        "guard": {
+          "blocked": false,
+          "warnings": [
+            "Admin privileges are unavailable; execution may be partial."
+          ],
+          "reasons": [
+            "admin_missing"
+          ],
+          "admin_required": true,
+          "admin_used": false
+        },
+        "request_id": "ef96bc10-a72c-4c67-9386-ecb460dc61d9",
+        "snapshot": {
+          "processes": [
+            {
+              "pid": 1704,
+              "name": "dllhost.exe"
+            },
+            {
+              "pid": 1724,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 1760,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 1784,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 2036,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 2160,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 2456,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 3312,
+              "name": "RtkUWP.exe"
+            },
+            {
+              "pid": 3720,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 3920,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 5432,
+              "name": "sihost.exe"
+            },
+            {
+              "pid": 5528,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5624,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5724,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5832,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 5904,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6172,
+              "name": "OneDrive.Sync.Service.exe"
+            },
+            {
+              "pid": 6232,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 6276,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 6428,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6980,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7008,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 7232,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 7300,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7416,
+              "name": "AQAUserPS.exe"
+            },
+            {
+              "pid": 7712,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 7756,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 7988,
+              "name": "SecurityHealthSystray.exe"
+            },
+            {
+              "pid": 8032,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 8036,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8116,
+              "name": "explorer.exe"
+            },
+            {
+              "pid": 8292,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8796,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9152,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 9304,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9708,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 10044,
+              "name": "ipf_helper.exe"
+            },
+            {
+              "pid": 10080,
+              "name": "ctfmon.exe"
+            },
+            {
+              "pid": 10264,
+              "name": "CrossDeviceResume.exe"
+            },
+            {
+              "pid": 10340,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11096,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 11112,
+              "name": "PLANET9DAHelper.exe"
+            },
+            {
+              "pid": 11328,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 11428,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11588,
+              "name": "StartMenuExperienceHost.exe"
+            },
+            {
+              "pid": 11988,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 12112,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12176,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 12396,
+              "name": "Widgets.exe"
+            },
+            {
+              "pid": 12556,
+              "name": "node.exe"
+            },
+            {
+              "pid": 12620,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 12676,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12696,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 12796,
+              "name": "AppActions.exe"
+            },
+            {
+              "pid": 12880,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 13264,
+              "name": "WidgetService.exe"
+            },
+            {
+              "pid": 13524,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 13904,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 13920,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 14176,
+              "name": "AICO 2 AC2S.exe"
+            },
+            {
+              "pid": 14304,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 14644,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 14704,
+              "name": "AICO Out Painting.exe"
+            },
+            {
+              "pid": 14788,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 14800,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 14924,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 15000,
+              "name": "CrossDeviceService.exe"
+            },
+            {
+              "pid": 15028,
+              "name": "SystemSettings.exe"
+            },
+            {
+              "pid": 15556,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 15724,
+              "name": "RtkAudUService64.exe"
+            },
+            {
+              "pid": 16404,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16508,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 16552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16588,
+              "name": "Lively.exe"
+            },
+            {
+              "pid": 16620,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 16792,
+              "name": "PhoneExperienceHost.exe"
+            },
+            {
+              "pid": 16808,
+              "name": "ShellHost.exe"
+            },
+            {
+              "pid": 16880,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 17392,
+              "name": "AICO Parallax Wallpaper.exe"
+            },
+            {
+              "pid": 17564,
+              "name": "StorPSCTL.exe"
+            },
+            {
+              "pid": 17608,
+              "name": "ShellExperienceHost.exe"
+            },
+            {
+              "pid": 17656,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 17784,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 17920,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 18008,
+              "name": "ACCUserPS.exe"
+            },
+            {
+              "pid": 18040,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 18148,
+              "name": "python.exe"
+            },
+            {
+              "pid": 18248,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 18292,
+              "name": "fdm.exe"
+            },
+            {
+              "pid": 18380,
+              "name": "vgtray.exe"
+            },
+            {
+              "pid": 18416,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 18684,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19200,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19324,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19820,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19900,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 19980,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 20192,
+              "name": "Lively.Watchdog.exe"
+            },
+            {
+              "pid": 20300,
+              "name": "node.exe"
+            },
+            {
+              "pid": 20412,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 20432,
+              "name": "wenativehost.exe"
+            },
+            {
+              "pid": 20440,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 20632,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 20668,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 21376,
+              "name": "SearchHost.exe"
+            },
+            {
+              "pid": 21440,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21456,
+              "name": "AcerGAICameraW.exe"
+            },
+            {
+              "pid": 21512,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 21624,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21780,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 21884,
+              "name": "QuickPanelOSD.exe"
+            },
+            {
+              "pid": 21964,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 22176,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22344,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22436,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22480,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22488,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22788,
+              "name": "FileCoAuth.exe"
+            },
+            {
+              "pid": 23404,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 23772,
+              "name": "ApplicationFrameHost.exe"
+            },
+            {
+              "pid": 23908,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 24000,
+              "name": "XboxPcAppFT.exe"
+            },
+            {
+              "pid": 24012,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 24060,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24076,
+              "name": "python.exe"
+            },
+            {
+              "pid": 24340,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24372,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 24872,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 24976,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 25028,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 25032,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 25184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 25300,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 26008,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 26464,
+              "name": "UserOOBEBroker.exe"
+            },
+            {
+              "pid": 26688,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27092,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27828,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28348,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28400,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 28480,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28744,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28788,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29068,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29376,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 29760,
+              "name": "codex.exe"
+            },
+            {
+              "pid": 29764,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 29924,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 29944,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 30072,
+              "name": "mpv.exe"
+            },
+            {
+              "pid": 30092,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 30384,
+              "name": "audiodg.exe"
+            },
+            {
+              "pid": 30544,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 30548,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 30552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 30984,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 31196,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 31396,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 31752,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 31784,
+              "name": "LockApp.exe"
+            },
+            {
+              "pid": 32228,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 32700,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32740,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 32812,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32948,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 33076,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33296,
+              "name": "pyrefly.exe"
+            },
+            {
+              "pid": 33368,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 33564,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33876,
+              "name": "python.exe"
+            },
+            {
+              "pid": 33908,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 34340,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 34908,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35116,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35120,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 35184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 35212,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 35500,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 35548,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 35552,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 35684,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 36520,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 37732,
+              "name": "AICO AC2S.exe"
+            }
+          ],
+          "priorities": {
+            "1704": 16384,
+            "1724": 16384,
+            "1760": 16384,
+            "1784": 16384,
+            "2036": 16384,
+            "2160": 16384,
+            "2456": 16384,
+            "3312": 16384,
+            "3720": 16384,
+            "3920": 16384,
+            "5432": 16384,
+            "5528": 32,
+            "5624": 32,
+            "5724": 32,
+            "5832": 16384,
+            "5904": 16384,
+            "6172": 16384,
+            "6232": 16384,
+            "6276": 16384,
+            "6428": 16384,
+            "6980": 32,
+            "7008": 32,
+            "7232": 32,
+            "7300": 32,
+            "7416": 32,
+            "7712": 32,
+            "7756": 128,
+            "7988": 32,
+            "8032": 32,
+            "8036": 32,
+            "8116": 32,
+            "8292": 32,
+            "8796": 64,
+            "9152": 32,
+            "9304": 32,
+            "9708": 32,
+            "10044": 32,
+            "10080": 128,
+            "10264": 32,
+            "10340": 32,
+            "11096": 32,
+            "11112": 32,
+            "11328": 32,
+            "11428": 32,
+            "11588": 32,
+            "11988": 32,
+            "12112": 32,
+            "12176": 64,
+            "12396": 32,
+            "12556": 32,
+            "12620": 32,
+            "12676": 32,
+            "12696": 32,
+            "12796": 32,
+            "12880": 32,
+            "13264": 32,
+            "13524": 32768,
+            "13904": 32768,
+            "13920": 32,
+            "14176": 32,
+            "14304": 32,
+            "14644": 64,
+            "14704": 32,
+            "14788": 64,
+            "14800": 32,
+            "14924": 32,
+            "15000": 32,
+            "15028": 32,
+            "15556": 32,
+            "15724": 32,
+            "16404": 32,
+            "16508": 32768,
+            "16552": 64,
+            "16588": 32,
+            "16620": 32,
+            "16792": 32,
+            "16808": 32,
+            "16880": 32,
+            "17392": 32,
+            "17564": 16384,
+            "17608": 32,
+            "17656": 32,
+            "17784": 32768,
+            "17920": 32,
+            "18008": 32,
+            "18040": 32768,
+            "18148": 32,
+            "18248": 32,
+            "18292": 32,
+            "18380": 32,
+            "18416": 32,
+            "18684": 32,
+            "19200": 32,
+            "19324": 32,
+            "19820": 32,
+            "19900": 32,
+            "19980": 32,
+            "20192": 32,
+            "20300": 32,
+            "20412": 32,
+            "20432": 32,
+            "20440": 32,
+            "20632": 32,
+            "20668": 32,
+            "21376": 32,
+            "21440": 32,
+            "21456": 32,
+            "21512": 64,
+            "21624": 32,
+            "21780": 32768,
+            "21884": 32,
+            "21964": 32,
+            "22176": 32768,
+            "22344": 32,
+            "22436": 32,
+            "22480": 64,
+            "22488": 32,
+            "22788": 32,
+            "23404": 32,
+            "23772": 32,
+            "23908": 32,
+            "24000": 32,
+            "24012": 64,
+            "24060": 32,
+            "24076": 16384,
+            "24340": 32,
+            "24372": 32,
+            "24872": 32,
+            "24976": 32,
+            "25028": 32,
+            "25032": 32,
+            "25184": 32,
+            "25300": 32,
+            "26008": 64,
+            "26464": 32,
+            "26688": 32,
+            "27092": 64,
+            "27828": 32,
+            "28348": 32,
+            "28400": 32,
+            "28480": 64,
+            "28744": 32,
+            "28788": 128,
+            "29068": 32,
+            "29376": 32,
+            "29760": 32,
+            "29764": 32,
+            "29924": 32,
+            "29944": 64,
+            "30072": 32,
+            "30092": 32768,
+            "30384": 32,
+            "30544": 32,
+            "30548": 32,
+            "30552": 32,
+            "30984": 32768,
+            "31196": 32,
+            "31396": 32,
+            "31752": 32,
+            "31784": 32,
+            "32228": 32,
+            "32700": 32,
+            "32740": 32,
+            "32812": 32,
+            "32948": 32,
+            "33076": 32,
+            "33296": 32,
+            "33368": 64,
+            "33564": 32,
+            "33876": 32,
+            "33908": 32,
+            "34340": 32,
+            "34908": 32,
+            "35116": 32,
+            "35120": 32,
+            "35184": 32,
+            "35212": 32,
+            "35500": 32,
+            "35548": 32,
+            "35552": 32,
+            "35684": 32,
+            "36520": 32,
+            "37732": 32
+          },
+          "memory_state": {
+            "total": 16573128704,
+            "available": 2377887744,
+            "used": 14195240960,
+            "percent": 85.7
+          },
+          "power_plan": "Power Scheme GUID: a1841308-3541-4fab-bc81-f71556f20b4a  (Power saver)",
+          "timestamp": "2026-04-16T16:03:42.346214+00:00"
+        }
+      },
+      "memory_before_percent": 85.7,
+      "memory_after_percent": 78.4,
+      "freed_mb": 1155.8,
+      "processes_cleaned": [
+        {
+          "pid": 1704,
+          "name": "dllhost.exe",
+          "memory_mb": 0.3
+        },
+        {
+          "pid": 1724,
+          "name": "msedgewebview2.exe",
+          "memory_mb": 4.7
+        },
+        {
+          "pid": 1760,
+          "name": "codex.exe",
+          "memory_mb": 14.8
+        },
+        {
+          "pid": 1784,
+          "name": "brave.exe",
+          "memory_mb": 5.8
+        },
+        {
+          "pid": 2036,
+          "name": "msedgewebview2.exe",
+          "memory_mb": 2.0
+        },
+        {
+          "pid": 2160,
+          "name": "backgroundtaskhost.exe",
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 2456,
+          "name": "msedgewebview2.exe",
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 3312,
+          "name": "rtkuwp.exe",
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 3720,
+          "name": "antigravity.exe",
+          "memory_mb": 7.4
+        },
+        {
+          "pid": 3920,
+          "name": "trae.exe",
+          "memory_mb": 27.3
+        },
+        {
+          "pid": 5432,
+          "name": "sihost.exe",
+          "memory_mb": 20.9
+        },
+        {
+          "pid": 5832,
+          "name": "taskhostw.exe",
+          "memory_mb": 7.3
+        },
+        {
+          "pid": 5904,
+          "name": "brave.exe",
+          "memory_mb": 32.0
+        },
+        {
+          "pid": 6172,
+          "name": "onedrive.sync.service.exe",
+          "memory_mb": 33.6
+        },
+        {
+          "pid": 6232,
+          "name": "conhost.exe",
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 6276,
+          "name": "powershell.exe",
+          "memory_mb": 3.1
+        },
+        {
+          "pid": 6428,
+          "name": "brave.exe",
+          "memory_mb": 345.2
+        },
+        {
+          "pid": 6980,
+          "name": "powershell.exe",
+          "memory_mb": 0.2
+        },
+        {
+          "pid": 7008,
+          "name": "trae.exe",
+          "memory_mb": 32.5
+        },
+        {
+          "pid": 7232,
+          "name": "predatorsense.exe",
+          "memory_mb": 9.8
+        }
+      ],
+      "estimated": false,
+      "failed_count": 82,
+      "details": [
+        "Processed 164 memory vectors",
+        "RAM load reduced from 85.7% to 78.4%",
+        "System Cache Status: Skipped (Admin required)",
+        "Operation failures captured: 82"
+      ]
+    },
+    "parameters": {
+      "requested_dry_run": false,
+      "confirm_high_risk": false
+    }
+  },
+  {
+    "action_id": "5bb90acd-412a-499e-ae48-41589973c854",
+    "action_type": "system_tweak",
+    "target": "gaming_boost",
+    "timestamp": 1776355432.4412777,
+    "status": "failed",
+    "reversible": true,
+    "result": {
+      "mode": "execute",
+      "tweak": "gaming_boost",
+      "status": "blocked",
+      "simulated": false,
+      "dry_run": false,
+      "summary": "Execution blocked by safety guardrail checks.",
+      "message": "Execution blocked by safety guardrail checks.",
+      "effects": {
+        "targets": [],
+        "power_plan": null,
+        "memory_freed": null,
+        "details": [],
+        "raw": {}
+      },
+      "meta": {
+        "duration_ms": 51,
+        "admin_required": false,
+        "admin_used": false,
+        "guard": {
+          "blocked": true,
+          "warnings": [
+            "High-risk tweak requested without explicit high-risk confirmation flag."
+          ],
+          "reasons": [
+            "high_risk_unconfirmed"
+          ],
+          "admin_required": false,
+          "admin_used": false
+        },
+        "request_id": "e0e0f564-2dba-419b-95cb-d558e410ba21"
+      }
+    },
+    "parameters": {
+      "requested_dry_run": false,
+      "confirm_high_risk": false
+    }
+  },
+  {
+    "action_id": "b41cf61e-371d-40e3-9534-fe34dd8d9f85",
+    "action_type": "system_tweak",
+    "target": "gaming_boost",
+    "timestamp": 1776355445.9450636,
+    "status": "success",
+    "reversible": true,
+    "result": {
+      "mode": "execute",
+      "tweak": "gaming_boost",
+      "status": "success",
+      "simulated": false,
+      "dry_run": false,
+      "summary": "Combat Mode active. Boosted brave.exe. Optimized 17 background vectors.",
+      "message": "",
+      "effects": {
+        "targets": [
+          {
+            "pid": 21376,
+            "name": "SearchHost.exe",
+            "cpu_percent": 0.0,
+            "memory_mb": 0.3
+          }
+        ],
+        "power_plan": "High Performance",
+        "memory_freed": null,
+        "details": [
+          "Allocated HIGH priority to 'brave.exe'",
+          "Boost target selection: foreground_window",
+          "Throttled 17 background tasks to starvation levels",
+          "Purged 1 non-critical performance bottlenecks",
+          "Power State: High Performance"
+        ],
+        "raw": {
+          "processes_killed": [
+            {
+              "pid": 21376,
+              "name": "SearchHost.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.3
+            }
+          ],
+          "processes_lowered": [
+            {
+              "pid": 1704,
+              "name": "dllhost.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 1724,
+              "name": "msedgewebview2.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.5
+            },
+            {
+              "pid": 1760,
+              "name": "Codex.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 3.1
+            },
+            {
+              "pid": 1784,
+              "name": "brave.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 2.7
+            },
+            {
+              "pid": 2036,
+              "name": "msedgewebview2.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.4
+            },
+            {
+              "pid": 2160,
+              "name": "backgroundTaskHost.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 2456,
+              "name": "msedgewebview2.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 3312,
+              "name": "RtkUWP.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 3720,
+              "name": "Antigravity.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 1.5
+            },
+            {
+              "pid": 3920,
+              "name": "Trae.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            }
+          ],
+          "foreground_boosted": {
+            "pid": 7756,
+            "name": "brave.exe",
+            "cpu_percent": 0.0,
+            "memory_mb": 74.4
+          },
+          "boosted_selection": "foreground_window",
+          "priority_snapshot": {
+            "7756": 128,
+            "1704": 16384,
+            "1724": 16384,
+            "1760": 16384,
+            "1784": 16384,
+            "2036": 16384,
+            "2160": 16384,
+            "2456": 16384,
+            "3312": 16384,
+            "3720": 16384,
+            "3920": 16384,
+            "5432": 16384,
+            "5832": 16384,
+            "5904": 16384,
+            "6172": 16384,
+            "6232": 16384,
+            "6276": 16384,
+            "6428": 16384
+          },
+          "power_plan": "High Performance",
+          "details": [
+            "Allocated HIGH priority to 'brave.exe'",
+            "Boost target selection: foreground_window",
+            "Throttled 17 background tasks to starvation levels",
+            "Purged 1 non-critical performance bottlenecks",
+            "Power State: High Performance"
+          ]
+        }
+      },
+      "meta": {
+        "duration_ms": 10136,
+        "admin_required": false,
+        "admin_used": false,
+        "guard": {
+          "blocked": false,
+          "warnings": [],
+          "reasons": [],
+          "admin_required": false,
+          "admin_used": false
+        },
+        "request_id": "62926520-7f0b-44fa-b2c6-92d3719b6f47",
+        "snapshot": {
+          "processes": [
+            {
+              "pid": 1704,
+              "name": "dllhost.exe"
+            },
+            {
+              "pid": 1724,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 1760,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 1784,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 2036,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 2160,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 2456,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 3312,
+              "name": "RtkUWP.exe"
+            },
+            {
+              "pid": 3720,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 3920,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 5432,
+              "name": "sihost.exe"
+            },
+            {
+              "pid": 5528,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5624,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5724,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5832,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 5904,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6172,
+              "name": "OneDrive.Sync.Service.exe"
+            },
+            {
+              "pid": 6232,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 6276,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 6428,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6980,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7008,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 7232,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 7300,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7416,
+              "name": "AQAUserPS.exe"
+            },
+            {
+              "pid": 7712,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 7756,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 7988,
+              "name": "SecurityHealthSystray.exe"
+            },
+            {
+              "pid": 8032,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 8036,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8116,
+              "name": "explorer.exe"
+            },
+            {
+              "pid": 8292,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8796,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9152,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 9304,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9708,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 10044,
+              "name": "ipf_helper.exe"
+            },
+            {
+              "pid": 10080,
+              "name": "ctfmon.exe"
+            },
+            {
+              "pid": 10264,
+              "name": "CrossDeviceResume.exe"
+            },
+            {
+              "pid": 10340,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11096,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 11112,
+              "name": "PLANET9DAHelper.exe"
+            },
+            {
+              "pid": 11328,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 11428,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11588,
+              "name": "StartMenuExperienceHost.exe"
+            },
+            {
+              "pid": 11988,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 12112,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12176,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 12396,
+              "name": "Widgets.exe"
+            },
+            {
+              "pid": 12556,
+              "name": "node.exe"
+            },
+            {
+              "pid": 12620,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 12676,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12696,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 12796,
+              "name": "AppActions.exe"
+            },
+            {
+              "pid": 12880,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 13264,
+              "name": "WidgetService.exe"
+            },
+            {
+              "pid": 13524,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 13904,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 13920,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 14176,
+              "name": "AICO 2 AC2S.exe"
+            },
+            {
+              "pid": 14304,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 14644,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 14704,
+              "name": "AICO Out Painting.exe"
+            },
+            {
+              "pid": 14788,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 14800,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 14924,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 15000,
+              "name": "CrossDeviceService.exe"
+            },
+            {
+              "pid": 15028,
+              "name": "SystemSettings.exe"
+            },
+            {
+              "pid": 15556,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 15724,
+              "name": "RtkAudUService64.exe"
+            },
+            {
+              "pid": 16404,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16508,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 16552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16588,
+              "name": "Lively.exe"
+            },
+            {
+              "pid": 16620,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 16792,
+              "name": "PhoneExperienceHost.exe"
+            },
+            {
+              "pid": 16808,
+              "name": "ShellHost.exe"
+            },
+            {
+              "pid": 16880,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 17392,
+              "name": "AICO Parallax Wallpaper.exe"
+            },
+            {
+              "pid": 17564,
+              "name": "StorPSCTL.exe"
+            },
+            {
+              "pid": 17608,
+              "name": "ShellExperienceHost.exe"
+            },
+            {
+              "pid": 17656,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 17784,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 17920,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 18008,
+              "name": "ACCUserPS.exe"
+            },
+            {
+              "pid": 18040,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 18148,
+              "name": "python.exe"
+            },
+            {
+              "pid": 18248,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 18292,
+              "name": "fdm.exe"
+            },
+            {
+              "pid": 18380,
+              "name": "vgtray.exe"
+            },
+            {
+              "pid": 18416,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 18684,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19200,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19324,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19820,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19900,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 19980,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 20192,
+              "name": "Lively.Watchdog.exe"
+            },
+            {
+              "pid": 20300,
+              "name": "node.exe"
+            },
+            {
+              "pid": 20412,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 20432,
+              "name": "wenativehost.exe"
+            },
+            {
+              "pid": 20440,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 20632,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 20668,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 21376,
+              "name": "SearchHost.exe"
+            },
+            {
+              "pid": 21440,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21456,
+              "name": "AcerGAICameraW.exe"
+            },
+            {
+              "pid": 21512,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 21624,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21780,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 21884,
+              "name": "QuickPanelOSD.exe"
+            },
+            {
+              "pid": 21964,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 22176,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22344,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22436,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22480,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22488,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22788,
+              "name": "FileCoAuth.exe"
+            },
+            {
+              "pid": 23404,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 23772,
+              "name": "ApplicationFrameHost.exe"
+            },
+            {
+              "pid": 23908,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 24000,
+              "name": "XboxPcAppFT.exe"
+            },
+            {
+              "pid": 24012,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 24060,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24076,
+              "name": "python.exe"
+            },
+            {
+              "pid": 24340,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24372,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 24872,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 24976,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 25028,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 25032,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 25184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 25300,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 26008,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 26464,
+              "name": "UserOOBEBroker.exe"
+            },
+            {
+              "pid": 26688,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27092,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27828,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28348,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28400,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 28480,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28744,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28788,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29068,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29376,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 29760,
+              "name": "codex.exe"
+            },
+            {
+              "pid": 29764,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 29924,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 29944,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 30072,
+              "name": "mpv.exe"
+            },
+            {
+              "pid": 30092,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 30384,
+              "name": "audiodg.exe"
+            },
+            {
+              "pid": 30544,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 30548,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 30552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 30984,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 31196,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 31396,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 31752,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 31784,
+              "name": "LockApp.exe"
+            },
+            {
+              "pid": 32228,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 32700,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32740,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 32812,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32948,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 33076,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33296,
+              "name": "pyrefly.exe"
+            },
+            {
+              "pid": 33368,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 33564,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33876,
+              "name": "python.exe"
+            },
+            {
+              "pid": 33908,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 34340,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 34908,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35116,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35120,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 35184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 35212,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 35500,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 35548,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 35552,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 35684,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 36520,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 37732,
+              "name": "AICO AC2S.exe"
+            }
+          ],
+          "priorities": {
+            "1704": 16384,
+            "1724": 16384,
+            "1760": 16384,
+            "1784": 16384,
+            "2036": 16384,
+            "2160": 16384,
+            "2456": 16384,
+            "3312": 16384,
+            "3720": 16384,
+            "3920": 16384,
+            "5432": 16384,
+            "5528": 32,
+            "5624": 32,
+            "5724": 32,
+            "5832": 16384,
+            "5904": 16384,
+            "6172": 16384,
+            "6232": 16384,
+            "6276": 16384,
+            "6428": 16384,
+            "6980": 32,
+            "7008": 32,
+            "7232": 32,
+            "7300": 32,
+            "7416": 32,
+            "7712": 32,
+            "7756": 128,
+            "7988": 32,
+            "8032": 32,
+            "8036": 32,
+            "8116": 32,
+            "8292": 32,
+            "8796": 64,
+            "9152": 32,
+            "9304": 32,
+            "9708": 32,
+            "10044": 32,
+            "10080": 128,
+            "10264": 32,
+            "10340": 32,
+            "11096": 32,
+            "11112": 32,
+            "11328": 32,
+            "11428": 32,
+            "11588": 32,
+            "11988": 32,
+            "12112": 32,
+            "12176": 64,
+            "12396": 32,
+            "12556": 32,
+            "12620": 32,
+            "12676": 32,
+            "12696": 32,
+            "12796": 32,
+            "12880": 32,
+            "13264": 32,
+            "13524": 32768,
+            "13904": 32768,
+            "13920": 32,
+            "14176": 32,
+            "14304": 32,
+            "14644": 64,
+            "14704": 32,
+            "14788": 64,
+            "14800": 32,
+            "14924": 32,
+            "15000": 32,
+            "15028": 32,
+            "15556": 32,
+            "15724": 32,
+            "16404": 32,
+            "16508": 32768,
+            "16552": 64,
+            "16588": 32,
+            "16620": 32,
+            "16792": 32,
+            "16808": 32,
+            "16880": 32,
+            "17392": 32,
+            "17564": 16384,
+            "17608": 32,
+            "17656": 32,
+            "17784": 32768,
+            "17920": 32,
+            "18008": 32,
+            "18040": 32768,
+            "18148": 32,
+            "18248": 32,
+            "18292": 32,
+            "18380": 32,
+            "18416": 32,
+            "18684": 32,
+            "19200": 32,
+            "19324": 32,
+            "19820": 32,
+            "19900": 32,
+            "19980": 32,
+            "20192": 32,
+            "20300": 32,
+            "20412": 32,
+            "20432": 32,
+            "20440": 32,
+            "20632": 32,
+            "20668": 32,
+            "21376": 32,
+            "21440": 32,
+            "21456": 32,
+            "21512": 64,
+            "21624": 32,
+            "21780": 32768,
+            "21884": 32,
+            "21964": 32,
+            "22176": 32768,
+            "22344": 32,
+            "22436": 32,
+            "22480": 64,
+            "22488": 32,
+            "22788": 32,
+            "23404": 32,
+            "23772": 32,
+            "23908": 32,
+            "24000": 32,
+            "24012": 64,
+            "24060": 32,
+            "24076": 16384,
+            "24340": 32,
+            "24372": 32,
+            "24872": 32,
+            "24976": 32,
+            "25028": 32,
+            "25032": 32,
+            "25184": 32,
+            "25300": 32,
+            "26008": 64,
+            "26464": 32,
+            "26688": 32,
+            "27092": 64,
+            "27828": 32,
+            "28348": 32,
+            "28400": 32,
+            "28480": 64,
+            "28744": 32,
+            "28788": 128,
+            "29068": 32,
+            "29376": 32,
+            "29760": 32,
+            "29764": 32,
+            "29924": 32,
+            "29944": 64,
+            "30072": 32,
+            "30092": 32768,
+            "30384": 32,
+            "30544": 32,
+            "30548": 32,
+            "30552": 32,
+            "30984": 32768,
+            "31196": 32,
+            "31396": 32,
+            "31752": 32,
+            "31784": 32,
+            "32228": 32,
+            "32700": 32,
+            "32740": 32,
+            "32812": 32,
+            "32948": 32,
+            "33076": 32,
+            "33296": 32,
+            "33368": 64,
+            "33564": 32,
+            "33876": 32,
+            "33908": 32,
+            "34340": 32,
+            "34908": 32,
+            "35116": 32,
+            "35120": 32,
+            "35184": 32,
+            "35212": 32,
+            "35500": 32,
+            "35548": 32,
+            "35552": 32,
+            "35684": 32,
+            "36520": 32,
+            "37732": 32
+          },
+          "memory_state": {
+            "total": 16573128704,
+            "available": 5210218496,
+            "used": 11362910208,
+            "percent": 68.6
+          },
+          "power_plan": "Power Scheme GUID: a1841308-3541-4fab-bc81-f71556f20b4a  (Power saver)",
+          "timestamp": "2026-04-16T16:04:05.268137+00:00"
+        }
+      },
+      "processes_killed": [
+        {
+          "pid": 21376,
+          "name": "SearchHost.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.3
+        }
+      ],
+      "processes_lowered": [
+        {
+          "pid": 1704,
+          "name": "dllhost.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 1724,
+          "name": "msedgewebview2.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.5
+        },
+        {
+          "pid": 1760,
+          "name": "Codex.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 3.1
+        },
+        {
+          "pid": 1784,
+          "name": "brave.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 2.7
+        },
+        {
+          "pid": 2036,
+          "name": "msedgewebview2.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.4
+        },
+        {
+          "pid": 2160,
+          "name": "backgroundTaskHost.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 2456,
+          "name": "msedgewebview2.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 3312,
+          "name": "RtkUWP.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 3720,
+          "name": "Antigravity.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 1.5
+        },
+        {
+          "pid": 3920,
+          "name": "Trae.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        }
+      ],
+      "foreground_boosted": {
+        "pid": 7756,
+        "name": "brave.exe",
+        "cpu_percent": 0.0,
+        "memory_mb": 74.4
+      },
+      "boosted_selection": "foreground_window",
+      "priority_snapshot": {
+        "7756": 128,
+        "1704": 16384,
+        "1724": 16384,
+        "1760": 16384,
+        "1784": 16384,
+        "2036": 16384,
+        "2160": 16384,
+        "2456": 16384,
+        "3312": 16384,
+        "3720": 16384,
+        "3920": 16384,
+        "5432": 16384,
+        "5832": 16384,
+        "5904": 16384,
+        "6172": 16384,
+        "6232": 16384,
+        "6276": 16384,
+        "6428": 16384
+      },
+      "power_plan": "High Performance",
+      "details": [
+        "Allocated HIGH priority to 'brave.exe'",
+        "Boost target selection: foreground_window",
+        "Throttled 17 background tasks to starvation levels",
+        "Purged 1 non-critical performance bottlenecks",
+        "Power State: High Performance"
+      ]
+    },
+    "parameters": {
+      "requested_dry_run": false,
+      "confirm_high_risk": true
+    }
+  },
+  {
+    "action_id": "c11f62fb-1b9b-49a0-adff-515ad1f22232",
+    "action_type": "system_tweak",
+    "target": "battery_saver",
+    "timestamp": 1776355665.454404,
+    "status": "success",
+    "reversible": true,
+    "result": {
+      "mode": "execute",
+      "tweak": "battery_saver",
+      "status": "partial",
+      "simulated": false,
+      "dry_run": false,
+      "summary": "Stealth Mode engaged. 0 tasks moved to deep idle.",
+      "message": "",
+      "effects": {
+        "targets": [],
+        "power_plan": "Power Saver Active",
+        "memory_freed": null,
+        "details": [
+          "Reduced 0 tasks to IDLE priority class (not true suspend)",
+          "Background Windows Update: Normal",
+          "Power State: Power Saver Active",
+          "Minimized telemetry sync frequency"
+        ],
+        "raw": {
+          "processes_lowered": [],
+          "processes_suspended": [],
+          "power_plan": "Power Saver Active",
+          "service_changes": "Normal",
+          "details": [
+            "Reduced 0 tasks to IDLE priority class (not true suspend)",
+            "Background Windows Update: Normal",
+            "Power State: Power Saver Active",
+            "Minimized telemetry sync frequency"
+          ]
+        }
+      },
+      "meta": {
+        "duration_ms": 284,
+        "admin_required": true,
+        "admin_used": false,
+        "guard": {
+          "blocked": false,
+          "warnings": [
+            "Admin privileges are unavailable; execution may be partial."
+          ],
+          "reasons": [
+            "admin_missing"
+          ],
+          "admin_required": true,
+          "admin_used": false
+        },
+        "request_id": "2d1d8dcd-4706-4bd0-a961-046530377c19",
+        "snapshot": {
+          "processes": [
+            {
+              "pid": 1704,
+              "name": "dllhost.exe"
+            },
+            {
+              "pid": 1724,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 1760,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 1784,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 2036,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 2160,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 2456,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 3312,
+              "name": "RtkUWP.exe"
+            },
+            {
+              "pid": 3720,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 3920,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 5432,
+              "name": "sihost.exe"
+            },
+            {
+              "pid": 5528,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5624,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5724,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5832,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 5904,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6172,
+              "name": "OneDrive.Sync.Service.exe"
+            },
+            {
+              "pid": 6232,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 6276,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 6428,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6980,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7008,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 7232,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 7300,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7416,
+              "name": "AQAUserPS.exe"
+            },
+            {
+              "pid": 7712,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 7756,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 7988,
+              "name": "SecurityHealthSystray.exe"
+            },
+            {
+              "pid": 8032,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 8036,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8116,
+              "name": "explorer.exe"
+            },
+            {
+              "pid": 8292,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8796,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9152,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 9304,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9708,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 10044,
+              "name": "ipf_helper.exe"
+            },
+            {
+              "pid": 10080,
+              "name": "ctfmon.exe"
+            },
+            {
+              "pid": 10264,
+              "name": "CrossDeviceResume.exe"
+            },
+            {
+              "pid": 10340,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11096,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 11112,
+              "name": "PLANET9DAHelper.exe"
+            },
+            {
+              "pid": 11328,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 11428,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11588,
+              "name": "StartMenuExperienceHost.exe"
+            },
+            {
+              "pid": 12112,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12176,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 12396,
+              "name": "Widgets.exe"
+            },
+            {
+              "pid": 12556,
+              "name": "node.exe"
+            },
+            {
+              "pid": 12620,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 12676,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12696,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 12796,
+              "name": "AppActions.exe"
+            },
+            {
+              "pid": 12880,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 13012,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 13264,
+              "name": "WidgetService.exe"
+            },
+            {
+              "pid": 13524,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 13904,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 13920,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 14176,
+              "name": "AICO 2 AC2S.exe"
+            },
+            {
+              "pid": 14304,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 14644,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 14704,
+              "name": "AICO Out Painting.exe"
+            },
+            {
+              "pid": 14788,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 14800,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 14924,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 15000,
+              "name": "CrossDeviceService.exe"
+            },
+            {
+              "pid": 15028,
+              "name": "SystemSettings.exe"
+            },
+            {
+              "pid": 15556,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 15724,
+              "name": "RtkAudUService64.exe"
+            },
+            {
+              "pid": 15776,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 16404,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16588,
+              "name": "Lively.exe"
+            },
+            {
+              "pid": 16620,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 16792,
+              "name": "PhoneExperienceHost.exe"
+            },
+            {
+              "pid": 16808,
+              "name": "ShellHost.exe"
+            },
+            {
+              "pid": 16880,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 17392,
+              "name": "AICO Parallax Wallpaper.exe"
+            },
+            {
+              "pid": 17564,
+              "name": "StorPSCTL.exe"
+            },
+            {
+              "pid": 17608,
+              "name": "ShellExperienceHost.exe"
+            },
+            {
+              "pid": 17656,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 17784,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 17920,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 18008,
+              "name": "ACCUserPS.exe"
+            },
+            {
+              "pid": 18040,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 18148,
+              "name": "python.exe"
+            },
+            {
+              "pid": 18248,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 18292,
+              "name": "fdm.exe"
+            },
+            {
+              "pid": 18380,
+              "name": "vgtray.exe"
+            },
+            {
+              "pid": 18416,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 18684,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19200,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19324,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19820,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19900,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 19980,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 20192,
+              "name": "Lively.Watchdog.exe"
+            },
+            {
+              "pid": 20300,
+              "name": "node.exe"
+            },
+            {
+              "pid": 20412,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 20432,
+              "name": "wenativehost.exe"
+            },
+            {
+              "pid": 20440,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 20632,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 20668,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 21440,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21456,
+              "name": "AcerGAICameraW.exe"
+            },
+            {
+              "pid": 21512,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 21624,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21780,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 21884,
+              "name": "QuickPanelOSD.exe"
+            },
+            {
+              "pid": 21964,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 22176,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22344,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22436,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22480,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22488,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22788,
+              "name": "FileCoAuth.exe"
+            },
+            {
+              "pid": 23404,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 23772,
+              "name": "ApplicationFrameHost.exe"
+            },
+            {
+              "pid": 23908,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 24000,
+              "name": "XboxPcAppFT.exe"
+            },
+            {
+              "pid": 24012,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 24060,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24076,
+              "name": "python.exe"
+            },
+            {
+              "pid": 24340,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24372,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 24872,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 24976,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 25028,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 25032,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 25184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 25300,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 26008,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 26464,
+              "name": "UserOOBEBroker.exe"
+            },
+            {
+              "pid": 26688,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27092,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27828,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28348,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28480,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28744,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28788,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29068,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29212,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 29376,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 29760,
+              "name": "codex.exe"
+            },
+            {
+              "pid": 29764,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 29916,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 29924,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 30072,
+              "name": "mpv.exe"
+            },
+            {
+              "pid": 30092,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 30384,
+              "name": "audiodg.exe"
+            },
+            {
+              "pid": 30544,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 30548,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 30552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 30824,
+              "name": "SearchHost.exe"
+            },
+            {
+              "pid": 30984,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 31196,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 31356,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 31396,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 31752,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 31784,
+              "name": "LockApp.exe"
+            },
+            {
+              "pid": 32228,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 32700,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32740,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 32812,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32948,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 33076,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33296,
+              "name": "pyrefly.exe"
+            },
+            {
+              "pid": 33368,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 33564,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33876,
+              "name": "python.exe"
+            },
+            {
+              "pid": 33908,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 34340,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 34908,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35116,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35120,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 35184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 35212,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 35500,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 35552,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 36068,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 36752,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 37732,
+              "name": "AICO AC2S.exe"
+            }
+          ],
+          "priorities": {
+            "1704": 16384,
+            "1724": 16384,
+            "1760": 16384,
+            "1784": 16384,
+            "2036": 16384,
+            "2160": 16384,
+            "2456": 16384,
+            "3312": 16384,
+            "3720": 16384,
+            "3920": 16384,
+            "5432": 16384,
+            "5528": 32,
+            "5624": 32,
+            "5724": 32,
+            "5832": 16384,
+            "5904": 16384,
+            "6172": 16384,
+            "6232": 16384,
+            "6276": 16384,
+            "6428": 16384,
+            "6980": 32,
+            "7008": 32,
+            "7232": 32,
+            "7300": 32,
+            "7416": 32,
+            "7712": 32,
+            "7756": 128,
+            "7988": 32,
+            "8032": 32,
+            "8036": 32,
+            "8116": 32,
+            "8292": 32,
+            "8796": 64,
+            "9152": 32,
+            "9304": 32,
+            "9708": 32,
+            "10044": 32,
+            "10080": 128,
+            "10264": 32,
+            "10340": 32,
+            "11096": 32,
+            "11112": 32,
+            "11328": 32,
+            "11428": 32,
+            "11588": 32,
+            "12112": 32,
+            "12176": 64,
+            "12396": 32,
+            "12556": 32,
+            "12620": 32,
+            "12676": 32,
+            "12696": 32,
+            "12796": 32,
+            "12880": 32,
+            "13012": 64,
+            "13264": 32,
+            "13524": 32768,
+            "13904": 32768,
+            "13920": 32,
+            "14176": 32,
+            "14304": 32,
+            "14644": 64,
+            "14704": 32,
+            "14788": 64,
+            "14800": 32,
+            "14924": 32,
+            "15000": 32,
+            "15028": 32,
+            "15556": 32,
+            "15724": 32,
+            "15776": 32,
+            "16404": 32,
+            "16552": 64,
+            "16588": 32,
+            "16620": 32,
+            "16792": 32,
+            "16808": 32,
+            "16880": 32,
+            "17392": 32,
+            "17564": 16384,
+            "17608": 32,
+            "17656": 32,
+            "17784": 32768,
+            "17920": 32,
+            "18008": 32,
+            "18040": 32768,
+            "18148": 32,
+            "18248": 32,
+            "18292": 32,
+            "18380": 32,
+            "18416": 32,
+            "18684": 32,
+            "19200": 32,
+            "19324": 32,
+            "19820": 32,
+            "19900": 32,
+            "19980": 32,
+            "20192": 32,
+            "20300": 32,
+            "20412": 32,
+            "20432": 32,
+            "20440": 32,
+            "20632": 32,
+            "20668": 32,
+            "21440": 32,
+            "21456": 32,
+            "21512": 64,
+            "21624": 32,
+            "21780": 32768,
+            "21884": 32,
+            "21964": 32,
+            "22176": 32768,
+            "22344": 32,
+            "22436": 32,
+            "22480": 64,
+            "22488": 32,
+            "22788": 32,
+            "23404": 32,
+            "23772": 32,
+            "23908": 32,
+            "24000": 32,
+            "24012": 64,
+            "24060": 32,
+            "24076": 16384,
+            "24340": 32,
+            "24372": 32,
+            "24872": 32,
+            "24976": 32,
+            "25028": 32,
+            "25032": 32,
+            "25184": 32,
+            "25300": 32,
+            "26008": 64,
+            "26464": 32,
+            "26688": 32,
+            "27092": 64,
+            "27828": 32,
+            "28348": 32,
+            "28480": 64,
+            "28744": 32,
+            "28788": 128,
+            "29068": 32,
+            "29212": 32,
+            "29376": 32,
+            "29760": 32,
+            "29764": 32,
+            "29916": 32,
+            "29924": 32,
+            "30072": 32,
+            "30092": 32768,
+            "30384": 32,
+            "30544": 32,
+            "30548": 32,
+            "30552": 32,
+            "30824": 32,
+            "30984": 32768,
+            "31196": 32,
+            "31356": 32,
+            "31396": 32,
+            "31752": 32,
+            "31784": 32,
+            "32228": 32,
+            "32700": 32,
+            "32740": 32,
+            "32812": 32,
+            "32948": 32,
+            "33076": 32,
+            "33296": 32,
+            "33368": 64,
+            "33564": 32,
+            "33876": 32,
+            "33908": 32,
+            "34340": 32,
+            "34908": 32,
+            "35116": 32,
+            "35120": 32,
+            "35184": 32,
+            "35212": 32,
+            "35500": 32,
+            "35552": 32,
+            "36068": 32768,
+            "36752": 32,
+            "37732": 32
+          },
+          "memory_state": {
+            "total": 16573128704,
+            "available": 3359637504,
+            "used": 13213491200,
+            "percent": 79.7
+          },
+          "power_plan": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)",
+          "timestamp": "2026-04-16T16:07:45.187267+00:00"
+        }
+      },
+      "processes_lowered": [],
+      "processes_suspended": [],
+      "power_plan": "Power Saver Active",
+      "service_changes": "Normal",
+      "details": [
+        "Reduced 0 tasks to IDLE priority class (not true suspend)",
+        "Background Windows Update: Normal",
+        "Power State: Power Saver Active",
+        "Minimized telemetry sync frequency"
+      ]
+    },
+    "parameters": {
+      "requested_dry_run": false,
+      "confirm_high_risk": false
+    }
+  },
+  {
+    "action_id": "7a2e09f3-e2be-4bca-b94d-abd7b9e951ec",
+    "action_type": "system_tweak",
+    "target": "gaming_boost",
+    "timestamp": 1776355863.8934202,
+    "status": "failed",
+    "reversible": true,
+    "result": {
+      "mode": "execute",
+      "tweak": "gaming_boost",
+      "status": "blocked",
+      "simulated": false,
+      "dry_run": false,
+      "summary": "Execution blocked by safety guardrail checks.",
+      "message": "Execution blocked by safety guardrail checks.",
+      "effects": {
+        "targets": [],
+        "power_plan": null,
+        "memory_freed": null,
+        "details": [],
+        "raw": {}
+      },
+      "meta": {
+        "duration_ms": 16,
+        "admin_required": false,
+        "admin_used": false,
+        "guard": {
+          "blocked": true,
+          "warnings": [
+            "High-risk tweak requested without explicit high-risk confirmation flag."
+          ],
+          "reasons": [
+            "high_risk_unconfirmed"
+          ],
+          "admin_required": false,
+          "admin_used": false
+        },
+        "request_id": "271eb621-754b-4f72-81a2-586d009faf22"
+      }
+    },
+    "parameters": {
+      "requested_dry_run": false,
+      "confirm_high_risk": false
+    }
+  },
+  {
+    "action_id": "5ecb17ec-3d1e-4edf-b42d-8b45606ced4c",
+    "action_type": "system_tweak",
+    "target": "gaming_boost",
+    "timestamp": 1776355871.8459735,
+    "status": "success",
+    "reversible": true,
+    "result": {
+      "mode": "execute",
+      "tweak": "gaming_boost",
+      "status": "success",
+      "simulated": false,
+      "dry_run": false,
+      "summary": "Combat Mode active. Boosted brave.exe. Optimized 17 background vectors.",
+      "message": "",
+      "effects": {
+        "targets": [
+          {
+            "pid": 30824,
+            "name": "SearchHost.exe",
+            "cpu_percent": 0.0,
+            "memory_mb": 166.6
+          }
+        ],
+        "power_plan": "High Performance",
+        "memory_freed": null,
+        "details": [
+          "Allocated HIGH priority to 'brave.exe'",
+          "Boost target selection: foreground_window",
+          "Throttled 17 background tasks to starvation levels",
+          "Purged 1 non-critical performance bottlenecks",
+          "Power State: High Performance"
+        ],
+        "raw": {
+          "processes_killed": [
+            {
+              "pid": 30824,
+              "name": "SearchHost.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 166.6
+            }
+          ],
+          "processes_lowered": [
+            {
+              "pid": 1704,
+              "name": "dllhost.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.3
+            },
+            {
+              "pid": 1724,
+              "name": "msedgewebview2.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 2.5
+            },
+            {
+              "pid": 1760,
+              "name": "Codex.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 10.7
+            },
+            {
+              "pid": 1784,
+              "name": "brave.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 4.2
+            },
+            {
+              "pid": 2036,
+              "name": "msedgewebview2.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.7
+            },
+            {
+              "pid": 2160,
+              "name": "backgroundTaskHost.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 2456,
+              "name": "msedgewebview2.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 3312,
+              "name": "RtkUWP.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            },
+            {
+              "pid": 3720,
+              "name": "Antigravity.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 5.4
+            },
+            {
+              "pid": 3920,
+              "name": "Trae.exe",
+              "cpu_percent": 0.0,
+              "memory_mb": 0.0
+            }
+          ],
+          "foreground_boosted": {
+            "pid": 7756,
+            "name": "brave.exe",
+            "cpu_percent": 0.0,
+            "memory_mb": 151.5
+          },
+          "boosted_selection": "foreground_window",
+          "priority_snapshot": {
+            "7756": 128,
+            "1704": 16384,
+            "1724": 16384,
+            "1760": 16384,
+            "1784": 16384,
+            "2036": 16384,
+            "2160": 16384,
+            "2456": 16384,
+            "3312": 16384,
+            "3720": 16384,
+            "3920": 16384,
+            "5432": 16384,
+            "5832": 16384,
+            "5904": 16384,
+            "6172": 16384,
+            "6232": 16384,
+            "6276": 16384,
+            "6428": 16384
+          },
+          "power_plan": "High Performance",
+          "details": [
+            "Allocated HIGH priority to 'brave.exe'",
+            "Boost target selection: foreground_window",
+            "Throttled 17 background tasks to starvation levels",
+            "Purged 1 non-critical performance bottlenecks",
+            "Power State: High Performance"
+          ]
+        }
+      },
+      "meta": {
+        "duration_ms": 4228,
+        "admin_required": false,
+        "admin_used": false,
+        "guard": {
+          "blocked": false,
+          "warnings": [],
+          "reasons": [],
+          "admin_required": false,
+          "admin_used": false
+        },
+        "request_id": "1c5c593f-1881-4ab8-850f-c4ef467842b8",
+        "snapshot": {
+          "processes": [
+            {
+              "pid": 1704,
+              "name": "dllhost.exe"
+            },
+            {
+              "pid": 1724,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 1760,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 1784,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 2036,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 2160,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 2456,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 3312,
+              "name": "RtkUWP.exe"
+            },
+            {
+              "pid": 3720,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 3920,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 5432,
+              "name": "sihost.exe"
+            },
+            {
+              "pid": 5528,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5624,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5724,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5832,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 5904,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6172,
+              "name": "OneDrive.Sync.Service.exe"
+            },
+            {
+              "pid": 6232,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 6276,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 6428,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6980,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7008,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 7232,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 7300,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7416,
+              "name": "AQAUserPS.exe"
+            },
+            {
+              "pid": 7712,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 7756,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 7988,
+              "name": "SecurityHealthSystray.exe"
+            },
+            {
+              "pid": 8032,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 8036,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8116,
+              "name": "explorer.exe"
+            },
+            {
+              "pid": 8292,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8796,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9152,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 9304,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9708,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 10044,
+              "name": "ipf_helper.exe"
+            },
+            {
+              "pid": 10080,
+              "name": "ctfmon.exe"
+            },
+            {
+              "pid": 10264,
+              "name": "CrossDeviceResume.exe"
+            },
+            {
+              "pid": 10340,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11096,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 11112,
+              "name": "PLANET9DAHelper.exe"
+            },
+            {
+              "pid": 11328,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 11428,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11588,
+              "name": "StartMenuExperienceHost.exe"
+            },
+            {
+              "pid": 12112,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12176,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 12396,
+              "name": "Widgets.exe"
+            },
+            {
+              "pid": 12556,
+              "name": "node.exe"
+            },
+            {
+              "pid": 12620,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 12676,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12696,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 12796,
+              "name": "AppActions.exe"
+            },
+            {
+              "pid": 12880,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 13012,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 13264,
+              "name": "WidgetService.exe"
+            },
+            {
+              "pid": 13524,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 13904,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 13920,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 14176,
+              "name": "AICO 2 AC2S.exe"
+            },
+            {
+              "pid": 14304,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 14644,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 14704,
+              "name": "AICO Out Painting.exe"
+            },
+            {
+              "pid": 14788,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 14800,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 14924,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 15000,
+              "name": "CrossDeviceService.exe"
+            },
+            {
+              "pid": 15028,
+              "name": "SystemSettings.exe"
+            },
+            {
+              "pid": 15556,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 15724,
+              "name": "RtkAudUService64.exe"
+            },
+            {
+              "pid": 15776,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 16404,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16588,
+              "name": "Lively.exe"
+            },
+            {
+              "pid": 16620,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 16792,
+              "name": "PhoneExperienceHost.exe"
+            },
+            {
+              "pid": 16808,
+              "name": "ShellHost.exe"
+            },
+            {
+              "pid": 16880,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 17392,
+              "name": "AICO Parallax Wallpaper.exe"
+            },
+            {
+              "pid": 17564,
+              "name": "StorPSCTL.exe"
+            },
+            {
+              "pid": 17608,
+              "name": "ShellExperienceHost.exe"
+            },
+            {
+              "pid": 17656,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 17784,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 17920,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 18008,
+              "name": "ACCUserPS.exe"
+            },
+            {
+              "pid": 18040,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 18148,
+              "name": "python.exe"
+            },
+            {
+              "pid": 18248,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 18292,
+              "name": "fdm.exe"
+            },
+            {
+              "pid": 18380,
+              "name": "vgtray.exe"
+            },
+            {
+              "pid": 18416,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 18684,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19200,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19324,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19820,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19900,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 19980,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 20192,
+              "name": "Lively.Watchdog.exe"
+            },
+            {
+              "pid": 20300,
+              "name": "node.exe"
+            },
+            {
+              "pid": 20412,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 20432,
+              "name": "wenativehost.exe"
+            },
+            {
+              "pid": 20440,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 20632,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 20668,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 21440,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21456,
+              "name": "AcerGAICameraW.exe"
+            },
+            {
+              "pid": 21512,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 21624,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21780,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 21884,
+              "name": "QuickPanelOSD.exe"
+            },
+            {
+              "pid": 21964,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 22176,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22344,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22436,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22480,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22488,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22788,
+              "name": "FileCoAuth.exe"
+            },
+            {
+              "pid": 23404,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 23772,
+              "name": "ApplicationFrameHost.exe"
+            },
+            {
+              "pid": 23908,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 24000,
+              "name": "XboxPcAppFT.exe"
+            },
+            {
+              "pid": 24012,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 24060,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24076,
+              "name": "python.exe"
+            },
+            {
+              "pid": 24340,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24372,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 24872,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 24976,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 25028,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 25032,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 25184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 25300,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 26008,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 26464,
+              "name": "UserOOBEBroker.exe"
+            },
+            {
+              "pid": 26688,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27092,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27828,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28348,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28480,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28744,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28788,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29068,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29212,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 29376,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 29760,
+              "name": "codex.exe"
+            },
+            {
+              "pid": 29764,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 29916,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 29924,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 30072,
+              "name": "mpv.exe"
+            },
+            {
+              "pid": 30092,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 30384,
+              "name": "audiodg.exe"
+            },
+            {
+              "pid": 30544,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 30548,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 30552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 30824,
+              "name": "SearchHost.exe"
+            },
+            {
+              "pid": 30984,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 31196,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 31356,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 31396,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 31752,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 31784,
+              "name": "LockApp.exe"
+            },
+            {
+              "pid": 32228,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 32700,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32740,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 32812,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32948,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 33076,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33296,
+              "name": "pyrefly.exe"
+            },
+            {
+              "pid": 33368,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 33564,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33876,
+              "name": "python.exe"
+            },
+            {
+              "pid": 33908,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 34340,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 34908,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35116,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35120,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 35184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 35212,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 35500,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 35552,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 36068,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 36752,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 37732,
+              "name": "AICO AC2S.exe"
+            }
+          ],
+          "priorities": {
+            "1704": 16384,
+            "1724": 16384,
+            "1760": 16384,
+            "1784": 16384,
+            "2036": 16384,
+            "2160": 16384,
+            "2456": 16384,
+            "3312": 16384,
+            "3720": 16384,
+            "3920": 16384,
+            "5432": 16384,
+            "5528": 32,
+            "5624": 32,
+            "5724": 32,
+            "5832": 16384,
+            "5904": 16384,
+            "6172": 16384,
+            "6232": 16384,
+            "6276": 16384,
+            "6428": 16384,
+            "6980": 32,
+            "7008": 32,
+            "7232": 32,
+            "7300": 32,
+            "7416": 32,
+            "7712": 32,
+            "7756": 128,
+            "7988": 32,
+            "8032": 32,
+            "8036": 32,
+            "8116": 32,
+            "8292": 32,
+            "8796": 64,
+            "9152": 32,
+            "9304": 32,
+            "9708": 32,
+            "10044": 32,
+            "10080": 128,
+            "10264": 32,
+            "10340": 32,
+            "11096": 32,
+            "11112": 32,
+            "11328": 32,
+            "11428": 32,
+            "11588": 32,
+            "12112": 32,
+            "12176": 64,
+            "12396": 32,
+            "12556": 32,
+            "12620": 32,
+            "12676": 32,
+            "12696": 32,
+            "12796": 32,
+            "12880": 32,
+            "13012": 64,
+            "13264": 32,
+            "13524": 32768,
+            "13904": 32768,
+            "13920": 32,
+            "14176": 32,
+            "14304": 32,
+            "14644": 64,
+            "14704": 32,
+            "14788": 64,
+            "14800": 32,
+            "14924": 32,
+            "15000": 32,
+            "15028": 32,
+            "15556": 32,
+            "15724": 32,
+            "15776": 32,
+            "16404": 32,
+            "16552": 64,
+            "16588": 32,
+            "16620": 32,
+            "16792": 32,
+            "16808": 32,
+            "16880": 32,
+            "17392": 32,
+            "17564": 16384,
+            "17608": 32,
+            "17656": 32,
+            "17784": 32768,
+            "17920": 32,
+            "18008": 32,
+            "18040": 32768,
+            "18148": 32,
+            "18248": 32,
+            "18292": 32,
+            "18380": 32,
+            "18416": 32,
+            "18684": 32,
+            "19200": 32,
+            "19324": 32,
+            "19820": 32,
+            "19900": 32,
+            "19980": 32,
+            "20192": 32,
+            "20300": 32,
+            "20412": 32,
+            "20432": 32,
+            "20440": 32,
+            "20632": 32,
+            "20668": 32,
+            "21440": 32,
+            "21456": 32,
+            "21512": 64,
+            "21624": 32,
+            "21780": 32768,
+            "21884": 32,
+            "21964": 32,
+            "22176": 32768,
+            "22344": 32,
+            "22436": 32,
+            "22480": 64,
+            "22488": 32,
+            "22788": 32,
+            "23404": 32,
+            "23772": 32,
+            "23908": 32,
+            "24000": 32,
+            "24012": 64,
+            "24060": 32,
+            "24076": 16384,
+            "24340": 32,
+            "24372": 32,
+            "24872": 32,
+            "24976": 32,
+            "25028": 32,
+            "25032": 32,
+            "25184": 32,
+            "25300": 32,
+            "26008": 64,
+            "26464": 32,
+            "26688": 32,
+            "27092": 64,
+            "27828": 32,
+            "28348": 32,
+            "28480": 64,
+            "28744": 32,
+            "28788": 128,
+            "29068": 32,
+            "29212": 32,
+            "29376": 32,
+            "29760": 32,
+            "29764": 32,
+            "29916": 32,
+            "29924": 32,
+            "30072": 32,
+            "30092": 32768,
+            "30384": 32,
+            "30544": 32,
+            "30548": 32,
+            "30552": 32,
+            "30824": 32,
+            "30984": 32768,
+            "31196": 32,
+            "31356": 32,
+            "31396": 32,
+            "31752": 32,
+            "31784": 32,
+            "32228": 32,
+            "32700": 32,
+            "32740": 32,
+            "32812": 32,
+            "32948": 32,
+            "33076": 32,
+            "33296": 32,
+            "33368": 64,
+            "33564": 32,
+            "33876": 32,
+            "33908": 32,
+            "34340": 32,
+            "34908": 32,
+            "35116": 32,
+            "35120": 32,
+            "35184": 32,
+            "35212": 32,
+            "35500": 32,
+            "35552": 32,
+            "36068": 32768,
+            "36752": 32,
+            "37732": 32
+          },
+          "memory_state": {
+            "total": 16573128704,
+            "available": 2791239680,
+            "used": 13781889024,
+            "percent": 83.2
+          },
+          "power_plan": "Power Scheme GUID: a1841308-3541-4fab-bc81-f71556f20b4a  (Power saver)",
+          "timestamp": "2026-04-16T16:11:10.067377+00:00"
+        }
+      },
+      "processes_killed": [
+        {
+          "pid": 30824,
+          "name": "SearchHost.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 166.6
+        }
+      ],
+      "processes_lowered": [
+        {
+          "pid": 1704,
+          "name": "dllhost.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.3
+        },
+        {
+          "pid": 1724,
+          "name": "msedgewebview2.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 2.5
+        },
+        {
+          "pid": 1760,
+          "name": "Codex.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 10.7
+        },
+        {
+          "pid": 1784,
+          "name": "brave.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 4.2
+        },
+        {
+          "pid": 2036,
+          "name": "msedgewebview2.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.7
+        },
+        {
+          "pid": 2160,
+          "name": "backgroundTaskHost.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 2456,
+          "name": "msedgewebview2.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 3312,
+          "name": "RtkUWP.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        },
+        {
+          "pid": 3720,
+          "name": "Antigravity.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 5.4
+        },
+        {
+          "pid": 3920,
+          "name": "Trae.exe",
+          "cpu_percent": 0.0,
+          "memory_mb": 0.0
+        }
+      ],
+      "foreground_boosted": {
+        "pid": 7756,
+        "name": "brave.exe",
+        "cpu_percent": 0.0,
+        "memory_mb": 151.5
+      },
+      "boosted_selection": "foreground_window",
+      "priority_snapshot": {
+        "7756": 128,
+        "1704": 16384,
+        "1724": 16384,
+        "1760": 16384,
+        "1784": 16384,
+        "2036": 16384,
+        "2160": 16384,
+        "2456": 16384,
+        "3312": 16384,
+        "3720": 16384,
+        "3920": 16384,
+        "5432": 16384,
+        "5832": 16384,
+        "5904": 16384,
+        "6172": 16384,
+        "6232": 16384,
+        "6276": 16384,
+        "6428": 16384
+      },
+      "power_plan": "High Performance",
+      "details": [
+        "Allocated HIGH priority to 'brave.exe'",
+        "Boost target selection: foreground_window",
+        "Throttled 17 background tasks to starvation levels",
+        "Purged 1 non-critical performance bottlenecks",
+        "Power State: High Performance"
+      ]
+    },
+    "parameters": {
+      "requested_dry_run": false,
+      "confirm_high_risk": true
+    }
+  },
+  {
+    "action_id": "9a909910-9b3a-430f-8a12-3b01098a5367",
+    "action_type": "system_tweak",
+    "target": "performance_boost",
+    "timestamp": 1776355895.694843,
+    "status": "success",
+    "reversible": true,
+    "result": {
+      "mode": "execute",
+      "tweak": "performance_boost",
+      "status": "success",
+      "simulated": false,
+      "dry_run": false,
+      "summary": "Neural Sync optimized 3 nodes. Shielding 111 core systems.",
+      "message": "",
+      "effects": {
+        "targets": [
+          {
+            "pid": 6428,
+            "name": "brave.exe",
+            "cpu_percent": 117.1,
+            "memory_mb": 291.2
+          },
+          {
+            "pid": 24076,
+            "name": "python.exe",
+            "cpu_percent": 99.7,
+            "memory_mb": 41.7
+          },
+          {
+            "pid": 30552,
+            "name": "brave.exe",
+            "cpu_percent": 60.2,
+            "memory_mb": 394.9
+          }
+        ],
+        "power_plan": null,
+        "memory_freed": null,
+        "details": [
+          "Normalizing 3 resource-heavy background spikes",
+          "Shielded 111 critical OS nodes from interference",
+          "Redistributed system task priority for better throughput"
+        ],
+        "raw": {
+          "processes_lowered": [
+            {
+              "pid": 6428,
+              "name": "brave.exe",
+              "cpu_percent": 117.1,
+              "memory_mb": 291.2
+            },
+            {
+              "pid": 24076,
+              "name": "python.exe",
+              "cpu_percent": 99.7,
+              "memory_mb": 41.7
+            },
+            {
+              "pid": 30552,
+              "name": "brave.exe",
+              "cpu_percent": 60.2,
+              "memory_mb": 394.9
+            }
+          ],
+          "protected_count": 111,
+          "details": [
+            "Normalizing 3 resource-heavy background spikes",
+            "Shielded 111 critical OS nodes from interference",
+            "Redistributed system task priority for better throughput"
+          ]
+        }
+      },
+      "meta": {
+        "duration_ms": 4184,
+        "admin_required": false,
+        "admin_used": false,
+        "guard": {
+          "blocked": false,
+          "warnings": [],
+          "reasons": [],
+          "admin_required": false,
+          "admin_used": false
+        },
+        "request_id": "62f8c20a-7d62-4de6-a080-c79dc61f319f",
+        "snapshot": {
+          "processes": [
+            {
+              "pid": 1704,
+              "name": "dllhost.exe"
+            },
+            {
+              "pid": 1724,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 1760,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 1784,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 2036,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 2160,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 2456,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 3312,
+              "name": "RtkUWP.exe"
+            },
+            {
+              "pid": 3720,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 3920,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 5432,
+              "name": "sihost.exe"
+            },
+            {
+              "pid": 5528,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5624,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5724,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 5832,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 5904,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6172,
+              "name": "OneDrive.Sync.Service.exe"
+            },
+            {
+              "pid": 6232,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 6276,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 6428,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 6856,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 6980,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7008,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 7232,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 7300,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 7416,
+              "name": "AQAUserPS.exe"
+            },
+            {
+              "pid": 7712,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 7756,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 7988,
+              "name": "SecurityHealthSystray.exe"
+            },
+            {
+              "pid": 8032,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 8036,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8116,
+              "name": "explorer.exe"
+            },
+            {
+              "pid": 8292,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 8796,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9152,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 9304,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 9708,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 9716,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 10044,
+              "name": "ipf_helper.exe"
+            },
+            {
+              "pid": 10080,
+              "name": "ctfmon.exe"
+            },
+            {
+              "pid": 10264,
+              "name": "CrossDeviceResume.exe"
+            },
+            {
+              "pid": 10340,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11096,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 11112,
+              "name": "PLANET9DAHelper.exe"
+            },
+            {
+              "pid": 11328,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 11428,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 11588,
+              "name": "StartMenuExperienceHost.exe"
+            },
+            {
+              "pid": 12112,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12176,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 12396,
+              "name": "Widgets.exe"
+            },
+            {
+              "pid": 12556,
+              "name": "node.exe"
+            },
+            {
+              "pid": 12620,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 12676,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 12696,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 12796,
+              "name": "AppActions.exe"
+            },
+            {
+              "pid": 12880,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 13012,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 13264,
+              "name": "WidgetService.exe"
+            },
+            {
+              "pid": 13524,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 13904,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 13920,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 13988,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 14176,
+              "name": "AICO 2 AC2S.exe"
+            },
+            {
+              "pid": 14304,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 14644,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 14704,
+              "name": "AICO Out Painting.exe"
+            },
+            {
+              "pid": 14788,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 14800,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 14924,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 15000,
+              "name": "CrossDeviceService.exe"
+            },
+            {
+              "pid": 15028,
+              "name": "SystemSettings.exe"
+            },
+            {
+              "pid": 15556,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 15724,
+              "name": "RtkAudUService64.exe"
+            },
+            {
+              "pid": 16404,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 16588,
+              "name": "Lively.exe"
+            },
+            {
+              "pid": 16620,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 16792,
+              "name": "PhoneExperienceHost.exe"
+            },
+            {
+              "pid": 16808,
+              "name": "ShellHost.exe"
+            },
+            {
+              "pid": 16880,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 17392,
+              "name": "AICO Parallax Wallpaper.exe"
+            },
+            {
+              "pid": 17564,
+              "name": "StorPSCTL.exe"
+            },
+            {
+              "pid": 17608,
+              "name": "ShellExperienceHost.exe"
+            },
+            {
+              "pid": 17656,
+              "name": "backgroundTaskHost.exe"
+            },
+            {
+              "pid": 17784,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 17920,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 18008,
+              "name": "ACCUserPS.exe"
+            },
+            {
+              "pid": 18040,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 18148,
+              "name": "python.exe"
+            },
+            {
+              "pid": 18248,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 18292,
+              "name": "fdm.exe"
+            },
+            {
+              "pid": 18380,
+              "name": "vgtray.exe"
+            },
+            {
+              "pid": 18416,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 18684,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19200,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19324,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 19820,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 19900,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 19980,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 20192,
+              "name": "Lively.Watchdog.exe"
+            },
+            {
+              "pid": 20300,
+              "name": "node.exe"
+            },
+            {
+              "pid": 20412,
+              "name": "cmd.exe"
+            },
+            {
+              "pid": 20432,
+              "name": "wenativehost.exe"
+            },
+            {
+              "pid": 20440,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 20632,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 20668,
+              "name": "PredatorSense.exe"
+            },
+            {
+              "pid": 20708,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 21440,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21456,
+              "name": "AcerGAICameraW.exe"
+            },
+            {
+              "pid": 21512,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 21624,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 21780,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 21884,
+              "name": "QuickPanelOSD.exe"
+            },
+            {
+              "pid": 21964,
+              "name": "QuickPanel.exe"
+            },
+            {
+              "pid": 22176,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22344,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22436,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22480,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22488,
+              "name": "CefSharp.BrowserSubprocess.exe"
+            },
+            {
+              "pid": 22788,
+              "name": "FileCoAuth.exe"
+            },
+            {
+              "pid": 23404,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 23772,
+              "name": "ApplicationFrameHost.exe"
+            },
+            {
+              "pid": 23908,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 24000,
+              "name": "XboxPcAppFT.exe"
+            },
+            {
+              "pid": 24012,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 24060,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24076,
+              "name": "python.exe"
+            },
+            {
+              "pid": 24340,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 24372,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 24872,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 24976,
+              "name": "taskhostw.exe"
+            },
+            {
+              "pid": 25028,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 25032,
+              "name": "SystemSettingsAdminFlows.exe"
+            },
+            {
+              "pid": 25184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 25300,
+              "name": "svchost.exe"
+            },
+            {
+              "pid": 26008,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 26464,
+              "name": "UserOOBEBroker.exe"
+            },
+            {
+              "pid": 26688,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27092,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 27828,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28348,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28480,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 28744,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 28788,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29068,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 29376,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 29720,
+              "name": "SearchHost.exe"
+            },
+            {
+              "pid": 29760,
+              "name": "codex.exe"
+            },
+            {
+              "pid": 29764,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 29924,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 30072,
+              "name": "mpv.exe"
+            },
+            {
+              "pid": 30092,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 30384,
+              "name": "audiodg.exe"
+            },
+            {
+              "pid": 30544,
+              "name": "language_server_windows_x64.exe"
+            },
+            {
+              "pid": 30548,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 30552,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 30984,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 31196,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 31396,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 31752,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 31784,
+              "name": "LockApp.exe"
+            },
+            {
+              "pid": 32228,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 32580,
+              "name": "msedgewebview2.exe"
+            },
+            {
+              "pid": 32700,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32740,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 32812,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 32948,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 33076,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33296,
+              "name": "pyrefly.exe"
+            },
+            {
+              "pid": 33368,
+              "name": "brave.exe"
+            },
+            {
+              "pid": 33564,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 33876,
+              "name": "python.exe"
+            },
+            {
+              "pid": 33908,
+              "name": "RuntimeBroker.exe"
+            },
+            {
+              "pid": 34340,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 34908,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35116,
+              "name": "Trae.exe"
+            },
+            {
+              "pid": 35120,
+              "name": "Antigravity.exe"
+            },
+            {
+              "pid": 35184,
+              "name": "conhost.exe"
+            },
+            {
+              "pid": 35212,
+              "name": "Codex.exe"
+            },
+            {
+              "pid": 35500,
+              "name": "mscopilot.exe"
+            },
+            {
+              "pid": 35552,
+              "name": "powershell.exe"
+            },
+            {
+              "pid": 37732,
+              "name": "AICO AC2S.exe"
+            },
+            {
+              "pid": 37792,
+              "name": "msedgewebview2.exe"
+            }
+          ],
+          "priorities": {
+            "1704": 16384,
+            "1724": 16384,
+            "1760": 16384,
+            "1784": 16384,
+            "2036": 16384,
+            "2160": 16384,
+            "2456": 16384,
+            "3312": 16384,
+            "3720": 16384,
+            "3920": 16384,
+            "5432": 16384,
+            "5528": 32,
+            "5624": 32,
+            "5724": 32,
+            "5832": 16384,
+            "5904": 16384,
+            "6172": 16384,
+            "6232": 16384,
+            "6276": 16384,
+            "6428": 16384,
+            "6856": 32,
+            "6980": 32,
+            "7008": 32,
+            "7232": 32,
+            "7300": 32,
+            "7416": 32,
+            "7712": 32,
+            "7756": 128,
+            "7988": 32,
+            "8032": 32,
+            "8036": 32,
+            "8116": 32,
+            "8292": 32,
+            "8796": 64,
+            "9152": 32,
+            "9304": 32,
+            "9708": 32,
+            "9716": 32,
+            "10044": 32,
+            "10080": 128,
+            "10264": 32,
+            "10340": 32,
+            "11096": 32,
+            "11112": 32,
+            "11328": 32,
+            "11428": 32,
+            "11588": 32,
+            "12112": 32,
+            "12176": 64,
+            "12396": 32,
+            "12556": 32,
+            "12620": 32,
+            "12676": 32,
+            "12696": 32,
+            "12796": 32,
+            "12880": 32,
+            "13012": 64,
+            "13264": 32,
+            "13524": 32768,
+            "13904": 32768,
+            "13920": 32,
+            "13988": 32,
+            "14176": 32,
+            "14304": 32,
+            "14644": 64,
+            "14704": 32,
+            "14788": 64,
+            "14800": 32,
+            "14924": 32,
+            "15000": 32,
+            "15028": 32,
+            "15556": 32,
+            "15724": 32,
+            "16404": 32,
+            "16552": 64,
+            "16588": 32,
+            "16620": 32,
+            "16792": 32,
+            "16808": 32,
+            "16880": 32,
+            "17392": 32,
+            "17564": 16384,
+            "17608": 32,
+            "17656": 32,
+            "17784": 32768,
+            "17920": 32,
+            "18008": 32,
+            "18040": 32768,
+            "18148": 32,
+            "18248": 32,
+            "18292": 32,
+            "18380": 32,
+            "18416": 32,
+            "18684": 32,
+            "19200": 32,
+            "19324": 32,
+            "19820": 32,
+            "19900": 32,
+            "19980": 32,
+            "20192": 32,
+            "20300": 32,
+            "20412": 32,
+            "20432": 32,
+            "20440": 32,
+            "20632": 32,
+            "20668": 32,
+            "20708": 32,
+            "21440": 32,
+            "21456": 32,
+            "21512": 64,
+            "21624": 32,
+            "21780": 32768,
+            "21884": 32,
+            "21964": 32,
+            "22176": 32768,
+            "22344": 32,
+            "22436": 32,
+            "22480": 64,
+            "22488": 32,
+            "22788": 32,
+            "23404": 32,
+            "23772": 32,
+            "23908": 32,
+            "24000": 32,
+            "24012": 64,
+            "24060": 32,
+            "24076": 16384,
+            "24340": 32,
+            "24372": 32,
+            "24872": 32,
+            "24976": 32,
+            "25028": 32,
+            "25032": 32,
+            "25184": 32,
+            "25300": 32,
+            "26008": 64,
+            "26464": 32,
+            "26688": 32,
+            "27092": 64,
+            "27828": 32,
+            "28348": 32,
+            "28480": 64,
+            "28744": 32,
+            "28788": 128,
+            "29068": 32,
+            "29376": 32,
+            "29720": 32,
+            "29760": 32,
+            "29764": 32,
+            "29924": 32,
+            "30072": 32,
+            "30092": 32768,
+            "30384": 32,
+            "30544": 32,
+            "30548": 32,
+            "30552": 32,
+            "30984": 32768,
+            "31196": 32,
+            "31396": 32,
+            "31752": 32,
+            "31784": 32,
+            "32228": 32,
+            "32580": 32768,
+            "32700": 32,
+            "32740": 32,
+            "32812": 32,
+            "32948": 32,
+            "33076": 32,
+            "33296": 32,
+            "33368": 64,
+            "33564": 32,
+            "33876": 32,
+            "33908": 32,
+            "34340": 32,
+            "34908": 32,
+            "35116": 32,
+            "35120": 32,
+            "35184": 32,
+            "35212": 32,
+            "35500": 32,
+            "35552": 32,
+            "37732": 32,
+            "37792": 32
+          },
+          "memory_state": {
+            "total": 16573128704,
+            "available": 2823401472,
+            "used": 13749727232,
+            "percent": 83.0
+          },
+          "power_plan": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)",
+          "timestamp": "2026-04-16T16:11:32.824520+00:00"
+        }
+      },
+      "processes_lowered": [
+        {
+          "pid": 6428,
+          "name": "brave.exe",
+          "cpu_percent": 117.1,
+          "memory_mb": 291.2
+        },
+        {
+          "pid": 24076,
+          "name": "python.exe",
+          "cpu_percent": 99.7,
+          "memory_mb": 41.7
+        },
+        {
+          "pid": 30552,
+          "name": "brave.exe",
+          "cpu_percent": 60.2,
+          "memory_mb": 394.9
+        }
+      ],
+      "protected_count": 111,
+      "details": [
+        "Normalizing 3 resource-heavy background spikes",
+        "Shielded 111 critical OS nodes from interference",
+        "Redistributed system task priority for better throughput"
+      ]
+    },
+    "parameters": {
+      "requested_dry_run": false,
+      "confirm_high_risk": false
+    }
   }
 ]
