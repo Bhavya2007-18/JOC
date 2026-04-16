@@ -29,7 +29,7 @@ logger = get_logger("monitor")
 class MonitorLoop:
     _instance = None
 
-    def __init__(self, interval: int = 5):
+    def __init__(self, interval: int = 15):
         self.interval = interval
         self.engine = IntelligenceEngine()
         self._thread = None

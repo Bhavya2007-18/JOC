@@ -104,7 +104,7 @@ def collect_snapshot() -> SystemSnapshot:
 		except (psutil.AccessDenied, psutil.NoSuchProcess, psutil.ZombieProcess):
 			continue
 
-	cpu_percent = psutil.cpu_percent(interval=0.5)
+	cpu_percent = psutil.cpu_percent(interval=0.1)
 	cpu_per_core = psutil.cpu_percent(interval=None, percpu=True)
 
 	vm = psutil.virtual_memory()

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { systemApi, intelligenceApi } from '../api/client';
 import useSystemStore from '../store/useSystemStore';
 
-export function useSystemData(pollingInterval = 2000) {
+export function useSystemData(pollingInterval = 15000) {
   const [stats, setStats] = useState(null);
   const [processes, setProcesses] = useState([]);
   const [anomalies, setAnomalies] = useState([]);

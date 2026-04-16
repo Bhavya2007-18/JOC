@@ -23,17 +23,23 @@ export function SystemModeProvider({ children }) {
   }, []);
 
   const setSystemMode = useCallback(async (mode) => {
+    const previousMode = systemMode;
+    // Optimistic update for immediate UI responsiveness.
+    setSystemModeState(mode);
     try {
-      // Transition duration depends on the direction
-      // Beast -> Chill is a slow cooling (1200ms)
-      // Any -> Beast is a fast heating (600ms)
-      await systemApi.setMode(mode);
-      setSystemModeState(mode);
+      const res = await systemApi.setMode(mode);
+      const effectiveMode = res?.data?.mode || mode;
+      if (effectiveMode !== mode) {
+        setSystemModeState(effectiveMode);
+      }
+      return res?.data || { mode: effectiveMode };
     } catch (err) {
+      // Roll back UI if backend rejects the switch.
+      setSystemModeState(previousMode);
       console.error('Failed to update system mode:', err);
       throw err;
     }
-  }, []);
+  }, [systemMode]);
 
   // Soft interpolation for Visual Intensity
   useEffect(() => {

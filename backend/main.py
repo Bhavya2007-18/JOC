@@ -29,7 +29,7 @@ from intelligence.config import DRY_RUN
 from intelligence.monitor_loop import MonitorLoop
 from utils.logger import get_logger
 
-monitor = MonitorLoop(interval=5)
+monitor = MonitorLoop(interval=15)
 logger = get_logger("api")
 app = FastAPI()
 

@@ -42,7 +42,7 @@ import { ModeControl } from '../components/mode-control';
 import { LogsPanel } from '../components/logs-panel';
 
 export function Dashboard() {
-  const { stats, processes, anomalies, decisions, health, loading, error, events: historyEvents, forecast, addEvent } = useSystemData(3000);
+  const { stats, processes, anomalies, decisions, health, loading, error, events: historyEvents, forecast, addEvent } = useSystemData(15000);
   const { systemMode, setSystemMode } = useSystemMode();
   const thermal = useSystemStore((state) => state.thermal);
   const thermalPrediction = useSystemStore((state) => state.thermalPrediction);
@@ -65,7 +65,7 @@ export function Dashboard() {
           cpu: stats.cpu.usage_percent,
           memory: stats.memory.percent,
         },
-      ].slice(-20);
+      ].slice(-40);
       return next;
     });
   }, [stats]);
@@ -111,11 +111,13 @@ export function Dashboard() {
     if (modeLoading) return;
     setModeLoading(true);
     try {
-      await setSystemMode(modeId);
+      const result = await setSystemMode(modeId);
+      const effectiveMode = result?.mode || modeId;
       addEvent(`Mode switched to ${modeId.toUpperCase()}`, 'config');
-      setProtocolStatus({ type: 'success', message: `Mode set to ${modeId.toUpperCase()}` });
+      setProtocolStatus({ type: 'success', message: `Mode set to ${String(effectiveMode).toUpperCase()}` });
     } catch (err) {
-      setProtocolStatus({ type: 'error', message: `Failed to switch mode` });
+      const msg = err?.response?.data?.message || 'Failed to switch mode';
+      setProtocolStatus({ type: 'error', message: msg });
     } finally {
       setModeLoading(false);
     }
@@ -267,10 +269,14 @@ export function Dashboard() {
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="cyberCpu" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#00E5FF" stopOpacity={0.4} /><stop offset="95%" stopColor="#00E5FF" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#00E5FF" stopOpacity={0.6} />
+                      <stop offset="50%" stopColor="#00E5FF" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#00E5FF" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="cyberMem" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#BF5FFF" stopOpacity={0.4} /><stop offset="95%" stopColor="#BF5FFF" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#BF5FFF" stopOpacity={0.6} />
+                      <stop offset="50%" stopColor="#BF5FFF" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#BF5FFF" stopOpacity={0} />
                     </linearGradient>
                     <pattern id="dotGrid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.5" fill="#334155" opacity="0.5" /></pattern>
                   </defs>
@@ -285,8 +291,8 @@ export function Dashboard() {
                   ) : null} />
                   <ReferenceLine y={80} stroke="#FFB300" strokeDasharray="4 4" />
                   <ReferenceLine y={95} stroke="#FF3D57" strokeDasharray="4 4" />
-                  <Area type="monotone" dataKey="cpu" stroke="#00E5FF" fill="url(#cyberCpu)" strokeWidth={3} isAnimationActive={false} />
-                  <Area type="monotone" dataKey="memory" stroke="#BF5FFF" fill="url(#cyberMem)" strokeWidth={3} isAnimationActive={false} />
+                  <Area type="monotone" dataKey="cpu" stroke="#00E5FF" fill="url(#cyberCpu)" strokeWidth={3} isAnimationActive={true} animationDuration={800} />
+                  <Area type="monotone" dataKey="memory" stroke="#BF5FFF" fill="url(#cyberMem)" strokeWidth={3} isAnimationActive={true} animationDuration={800} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
