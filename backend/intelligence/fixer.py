@@ -2,6 +2,7 @@
 
 import time
 import uuid
+from typing import Optional, Dict, Any, List
 
 import psutil
 
@@ -10,23 +11,10 @@ from intelligence.config import DRY_RUN
 from intelligence.constants import CRITICAL_PROCESSES
 from intelligence.models import ActionRecord, ActionType
 from services.optimizer.process_manager import kill_process_safe
+from utils.execution_context import ExecutionContext
 
 
 class FixEngine:
-    def kill_process_by_pid(self, pid: int) -> dict:
-        result = kill_process_safe(pid=pid, dry_run=DRY_RUN)
-        if not result.get("success", False):
-            return {"error": result.get("message", f"Failed to terminate process {pid}")}
-
-        response = {
-            "action": "kill_process_pid",
-            "pid": pid,
-            "name": result.get("name", ""),
-            "simulated": bool(result.get("dry_run", False)),
-        }
-        if result.get("action_id"):
-            response["action_id"] = result["action_id"]
-        return response
     def __init__(self) -> None:
         self.store = ActionStore()
 
@@ -43,6 +31,7 @@ class FixEngine:
             status = "failed"
         else:
             status = "success"
+            
         return ActionRecord(
             action_id=str(uuid.uuid4()),
             action_type=action_type,
@@ -54,10 +43,30 @@ class FixEngine:
             parameters=parameters,
         )
 
-    def kill_process_by_name(self, process_name: str) -> dict:
+    def kill_process_by_pid(self, pid: int, context: Optional[ExecutionContext] = None, dry_run: bool = False) -> dict:
+        if context is None:
+            context = ExecutionContext.from_request(dry_run=dry_run)
+            
+        result = kill_process_safe(pid=pid, context=context)
+        if not result.get("success", False):
+            return {"error": result.get("message", f"Failed to terminate process {pid}")}
+
+        response = {
+            "action": "kill_process_pid",
+            "pid": pid,
+            "name": result.get("name", ""),
+            "simulated": bool(result.get("dry_run", False)),
+        }
+        if result.get("action_id"):
+            response["action_id"] = result["action_id"]
+        return response
+
+    def kill_process_by_name(self, process_name: str, context: Optional[ExecutionContext] = None, dry_run: bool = False) -> dict:
         """
         Attempts to kill all processes matching the given name.
         """
+        if context is None:
+            context = ExecutionContext.from_request(dry_run=dry_run)
 
         normalized_target = process_name.lower().replace(".exe", "")
         if normalized_target in CRITICAL_PROCESSES:
@@ -82,18 +91,15 @@ class FixEngine:
         for proc in psutil.process_iter(["pid", "name"]):
             try:
                 name = proc.info.get("name")
-
                 if not name:
                     continue
 
-                target = normalized_target
                 proc_name = name.lower().replace(".exe", "")
-
                 if proc_name in CRITICAL_PROCESSES:
                     continue
 
-                if target == proc_name:
-                    outcome = kill_process_safe(pid=proc.info["pid"], dry_run=DRY_RUN)
+                if normalized_target == proc_name:
+                    outcome = kill_process_safe(pid=proc.info["pid"], context=context)
                     if outcome.get("success", False):
                         killed.append(proc.info["pid"])
                     else:
@@ -123,6 +129,7 @@ class FixEngine:
                 "killed_pids": killed,
                 "failed": failed
             }
+            
         record = self._build_action_record(
             action_type=ActionType.KILL_PROCESS,
             target=process_name,
@@ -138,20 +145,24 @@ class FixEngine:
     def execute_tweak(
         self,
         tweak_name: str,
+        context: Optional[ExecutionContext] = None,
         dry_run: bool = None,
         confirm_high_risk: bool = False,
     ) -> dict:
         from intelligence.tweaks.executor import execute_tweak
         from intelligence.tweaks.registry import get_tweak
 
+        # Tweak executor will create context if None, but we can pass it if we have it
         result = execute_tweak(
             tweak_name,
-            dry_run=dry_run,
+            dry_run=dry_run if context is None else context.dry_run,
             confirm_high_risk=confirm_high_risk,
         )
+        
         tweak = get_tweak(tweak_name)
         is_preview = bool(result.get("simulated", dry_run))
         is_reversible = bool(getattr(tweak, "reversible", False)) and not is_preview
+        
         record = self._build_action_record(
             action_type=ActionType.SYSTEM_TWEAK,
             target=tweak_name,

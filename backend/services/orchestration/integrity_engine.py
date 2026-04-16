@@ -37,6 +37,7 @@ from services.red_team.attack_strategist import AttackStrategist
 from services.red_team.multi_vector import AttackPlan
 from services.orchestration.feedback_loop import FeedbackLoop
 from intelligence.monitor_loop import MonitorLoop
+from utils.execution_context import ExecutionContext
 from utils.logger import get_logger
 
 
@@ -76,7 +77,7 @@ class IntegrityEngine:
                     simulation_id=queued_id,
                     simulation_type=request.simulation_type,
                     parameters=request.parameters,
-                    dry_run=DRY_RUN,
+                    dry_run=request.dry_run,
                     observation_window_seconds=request.observation_window_seconds,
                     correlation_id=queued_id,
                 )
@@ -135,7 +136,7 @@ class IntegrityEngine:
         synthetic_request = SimulationRunRequest(
             simulation_type=queued.simulation_type,
             parameters=queued.parameters,
-            dry_run=DRY_RUN,
+            dry_run=queued.dry_run,
             observation_window_seconds=queued.observation_window_seconds,
             chain=[],
             queue_if_busy=False,
@@ -152,6 +153,7 @@ class IntegrityEngine:
     ) -> SimulationReport:
         simulation_id = fixed_ids[0] if fixed_ids else str(uuid.uuid4())
         correlation_id = fixed_ids[1] if fixed_ids else str(uuid.uuid4())
+        context = ExecutionContext.from_request(dry_run=request.dry_run)
         start = time.time()
 
         # ── ML Attack Selection ───────────────────────────────
@@ -203,7 +205,7 @@ class IntegrityEngine:
                     simulation_id=simulation_id,
                     correlation_id=correlation_id,
                     parameters=request.parameters,
-                    dry_run=DRY_RUN,
+                    context=context,
                 )
                 self._run_single_simulation(simulation, observations, start, timeline)
 
@@ -336,7 +338,7 @@ class IntegrityEngine:
         simulation_id: str,
         correlation_id: str,
         parameters: Dict[str, Any],
-        dry_run: bool,
+        context: ExecutionContext,
     ) -> BaseSimulation:
         mapping = {
             SimulationType.cpu_spike: CpuSpikeSimulation,
@@ -350,7 +352,7 @@ class IntegrityEngine:
             correlation_id=correlation_id,
             parameters=parameters,
             safety_guard=self.safety_guard,
-            dry_run=dry_run,
+            context=context,
         )
 
     def _run_single_simulation(

@@ -46,12 +46,12 @@ async def add_error_handling(request: Request, call_next):
 
 @app.on_event("startup")
 def startup_event():
-    print(f"SYSTEM RUNNING IN DRY MODE: {DRY_RUN}")
+    print(f"GLOBAL DEFAULT DRY MODE: {DRY_RUN}")
     if DRY_RUN:
-        print("WARNING: ALL SYSTEM ACTIONS ARE IN DRY RUN MODE")
+        print("WARNING: GLOBAL DRY_RUN IS ENABLED. Defaulting to safe simulation.")
+        print("PER-REQUEST OVERRIDES ARE NOW ACTIVE VIA ExecutionContext.")
         print("=" * 50)
         print("SYSTEM RUNNING IN SAFE SIMULATION MODE")
-        print("No real system changes will occur")
         print("=" * 50)
     init_db()
 

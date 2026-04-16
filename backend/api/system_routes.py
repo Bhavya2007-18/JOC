@@ -75,12 +75,14 @@ def get_timeline(limit: int = 50):
     return {"events": events}
 
 
+from utils.execution_context import ExecutionContext
+
 @router.post("/mode")
 def set_system_mode(payload: SetModeRequest):
     """Switch the system operating mode (chill / smart / beast)."""
-    # Force LIVE deployment as per user request to 'make this working fully'
-    # This bypasses the global DRY_RUN flag for this specific safe-guarded action.
-    result = apply_system_mode(payload.mode, force_live=True)
+    # Create a context for the mode switch. Force LIVE as per existing logic.
+    context = ExecutionContext.from_request(dry_run=False, mode="system_policy_update")
+    result = apply_system_mode(payload.mode, context=context)
     return result
 
 

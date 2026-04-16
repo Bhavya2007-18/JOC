@@ -4,7 +4,7 @@ from typing import Dict, Optional
 import logging
 import time
 
-from .context import ExecutionContext
+from utils.execution_context import ExecutionContext
 from .guard import GuardReport, ExecutionGuard
 from .registry import get_tweak
 from .snapshot import SnapshotEngine

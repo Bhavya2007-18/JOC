@@ -7,7 +7,7 @@ import ctypes
 import psutil
 
 from intelligence.constants import CRITICAL_PROCESSES
-from .context import ExecutionContext
+from utils.execution_context import ExecutionContext
 
 
 @dataclass

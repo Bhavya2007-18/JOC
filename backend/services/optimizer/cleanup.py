@@ -5,9 +5,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from intelligence.action_store import ActionStore
-from intelligence.config import DRY_RUN
-from intelligence.models import ActionRecord, ActionType
+from utils.execution_context import ExecutionContext
 from utils.logger import get_logger
 
 
@@ -102,8 +100,11 @@ def _cleanup_path(path: Path, dry_run: bool) -> Tuple[int, bool]:
     return freed, simulated
 
 
-def run_cleanup(dry_run: bool = False) -> Dict[str, Any]:
-    effective_dry_run = bool(DRY_RUN)
+def run_cleanup(context: Optional[ExecutionContext] = None, dry_run: bool = False) -> Dict[str, Any]:
+    if context is None:
+        context = ExecutionContext.from_request(dry_run=dry_run)
+    
+    effective_dry_run = context.simulated
     temp_dir = Path(tempfile.gettempdir())
     cache_dirs = _collect_safe_cache_dirs()
 
@@ -156,11 +157,6 @@ def run_cleanup(dry_run: bool = False) -> Dict[str, Any]:
 
     _log_cleanup_action(result, {"dry_run": effective_dry_run})
 
-    logger.info(
-        "Cleanup finished dry_run=%s total_bytes_freed=%s items=%s",
-        effective_dry_run,
-        total_freed,
-        len(items),
-    )
+    context.log_action("run_cleanup", {"total_bytes_freed": total_freed, "items_count": len(items)})
 
     return result

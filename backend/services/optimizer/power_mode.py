@@ -20,6 +20,7 @@ from intelligence.action_store import ActionStore
 from intelligence.config import DRY_RUN
 from intelligence.models import ActionRecord, ActionType
 from intelligence.snapshot_provider import collect_snapshot
+from utils.execution_context import ExecutionContext
 from services.safety.safety_guard import is_action_safe
 from services.system_monitor import get_cpu_stats, get_memory_stats
 from utils.logger import get_logger
@@ -91,8 +92,9 @@ def get_current_mode() -> str:
     return _current_mode
 
 
-def _set_power_plan(mode: str, dry_run: bool) -> Dict[str, Any]:
+def _set_power_plan(mode: str, context: ExecutionContext) -> Dict[str, Any]:
     """Set the Windows power plan via powercfg."""
+    dry_run = context.simulated
     guid = _POWER_PLANS.get(mode)
     if not guid:
         return {"success": False, "message": f"Unknown mode: {mode}"}
@@ -138,9 +140,10 @@ def _set_power_plan(mode: str, dry_run: bool) -> Dict[str, Any]:
 
 
 def _adjust_process_priorities(
-    mode: str, dry_run: bool
+    mode: str, context: ExecutionContext
 ) -> List[Dict[str, Any]]:
     """Adjust process priorities based on mode profile."""
+    dry_run = context.simulated
     threshold = _CPU_THRESHOLDS[mode]
     max_procs = _MAX_AFFECTED_PROCESSES[mode]
     target_priority = _PRIORITY_MAP[mode]
@@ -185,7 +188,7 @@ def _adjust_process_priorities(
             result = change_process_priority_safe(
                 pid=proc_info["pid"],
                 priority=target_priority,
-                dry_run=False,
+                context=context,
             )
             affected.append({
                 "pid": proc_info["pid"],
@@ -258,6 +261,7 @@ def _record_thermal_guard_event(
 
 def apply_system_mode(
     mode: str,
+    context: Optional[ExecutionContext] = None,
     force_live: bool = False,
     thermal_data: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
@@ -272,7 +276,10 @@ def apply_system_mode(
         system metrics, and mode metadata.
     """
     global _current_mode
-    effective_dry_run = bool(DRY_RUN) and not force_live
+    if context is None:
+        context = ExecutionContext.from_request(dry_run=bool(DRY_RUN) and not force_live)
+        
+    effective_dry_run = context.simulated
     if effective_dry_run:
         logger.info("[DRY RUN ACTIVE] No real system changes will be applied.")
     mode = mode.lower().strip()
@@ -357,10 +364,10 @@ def apply_system_mode(
     mem_before = get_memory_stats()
 
     # 1. Set power plan
-    power_result = _set_power_plan(mode, dry_run=effective_dry_run)
-
+    power_result = _set_power_plan(mode, context=context)
+    
     # 2. Adjust process priorities
-    affected_processes = _adjust_process_priorities(mode, dry_run=effective_dry_run)
+    affected_processes = _adjust_process_priorities(mode, context=context)
 
     # 3. Update internal state and persistence
     previous_mode = _current_mode
@@ -427,11 +434,10 @@ def apply_system_mode(
     _action_store.add_action(record)
     result["action_id"] = action_id
 
-    logger.info(
-        "Mode applied mode=%s dry_run=%s processes=%s",
-        mode,
-        effective_dry_run,
-        len(affected_processes),
-    )
+    context.log_action("apply_system_mode", {
+        "mode": mode,
+        "dry_run": effective_dry_run,
+        "processes_affected": len(affected_processes)
+    })
 
     return result

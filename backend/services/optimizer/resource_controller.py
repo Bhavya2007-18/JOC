@@ -2,9 +2,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import psutil
 
-from intelligence.action_store import ActionStore
-from intelligence.config import DRY_RUN
-from intelligence.models import ActionRecord, ActionType
+from utils.execution_context import ExecutionContext
+from models.optimizer_models import ActionType
 from services.system_monitor import get_cpu_stats, get_memory_stats
 from utils.logger import get_logger
 
@@ -58,8 +57,11 @@ def analyze_system_load(cpu_threshold: float, max_processes: int) -> List[Dict[s
     return processes[:max_processes]
 
 
-def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: bool) -> Dict[str, Any]:
-    effective_dry_run = bool(DRY_RUN)
+def boost_system_performance(cpu_threshold: float, max_processes: int, context: Optional[ExecutionContext] = None, dry_run: bool = False) -> Dict[str, Any]:
+    if context is None:
+        context = ExecutionContext.from_request(dry_run=dry_run)
+    
+    effective_dry_run = context.simulated
     heavy_processes = analyze_system_load(cpu_threshold=cpu_threshold, max_processes=max_processes)
     score_before = _calculate_optimization_score()
 
@@ -112,9 +114,10 @@ def boost_system_performance(cpu_threshold: float, max_processes: int, dry_run: 
                     "action_id": None,
                 }
             )
+            context.log_action("boost_system", {"pid": pid, "name": name, "suggested": suggested_priority})
             continue
 
-        result = change_process_priority_safe(pid=pid, priority=suggested_priority, dry_run=effective_dry_run)
+        result = change_process_priority_safe(pid=pid, priority=suggested_priority, context=context)
 
         boosted.append(
             {

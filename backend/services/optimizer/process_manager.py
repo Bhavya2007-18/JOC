@@ -9,11 +9,11 @@ from intelligence.action_store import ActionStore
 from intelligence.config import DRY_RUN
 from intelligence.constants import CRITICAL_PROCESSES
 from intelligence.models import ActionRecord, ActionType
-from intelligence.safety import allow_execution, enforce_safe_execution
-from services.safety.safety_guard import is_action_safe
+from utils.execution_context import ExecutionContext
 from utils.logger import get_logger
 
-assert isinstance(DRY_RUN, bool), "DRY_RUN must be a boolean"
+# Removed global DRY_RUN reliance to ensure thread safety
+# logger = get_logger("optimizer.process_manager")
 
 
 logger = get_logger("optimizer.process_manager")
@@ -124,9 +124,11 @@ def _prepare_process(pid: int) -> Tuple[Optional[psutil.Process], bool, str]:
     return proc, False, ""
 
 
-def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
-    execution_allowed = allow_execution()
-    effective_dry_run = dry_run or not execution_allowed
+def kill_process_safe(pid: int, context: Optional[ExecutionContext] = None, dry_run: bool = False) -> Dict[str, Any]:
+    if context is None:
+        context = ExecutionContext.from_request(dry_run=dry_run)
+    
+    effective_dry_run = context.simulated
     start_time = time.time()
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
@@ -190,7 +192,7 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         }
 
     if effective_dry_run:
-        logger.info("Dry-run kill for pid=%s name=%s", pid, name)
+        context.log_action("kill_process", {"pid": pid, "name": name})
         return {
             "pid": pid,
             "name": name,
@@ -212,7 +214,8 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
             proc.wait(timeout=3)
         except psutil.TimeoutExpired:
             proc.kill()
-        logger.info("Requested terminate for pid=%s name=%s", pid, name)
+        
+        context.log_action("kill_process", {"pid": pid, "name": name})
         action_id = _log_action(
             action_type=ActionType.KILL_PROCESS,
             target=str(pid),
@@ -264,9 +267,11 @@ def _map_priority_for_platform(priority: int) -> Any:
     return priority
 
 
-def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False) -> Dict[str, Any]:
-    execution_allowed = allow_execution()
-    effective_dry_run = dry_run or not execution_allowed
+def change_process_priority_safe(pid: int, priority: int, context: Optional[ExecutionContext] = None, dry_run: bool = False) -> Dict[str, Any]:
+    if context is None:
+        context = ExecutionContext.from_request(dry_run=dry_run)
+    
+    effective_dry_run = context.simulated
     start_time = time.time()
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
@@ -316,13 +321,7 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
     new_nice_value = _map_priority_for_platform(priority)
 
     if effective_dry_run:
-        logger.info(
-            "Dry-run priority change for pid=%s name=%s from=%s to=%s",
-            pid,
-            name,
-            old_nice,
-            new_nice_value,
-        )
+        context.log_action("change_priority", {"pid": pid, "name": name, "from": old_nice, "to": new_nice_value})
         return {
             "pid": pid,
             "name": name,
@@ -340,13 +339,7 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
         if not execution_allowed:
             enforce_safe_execution()
         proc.nice(new_nice_value)
-        logger.info(
-            "Changed priority for pid=%s name=%s from=%s to=%s",
-            pid,
-            name,
-            old_nice,
-            new_nice_value,
-        )
+        context.log_action("change_priority", {"pid": pid, "name": name, "from": old_nice, "to": new_nice_value})
         action_id = _log_action(
             action_type=ActionType.SYSTEM_TWEAK,
             target=str(pid),
@@ -384,9 +377,11 @@ def change_process_priority_safe(pid: int, priority: int, dry_run: bool = False)
         }
 
 
-def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
-    execution_allowed = allow_execution()
-    effective_dry_run = dry_run or not execution_allowed
+def suspend_process_safe(pid: int, context: Optional[ExecutionContext] = None, dry_run: bool = False) -> Dict[str, Any]:
+    if context is None:
+        context = ExecutionContext.from_request(dry_run=dry_run)
+    
+    effective_dry_run = context.simulated
     start_time = time.time()
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
@@ -432,7 +427,7 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         }
 
     if effective_dry_run:
-        logger.info("Dry-run suspend for pid=%s name=%s", pid, name)
+        context.log_action("suspend_process", {"pid": pid, "name": name})
         return {
             "pid": pid,
             "name": name,
@@ -450,7 +445,7 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         if not execution_allowed:
             enforce_safe_execution()
         proc.suspend()
-        logger.info("Suspended pid=%s name=%s", pid, name)
+        context.log_action("suspend_process", {"pid": pid, "name": name})
         action_id = _log_action(
             action_type=ActionType.SYSTEM_TWEAK,
             target=str(pid),
@@ -488,9 +483,11 @@ def suspend_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         }
 
 
-def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
-    execution_allowed = allow_execution()
-    effective_dry_run = dry_run or not execution_allowed
+def resume_process_safe(pid: int, context: Optional[ExecutionContext] = None, dry_run: bool = False) -> Dict[str, Any]:
+    if context is None:
+        context = ExecutionContext.from_request(dry_run=dry_run)
+    
+    effective_dry_run = context.simulated
     start_time = time.time()
     proc, protected, reason = _prepare_process(pid)
     if proc is None:
@@ -523,7 +520,7 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         logger.warning("Resume attempted on protected process pid=%s name=%s", pid, name)
 
     if effective_dry_run:
-        logger.info("Dry-run resume for pid=%s name=%s", pid, name)
+        context.log_action("resume_process", {"pid": pid, "name": name})
         return {
             "pid": pid,
             "name": name,
@@ -541,7 +538,7 @@ def resume_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
         if not execution_allowed:
             enforce_safe_execution()
         proc.resume()
-        logger.info("Resumed pid=%s name=%s", pid, name)
+        context.log_action("resume_process", {"pid": pid, "name": name})
         action_id = _log_action(
             action_type=ActionType.SYSTEM_TWEAK,
             target=str(pid),

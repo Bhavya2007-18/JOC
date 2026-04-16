@@ -1,1494 +1,5 @@
 [
   {
-    "timestamp": "2026-04-16T20:39:18.804347+00:00",
-    "data": {
-      "risk_score": 30,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "20668_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "5148_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process NVDisplay.Container.exe (PID 5148) is not recognized.",
-          "pid": 5148,
-          "process_name": "NVDisplay.Container.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (500.4 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 5148,
-          "process_name": "NVDisplay.Container.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T20:40:17.112213+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "2900_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 2900) is not recognized.",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (505.7 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T20:41:24.401060+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "36004_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process Antigravity.exe (PID 36004) is not recognized.",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "2900_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 2900) is not recognized.",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T20:42:31.805620+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "6848_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process AICO2_svc.exe (PID 6848) is not recognized.",
-          "pid": 6848,
-          "process_name": "AICO2_svc.exe"
-        },
-        {
-          "id": "6772_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process AICO_svc.exe (PID 6772) is not recognized.",
-          "pid": 6772,
-          "process_name": "AICO_svc.exe"
-        },
-        {
-          "id": "10964_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process Antigravity.exe (PID 10964) is not recognized.",
-          "pid": 10964,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "27404_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process wenativehost.exe (PID 27404) is not recognized.",
-          "pid": 27404,
-          "process_name": "wenativehost.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (516.9 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 6848,
-          "process_name": "AICO2_svc.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 6772,
-          "process_name": "AICO_svc.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 10964,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 27404,
-          "process_name": "wenativehost.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T20:43:38.406121+00:00",
-    "data": {
-      "risk_score": 30,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "18040_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "13956_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process Antigravity.exe (PID 13956) is not recognized.",
-          "pid": 13956,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "2900_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 2900) is not recognized.",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (520.3 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 13956,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T20:44:33.763140+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "36004_suspicious_process",
-          "category": "suspicious_process",
-          "severity": "high",
-          "title": "Suspicious Process Detected",
-          "description": "Process Antigravity.exe flagged as suspicious (CPU: 233.0%, RAM: 526.8 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "36004_background_suspicious",
-          "category": "background_suspicious",
-          "severity": "high",
-          "title": "Suspicious Background Activity",
-          "description": "Suspicious background process Antigravity.exe detected (PID 36004).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "22684_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 22684) is not recognized.",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "id": "13956_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (307.1 MB).",
-          "pid": 13956,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "suspicious_process",
-          "action": "Terminate process",
-          "explanation": "Process shows abnormal CPU/RAM usage",
-          "urgency": "high",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "background_suspicious",
-          "action": "Investigate background process",
-          "explanation": "Suspicious activity running in background",
-          "urgency": "high",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 13956,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T20:45:30.168747+00:00",
-    "data": {
-      "risk_score": 30,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "2900_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 2900) is not recognized.",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "id": "20668_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "36004_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process Antigravity.exe (PID 36004) is not recognized.",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T20:46:25.731364+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "36004_suspicious_process",
-          "category": "suspicious_process",
-          "severity": "high",
-          "title": "Suspicious Process Detected",
-          "description": "Process Antigravity.exe flagged as suspicious (CPU: 93.4%, RAM: 523.7 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "36004_background_suspicious",
-          "category": "background_suspicious",
-          "severity": "high",
-          "title": "Suspicious Background Activity",
-          "description": "Suspicious background process Antigravity.exe detected (PID 36004).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "13956_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process Antigravity.exe (PID 13956) is not recognized.",
-          "pid": 13956,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "21884_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process QuickPanelOSD.exe (PID 21884) is not recognized.",
-          "pid": 21884,
-          "process_name": "QuickPanelOSD.exe"
-        },
-        {
-          "id": "20668_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "7460_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PLANET9DA.exe (PID 7460) is not recognized.",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "suspicious_process",
-          "action": "Terminate process",
-          "explanation": "Process shows abnormal CPU/RAM usage",
-          "urgency": "high",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "background_suspicious",
-          "action": "Investigate background process",
-          "explanation": "Suspicious activity running in background",
-          "urgency": "high",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 13956,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 21884,
-          "process_name": "QuickPanelOSD.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:01:07.054532+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "18040_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "22684_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 22684) is not recognized.",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "id": "22788_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process FileCoAuth.exe (PID 22788) is not recognized.",
-          "pid": 22788,
-          "process_name": "FileCoAuth.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (533.2 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 22788,
-          "process_name": "FileCoAuth.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:02:10.608030+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "20432_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process wenativehost.exe (PID 20432) is not recognized.",
-          "pid": 20432,
-          "process_name": "wenativehost.exe"
-        },
-        {
-          "id": "9356_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process KillerNetworkService.exe (PID 9356) is not recognized.",
-          "pid": 9356,
-          "process_name": "KillerNetworkService.exe"
-        },
-        {
-          "id": "18040_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (533.6 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 20432,
-          "process_name": "wenativehost.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 9356,
-          "process_name": "KillerNetworkService.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:03:17.282245+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "22684_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 22684) is not recognized.",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (520.5 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:04:23.218373+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "18548_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process Antigravity.exe (PID 18548) is not recognized.",
-          "pid": 18548,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "18292_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process fdm.exe (PID 18292) is not recognized.",
-          "pid": 18292,
-          "process_name": "fdm.exe"
-        },
-        {
-          "id": "20708_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process msedgewebview2.exe (PID 20708) is not recognized.",
-          "pid": 20708,
-          "process_name": "msedgewebview2.exe"
-        },
-        {
-          "id": "6632_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process AcerQAAgent.exe (PID 6632) is not recognized.",
-          "pid": 6632,
-          "process_name": "AcerQAAgent.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (521.1 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18548,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18292,
-          "process_name": "fdm.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 20708,
-          "process_name": "msedgewebview2.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 6632,
-          "process_name": "AcerQAAgent.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:05:24.888017+00:00",
-    "data": {
-      "risk_score": 20,
-      "risk_level": "low",
-      "threats": [
-        {
-          "id": "20668_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (514.0 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:06:21.899801+00:00",
-    "data": {
-      "risk_score": 30,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "18040_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "9356_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process KillerNetworkService.exe (PID 9356) is not recognized.",
-          "pid": 9356,
-          "process_name": "KillerNetworkService.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (514.2 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 9356,
-          "process_name": "KillerNetworkService.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:07:17.563831+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "2900_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 2900) is not recognized.",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "id": "18040_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "6632_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process AcerQAAgent.exe (PID 6632) is not recognized.",
-          "pid": 6632,
-          "process_name": "AcerQAAgent.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (515.0 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 2900,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 6632,
-          "process_name": "AcerQAAgent.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:08:15.175801+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "36004_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process Antigravity.exe (PID 36004) is not recognized.",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "18040_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "9388_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process AcerService.exe (PID 9388) is not recognized.",
-          "pid": 9388,
-          "process_name": "AcerService.exe"
-        },
-        {
-          "id": "3980_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process NVDisplay.Container.exe (PID 3980) is not recognized.",
-          "pid": 3980,
-          "process_name": "NVDisplay.Container.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 18040,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 9388,
-          "process_name": "AcerService.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 3980,
-          "process_name": "NVDisplay.Container.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:09:13.574718+00:00",
-    "data": {
-      "risk_score": 30,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "20668_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (560.0 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "22684_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (460.5 MB).",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 20668,
-          "process_name": "PredatorSense.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:10:16.525383+00:00",
-    "data": {
-      "risk_score": 30,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "7460_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PLANET9DA.exe (PID 7460) is not recognized.",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (554.4 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "22684_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (453.2 MB).",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:11:21.048571+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "7460_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PLANET9DA.exe (PID 7460) is not recognized.",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        },
-        {
-          "id": "35656_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process AICO AC2S.exe (PID 35656) is not recognized.",
-          "pid": 35656,
-          "process_name": "AICO AC2S.exe"
-        },
-        {
-          "id": "36004_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process Antigravity.exe (PID 36004) is not recognized.",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "22684_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (447.2 MB).",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 35656,
-          "process_name": "AICO AC2S.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:12:25.094734+00:00",
-    "data": {
-      "risk_score": 40,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "7460_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PLANET9DA.exe (PID 7460) is not recognized.",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        },
-        {
-          "id": "20708_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process msedgewebview2.exe (PID 20708) is not recognized.",
-          "pid": 20708,
-          "process_name": "msedgewebview2.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (568.8 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "id": "22684_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (444.9 MB).",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 20708,
-          "process_name": "msedgewebview2.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        }
-      ]
-    }
-  },
-  {
-    "timestamp": "2026-04-16T21:13:27.558214+00:00",
-    "data": {
-      "risk_score": 30,
-      "risk_level": "moderate",
-      "threats": [
-        {
-          "id": "7460_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process PLANET9DA.exe (PID 7460) is not recognized.",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        },
-        {
-          "id": "22684_unknown_process",
-          "category": "unknown_process",
-          "severity": "medium",
-          "title": "Unknown Process",
-          "description": "Process language_server_windows_x64.exe (PID 22684) is not recognized.",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "id": "36004_idle_resource_hog",
-          "category": "idle_resource_hog",
-          "severity": "medium",
-          "title": "Idle Resource Usage",
-          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (561.9 MB).",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ],
-      "recommendations": [
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 7460,
-          "process_name": "PLANET9DA.exe"
-        },
-        {
-          "category": "unknown_process",
-          "action": "Review process manually",
-          "explanation": "Process is not recognized",
-          "urgency": "medium",
-          "pid": 22684,
-          "process_name": "language_server_windows_x64.exe"
-        },
-        {
-          "category": "idle_resource_hog",
-          "action": "Close unused application",
-          "explanation": "Process consuming memory while idle",
-          "urgency": "medium",
-          "pid": 36004,
-          "process_name": "Antigravity.exe"
-        }
-      ]
-    }
-  },
-  {
     "timestamp": "2026-04-16T21:14:26.921580+00:00",
     "data": {
       "risk_score": 30,
@@ -4064,6 +2575,1631 @@
           "urgency": "medium",
           "pid": 13956,
           "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:40:42.188405+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "13956_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 13956) is not recognized.",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "18040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "7460_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 7460) is not recognized.",
+          "pid": 7460,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (737.0 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (355.9 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 7460,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:41:38.123205+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "36912_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 36912) is not recognized.",
+          "pid": 36912,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "18040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (670.9 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (353.6 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 36912,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:42:33.128934+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "18040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (693.8 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (369.0 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:43:32.581354+00:00",
+    "data": {
+      "risk_score": 60,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "13956_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 13956) is not recognized.",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "18040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "20432_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process wenativehost.exe (PID 20432) is not recognized.",
+          "pid": 20432,
+          "process_name": "wenativehost.exe"
+        },
+        {
+          "id": "15748_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AcerSysHardwareService.exe (PID 15748) is not recognized.",
+          "pid": 15748,
+          "process_name": "AcerSysHardwareService.exe"
+        },
+        {
+          "id": "18292_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process fdm.exe (PID 18292) is not recognized.",
+          "pid": 18292,
+          "process_name": "fdm.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (317.9 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20432,
+          "process_name": "wenativehost.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 15748,
+          "process_name": "AcerSysHardwareService.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18292,
+          "process_name": "fdm.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:44:27.551518+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "20668_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "3980_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process NVDisplay.Container.exe (PID 3980) is not recognized.",
+          "pid": 3980,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (671.0 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (335.7 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 3980,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:45:22.390627+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "36004_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process Antigravity.exe flagged as suspicious (CPU: 171.1%, RAM: 694.6 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "36004_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process Antigravity.exe detected (PID 36004).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "35656_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO AC2S.exe (PID 35656) is not recognized.",
+          "pid": 35656,
+          "process_name": "AICO AC2S.exe"
+        },
+        {
+          "id": "22684_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 22684) is not recognized.",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "id": "13956_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (304.0 MB).",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 35656,
+          "process_name": "AICO AC2S.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:46:16.816747+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "36004_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process Antigravity.exe flagged as suspicious (CPU: 186.7%, RAM: 712.1 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "36004_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process Antigravity.exe detected (PID 36004).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "37436_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 37436) is not recognized.",
+          "pid": 37436,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "id": "7460_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 7460) is not recognized.",
+          "pid": 7460,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (364.4 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 37436,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 7460,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:47:11.813507+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "7036_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process KillerAnalyticsService.exe (PID 7036) is not recognized.",
+          "pid": 7036,
+          "process_name": "KillerAnalyticsService.exe"
+        },
+        {
+          "id": "20668_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (695.9 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (386.9 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 7036,
+          "process_name": "KillerAnalyticsService.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:48:05.274697+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "13504_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 13504) is not recognized.",
+          "pid": 13504,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "18040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "7460_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PLANET9DA.exe (PID 7460) is not recognized.",
+          "pid": 7460,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (666.5 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (386.2 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 13504,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 7460,
+          "process_name": "PLANET9DA.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:49:01.491669+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "13956_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 13956) is not recognized.",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "20668_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (577.0 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (397.3 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:50:00.028837+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "18548_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 18548) is not recognized.",
+          "pid": 18548,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (631.1 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (393.1 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18548,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:50:56.405663+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "13956_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 13956) is not recognized.",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "20668_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (652.0 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (405.8 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:51:52.698645+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "36004_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 36004) is not recognized.",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "3980_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process NVDisplay.Container.exe (PID 3980) is not recognized.",
+          "pid": 3980,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (359.0 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 3980,
+          "process_name": "NVDisplay.Container.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:52:47.704192+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (628.7 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (358.1 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:53:41.974090+00:00",
+    "data": {
+      "risk_score": 40,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "6772_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO_svc.exe (PID 6772) is not recognized.",
+          "pid": 6772,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "id": "22684_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process language_server_windows_x64.exe (PID 22684) is not recognized.",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "id": "19900_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 19900) is not recognized.",
+          "pid": 19900,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (636.5 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 6772,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 19900,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:54:36.291390+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "36004_suspicious_process",
+          "category": "suspicious_process",
+          "severity": "high",
+          "title": "Suspicious Process Detected",
+          "description": "Process Antigravity.exe flagged as suspicious (CPU: 129.2%, RAM: 635.5 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "36004_background_suspicious",
+          "category": "background_suspicious",
+          "severity": "high",
+          "title": "Suspicious Background Activity",
+          "description": "Suspicious background process Antigravity.exe detected (PID 36004).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (403.7 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "suspicious_process",
+          "action": "Terminate process",
+          "explanation": "Process shows abnormal CPU/RAM usage",
+          "urgency": "high",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "background_suspicious",
+          "action": "Investigate background process",
+          "explanation": "Suspicious activity running in background",
+          "urgency": "high",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:55:30.433487+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "6772_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process AICO_svc.exe (PID 6772) is not recognized.",
+          "pid": 6772,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "id": "13956_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 13956) is not recognized.",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (640.9 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (361.8 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 6772,
+          "process_name": "AICO_svc.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 13956,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:56:24.383023+00:00",
+    "data": {
+      "risk_score": 60,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "20668_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 20668) is not recognized.",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "9356_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process KillerNetworkService.exe (PID 9356) is not recognized.",
+          "pid": 9356,
+          "process_name": "KillerNetworkService.exe"
+        },
+        {
+          "id": "18292_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process fdm.exe (PID 18292) is not recognized.",
+          "pid": 18292,
+          "process_name": "fdm.exe"
+        },
+        {
+          "id": "16792_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PhoneExperienceHost.exe (PID 16792) is not recognized.",
+          "pid": 16792,
+          "process_name": "PhoneExperienceHost.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (628.3 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (357.4 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 20668,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 9356,
+          "process_name": "KillerNetworkService.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18292,
+          "process_name": "fdm.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 16792,
+          "process_name": "PhoneExperienceHost.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:57:17.076663+00:00",
+    "data": {
+      "risk_score": 20,
+      "risk_level": "low",
+      "threats": [
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (642.5 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (335.8 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:58:10.782432+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "18040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "36004_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process Antigravity.exe (PID 36004) is not recognized.",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (352.6 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-04-16T21:59:04.935520+00:00",
+    "data": {
+      "risk_score": 30,
+      "risk_level": "moderate",
+      "threats": [
+        {
+          "id": "18040_unknown_process",
+          "category": "unknown_process",
+          "severity": "medium",
+          "title": "Unknown Process",
+          "description": "Process PredatorSense.exe (PID 18040) is not recognized.",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "id": "36004_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process Antigravity.exe is mostly idle with low CPU but high RAM usage (639.0 MB).",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "id": "22684_idle_resource_hog",
+          "category": "idle_resource_hog",
+          "severity": "medium",
+          "title": "Idle Resource Usage",
+          "description": "Process language_server_windows_x64.exe is mostly idle with low CPU but high RAM usage (375.4 MB).",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
+        }
+      ],
+      "recommendations": [
+        {
+          "category": "unknown_process",
+          "action": "Review process manually",
+          "explanation": "Process is not recognized",
+          "urgency": "medium",
+          "pid": 18040,
+          "process_name": "PredatorSense.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 36004,
+          "process_name": "Antigravity.exe"
+        },
+        {
+          "category": "idle_resource_hog",
+          "action": "Close unused application",
+          "explanation": "Process consuming memory while idle",
+          "urgency": "medium",
+          "pid": 22684,
+          "process_name": "language_server_windows_x64.exe"
         }
       ]
     }

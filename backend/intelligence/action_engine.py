@@ -8,6 +8,8 @@ from intelligence.config import DRY_RUN, AUTOPILOT_MODE
 from intelligence.snapshot_provider import collect_snapshot
 from services.optimizer.process_manager import kill_process_safe, change_process_priority_safe
 from services.safety.safety_guard import is_action_safe
+from utils.execution_context import ExecutionContext
+from typing import Optional, Dict, Any, List
 
 
 logger = logging.getLogger(__name__)
@@ -33,8 +35,14 @@ class ActionEngine:
 		self._last_action_time: float = 0.0
 		self._cooldown_seconds: float = 30.0
 
-	def execute(self, decision: Dict[str, Any]) -> Dict[str, Any]:
+	def execute(self, decision: Dict[str, Any], context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
 		"""Executes a decision with pre-flight checks and rollback tracking."""
+		if context is None:
+			# Auto-pilot decisions should provide their own context, but we fallback
+			context = ExecutionContext.from_request(
+				dry_run=decision.get("dry_run", False),
+				mode=decision.get("autopilot_mode")
+			)
 		action_name = decision.get("action")
 		target = decision.get("target")
 		confidence = decision.get("confidence", 0.0)
@@ -109,7 +117,7 @@ class ActionEngine:
 		handler = self._handlers[action_name]
 
 		try:
-			result = handler(target, pid=pid)
+			result = handler(target, pid=pid, context=context)
 			return self._build_result(result["status"], action_name, target, params=result.get("params"))
 		except Exception as e:
 			return self._build_result("failed", action_name, target, reason=str(e))
@@ -194,7 +202,10 @@ class ActionEngine:
 
 		return None
 
-	def _throttle(self, target: str, pid: int = None) -> Dict[str, Any]:
+	def _throttle(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
+		if context is None:
+			context = ExecutionContext.from_request()
+		
 		print(f"[DEBUG] PID: {pid}")
 		if pid is None:
 			return {
@@ -206,12 +217,12 @@ class ActionEngine:
 		result = change_process_priority_safe(
 			pid=pid,
 			priority=throttle_priority,
-			dry_run=DRY_RUN,
+			context=context,
 		)
-		dry_run = bool(result.get("dry_run", DRY_RUN))
+		effective_dry_run = context.simulated
 		success = bool(result.get("success", False))
 
-		if success and dry_run:
+		if success and effective_dry_run:
 			status = "simulated"
 		elif success:
 			status = "executed"
@@ -224,7 +235,7 @@ class ActionEngine:
 				"cpu_limit": 20,
 				"pid": pid,
 				"priority": throttle_priority,
-				"dry_run": dry_run,
+				"dry_run": effective_dry_run,
 				"message": result.get("message"),
 				"action_id": result.get("action_id"),
 				"risk": result.get("risk"),
@@ -232,7 +243,10 @@ class ActionEngine:
 			},
 		}
 
-	def _kill(self, target: str, pid: int = None) -> Dict[str, Any]:
+	def _kill(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
+		if context is None:
+			context = ExecutionContext.from_request()
+
 		print(f"[DEBUG] PID: {pid}")
 		if pid is None:
 			return {
@@ -240,11 +254,11 @@ class ActionEngine:
 				"params": {"message": "target_pid_not_found", "target": target},
 			}
 
-		result = kill_process_safe(pid=pid, dry_run=DRY_RUN)
-		dry_run = bool(result.get("dry_run", DRY_RUN))
+		result = kill_process_safe(pid=pid, context=context)
+		effective_dry_run = context.simulated
 		success = bool(result.get("success", False))
 
-		if success and dry_run:
+		if success and effective_dry_run:
 			status = "simulated"
 		elif success:
 			status = "executed"
@@ -256,7 +270,7 @@ class ActionEngine:
 			"params": {
 				"pid": pid,
 				"name": result.get("name", ""),
-				"dry_run": dry_run,
+				"dry_run": effective_dry_run,
 				"message": result.get("message"),
 				"action_id": result.get("action_id"),
 				"risk": result.get("risk"),
@@ -265,13 +279,15 @@ class ActionEngine:
 			},
 		}
 
-	def _clear_cache(self, target: str, pid: int = None) -> Dict[str, Any]:
-		if DRY_RUN:
+	def _clear_cache(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
+		simulated = context.simulated if context else bool(DRY_RUN)
+		if simulated:
 			return {"status": "simulated", "params": {"strategy": "aggressive"}}
 		return {"status": "executed", "params": {"strategy": "aggressive"}}
 
-	def _rate_limit(self, target: str, pid: int = None) -> Dict[str, Any]:
-		if DRY_RUN:
+	def _rate_limit(self, target: str, pid: int = None, context: Optional[ExecutionContext] = None) -> Dict[str, Any]:
+		simulated = context.simulated if context else bool(DRY_RUN)
+		if simulated:
 			return {"status": "simulated", "params": {"requests_per_sec": 100}}
 		return {"status": "executed", "params": {"requests_per_sec": 100}}
 

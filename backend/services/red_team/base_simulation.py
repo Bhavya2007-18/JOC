@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict
 
 from services.orchestration.state_manager import SafetyGuard
+from utils.execution_context import ExecutionContext
 
 
 class BaseSimulation(ABC):
@@ -15,13 +16,14 @@ class BaseSimulation(ABC):
         correlation_id: str,
         parameters: Dict[str, Any],
         safety_guard: SafetyGuard,
-        dry_run: bool = False,
+        context: ExecutionContext,
     ) -> None:
         self.simulation_id = simulation_id
         self.correlation_id = correlation_id
         self.parameters = parameters
         self.safety_guard = safety_guard
-        self.dry_run = dry_run
+        self.context = context
+        self.dry_run = context.dry_run
 
     @abstractmethod
     def setup(self) -> None:
