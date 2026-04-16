@@ -1,5 +1,6 @@
 import time
 import uuid
+from types import SimpleNamespace
 from typing import Any, Dict, Optional, Tuple
 
 import psutil
@@ -9,6 +10,7 @@ from intelligence.config import DRY_RUN
 from intelligence.constants import CRITICAL_PROCESSES
 from intelligence.models import ActionRecord, ActionType
 from intelligence.safety import allow_execution, enforce_safe_execution
+from services.safety.safety_guard import is_action_safe
 from utils.logger import get_logger
 
 assert isinstance(DRY_RUN, bool), "DRY_RUN must be a boolean"
@@ -150,6 +152,24 @@ def kill_process_safe(pid: int, dry_run: bool = False) -> Dict[str, Any]:
     except psutil.Error:
         name = ""
         cpu_percent = None
+
+    action = {"action_type": "kill_process", "parameters": {"pid": pid}}
+    snapshot = SimpleNamespace(top_processes=[SimpleNamespace(pid=pid, name=name)])
+    if not is_action_safe(action, snapshot):
+        logger.warning(f"[BLOCKED] Unsafe action prevented: {action}")
+        return {
+            "pid": pid,
+            "name": name,
+            "action": "kill",
+            "success": False,
+            "message": "Unsafe action blocked by safety guard",
+            "dry_run": effective_dry_run,
+            "protected": True,
+            "action_id": None,
+            "execution_time_ms": int((time.time() - start_time) * 1000),
+            "risk": "high",
+            "confidence": 0.95,
+        }
 
     risk_info = _compute_risk("kill", protected, cpu_percent)
 

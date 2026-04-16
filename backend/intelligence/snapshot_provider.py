@@ -81,6 +81,81 @@ def _collect_services() -> List[Dict[str, str]]:
 	return services
 
 
+def _collect_gpu_metrics() -> tuple[float, float, List[Dict[str, object]]]:
+	gpu_percent = 0.0
+	gpu_memory_percent = 0.0
+	gpu_heavy_processes: List[Dict[str, object]] = []
+
+	try:
+		import pynvml  # type: ignore
+
+		pynvml.nvmlInit()
+		try:
+			handle = pynvml.nvmlDeviceGetHandleByIndex(0)
+			util = pynvml.nvmlDeviceGetUtilizationRates(handle)
+			memory = pynvml.nvmlDeviceGetMemoryInfo(handle)
+
+			gpu_percent = float(getattr(util, "gpu", 0.0) or 0.0)
+			total = float(getattr(memory, "total", 0.0) or 0.0)
+			used = float(getattr(memory, "used", 0.0) or 0.0)
+			gpu_memory_percent = (used / total) * 100.0 if total > 0.0 else 0.0
+
+			pid_to_gpu_bytes: Dict[int, int] = {}
+			for getter_name in (
+				"nvmlDeviceGetComputeRunningProcesses",
+				"nvmlDeviceGetGraphicsRunningProcesses",
+			):
+				getter = getattr(pynvml, getter_name, None)
+				if getter is None:
+					continue
+				try:
+					running_processes = getter(handle) or []
+				except Exception:
+					continue
+
+				for gpu_proc in running_processes:
+					try:
+						pid = int(getattr(gpu_proc, "pid", 0) or 0)
+						used_bytes = int(getattr(gpu_proc, "usedGpuMemory", 0) or 0)
+					except (TypeError, ValueError):
+						continue
+
+					if pid <= 0:
+						continue
+
+					if used_bytes < 0 or used_bytes > (1 << 60):
+						used_bytes = 0
+
+					pid_to_gpu_bytes[pid] = pid_to_gpu_bytes.get(pid, 0) + used_bytes
+
+			for pid, used_bytes in sorted(
+				pid_to_gpu_bytes.items(), key=lambda item: item[1], reverse=True
+			)[:5]:
+				try:
+					process_name = psutil.Process(pid).name() or "unknown"
+				except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+					process_name = "unknown"
+
+				gpu_heavy_processes.append(
+					{
+						"pid": pid,
+						"name": process_name,
+						"gpu_memory_mb": round(float(used_bytes) / _BYTES_PER_MB, 2),
+					}
+				)
+		finally:
+			try:
+				pynvml.nvmlShutdown()
+			except Exception:
+				pass
+	except Exception:
+		gpu_percent = 0.0
+		gpu_memory_percent = 0.0
+		gpu_heavy_processes = []
+
+	return gpu_percent, gpu_memory_percent, gpu_heavy_processes
+
+
 def collect_snapshot() -> SystemSnapshot:
 	global _previous_disk, _previous_net, _previous_time
 
@@ -110,6 +185,9 @@ def collect_snapshot() -> SystemSnapshot:
 	vm = psutil.virtual_memory()
 	disk_usage = psutil.disk_usage("/")
 	services = _collect_services()
+	gpu_percent, gpu_memory_percent, gpu_heavy_processes = _collect_gpu_metrics()
+	if os.getenv("JOC_DEBUG_GPU", "false").lower() == "true":
+		print(f"[GPU] {gpu_percent:.1f}% | VRAM {gpu_memory_percent:.1f}%")
 
 	processes: List[ProcessInfo] = []
 	for proc in process_handles:
@@ -211,4 +289,7 @@ def collect_snapshot() -> SystemSnapshot:
 		boot_time=psutil.boot_time(),
 		active_window=_get_active_window_title(),
 		services=services,
+		gpu_percent=gpu_percent,
+		gpu_memory_percent=gpu_memory_percent,
+		gpu_heavy_processes=gpu_heavy_processes,
 	)

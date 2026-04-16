@@ -1,6 +1,12 @@
+import logging
 from typing import Any
 
 from training.taxonomy import ScenarioTraits
+
+
+IMPACT_MARGIN = 0.05
+
+logger = logging.getLogger(__name__)
 
 
 class RuntimeOptimizer:
@@ -74,16 +80,36 @@ class RuntimeOptimizer:
 
         # Case 3: both exist and actions differ.
         should_override = False
+        impacts_available = isinstance(learned_avg_impact, (int, float)) and isinstance(fallback_avg_impact, (int, float))
 
-        if learned_type != fallback_type:
-            should_override = True
-
-        if isinstance(learned_avg_impact, (int, float)) and isinstance(fallback_avg_impact, (int, float)):
-            if learned_avg_impact > fallback_avg_impact:
+        if impacts_available:
+            if learned_avg_impact > (fallback_avg_impact + IMPACT_MARGIN):
                 should_override = True
 
         if float(fallback_confidence) < 0.7:
-            should_override = True
+            if not impacts_available or (
+                isinstance(learned_avg_impact, (int, float)) and 
+                isinstance(fallback_avg_impact, (int, float)) and
+                learned_avg_impact >= fallback_avg_impact
+            ):
+                should_override = True
+
+        if impacts_available and learned_avg_impact < 1.0 and fallback_avg_impact < 1.0:
+            should_override = False
+
+        if impacts_available:
+            if should_override:
+                logger.debug(
+                    "[MEMORY OVERRIDE] learned=%.2f fallback=%.2f",
+                    float(learned_avg_impact),
+                    float(fallback_avg_impact),
+                )
+            else:
+                logger.debug(
+                    "[ENGINE KEPT] learned=%.2f fallback=%.2f",
+                    float(learned_avg_impact),
+                    float(fallback_avg_impact),
+                )
 
         if should_override:
             override = dict(learned_action)

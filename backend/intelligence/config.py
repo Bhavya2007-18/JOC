@@ -13,6 +13,7 @@ MAX_HISTORY_LENGTH = 100
 
 # 🔥 Safety flags
 DRY_RUN = os.getenv("JOC_DRY_RUN", "true").lower() == "true"
+AUTOPILOT_MODE = "passive"  # passive | assist | aggressive
 # 🔥 Scoring weights 
 CPU_WEIGHT = 0.4
 MEMORY_WEIGHT = 0.4

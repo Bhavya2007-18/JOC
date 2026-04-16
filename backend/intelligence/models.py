@@ -47,6 +47,9 @@ class SystemSnapshot:
 	boot_time: float
 	active_window: Optional[str] = None
 	services: List[Dict[str, str]] = field(default_factory=list)
+	gpu_percent: float = 0.0
+	gpu_memory_percent: float = 0.0
+	gpu_heavy_processes: List[Dict[str, object]] = field(default_factory=list)
 
 
 class ActionType(Enum):

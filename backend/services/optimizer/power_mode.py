@@ -19,6 +19,8 @@ import psutil
 from intelligence.action_store import ActionStore
 from intelligence.config import DRY_RUN
 from intelligence.models import ActionRecord, ActionType
+from intelligence.snapshot_provider import collect_snapshot
+from services.safety.safety_guard import is_action_safe
 from services.system_monitor import get_cpu_stats, get_memory_stats
 from utils.logger import get_logger
 
@@ -279,6 +281,23 @@ def apply_system_mode(
         return {
             "success": False,
             "message": f"Invalid mode: {mode}. Must be chill, smart, or beast.",
+        }
+
+    action = {"action_type": "system_tweak", "parameters": {"mode": mode}}
+    snapshot = None
+    try:
+        snapshot = collect_snapshot()
+    except Exception:
+        snapshot = None
+
+    if not is_action_safe(action, snapshot):
+        logger.warning(f"[BLOCKED] Unsafe action prevented: {action}")
+        return {
+            "success": False,
+            "mode": mode,
+            "requested_mode": mode,
+            "dry_run": effective_dry_run,
+            "message": "Unsafe action blocked by safety guard.",
         }
 
     guard_action_id = None

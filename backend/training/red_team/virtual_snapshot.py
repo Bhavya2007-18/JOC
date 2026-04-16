@@ -36,6 +36,12 @@ class VirtualSnapshot:
     disk_percent: float
     process_count: int
     top_processes: List[VirtualProcessInfo]
+    gpu_percent: float = 0.0
+    gpu_memory_percent: float = 0.0
+
+    @property
+    def gpu_heavy_processes(self) -> List[dict]:
+        return []
 
     @property
     def disk_heavy_processes(self) -> List[VirtualProcessInfo]:
