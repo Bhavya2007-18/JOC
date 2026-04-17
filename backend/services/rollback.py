@@ -2,13 +2,34 @@ import uuid
 import psutil
 from typing import Dict, Any
 
+import json
+from utils.paths import get_persistent_path
+
 class RollbackManager:
     """
     State safety interceptor. Snapshots system state before autonomous interventions.
     Allows for undo functionality if fixes generate instability.
     """
     def __init__(self):
+        self._file_path = get_persistent_path("checkpoints.json", "storage")
+        self._file_path.parent.mkdir(parents=True, exist_ok=True)
         self.snapshots_db: Dict[str, Dict[str, Any]] = {}
+        self._load_checkpoints()
+
+    def _load_checkpoints(self):
+        try:
+            if self._file_path.exists():
+                with open(self._file_path, "r", encoding="utf-8") as f:
+                    self.snapshots_db = json.load(f)
+        except Exception:
+            self.snapshots_db = {}
+
+    def _save_checkpoints(self):
+        try:
+            with open(self._file_path, "w", encoding="utf-8") as f:
+                json.dump(self.snapshots_db, f, indent=2)
+        except Exception:
+            pass
 
     def capture_pre_action_state(self, action_type: str, target: str, pid: int = None) -> str:
         """
@@ -38,6 +59,25 @@ class RollbackManager:
             
         rollback_id = str(uuid.uuid4())
         self.snapshots_db[rollback_id] = snapshot
+        self._save_checkpoints()
+        return rollback_id
+
+    def capture_system_profile(self) -> str:
+        """
+        Captures a broad system checkpoint (Memory, Power, Active Process list).
+        Recommended before high-risk tweaks.
+        """
+        from intelligence.tweaks.snapshot import SnapshotEngine
+        snapshot_data = SnapshotEngine.capture().to_dict()
+        
+        rollback_id = f"CP-{str(uuid.uuid4())[:8]}"
+        self.snapshots_db[rollback_id] = {
+            "action_type": "checkpoint",
+            "target": "full_system",
+            "timestamp": snapshot_data.get("timestamp"),
+            "state_data": snapshot_data
+        }
+        self._save_checkpoints()
         return rollback_id
 
     def execute_rollback(self, rollback_id: str) -> bool:

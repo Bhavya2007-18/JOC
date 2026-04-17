@@ -11,6 +11,7 @@ from intelligence.config import DRY_RUN
 from intelligence.constants import CRITICAL_PROCESSES
 from intelligence.models import ActionRecord, ActionType
 from services.optimizer.process_manager import kill_process_safe
+from services.rollback import rollback_manager
 from utils.execution_context import ExecutionContext
 
 
@@ -47,6 +48,9 @@ class FixEngine:
         if context is None:
             context = ExecutionContext.from_request(dry_run=dry_run)
             
+        # Create a checkpoint before killing
+        rollback_id = rollback_manager.capture_pre_action_state("kill", f"PID_{pid}", pid=pid)
+        
         result = kill_process_safe(pid=pid, context=context)
         if not result.get("success", False):
             return {"error": result.get("message", f"Failed to terminate process {pid}")}
@@ -59,6 +63,7 @@ class FixEngine:
         }
         if result.get("action_id"):
             response["action_id"] = result["action_id"]
+        response["checkpoint_id"] = rollback_id
         return response
 
     def kill_process_by_name(self, process_name: str, context: Optional[ExecutionContext] = None, dry_run: bool = False) -> dict:
@@ -152,10 +157,18 @@ class FixEngine:
         from intelligence.tweaks.executor import execute_tweak
         from intelligence.tweaks.registry import get_tweak
 
-        # Tweak executor will create context if None, but we can pass it if we have it
+        # Handle context creation if missing
+        if context is None:
+            context = ExecutionContext.from_request(dry_run=dry_run, confirmed_high_risk=confirm_high_risk)
+
+        # Create a full system checkpoint if not a dry run
+        checkpoint_id = None
+        if not context.dry_run:
+            checkpoint_id = rollback_manager.capture_system_profile()
+
         result = execute_tweak(
             tweak_name,
-            dry_run=dry_run if context is None else context.dry_run,
+            dry_run=context.dry_run,
             confirm_high_risk=confirm_high_risk,
         )
         
@@ -171,6 +184,7 @@ class FixEngine:
             parameters={
                 "requested_dry_run": dry_run,
                 "confirm_high_risk": confirm_high_risk,
+                "checkpoint_id": checkpoint_id,
             },
         )
         self.store.add_action(record)
