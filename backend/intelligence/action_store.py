@@ -11,7 +11,8 @@ from .models import ActionRecord, ActionType
 
 class ActionStore:
 	def __init__(self) -> None:
-		self._file_path = Path(__file__).parent / "action_history.json"
+		from utils.paths import get_persistent_path
+		self._file_path = get_persistent_path("action_history.json", "intelligence")
 		self._file_path.parent.mkdir(parents=True, exist_ok=True)
 		self._actions: List[ActionRecord] = []
 		self._load_history()

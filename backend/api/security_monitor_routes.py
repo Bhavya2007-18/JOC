@@ -53,7 +53,8 @@ def monitor_health():
 
 @router.get("/security/logs")
 def get_security_logs(limit: int = 20):
-    log_file = Path(__file__).resolve().parent.parent / "logs" / "security_logs.json"
+    from utils.paths import get_persistent_path
+    log_file = get_persistent_path("security_logs.json", "logs")
     if not log_file.exists():
         return []
 

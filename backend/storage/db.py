@@ -4,7 +4,8 @@ import time
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-DB_PATH = BASE_DIR / "snapshots.db"
+from utils.paths import get_persistent_path
+DB_PATH = get_persistent_path("snapshots.db", "storage")
 
 
 def get_connection():
@@ -33,6 +34,17 @@ def init_db():
         CREATE TABLE IF NOT EXISTS settings (
             key TEXT PRIMARY KEY,
             value TEXT
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS timeline_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp REAL,
+            event_type TEXT,
+            severity TEXT,
+            message TEXT,
+            metadata TEXT
         )
     """)
 

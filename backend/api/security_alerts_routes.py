@@ -5,7 +5,8 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-_ALERTS_FILE = Path(__file__).resolve().parent.parent / "logs" / "security_alerts.json"
+from utils.paths import get_persistent_path
+_ALERTS_FILE = get_persistent_path("security_alerts.json", "logs")
 
 
 @router.get("/security/alerts")

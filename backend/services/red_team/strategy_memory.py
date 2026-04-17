@@ -10,7 +10,8 @@ from utils.logger import get_logger
 
 logger = get_logger("red_team.strategy_memory")
 
-_STORAGE_PATH = Path(__file__).resolve().parents[2] / "storage" / "red_team_memory.json"
+from utils.paths import get_persistent_path
+_STORAGE_PATH = get_persistent_path("red_team_memory.json", "storage")
 _MAX_HISTORY = 200
 
 

@@ -10,7 +10,8 @@ from utils.logger import get_logger
 
 logger = get_logger("blue_team.defense_memory")
 
-_STORAGE_PATH = Path(__file__).resolve().parents[2] / "storage" / "blue_team_memory.json"
+from utils.paths import get_persistent_path
+_STORAGE_PATH = get_persistent_path("blue_team_memory.json", "storage")
 
 
 def _default_state() -> Dict[str, Any]:

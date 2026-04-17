@@ -5,7 +5,11 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-BACKEND_DIR = Path(__file__).resolve().parent
+if getattr(sys, 'frozen', False):
+    BACKEND_DIR = Path(sys._MEIPASS)
+else:
+    BACKEND_DIR = Path(__file__).resolve().parent
+    
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
@@ -104,3 +108,10 @@ app.include_router(trace_router)
 
 from api.report_routes import router as report_router
 app.include_router(report_router)
+
+import os
+from fastapi.staticfiles import StaticFiles
+
+frontend_dist = os.path.join(BACKEND_DIR, "frontend_dist")
+if os.path.exists(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="static")

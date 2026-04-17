@@ -4,7 +4,8 @@ import time
 from pathlib import Path
 from typing import Optional
 
-DB_PATH = Path(__file__).parent.parent.parent / "storage" / "pattern_memory.db"
+from utils.paths import get_persistent_path
+DB_PATH = get_persistent_path("pattern_memory.db", "storage")
 
 class PatternMemory:
     INTENSITY_TOLERANCE  = 0.20

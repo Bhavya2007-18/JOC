@@ -13,7 +13,8 @@ def _get_storage_path() -> Path:
     base_dir = Path(__file__).resolve().parents[2]
     storage_dir = base_dir / "storage"
     storage_dir.mkdir(parents=True, exist_ok=True)
-    return storage_dir / "behavior_logs.json"
+    from utils.paths import get_persistent_path
+    return get_persistent_path("behavior_logs.json", "storage")
 
 
 def _load_raw_logs() -> List[Dict[str, Any]]:
