@@ -22,7 +22,6 @@ backend/intelligence/*.json
 backend/services/**/*.json
 backend/build/
 backend/*.spec
-backend/dist/
 *.bak
 *.pkg
 *.pyz
