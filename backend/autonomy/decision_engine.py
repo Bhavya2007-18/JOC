@@ -51,9 +51,22 @@ class DecisionEngine:
         top_issue = ranked_issues[0] if ranked_issues else None
         
         # Use top issue category/root_cause for heuristics
-        category = top_issue.get("category", "system") if top_issue else "system"
-        root_cause = top_issue.get("evidence", {}).get("fix_action", {}).get("target") or intelligence.get("causal_graph", {}).get("root_cause")
-        pid = top_issue.get("evidence", {}).get("fix_action", {}).get("pid")
+        category = "system"
+        root_cause = intelligence.get("causal_graph", {}).get("root_cause")
+        pid = None
+        
+        if top_issue:
+            if isinstance(top_issue, dict):
+                category = top_issue.get("category", "system")
+                evidence = top_issue.get("evidence", {})
+            else:
+                category = getattr(top_issue, "category", "system")
+                evidence = getattr(top_issue, "evidence", {})
+                
+            fix_action = evidence.get("fix_action", {}) if isinstance(evidence, dict) else {}
+            if fix_action.get("target"):
+                root_cause = fix_action.get("target")
+            pid = fix_action.get("pid")
 
         # Evaluate heuristics for each action
         heuristic_scores = self._evaluate_heuristics(threat_score, category, root_cause, preemptive_signal)
@@ -73,8 +86,11 @@ class DecisionEngine:
 
             # Prioritization boost: if the best heuristic action matches the top_issue category needs
             prio_boost = 1.0
-            if top_issue and top_issue.get("severity") in ["high", "critical"]:
-                prio_boost = 1.5
+            if top_issue:
+                sev = top_issue.get("severity") if isinstance(top_issue, dict) else getattr(top_issue, "severity", "medium")
+                sev_val = str(getattr(sev, "value", sev)).lower()
+                if sev_val in ["high", "critical"]:
+                    prio_boost = 1.5
 
             raw = heuristics * learned_weight * memory_boost * (1.0 + threat_urgency) * prio_boost
             adj = raw * (1.0 - base_cost)
@@ -100,21 +116,27 @@ class DecisionEngine:
             "target": target,
             "pid": pid,
             "confidence": round(confidence, 3),
-            "top_issue": top_issue.get("id") if top_issue else "none",
+            "top_issue": (top_issue.get("id") if isinstance(top_issue, dict) else getattr(top_issue, "id", "none")) if top_issue else "none",
             "reason": f"Heuristics evaluated for {category}. Ranked {len(ranked_issues)} issues.",
             "scores": {k: round(v, 3) for k, v in confidence_scores.items()}
         }
 
-    def _rank_issues(self, issues: List[Dict[str, Any]], intelligence: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _rank_issues(self, issues: List[Any], intelligence: Dict[str, Any]) -> List[Any]:
         """Ranks issues by category priority and severity."""
         if not issues:
             return []
             
         def get_score(issue):
-            cat = str(issue.get("category", "system")).lower()
+            if isinstance(issue, dict):
+                cat = str(issue.get("category", "system")).lower()
+                sev = str(issue.get("severity", "moderate")).lower()
+            else:
+                cat = str(getattr(issue, "category", "system")).lower()
+                sev_obj = getattr(issue, "severity", "moderate")
+                sev = str(getattr(sev_obj, "value", sev_obj)).lower()
+                
             cat_score = self.CATEGORY_PRIORITY.get(cat, 0)
             
-            sev = str(issue.get("severity", "moderate")).lower()
             sev_score = 0
             if sev == "critical": sev_score = 1000
             elif sev == "high": sev_score = 500

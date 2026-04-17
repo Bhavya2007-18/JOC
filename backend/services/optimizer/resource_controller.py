@@ -3,7 +3,8 @@ from typing import Any, Dict, List, Optional, Tuple
 import psutil
 
 from utils.execution_context import ExecutionContext
-from models.optimizer_models import ActionType
+from intelligence.models import ActionType
+from intelligence.action_store import ActionStore
 from services.system_monitor import get_cpu_stats, get_memory_stats
 from utils.logger import get_logger
 

@@ -65,7 +65,8 @@ class AutonomyOrchestrator:
         preemptive_signal = self.preemptive_engine.check(pred_data, threat_data, system_mode=current_mode)
         
         # Pull latest weights from LearningEngine
-        current_weights = self.learning_engine.get_weights()
+        context = intelligence.get("threat", {}).get("raw_inputs", {})
+        current_weights = self.learning_engine.get_weights(context=context)
         self.decision_engine.update_weights(current_weights)
 
         # STEP 3: Decision
@@ -96,7 +97,7 @@ class AutonomyOrchestrator:
 
         if feedback:
             # STEP 5: Learning
-            self.learning_engine.record_outcome(feedback["action"], feedback)
+            self.learning_engine.record_outcome(feedback["action"], feedback, context=context)
             self.learning_engine.save()
             
             # STEP 6: Memory Update
@@ -111,8 +112,7 @@ class AutonomyOrchestrator:
             # Create a dedicated context for this autonomous action
             context = ExecutionContext.from_request(
                 dry_run=False, # Autonomy usually runs LIVE if enabled
-                mode="autonomy",
-                request_id=f"auto-{int(time.time())}"
+                mode="autonomy"
             )
             
             action_result = self.action_engine.execute(decision, context=context)
@@ -146,19 +146,23 @@ class AutonomyOrchestrator:
         # Phase 6A: Decision Trace
         from intelligence.decision_trace import DecisionTrace, DecisionTraceLog
         override_reason = "static_only"
+        
+        static_pattern_safe = static_pattern or {}
+        matched_pattern_safe = matched_pattern or {}
+        
         if cognitive_data.get("confidence", 0) > 0.6:
             override_reason = "confidence > 0.6"
-        elif matched_pattern.get("pattern_id"):
+        elif matched_pattern_safe.get("pattern_id"):
             override_reason = "memory_match"
             
         trace = DecisionTrace(
             timestamp=time.time(),
-            pattern_state=static_pattern.get("pattern_id", "unknown"),
-            engine_recommendation=static_pattern.get("recommended_action", "none"),
+            pattern_state=static_pattern_safe.get("pattern_id", "unknown"),
+            engine_recommendation=static_pattern_safe.get("recommended_action", "none"),
             memory_recommendation=cognitive_data.get("recommended_response", "none"),
             final_decision=decision.get("action", "none") if decision else "none",
             override_reason=override_reason,
-            confidence=matched_pattern.get("confidence", 0.0),
+            confidence=matched_pattern_safe.get("confidence", 0.0),
             action_type=decision.get("action", "none") if decision else "none"
         )
         DecisionTraceLog.get_instance().record(trace)
@@ -167,3 +171,32 @@ class AutonomyOrchestrator:
 
     def set_enabled(self, enabled: bool):
         self.enabled = enabled
+
+    def get_health(self) -> Dict[str, Any]:
+        """Returns the self-monitoring health state of the autonomy pipeline."""
+        return {
+            "uptime_status": "operational" if self.enabled else "offline",
+            "engines": {
+                "decision": {
+                    "active": bool(self.decision_engine),
+                    "oscillation_window_size": len(getattr(self.decision_engine, "_oscillation_window", []))
+                },
+                "learning": {
+                    "active": bool(self.learning_engine),
+                    "tracked_actions": len(self.learning_engine.get_performance_summary()),
+                },
+                "memory": {
+                    "active": bool(self.memory_engine),
+                    "pattern_count": len(getattr(self.memory_engine, "memory_bank", []))
+                },
+                "feedback": {
+                    "active": bool(self.feedback_engine)
+                }
+            },
+            "metrics": {
+                "total_autonomous_decisions": sum(
+                    stat.get("total_executions", 0) 
+                    for stat in self.learning_engine.get_performance_summary().values()
+                )
+            }
+        }

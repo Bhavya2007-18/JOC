@@ -209,3 +209,27 @@ def get_etw_events():
         "etw_active": monitor.etw_adapter._etw_active,
         "etw_lib": monitor.etw_adapter._etw_lib or "psutil-fallback"
     }
+
+@router.get("/proof")
+def get_proof_intelligence():
+    """
+    Returns the comprehensive internal state of the entire Sentinel Engine Autonomy Core.
+    This proves to the user that all sub-engines (Learning, Memory, Causal, Predictive, Thermal, etc.)
+    are actively ingesting data and maintaining state.
+    """
+    monitor = MonitorLoop.get_instance()
+    if not monitor:
+        raise HTTPException(status_code=500, detail="MonitorLoop not initialized")
+        
+    orchestrator = getattr(monitor, "autonomy_orchestrator", None)
+    if not orchestrator:
+        raise HTTPException(status_code=500, detail="AutonomyOrchestrator not initialized")
+
+    return {
+        "status": "operational",
+        "health": orchestrator.get_health(),
+        "intelligence_stream": monitor.latest_intelligence,
+        "latest_autonomous_decision": monitor.latest_autonomy_state,
+        "memory_bank_size": len(getattr(orchestrator.memory_engine, "memory_bank", [])),
+        "learning_performance": orchestrator.learning_engine.get_performance_summary()
+    }

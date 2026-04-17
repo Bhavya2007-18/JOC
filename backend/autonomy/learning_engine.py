@@ -12,6 +12,7 @@ class LearningEngine:
     BASE_WEIGHT = 1.0
     EMA_ALPHA = 0.3
 
+
     def __init__(self):
         # We track performance of default actions, assuming catalog from DecisionEngine
         # action_name -> performance_stats
@@ -32,10 +33,11 @@ class LearningEngine:
                 "over_corrections": 0,
                 "avg_impact_reduction": 0.0,
                 "current_weight": self.BASE_WEIGHT,
-                "last_updated": 0.0
+                "last_updated": 0.0,
+                "experiences": []
             }
 
-    def record_outcome(self, action: str, feedback: Dict[str, Any]) -> None:
+    def record_outcome(self, action: str, feedback: Dict[str, Any], context: Dict[str, float] = None) -> None:
         """Updates performance stats and adjusts action weights based on feedback."""
         if action not in self._performance:
             self._performance[action] = {
@@ -46,7 +48,8 @@ class LearningEngine:
                 "over_corrections": 0,
                 "avg_impact_reduction": 0.0,
                 "current_weight": self.BASE_WEIGHT,
-                "last_updated": 0.0
+                "last_updated": 0.0,
+                "experiences": []
             }
 
         stats = self._performance[action]
@@ -54,6 +57,17 @@ class LearningEngine:
         
         result_type = feedback.get("result", "failure")
         impact = feedback.get("impact_reduction", 0.0)
+
+        # Record Q-learning context experience
+        if context:
+            stats["experiences"].append({
+                "context": context,
+                "impact": impact,
+                "timestamp": time.time()
+            })
+            # keep history bounded
+            if len(stats["experiences"]) > 100:
+                stats["experiences"].pop(0)
 
         # Update tallies
         if result_type == "success":
@@ -89,10 +103,47 @@ class LearningEngine:
         stats["current_weight"] = max(self.MIN_WEIGHT, min(self.MAX_WEIGHT, new_weight))
         stats["last_updated"] = time.time()
 
-    def get_weights(self) -> Dict[str, float]:
-        """Returns the current learned multiplier for each action."""
-        return {action: stats["current_weight"] for action, stats in self._performance.items()}
-        
+    def get_weights(self, context: Dict[str, float] = None) -> Dict[str, float]:
+        """Returns the current learned multiplier for each action, with Q-learning interpolation."""
+        weights = {}
+        for action, stats in self._performance.items():
+            base_w = stats.get("current_weight", self.BASE_WEIGHT)
+            
+            if not context or not stats.get("experiences"):
+                weights[action] = base_w
+                continue
+                
+            # Q-learning interpolation (KNN weighting)
+            # Find close experiences in state space
+            total_influence = 0.0
+            weighted_impact_sum = 0.0
+            
+            # Simple euclidean distance over CPU and RAM
+            req_cpu = context.get("cpu_percent", 0.0)
+            req_ram = context.get("memory_percent", 0.0)
+            
+            for exp in stats["experiences"][-20:]:  # Look at recent 20 context matches
+                exp_ctx = exp["context"]
+                e_cpu = exp_ctx.get("cpu_percent", req_cpu)
+                e_ram = exp_ctx.get("memory_percent", req_ram)
+                
+                dist_sq = (req_cpu - e_cpu)**2 + (req_ram - e_ram)**2
+                # Convert distance to influence (closer = higher influence)
+                influence = 1.0 / (1.0 + (dist_sq / 100.0))  
+                
+                weighted_impact_sum += exp["impact"] * influence
+                total_influence += influence
+                
+            if total_influence > 0:
+                expected_impact = weighted_impact_sum / total_influence
+                # Modulate the base weight by contextual expectations
+                context_modulator = 1.0 + (expected_impact / 200.0) # slightly boost or penalize
+                context_weight = base_w * context_modulator
+                weights[action] = max(self.MIN_WEIGHT, min(self.MAX_WEIGHT, context_weight))
+            else:
+                weights[action] = base_w
+                
+        return weights
     def get_performance_summary(self) -> Dict[str, Any]:
         """Returns full internal state for API reporting."""
         return self._performance

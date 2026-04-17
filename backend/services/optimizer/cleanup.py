@@ -7,7 +7,8 @@ from typing import Any, Dict, List, Tuple
 
 from utils.execution_context import ExecutionContext
 from utils.logger import get_logger
-
+from intelligence.action_store import ActionStore, ActionRecord
+from intelligence.models import ActionType
 
 logger = get_logger("optimizer.cleanup")
 _action_store = ActionStore()
