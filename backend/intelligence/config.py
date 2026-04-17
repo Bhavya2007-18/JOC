@@ -14,7 +14,7 @@ MAX_HISTORY_LENGTH = 100
 # 🔥 Safety flags
 # WARNING: This is a GLOBAL DEFAULT. For thread-safe, per-request actions,
 # ALWAYS use the ExecutionContext pattern in utils/execution_context.py.
-DRY_RUN = os.getenv("JOC_DRY_RUN", "true").lower() == "true"
+DRY_RUN = os.getenv("JOC_DRY_RUN", "false").lower() == "true"
 AUTOPILOT_MODE = "passive"  # passive | assist | aggressive
 # 🔥 Scoring weights 
 CPU_WEIGHT = 0.4
